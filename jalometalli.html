@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hopea & Kulta — Jalometallialan materiaaliopas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --silver:    #adb8c4;
+  --silver-lt: #d8e0e8;
+  --silver-dk: #6a7a88;
+  --gold:      #c9a84c;
+  --gold-lt:   #e8d49a;
+  --gold-dk:   #8a6820;
+  --forge:     #1a1f2b;
+  --forge-mid: #252c3a;
+  --ash:       #dde3e8;
+  --smoke:     #f4f6f8;
+  --white:     #fafcfd;
+  --slate:     #4a5568;
+  --ink:       #1a202c;
+  --ruby:      #9b2335;
+  --steel:     #3d6b8a;
+  --steel-lt:  #ddeaf5;
+  --earth:     #5c4020;
+  --earth-lt:  #f5efe5;
+  --bar-h:     50px;
+  --toc-w:     240px;
+  --font-h:    'Cormorant Garamond', Georgia, serif;
+  --font-b:    'Source Serif 4', Georgia, serif;
+  --font-m:    'JetBrains Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--smoke); color: var(--ink); font-family: var(--font-b); line-height: 1.8; }
+
+/* ══ TOP BAR ════════════════════════════════════════════════════════ */
+#topbar { position: fixed; top:0;left:0;right:0;height:var(--bar-h);background:var(--forge);z-index:300;display:flex;align-items:center;justify-content:space-between;padding:0 1.6rem;box-shadow:0 2px 20px rgba(0,0,0,.5);border-bottom:1px solid rgba(201,168,76,.2); }
+.tb-brand { display:flex;align-items:center;gap:.6rem;text-decoration:none; }
+.tb-brand .sym { font-size:1.2rem; }
+.tb-brand .nm { font-family:var(--font-h);font-size:1.1rem;font-weight:600;color:var(--gold-lt);letter-spacing:.03em; }
+.tb-sub { font-family:var(--font-m);font-size:.58rem;color:rgba(255,255,255,.22);letter-spacing:.08em; }
+#mb-btn { display:none;align-items:center;justify-content:center;background:none;border:none;color:var(--gold-lt);font-size:1.2rem;cursor:pointer;width:36px;height:36px; }
+
+/* ══ LAYOUT ══════════════════════════════════════════════════════════ */
+#layout { display:flex;padding-top:var(--bar-h);min-height:100vh; }
+
+/* ══ RIGHT TOC ══════════════════════════════════════════════════════ */
+#toc { position:fixed;top:var(--bar-h);right:0;width:var(--toc-w);height:calc(100vh - var(--bar-h));background:var(--forge);overflow-y:auto;z-index:200;display:flex;flex-direction:column;border-left:1px solid rgba(201,168,76,.15); }
+#toc::-webkit-scrollbar { width:3px; }
+#toc::-webkit-scrollbar-thumb { background:var(--gold-dk);border-radius:2px; }
+.toc-head { padding:1.3rem 1.2rem .8rem;border-bottom:1px solid rgba(201,168,76,.18);flex-shrink:0; }
+.toc-head p { font-family:var(--font-m);font-size:.57rem;color:rgba(255,255,255,.22);text-transform:uppercase;letter-spacing:.13em; }
+.toc-head h3 { font-family:var(--font-h);font-size:.95rem;font-weight:600;color:var(--gold-lt);margin-top:.15rem;letter-spacing:.04em; }
+.toc-nav { flex:1;padding:.4rem 0 1.5rem;overflow-y:auto; }
+.toc-grp { margin-bottom:.2rem; }
+.toc-grp-lbl { padding:.65rem 1.2rem .15rem;font-family:var(--font-m);font-size:.56rem;color:rgba(255,255,255,.18);text-transform:uppercase;letter-spacing:.13em; }
+.toc-nav a { display:flex;align-items:flex-start;gap:.5rem;padding:.4rem 1.2rem;text-decoration:none;color:rgba(255,255,255,.45);font-size:.73rem;line-height:1.3;border-left:2px solid transparent;transition:color .18s,border-color .18s,background .18s; }
+.toc-nav a:hover { color:var(--gold-lt);background:rgba(201,168,76,.07); }
+.toc-nav a.active { color:var(--gold-lt);border-left-color:var(--gold);background:rgba(201,168,76,.1); }
+.toc-num { font-family:var(--font-m);font-size:.56rem;color:var(--gold-dk);flex-shrink:0;margin-top:.1rem; }
+.toc-nav a.active .toc-num { color:var(--gold); }
+.toc-star { color:var(--gold);font-size:.68rem;flex-shrink:0;margin-top:.05rem; }
+.toc-footer { padding:.9rem 1.2rem;border-top:1px solid rgba(201,168,76,.12);font-family:var(--font-m);font-size:.58rem;color:rgba(255,255,255,.16);line-height:1.6;flex-shrink:0; }
+#toc-overlay { display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:190; }
+#toc-overlay.open { display:block; }
+
+/* ══ MAIN ════════════════════════════════════════════════════════════ */
+#content { flex:1;margin-right:var(--toc-w);min-width:0; }
+
+/* ══ HERO ════════════════════════════════════════════════════════════ */
+#hero { background:var(--forge);min-height:92vh;display:flex;align-items:center;padding:5rem 6rem;position:relative;overflow:hidden; }
+#hero::before { content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 70% at 78% 40%,rgba(201,168,76,.16) 0%,transparent 65%),radial-gradient(ellipse 40% 55% at 5% 75%,rgba(61,107,138,.1) 0%,transparent 60%); }
+.hero-mesh { position:absolute;inset:0;opacity:.025;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,1) 0,rgba(255,255,255,1) 1px,transparent 1px,transparent 56px),repeating-linear-gradient(90deg,rgba(255,255,255,1) 0,rgba(255,255,255,1) 1px,transparent 1px,transparent 56px); }
+.h-cont { position:relative;z-index:1;max-width:660px; }
+.h-eye { font-family:var(--font-m);font-size:.67rem;color:var(--gold);text-transform:uppercase;letter-spacing:.2em;margin-bottom:1.5rem;display:flex;align-items:center;gap:.8rem; }
+.h-eye::before { content:'';display:block;width:38px;height:1px;background:linear-gradient(90deg,var(--gold),transparent); }
+#hero h1 { font-family:var(--font-h);font-size:clamp(2.8rem,4.5vw,4.8rem);font-weight:700;line-height:1.03;color:var(--white);margin-bottom:1.5rem;letter-spacing:.01em; }
+#hero h1 em { font-style:italic;color:var(--gold-lt); }
+#hero .h-lead { font-size:1.05rem;color:rgba(255,255,255,.55);max-width:510px;line-height:1.92;margin-bottom:2.5rem; }
+.h-stats { display:flex;gap:2.5rem;flex-wrap:wrap; }
+.h-stat { display:flex;flex-direction:column;gap:.15rem; }
+.h-stat .v { font-family:var(--font-h);font-size:1.9rem;font-weight:600;color:var(--gold-lt);line-height:1; }
+.h-stat .l { font-size:.62rem;color:rgba(255,255,255,.26);font-family:var(--font-m);text-transform:uppercase;letter-spacing:.09em; }
+.h-orn { position:absolute;right:5.5rem;top:50%;transform:translateY(-50%);width:300px;height:300px;opacity:.06; }
+
+/* ══ SECTIONS ════════════════════════════════════════════════════════ */
+.section { padding:4rem 6rem;border-bottom:1px solid var(--ash); }
+.section:nth-child(even) { background:var(--white); }
+.section:nth-child(odd)  { background:var(--smoke); }
+.section.story { background:var(--forge); }
+.section.story-alt { background:var(--forge-mid); }
+.section.story * { color:rgba(255,255,255,.78); }
+.section.story .prose p { color:rgba(255,255,255,.68); }
+.section.story .prose h3 { color:var(--gold-lt); }
+.section.story .prose h3::before { background:linear-gradient(90deg,var(--gold),transparent); }
+.section.story .prose h4 { color:var(--gold); }
+.section.story .sec-hd h2 { color:var(--gold-lt); }
+.section.story .sec-hd h2 .sub { color:var(--silver); }
+
+.sec-hd { display:flex;align-items:flex-start;gap:1.1rem;margin-bottom:2.2rem; }
+.sec-num { font-family:var(--font-m);font-size:.64rem;color:var(--gold);padding:.26rem .5rem;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.28);border-radius:3px;flex-shrink:0;margin-top:.48rem;letter-spacing:.05em; }
+.sec-hd h2 { font-family:var(--font-h);font-size:clamp(1.6rem,3vw,2.3rem);font-weight:600;line-height:1.18;color:var(--forge);letter-spacing:.01em; }
+.sec-hd h2 .sub { display:block;font-size:.68rem;font-family:var(--font-m);font-weight:400;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.2rem; }
+
+/* ══ PROSE ════════════════════════════════════════════════════════════ */
+.prose { max-width:740px; }
+.prose p { font-size:.97rem;color:var(--slate);margin-bottom:1.05rem;line-height:1.9; }
+.prose h3 { font-family:var(--font-h);font-size:1.28rem;font-weight:600;color:var(--forge);margin:2rem 0 .7rem;display:flex;align-items:center;gap:.65rem;letter-spacing:.01em; }
+.prose h3::before { content:'';display:inline-block;width:22px;height:2px;background:linear-gradient(90deg,var(--gold),var(--silver));border-radius:2px;flex-shrink:0; }
+.prose h4 { font-size:.78rem;font-weight:600;color:var(--gold-dk);text-transform:uppercase;letter-spacing:.09em;margin:1.35rem 0 .35rem; }
+
+/* pullquote — for story sections */
+.pullquote { border-left:4px solid var(--gold);padding:1rem 1.5rem;margin:1.8rem 0;font-family:var(--font-h);font-size:1.35rem;font-style:italic;color:var(--gold-lt);line-height:1.55; }
+.pullquote.light { border-left-color:rgba(201,168,76,.5);color:rgba(255,255,255,.7);font-size:1.2rem; }
+.pullquote cite { display:block;font-family:var(--font-m);font-size:.62rem;font-style:normal;color:rgba(201,168,76,.55);text-transform:uppercase;letter-spacing:.1em;margin-top:.6rem; }
+
+/* fact box */
+.fact-box { background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:8px;padding:1.2rem 1.5rem;margin:1.4rem 0;display:flex;gap:1rem;align-items:flex-start; }
+.fact-box .fact-icon { font-size:1.8rem;flex-shrink:0; }
+.fact-box .fact-num { font-family:var(--font-h);font-size:1.6rem;font-weight:700;color:var(--gold-lt);line-height:1;display:block;margin-bottom:.1rem; }
+.fact-box .fact-lbl { font-family:var(--font-m);font-size:.65rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em; }
+.fact-box .fact-text { font-size:.87rem;color:rgba(255,255,255,.65);line-height:1.68; }
+
+/* fact row */
+.fact-row { display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.85rem;margin:1.3rem 0; }
+.fact-card { background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:1rem 1.1rem;text-align:center; }
+.fact-card .fc-val { font-family:var(--font-h);font-size:1.85rem;font-weight:700;color:var(--gold-lt);line-height:1;display:block;margin-bottom:.15rem; }
+.fact-card .fc-lbl { font-family:var(--font-m);font-size:.62rem;color:rgba(255,255,255,.32);text-transform:uppercase;letter-spacing:.08em; }
+
+/* timeline */
+.timeline { margin:1.5rem 0;display:flex;flex-direction:column;gap:0;position:relative; }
+.timeline::before { content:'';position:absolute;left:72px;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,var(--gold),rgba(201,168,76,.1)); }
+.tl-item { display:flex;gap:1.2rem;align-items:flex-start;padding:.6rem 0; }
+.tl-year { font-family:var(--font-m);font-size:.7rem;color:var(--gold);width:65px;flex-shrink:0;text-align:right;padding-top:.18rem;letter-spacing:.04em; }
+.tl-dot { width:12px;height:12px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:.25rem;z-index:1;border:2px solid var(--forge-mid); }
+.tl-dot.silver { background:var(--silver); }
+.tl-body { flex:1; }
+.tl-body strong { display:block;font-size:.9rem;font-weight:600;color:rgba(255,255,255,.8);line-height:1.2;margin-bottom:.15rem; }
+.tl-body span { font-size:.83rem;color:rgba(255,255,255,.5);line-height:1.6; }
+
+/* steps */
+.steps { counter-reset:step;list-style:none;margin:1.1rem 0;display:flex;flex-direction:column;gap:.5rem; }
+.steps li { counter-increment:step;display:flex;gap:.8rem;align-items:flex-start;padding:.75rem .95rem;background:var(--white);border:1px solid var(--ash);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;font-size:.91rem;color:var(--slate);line-height:1.65;transition:border-color .18s,transform .18s,box-shadow .18s; }
+.steps li:hover { border-left-color:var(--silver);transform:translateX(4px);box-shadow:0 2px 12px rgba(0,0,0,.06); }
+.steps li::before { content:counter(step);font-family:var(--font-m);font-size:.65rem;font-weight:600;color:var(--forge);background:var(--gold);width:1.5rem;height:1.5rem;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.06rem; }
+
+/* bullets */
+.bullets { list-style:none;margin:.65rem 0;display:flex;flex-direction:column;gap:.32rem; }
+.bullets li { display:flex;gap:.65rem;align-items:flex-start;font-size:.91rem;color:var(--slate);line-height:1.65; }
+.bullets li::before { content:'◈';color:var(--gold);font-size:.55rem;flex-shrink:0;margin-top:.52rem; }
+.bullets.light li { color:rgba(255,255,255,.65); }
+.bullets.light li::before { color:var(--gold); }
+
+/* callouts */
+.callout { border-radius:5px;padding:.9rem 1.25rem;margin:1.15rem 0;font-size:.88rem;line-height:1.72;display:flex;gap:.8rem;align-items:flex-start; }
+.callout-icon { font-size:1.05rem;flex-shrink:0;margin-top:.04rem; }
+.callout.tip  { background:var(--steel-lt);border-left:3px solid var(--steel);color:#1c3d55; }
+.callout.warn { background:#fdf0eb;border-left:3px solid var(--ruby);color:#5c1620; }
+.callout.danger { background:#fde8e8;border-left:4px solid #cc2222;color:#5c0808; }
+.callout.info { background:rgba(201,168,76,.1);border-left:3px solid var(--gold);color:#4a3410; }
+.callout.silver { background:rgba(173,184,196,.12);border-left:3px solid var(--silver-dk);color:#2d3a44; }
+.callout.earth { background:var(--earth-lt);border-left:3px solid var(--earth);color:#3c2a10; }
+.callout b { font-weight:600;display:block;margin-bottom:.12rem; }
+
+/* pills */
+.data-row { display:flex;flex-wrap:wrap;gap:.55rem;margin:.9rem 0; }
+.pill { background:var(--forge);color:var(--gold-lt);font-family:var(--font-m);font-size:.7rem;padding:.3rem .8rem;border-radius:20px;letter-spacing:.02em; }
+.pill.silver { background:var(--silver-dk);color:var(--white); }
+.pill.ruby   { background:var(--ruby);color:#ffe0e3; }
+.pill.steel  { background:var(--steel);color:var(--steel-lt); }
+.pill.gold   { background:var(--gold-dk);color:var(--gold-lt); }
+.pill.green  { background:#2d6a3a;color:#b8f0c0; }
+
+/* card grid */
+.card-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.9rem;margin:1.1rem 0; }
+.card { background:var(--white);border:1px solid var(--ash);border-top:3px solid var(--gold);border-radius:0 0 7px 7px;padding:1.2rem 1.3rem;transition:border-top-color .18s,box-shadow .18s; }
+.card:hover { border-top-color:var(--silver);box-shadow:0 6px 22px rgba(0,0,0,.08); }
+.card.silver-top { border-top-color:var(--silver); }
+.card.ruby-top   { border-top-color:var(--ruby); }
+.card.steel-top  { border-top-color:var(--steel); }
+.card-icon { font-size:1.6rem;margin-bottom:.55rem;display:block; }
+.card h4 { font-family:var(--font-h);font-size:1rem;font-weight:600;color:var(--forge);margin-bottom:.3rem; }
+.card p { font-size:.83rem;color:var(--slate);line-height:1.65; }
+
+/* two-col */
+.two-col { display:grid;grid-template-columns:1fr 1fr;gap:1.8rem;margin:1.1rem 0; }
+
+/* process flow */
+.process-flow { display:flex;flex-direction:column;margin:1.1rem 0;position:relative; }
+.process-flow::before { content:'';position:absolute;left:1.1rem;top:1.3rem;bottom:1.3rem;width:2px;background:linear-gradient(to bottom,var(--gold),var(--silver)); }
+.pf-item { display:flex;gap:1.3rem;align-items:flex-start;padding:.8rem .9rem;position:relative; }
+.pf-dot { width:2.2rem;height:2.2rem;border-radius:50%;background:var(--gold);color:var(--forge);font-family:var(--font-m);font-size:.68rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1;font-weight:600; }
+.pf-dot.silver { background:var(--silver);color:var(--forge); }
+.pf-dot.steel  { background:var(--steel);color:white; }
+.pf-dot.ruby   { background:var(--ruby);color:white; }
+.pf-dot.dark   { background:var(--forge-mid);color:var(--gold-lt);border:1px solid var(--gold-dk); }
+.pf-body { flex:1;padding-top:.22rem; }
+.pf-body strong { display:block;font-weight:600;font-size:.92rem;color:var(--forge);margin-bottom:.12rem; }
+.pf-body strong.lt { color:rgba(255,255,255,.88); }
+.pf-body span { font-size:.84rem;color:var(--slate);line-height:1.62; }
+.pf-body span.lt { color:rgba(255,255,255,.58); }
+
+/* tool / material tables */
+.tool-table, .mat-table { width:100%;border-collapse:separate;border-spacing:0 .4rem;margin:1rem 0; }
+.tool-table th, .mat-table th { font-family:var(--font-m);font-size:.61rem;text-transform:uppercase;letter-spacing:.1em;color:var(--slate);padding:0 .85rem .35rem;text-align:left;border-bottom:1px solid var(--ash); }
+.mat-table th { border-bottom:2px solid var(--gold); }
+.tool-table td, .mat-table td { padding:.62rem .85rem;font-size:.87rem;color:var(--slate);background:var(--white); }
+.tool-table tr td:first-child { border-left:3px solid var(--gold);border-radius:4px 0 0 4px;font-weight:600;color:var(--forge); }
+.mat-table tr td:first-child { font-weight:600;color:var(--forge);border-radius:4px 0 0 4px; }
+.tool-table tr td:last-child, .mat-table tr td:last-child { border-radius:0 4px 4px 0; }
+.mat-table tr:hover td { background:rgba(201,168,76,.06); }
+
+/* warn table */
+.warn-table { width:100%;border-collapse:separate;border-spacing:0 .4rem;margin:.9rem 0; }
+.warn-table th { font-family:var(--font-m);font-size:.61rem;text-transform:uppercase;letter-spacing:.1em;color:var(--slate);padding:0 .8rem .3rem;text-align:left;border-bottom:1px solid var(--ash); }
+.warn-table td { padding:.62rem .8rem;font-size:.86rem;color:var(--slate);background:var(--white); }
+.warn-table tr td:first-child { border-left:3px solid var(--ruby);border-radius:4px 0 0 4px;font-weight:600;color:var(--forge); }
+.warn-table tr td:last-child { border-radius:0 4px 4px 0; }
+
+/* faq */
+.faq { margin:1.1rem 0;display:flex;flex-direction:column;gap:.7rem; }
+.faq-item { background:var(--white);border:1px solid var(--ash);border-radius:5px;overflow:hidden; }
+.faq-q { padding:.85rem 1.1rem;font-weight:600;font-size:.91rem;color:var(--forge);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none; }
+.faq-q::after { content:'+';font-family:var(--font-m);font-size:1rem;color:var(--gold);font-weight:400; }
+.faq-item.open .faq-q::after { content:'−'; }
+.faq-a { display:none;padding:0 1.1rem .85rem;font-size:.88rem;color:var(--slate);line-height:1.72;border-top:1px solid var(--ash);padding-top:.72rem; }
+.faq-item.open .faq-a { display:block; }
+
+/* alloy cards */
+.alloy-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.8rem;margin:1.1rem 0; }
+.alloy-card { border-radius:8px;padding:1rem 1.2rem;display:flex;align-items:center;gap:1rem; }
+.alloy-card.gold-24 { background:linear-gradient(135deg,#c9a84c,#f0d080); }
+.alloy-card.gold-18 { background:linear-gradient(135deg,#b8924a,#d4aa60); }
+.alloy-card.gold-14 { background:linear-gradient(135deg,#9a7a3c,#bc9850); }
+.alloy-card.silver  { background:linear-gradient(135deg,#8090a0,#c0ccd8); }
+.alloy-swatch { width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.4);flex-shrink:0; }
+.alloy-card.gold-24 .alloy-swatch { background:#ffd700; }
+.alloy-card.gold-18 .alloy-swatch { background:#e8c050; }
+.alloy-card.gold-14 .alloy-swatch { background:#d4a840; }
+.alloy-card.silver  .alloy-swatch { background:#e8eef4; }
+.alloy-info .title { font-family:var(--font-h);font-size:.98rem;font-weight:600;color:var(--forge);line-height:1.1; }
+.alloy-info .sub { font-family:var(--font-m);font-size:.63rem;color:rgba(26,31,43,.6); }
+
+/* safety grid */
+.safety-grid { display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.1rem 0; }
+.safety-item { background:var(--white);border:1px solid var(--ash);border-left:4px solid var(--ruby);border-radius:0 5px 5px 0;padding:1rem 1.15rem; }
+.safety-item.ok { border-left-color:var(--steel); }
+.safety-item.warn { border-left-color:var(--gold); }
+.safety-item h4 { font-size:.77rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--ruby);margin-bottom:.28rem; }
+.safety-item.ok h4 { color:var(--steel); }
+.safety-item.warn h4 { color:var(--gold-dk); }
+.safety-item p { font-size:.84rem;color:var(--slate);line-height:1.65; }
+
+/* PPE table */
+.ppe-table { width:100%;border-collapse:collapse;margin:1.1rem 0; }
+.ppe-table th { font-family:var(--font-m);font-size:.6rem;text-transform:uppercase;letter-spacing:.09em;color:var(--slate);padding:.5rem .8rem;border-bottom:2px solid var(--ruby);text-align:left; }
+.ppe-table td { padding:.55rem .8rem;font-size:.86rem;color:var(--slate);border-bottom:1px solid var(--ash); }
+.ppe-table tr:hover td { background:rgba(201,168,76,.05); }
+.ppe-table td:first-child { font-weight:600;color:var(--forge); }
+.ppe-table .ppe-yes { color:#2d6a3a;font-weight:600;font-family:var(--font-m);font-size:.8rem; }
+.ppe-table .ppe-no  { color:var(--ash);font-family:var(--font-m);font-size:.8rem; }
+
+/* cast grid */
+.cast-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin:1.1rem 0; }
+.cast-card { background:var(--white);border:1px solid var(--ash);border-radius:7px;padding:1.15rem 1.2rem; }
+.cast-card:hover { box-shadow:0 4px 16px rgba(0,0,0,.07); }
+.cast-badge { font-family:var(--font-m);font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;padding:.2rem .55rem;border-radius:3px;display:inline-block;margin-bottom:.6rem; }
+.cast-badge.trad { background:rgba(201,168,76,.15);color:var(--gold-dk); }
+.cast-badge.mod  { background:rgba(61,107,138,.15);color:var(--steel); }
+.cast-badge.resin { background:rgba(100,50,150,.15);color:#60308a; }
+.cast-card h4 { font-family:var(--font-h);font-size:1rem;font-weight:600;color:var(--forge);margin-bottom:.35rem; }
+.cast-card p { font-size:.82rem;color:var(--slate);line-height:1.62; }
+.cast-pros { margin-top:.6rem;display:flex;flex-direction:column;gap:.18rem; }
+.cast-pros span { font-size:.78rem;color:var(--slate);display:flex;gap:.4rem; }
+.cast-pros span::before { content:'✓';color:var(--steel);font-size:.7rem;flex-shrink:0; }
+
+/* silver future */
+.future-bar { background:rgba(255,255,255,.06);border:1px solid rgba(173,184,196,.25);border-radius:8px;padding:1.2rem 1.5rem;margin:.8rem 0; }
+.future-bar h4 { font-family:var(--font-m);font-size:.63rem;color:var(--silver);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem; }
+.f-track { background:rgba(255,255,255,.07);border-radius:4px;height:22px;overflow:hidden;position:relative; }
+.f-fill { height:100%;border-radius:4px;display:flex;align-items:center;padding:0 .7rem;font-family:var(--font-m);font-size:.67rem;font-weight:600;color:white; }
+.f-fill.s-demand { background:linear-gradient(90deg,var(--ruby),#e05050); }
+.f-fill.s-supply { background:linear-gradient(90deg,var(--steel),#80b0d0); }
+.f-fill.s-solar   { background:linear-gradient(90deg,var(--gold-dk),var(--gold)); }
+.f-label { display:flex;justify-content:space-between;margin-top:.3rem;font-family:var(--font-m);font-size:.6rem;color:rgba(255,255,255,.3); }
+
+/* ══ RING CALCULATOR ════════════════════════════════════════════════ */
+.calc-outer { background:var(--forge);border-radius:12px;padding:2rem 2.3rem;margin:0 0 2rem;color:white;border:1px solid rgba(201,168,76,.22); }
+.calc-title { font-family:var(--font-h);font-size:1.2rem;font-weight:600;color:var(--gold-lt);margin-bottom:1.5rem;letter-spacing:.02em;display:flex;align-items:center;gap:.6rem; }
+.calc-title::before { content:'◈';color:var(--gold);font-size:.9rem; }
+.calc-tabs { display:flex;gap:0;margin-bottom:1.6rem;background:rgba(255,255,255,.06);border-radius:7px;padding:3px; }
+.calc-tab { flex:1;padding:.48rem .4rem;background:none;border:none;border-radius:5px;color:rgba(255,255,255,.42);font-family:var(--font-b);font-size:.78rem;cursor:pointer;transition:background .18s,color .18s;text-align:center; }
+.calc-tab.on { background:var(--gold-dk);color:var(--gold-lt); }
+.calc-tab:hover:not(.on) { background:rgba(255,255,255,.1);color:rgba(255,255,255,.7); }
+.calc-form { display:none; }
+.calc-form.on { display:block; }
+.calc-row { display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.85rem;margin-bottom:.95rem; }
+.calc-field { display:flex;flex-direction:column;gap:.28rem; }
+.calc-field label { font-family:var(--font-m);font-size:.59rem;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.09em; }
+.calc-field input[type=number] { background:rgba(255,255,255,.09);border:1px solid rgba(201,168,76,.28);border-radius:5px;padding:.5rem .65rem;color:white;font-family:var(--font-m);font-size:.88rem;width:100%;transition:border-color .18s;-moz-appearance:textfield; }
+.calc-field input[type=number]::-webkit-outer-spin-button,.calc-field input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
+.calc-field input:focus { outline:none;border-color:var(--gold);background:rgba(255,255,255,.13); }
+.calc-divider { border:none;border-top:1px solid rgba(255,255,255,.07);margin:1.1rem 0; }
+.calc-results { display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.75rem;margin-top:1.4rem; }
+.result-card { background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:.95rem 1rem;text-align:center; }
+.result-card.highlight { background:rgba(201,168,76,.18);border-color:rgba(201,168,76,.42); }
+.result-card.silver-card { background:rgba(173,184,196,.12);border-color:rgba(173,184,196,.3); }
+.result-card .r-val { font-family:var(--font-h);font-size:1.8rem;font-weight:700;color:var(--gold-lt);line-height:1;display:block;margin-bottom:.18rem; }
+.result-card.highlight .r-val { color:#fff; }
+.result-card.silver-card .r-val { color:var(--silver-lt); }
+.result-card .r-unit { font-family:var(--font-m);font-size:.63rem;color:rgba(255,255,255,.38);display:block;margin-bottom:.2rem; }
+.result-card .r-lbl { font-size:.72rem;color:rgba(255,255,255,.45);line-height:1.3; }
+.result-card.highlight .r-lbl,.result-card.silver-card .r-lbl { color:rgba(255,255,255,.65); }
+.calc-note { font-family:var(--font-m);font-size:.67rem;color:rgba(255,255,255,.24);margin-top:.9rem;text-align:center;line-height:1.6; }
+.size-chart { width:100%;border-collapse:separate;border-spacing:0 3px;margin:1.2rem 0; }
+.size-chart th { font-family:var(--font-m);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.35);padding:0 .7rem .4rem;text-align:center;border-bottom:1px solid rgba(255,255,255,.1); }
+.size-chart td { padding:.45rem .7rem;font-size:.8rem;color:rgba(255,255,255,.6);text-align:center;background:rgba(255,255,255,.04); }
+.size-chart tr:hover td { background:rgba(201,168,76,.1);color:var(--gold-lt); }
+.size-chart td:first-child { font-family:var(--font-m);font-weight:600;color:var(--gold);border-radius:4px 0 0 4px; }
+.size-chart td:last-child { border-radius:0 4px 4px 0; }
+
+/* ══ FOOTER ══════════════════════════════════════════════════════════ */
+#footer { background:var(--forge);color:rgba(255,255,255,.22);text-align:center;padding:2.2rem 5rem;font-family:var(--font-m);font-size:.66rem;letter-spacing:.06em;line-height:2;border-top:1px solid rgba(201,168,76,.15); }
+
+/* ══ RESPONSIVE ══════════════════════════════════════════════════════ */
+@media(max-width:1024px) {
+  :root { --toc-w:0px; }
+  #toc { transform:translateX(100%);width:260px;transition:transform .28s; }
+  #toc.open { transform:translateX(0); }
+  #content { margin-right:0; }
+  #mb-btn { display:flex; }
+  .section { padding:3rem 1.75rem; }
+  #hero { padding:3.5rem 1.75rem;min-height:auto; }
+  .h-orn { display:none; }
+  .two-col,.safety-grid { grid-template-columns:1fr; }
+  #footer { padding:2rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<header id="topbar">
+  <a class="tb-brand" href="#hero"><span class="sym">💍</span><span class="nm">Hopea &amp; Kulta</span></a>
+  <span class="tb-sub">Jalometallialan materiaaliopas · Metropolia AMK</span>
+  <button id="mb-btn" aria-label="Sisällysluettelo" onclick="toggleToc()">☰</button>
+</header>
+
+<div id="toc-overlay" onclick="toggleToc()"></div>
+
+<aside id="toc">
+  <div class="toc-head"><p>Sisällysluettelo</p><h3>Hopea &amp; Kulta</h3></div>
+  <nav class="toc-nav">
+    <div class="toc-grp"><div class="toc-grp-lbl">Tarina &amp; Historia</div>
+      <a href="#kultahistoria"><span class="toc-num">I</span>Kullan tarina — jumalista pankkiholviin</a>
+      <a href="#kultaryntays"><span class="toc-num">II</span>Kultaryntäykset — miehiä ja madmaxia</a>
+      <a href="#hopeahistoria"><span class="toc-num">III</span>Hopean tarina — kaivoksista akkuihin</a>
+      <a href="#hopeatulevaisuus"><span class="toc-num">IV</span>Hopean tulevaisuus — kriisi tulossa?</a>
+    </div>
+    <div class="toc-grp"><div class="toc-grp-lbl">Materiaalit</div>
+      <a href="#materiaalit"><span class="toc-num">01</span>Materiaalit ja seokset</a>
+    </div>
+    <div class="toc-grp"><div class="toc-grp-lbl">Valutekniikat</div>
+      <a href="#hartsitulostin"><span class="toc-num">02</span>Hartsitulostin ja 3D-valutyö</a>
+      <a href="#modernivalu"><span class="toc-num">03</span>Muut modernit valutekniikat</a>
+      <a href="#valaminen"><span class="toc-num">04</span>Perinteiset valutekniikat</a>
+    </div>
+    <div class="toc-grp"><div class="toc-grp-lbl">Esivalmistelu</div>
+      <a href="#esivalmistelu"><span class="toc-num">05</span>Valssaus ja langan veto</a>
+      <a href="#mitoitus"><span class="toc-star">★</span>Sormuksen mitoituslaskuri</a>
+    </div>
+    <div class="toc-grp"><div class="toc-grp-lbl">Työvaiheet</div>
+      <a href="#tyovaiheet"><span class="toc-num">06</span>Sahaaminen ja viilaaminen</a>
+      <a href="#muotoilu"><span class="toc-num">07</span>Muotoilu ja juottaminen</a>
+      <a href="#viimeistely"><span class="toc-num">08</span>Viimeistely ja pintakäsittely</a>
+    </div>
+    <div class="toc-grp"><div class="toc-grp-lbl">Erikoistekniikat</div>
+      <a href="#kaiverrus"><span class="toc-num">09</span>Kaiverrus</a>
+      <a href="#kivistysvaiheet"><span class="toc-num">10</span>Kiven istuttaminen</a>
+      <a href="#patinointi"><span class="toc-num">11</span>Patinointi ja pintaefektit</a>
+    </div>
+    <div class="toc-grp"><div class="toc-grp-lbl">Turvallisuus</div>
+      <a href="#turvallisuus"><span class="toc-num">12</span>Turvallisuus ja suojautuminen</a>
+      <a href="#tyokalut"><span class="toc-num">13</span>Työkalut ja penkki</a>
+    </div>
+  </nav>
+  <div class="toc-footer">Muotoilun pajat<br>Metropolia AMK</div>
+</aside>
+
+<div id="layout"><main id="content">
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-mesh"></div>
+  <div class="h-cont">
+    <div class="h-eye">Jalometallialan materiaaliopas</div>
+    <h1>Hopea &amp; <em>Kulta</em> —<br>jalometallien ikuinen viehätys</h1>
+    <p class="h-lead">Kulta on kestänyt sivilisaatioita, sytyttänyt sotia, vetänyt miljoonat ihmisiä halki haloon erämaan. Hopea on pitänyt fotot tallessa, parantanut haavoja ja vie nyt sähkön aurinkopaneelista autoon. Tämä on niiden tarina — ja ohjeet niiden muovaamisen taitoon.</p>
+    <div class="h-stats">
+      <div class="h-stat"><span class="v">190 000</span><span class="l">Tonnia kultaa louhittu kautta aikojen</span></div>
+      <div class="h-stat"><span class="v">1 mljrd</span><span class="l">Oz — hopea aurinkopaneeleissa 2030</span></div>
+      <div class="h-stat"><span class="v">5 000+</span><span class="l">Vuotta jalometallihistoriaa</span></div>
+    </div>
+  </div>
+  <svg class="h-orn" viewBox="0 0 300 300">
+    <circle cx="150" cy="150" r="130" stroke="rgba(201,168,76,1)" stroke-width="1.5" stroke-dasharray="6 8" fill="none"/>
+    <circle cx="150" cy="150" r="100" stroke="rgba(173,184,196,1)" stroke-width="1" fill="none"/>
+    <circle cx="150" cy="150" r="70"  stroke="rgba(201,168,76,1)" stroke-width="2" fill="none"/>
+    <circle cx="150" cy="150" r="38"  stroke="rgba(173,184,196,1)" stroke-width="1" stroke-dasharray="3 6" fill="none"/>
+    <circle cx="150" cy="150" r="6"   fill="rgba(201,168,76,1)"/>
+    <line x1="20" y1="150" x2="280" y2="150" stroke="rgba(201,168,76,1)" stroke-width=".5" stroke-dasharray="3 8"/>
+    <line x1="150" y1="20" x2="150" y2="280" stroke="rgba(201,168,76,1)" stroke-width=".5" stroke-dasharray="3 8"/>
+    <line x1="57" y1="57" x2="243" y2="243" stroke="rgba(173,184,196,1)" stroke-width=".4" stroke-dasharray="2 10"/>
+    <line x1="243" y1="57" x2="57" y2="243" stroke="rgba(173,184,196,1)" stroke-width=".4" stroke-dasharray="2 10"/>
+  </svg>
+</section>
+
+<!-- I. KULLAN TARINA -->
+<section class="section story" id="kultahistoria">
+  <div class="sec-hd"><span class="sec-num" style="border-color:rgba(201,168,76,.4);color:var(--gold)">I</span><h2><span class="sub">Historia</span>Kullan tarina — jumalten lihasta pankkiholviin</h2></div>
+  <div class="prose">
+    <div class="pullquote light">"Kulta on ainoa metalli, joka ei ruostu, ei hapetu, ei katoa. Se on ihmiskunnan ikuisuuden symboli — ja sen kirous."</div>
+
+    <p>Noin 5 000 vuotta sitten Mesopotamian laaksoissa ihminen löysi joen pohjasta keltaisen kiven, joka ei muuttunut. Se ei ruostunut. Se ei kuprunut pois. Kun sitä hakkasi kivellä, se ei murtunut — se litistyi kauniiksi levyksi. Mikään tunnettu aine ei käyttäytynyt niin. Kulta oli erilainen, ja ihmiset tiesivät sen heti.</p>
+
+    <p>Muinaisessa Egyptissä kultaa kutsuttiin <em>nebuoksi</em> — auringonjumala Ran lihaksi. Faraot hautautuivat kultaisiin arkkuihin, temppelit verhoutuivat kultaan ja faraon iho maalauttiin kultaiseksi juhlissa. Kulta ei ollut raha. Se oli jumaluus itse.</p>
+
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-year">~3000 eKr</div><div class="tl-dot"></div><div class="tl-body"><strong>Ensimmäiset kultakorut</strong><span>Mesopotamia ja Egypti — kulta takotaan ja muotoillaan koruiksi kuninkaallisille.</span></div></div>
+      <div class="tl-item"><div class="tl-year">1332 eKr</div><div class="tl-dot"></div><div class="tl-body"><strong>Tutankhamonin hauta</strong><span>Farao haudataan 110 kg:n kultaiseen hautamaskin sisään. Aarteisto löydetään 1922.</span></div></div>
+      <div class="tl-item"><div class="tl-year">600 eKr</div><div class="tl-dot"></div><div class="tl-body"><strong>Ensimmäiset kultakolikot</strong><span>Lydia (nykyinen Turkki) lyö ensimmäiset elektrum-kolikot — standardoitu valuuta syntyy.</span></div></div>
+      <div class="tl-item"><div class="tl-year">1200-luku</div><div class="tl-dot"></div><div class="tl-body"><strong>El Dorado -myytti</strong><span>Espanjalaiset kuulevat kultaisesta kaupungista Amazonin syvyyksissä. Myytti vetää tuhansia kuolemaansa.</span></div></div>
+      <div class="tl-item"><div class="tl-year">1492</div><div class="tl-dot"></div><div class="tl-body"><strong>Kolumbus ja konkistadorit</strong><span>Eurooppa valloittaa Amerikan. Azteekit ja inkat menettävät kultavarantonsa väkisin — sivilisaatiot tuhoutuvat.</span></div></div>
+      <div class="tl-item"><div class="tl-year">1848</div><div class="tl-dot"></div><div class="tl-body"><strong>Kultaryntäys alkaa</strong><span>Sutter's Mill, Kalifornia. Kulta löytyy — ja 300 000 ihmistä lähtee liikkeelle.</span></div></div>
+      <div class="tl-item"><div class="tl-year">1944</div><div class="tl-dot"></div><div class="tl-body"><strong>Bretton Woods</strong><span>Maailman valuutat sidotaan dollariin, dollari kultaan. Kulta on koko globaalin rahajärjestelmän selkäranka.</span></div></div>
+      <div class="tl-item"><div class="tl-year">1971</div><div class="tl-dot"></div><div class="tl-body"><strong>Kultakannasta luopuminen</strong><span>Presidentti Nixon purkaa dollarin yhteyden kultaan. Kultastandardi päättyy — mutta kullan arvo ei.</span></div></div>
+      <div class="tl-item"><div class="tl-year">2023</div><div class="tl-dot"></div><div class="tl-body"><strong>Kultavarannoissa 35 000 tonnia</strong><span>Maailman keskuspankit pitävät edelleen yli 35 000 tonnia kultaa varannoissaan.</span></div></div>
+    </div>
+
+    <h3>Sveitsin pankkiholvit ja kultareservit</h3>
+    <p>Yhteensä ihmiskunta on louhinut kautta aikain noin 190 000 tonnia kultaa. Kaikki siitä mahtuisi alle kolmeen olympiauima-altaaseen. Siitä yli kolmannes istuu keskuspankkien holveissa — suuri osa kirjaimellisesti Sveitsin Alpeissa kallion sisällä, Fort Knoxissa betonin ja teräksen takana tai Bank of Englandin kellarissa.</p>
+
+    <div class="fact-row">
+      <div class="fact-card"><span class="fc-val">8 133 t</span><span class="fc-lbl">USA:n kultavaranto</span></div>
+      <div class="fact-card"><span class="fc-val">3 355 t</span><span class="fc-lbl">Saksa</span></div>
+      <div class="fact-card"><span class="fc-val">2 452 t</span><span class="fc-lbl">Italia</span></div>
+      <div class="fact-card"><span class="fc-val">1 040 t</span><span class="fc-lbl">Suomi + Pohjoismaat yhdistettynä</span></div>
+    </div>
+
+    <p>Miksi? Kulta ei ruostu, ei inflatoidu, ei poliittisesti manipuloida. Se on täydellinen varasto arvon säilyttämiseen viimeisessä hädässä. Sveitsiläinen sanontatapa kuuluu: <em>"Kun kaikki muu epäonnistuu, kulta onnistuu."</em></p>
+
+    <div class="callout earth"><span class="callout-icon">🏔️</span><div><b>Kulta Suomessa</b> Suomi ei ole merkittävä kultamaa — mutta Lapin kultahistoria on elävää. Ivalojoen kultaryntäys alkoi 1868 ja oli Pohjoismaiden ensimmäinen. Kaivosmiehet tulivat Norjasta, Ruotsista ja kaukaa Keski-Euroopasta. Kultaa löytyi, mutta vähän. Monet menettivät henkensä arktisessa erämaakilpailussa enemmän kuin löysivät kultaa.</div></div>
+  </div>
+</section>
+
+<!-- II. KULTARYNTÄYKSET -->
+<section class="section story-alt" id="kultaryntays">
+  <div class="sec-hd"><span class="sec-num" style="border-color:rgba(201,168,76,.4);color:var(--gold)">II</span><h2><span class="sub">Historia</span>Kultaryntäykset — miten kulta muovasi ihmiskuntaa</h2></div>
+  <div class="prose">
+    <div class="pullquote light">"Kultaryntäys on historia parhaimmillaan ja pahimmillaan: hulluus, toivo, ahkera työ, petos, ja lopussa useimmille — tyhjyys."<cite>— Historian opetus kultaryntäyksistä</cite></div>
+
+    <h3>Kalifornia 1848 — maailma muuttuu</h3>
+    <p>24. tammikuuta 1848 puuseppä James Marshall löysi kiiltävän kiven Sutter's Millin rakennustyömaalta Kaliforniassa. Hän ei tiennyt, että tuo löytö muuttaisi maailmaa. Yhdeksässä kuukaudessa 300 000 ihmistä — <em>forty-niners</em> — virtasi Kaliforniaan laivalla, jalan ja myynnistä. San Francisco kasvoi kalastuslahomurasta suurkaupungiksi kahdessa vuodessa.</p>
+    <p>Kultaa löytyi — mutta useimmat löysivät sen myymällä kaivajille lapioita, ruokaa ja viinaa. Levi Strauss tuli ompelemaan erityisiä housuja kaivajille. Californian väkiluku kasvoi 14 000:sta 380 000:een alle kymmenessä vuodessa. Alkuperäiskansat pyyhittiin pois tältä tieltä. Luonto kärsi, kun koko jokiuomia ohjattiin, räjäytettiin ja myrkytettiin elohopea-amalgamimenetelmällä.</p>
+
+    <h3>Klondike 1896 — kultaa lumen alta</h3>
+    <p>Jos Kalifornia oli suuri, Klondike oli eeppinen. Kun George Carmack löysi elokuussa 1896 kultaa Yukonin tundralta Bonanza Creekiltä, oli lähimmälle kaupungille Dawsonin kaupungille matkaa satoja kilometriä. Silti 100 000 ihmistä yritti päästä sinne.</p>
+    <p>Chilikootin sola — jyrkkä vuoristoreitti Alaskan rannikolta Yukonille — käytettiin talvella 1897–98 ihmisvirran läpi. Kanadian poliisi vaati jokaista, joka ylitti rajan, tuomaan mukanaan vuoden ruokavarannot — yli 900 kg. Rajan yli kävelevät ihmiset muodostivat inhimillisen ketjun kuukausia. Jotkut tekivät matkan yli 40 kertaa edestakaisin kantaakseen kaiken tarvittavan.</p>
+
+    <div class="fact-box">
+      <div class="fact-icon">⛏️</div>
+      <div>
+        <span class="fact-num">$30 mrd</span>
+        <span class="fact-lbl">Klondiken kultasadon arvo nykyrahassa</span>
+        <p class="fact-text">Klondikesta louhittiin 1896–1899 noin 12,5 miljoonaa troy-unssia kultaa. Itse Dawsonin kaupungissa kukoisti teatterit, paristot ja luksushotellit 500 km:n päässä lähimmästä rautatieasemasta. Kirjailija Jack London tuli sinne 1897 — ja kirjoitti sen tarinat ikuisiksi.</p>
+      </div>
+    </div>
+
+    <h3>Lappi ja Ivalojoki — Suomen kultaunelma</h3>
+    <p>Vuonna 1868 ruotsalainen Nils Johan Lannavaara löysi kultahiukkasia Ivalojoen hiekasta. Tieto levisi nopeasti — ensin lähipitäjiin, sitten etelään. Satoja miehiä saapui Lapin erämaahan yrityksenä löytää onni. Ivalojoki ja sen sivujoet kaivettiin perinpohjaisesti — mutta kultaa löytyi vaatimattomasti. Silti Lapin kultakuume jatkuu tähän päivään: Lemmenjoki on edelleen aktiivisin kultakaivosalue Suomessa.</p>
+    <div class="callout earth"><span class="callout-icon">🌲</span><div><b>Ympäristötuho kullan jäljissä</b> Kultaryntäykset jättivät pysyvät arvet luontoon kaikkialla. Elohopeamyrkytys Kalifornian joissa on edelleen havaittavissa. Klondiken kaivosalueet ovat surullisen hyvä esimerkki: louhitut, revityt ja patoaltaiden täyttämät laaksot muistuttavat kuuluisaa maisemaa. Kultaa löydettiin — mutta luonnon hinta oli kova.</div></div>
+
+    <h3>Nykykullan louhinta — onko se kestävää?</h3>
+    <p>Nykyisin kulta louhitaan pääasiassa teollisessa kaivostoiminnassa Kiinassa, Australiassa, Venäjällä ja Afrikassa. Yhden kultasormuksen valmistamiseen tarvitaan keskimäärin <strong>20 tonnia louhintatähde</strong>. Kaivokset kuluttavat valtavia määriä vettä, syaaniliuosta ja energiaa. Toisaalta kierrätyskulta (ns. "urban mining" elektroniikasta) on yleistymässä.</p>
+  </div>
+</section>
+
+<!-- III. HOPEAN TARINA -->
+<section class="section story" id="hopeahistoria">
+  <div class="sec-hd"><span class="sec-num" style="border-color:rgba(173,184,196,.4);color:var(--silver)">III</span><h2><span class="sub">Historia</span>Hopean tarina — laivastosta laboratorioon</h2></div>
+  <div class="prose">
+    <div class="pullquote light">"Hopea on kullan vaatimaton veli — mutta teollisuuden korvaamaton työmies."</div>
+
+    <h3>Antiikin Laureion — hopea rakentaa laivastoja</h3>
+    <p>Vuonna 483 eKr. Ateenan Laureionin kaivoksissa löydettiin poikkeuksellisen rikas hopeasuoni. Ateenalaiset äänestivät poikkeuksellisesta päätöksestä: rahat rakennettaisiin laivastoksi, ei jaettaisi kansalaisille. Kolme vuotta myöhemmin tuo laivasto tuhosi Persian kuningas Xerxeen laivaston Salamiksen taistelussa. Hopea pelasti länsimaisen demokratian.</p>
+
+    <h3>Potosí — Etelä-Amerikan hopeakaivos</h3>
+    <p>1500-luvulla löydettiin Bolivian Cerro Rico -vuorelta hopeaa niin paljon, että siitä kirjoitettiin sanonta: "vale un Potosí" — maksaa Potosín arvoisen. Kaivos ruokki koko Espanjan imperiumia ja sen sota-armeijaa. Hinnan maksoivat kaivoksissa työskentelevät alkuperäiskansojen ihmiset — arviolta 8 miljoonaa kuoli 200 vuoden aikana. Cerro Ricoa kutsuttiin nimellä "vuori, joka syö ihmisiä."</p>
+
+    <h3>Hopea lääketieteessä ja tieteessä</h3>
+    <ul class="bullets light">
+      <li><strong>Antibakteerinen:</strong> Hopean ionit tappavat bakteereja ja sieniä — sitä on käytetty haavasiteiden, vesiputkien ja lääketieteellisten laitteiden pinnoituksessa kautta aikojen</li>
+      <li><strong>Valokuvaus:</strong> Hopean valonherkkyys mahdollisti valokuvauksen — hopeasuolat olivat kaikkien varhaisvalokuvien sielu</li>
+      <li><strong>Elektroniikka:</strong> Hopea on paras sähkönjohdin kaikista metalleista — se löytyy jokaisesta tietokoneesta, älypuhelimesta ja sähkölaitteesta kontakteissa</li>
+      <li><strong>Peilit:</strong> Hopea-amalgaamia käytettiin peilissä 1800-luvulle asti — siksi "silvered mirror"</li>
+    </ul>
+  </div>
+</section>
+
+<!-- IV. HOPEAN TULEVAISUUS -->
+<section class="section story-alt" id="hopeatulevaisuus">
+  <div class="sec-hd"><span class="sec-num" style="border-color:rgba(173,184,196,.4);color:var(--silver)">IV</span><h2><span class="sub">Nykypäivä &amp; tulevaisuus</span>Hopean kriisi — miksi hopea voi olla tärkeämpää kuin kulta</h2></div>
+  <div class="prose">
+    <div class="pullquote light">"Kulta on varallisuuden säilyttämistä. Hopea on sivilisaation toimivuutta."</div>
+
+    <h3>Aurinkopaneelit syövät hopean</h3>
+    <p>Tässä on moderni paradoksi: maapallo yrittää pelastaa itsensä ilmastonmuutokselta aurinkoenergian avulla. Mutta aurinkoenergia vaatii hopean. Jokainen aurinkopaneeli sisältää noin <strong>20 grammaa hopeaa</strong> — sähköä johtavana pastana kennon pinnalla. Maailma asentaa nyt kymmeniä gigatehoja aurinkopaneeleita vuosittain.</p>
+
+    <div class="future-bar">
+      <h4>Hopean kysyntä-tarjonta -ennuste 2025–2035</h4>
+      <div style="display:flex;flex-direction:column;gap:.8rem">
+        <div>
+          <div style="font-family:var(--font-m);font-size:.62rem;color:rgba(255,255,255,.4);margin-bottom:.3rem">Kysyntä (aurinkopaneelit + EV + perinteinen)</div>
+          <div class="f-track"><div class="f-fill s-demand" style="width:88%">88% — ja kasvussa</div></div>
+        </div>
+        <div>
+          <div style="font-family:var(--font-m);font-size:.62rem;color:rgba(255,255,255,.4);margin-bottom:.3rem">Tarjonta (kaivokset + kierrätys)</div>
+          <div class="f-track"><div class="f-fill s-supply" style="width:72%">72% — kasvaa hitaasti</div></div>
+        </div>
+        <div>
+          <div style="font-family:var(--font-m);font-size:.62rem;color:rgba(255,255,255,.4);margin-bottom:.3rem">Aurinkopaneelien osuus hopeankulutuksesta</div>
+          <div class="f-track"><div class="f-fill s-solar" style="width:58%">~55% vuoteen 2030 mennessä</div></div>
+        </div>
+      </div>
+      <p class="calc-note" style="margin-top:.7rem">Lähteet: Silver Institute, IEA, BNEF 2024</p>
+    </div>
+
+    <h3>Sähköautot ja akkuteollisuus</h3>
+    <p>Sähköautojen tehoelektroniikka vaatii hopeaa kontakteissa. Kiinteäelektrolyytti-akkuteknologia (solid-state) käyttää hopea-pohjaa anodissa — ja lupaa paljon suuremman energiatiheyden kuin litiumioniakku. Toyota ja Samsung ovat jo investoimat miljardeja tähän teknologiaan. Jos kiinteäelektrolyytti läpimurto tapahtuu, hopean kysyntä voi moninkertaistua.</p>
+
+    <div class="fact-row">
+      <div class="fact-card"><span class="fc-val">25 000 t</span><span class="fc-lbl">Hopean vuosilouhinta maailmassa</span></div>
+      <div class="fact-card"><span class="fc-val">~30 v</span><span class="fc-lbl">Arvioitu tunnettu varanto nykytahdilla</span></div>
+      <div class="fact-card"><span class="fc-val">6 500 t</span><span class="fc-lbl">Hopea aurinkopaneeleissa v. 2023</span></div>
+      <div class="fact-card"><span class="fc-val">3×</span><span class="fc-lbl">Hinnan odotettu nousu 2025–2035</span></div>
+    </div>
+
+    <h3>Mitä tapahtuu jos korvaajaa ei löydy?</h3>
+    <p>Hopean sähkönjohtokyky on parhaan metallin — jopa kuparia parempi. Tutkijat etsivät korvaajia: grafeenia, kupari-nanolankoja, johtavia polymeerejä. Mutta toistaiseksi mikään ei pysty korvaamaan hopeaa aurinkokennojen keräystehossa. Kehitys etenee, mutta hitaammin kuin hopean kysyntä kasvaa.</p>
+    <div class="callout warn"><span class="callout-icon">📈</span><div><b>Sijoittajan näkökulma</b> Hopea on ollut aliarvostettu suhteessa kultaan vuosikymmeniä. Gold/silver-suhde on historiallisesti ollut 1:15 — tänään se on lähempänä 1:80. Monet analyytikot uskovat hopean olevan nyt se aliarvostettu strateginen metalli, jota kulta oli 1970-luvulla. Tämä ei ole sijoitusneuvonta.</div></div>
+
+    <div class="pullquote light">"Ymmärtääksesi hopean tärkeyttä, pidä kädessäsi älypuhelin, katso ulos ikkunasta aurinkovoimalan suuntaan ja mieti: kaikki tämä on mahdollista hopean ansiosta."</div>
+  </div>
+</section>
+
+<!-- 01 MATERIAALIT -->
+<section class="section" id="materiaalit">
+  <div class="sec-hd"><span class="sec-num">01</span><h2><span class="sub">Materiaalit</span>Materiaalit ja jalometallilegeeringit</h2></div>
+  <div class="prose">
+    <p>Jalometallityöt alkavat oikean materiaalin valinnalla. Puhdas kulta ja hopea ovat liian pehmeitä käytännön koruihin, joten ne seostetaan muilla metalleilla kovuuden parantamiseksi.</p>
+    <div class="alloy-grid">
+      <div class="alloy-card gold-24"><div class="alloy-swatch"></div><div class="alloy-info"><div class="title">24k — Puhdas kulta 999</div><div class="sub">99,9% Au — liian pehmeää koruihin</div></div></div>
+      <div class="alloy-card gold-18"><div class="alloy-swatch"></div><div class="alloy-info"><div class="title">18k — Kultaa 750</div><div class="sub">75% Au — korkealaatuinen korukäyttöön</div></div></div>
+      <div class="alloy-card gold-14"><div class="alloy-swatch"></div><div class="alloy-info"><div class="title">14k — Kultaa 585</div><div class="sub">58,5% Au — yleisin Suomessa</div></div></div>
+      <div class="alloy-card silver"><div class="alloy-swatch"></div><div class="alloy-info"><div class="title">Sterling 925</div><div class="sub">92,5% Ag + 7,5% Cu — korustandardi</div></div></div>
+    </div>
+    <h3>Hankintamuodot</h3>
+    <table class="mat-table">
+      <thead><tr><th>Muoto</th><th>Kuvaus</th><th>Käyttökohteet</th></tr></thead>
+      <tbody>
+        <tr><td>Rakeet (Granulaatit)</td><td>Pieniä kuulia tai rakeita</td><td>Valaminen, seosteneko, granulaatiokoristelu</td></tr>
+        <tr><td>Levy</td><td>0,3–3,0 mm paksuina arkkina</td><td>Sormusrungot, istukat, riipukset</td></tr>
+        <tr><td>Lanka — pyöreä</td><td>Eri paksuisia (0,3–3 mm)</td><td>Sormukset, ketjut, istukkaan reunukset</td></tr>
+        <tr><td>Lanka — puolipyöreä / neliskanttinen</td><td>Erikoisprofiileja</td><td>Kehykset, geometriset sormukset</td></tr>
+        <tr><td>Putki</td><td>Ontto profiili</td><td>Nivelliitokset, kevytrakenteet</td></tr>
+        <tr><td>Harko (Ingot)</td><td>Valettu palkki</td><td>Lähtömateriaaliksi valssaukselle</td></tr>
+      </tbody>
+    </table>
+    <div class="callout info"><span class="callout-icon">♻️</span><div><b>Kierrätys — arvokas rutiini</b> Viilausjauho, sahanpuru ja leikkuujätteet kerätään talteen ja lähetetään puhdistusliikkeelle. Hyvä talteenotto vähentää materiaalikustannuksia merkittävästi.</div></div>
+  </div>
+</section>
+
+<!-- 02 HARTSITULOSTIN -->
+<section class="section" id="hartsitulostin">
+  <div class="sec-hd"><span class="sec-num">02</span><h2><span class="sub">Modernit valutekniikat</span>Hartsitulostin ja 3D-valumalli — uusi aikakausi</h2></div>
+  <div class="prose">
+    <p>Meillä on käytössä hartsitulostin (ns. resin printer), jolla voidaan tulostaa <strong>valukelpoisia vahamaisia malleja</strong> suoraan 3D-mallinnusohjelmistosta. Teknologia yhdistää digitaalisen suunnittelun perinteiseen kadonneenvahan valuun — tulos on täsmällisyydeltään ja vapaudeltaan ylivertainen verrattuna käsin veistettyihin vahamalleihin.</p>
+
+    <h3>Miten hartsitulostin toimii?</h3>
+    <p>Jalometallityöhön käytetään <strong>DLP- tai MSLA-tekniikan</strong> resin-tulostimia (esim. Elegoo, Anycubic, Formlabs). Nestettä kovettataan UV-valolla kerros kerrokselta. Kastava/vaalimiskelvoton hartsimateriaali valitaan sen mukaan, miten se käyttäytyy valussa:</p>
+    <div class="card-grid">
+      <div class="card steel-top"><span class="card-icon">🟡</span><h4>Castable Resin (valukelpoinen)</h4><p>Erityinen hartsi, joka palaa vuolijanheen sisällä lähes täydellisesti poistamatta tuhkaa. Tasainen palamistapahtuma estää kappaleen rikkoutumisen. Esim. Castable Wax, SprintRay CastablePro.</p></div>
+      <div class="card steel-top"><span class="card-icon">🔵</span><h4>Flexible/Standard Resin — EI valuun</span></h4><p>Tavallinen hartsi ei pala puhtaasti — jättää tuhkaa muottiin ja aiheuttaa huokosuutta valuun. Käytetään vain prototyyppeihin, ei suoraan valuun.</p></div>
+      <div class="card"><span class="card-icon">🟣</span><h4>DLP/MSLA Wax Resin</h4><p>Hartsit, jotka sisältävät vahaa — käyttäytyvät kuten perinteinen koruvaha. Sopii parhaiten kadonneenvahan valuun. Anycubic Craftmaster, FormLabs Castable Wax 40.</p></div>
+    </div>
+
+    <h3>Työnkulku — 3D-mallista valmiiseen koruun</h3>
+    <div class="process-flow">
+      <div class="pf-item"><div class="pf-dot">1</div><div class="pf-body"><strong>3D-mallinnus (CAD)</strong><span>Malli suunnitellaan Rhinoceros 3D:ssä, ZBrushissa, Fusion 360:ssä tai Blenderissä. Korualalla Rhino + Grasshopper tai RhinoGold ovat standardeja. Muista: malli tulostetaan ~2% kutistumavara huomioiden.</span></div></div>
+      <div class="pf-item"><div class="pf-dot">2</div><div class="pf-body"><strong>Slicing — kerrosten laskenta</strong><span>Malli tuodaan slicer-ohjelmaan (esim. Chitubox, Lychee Slicer). Lisätään tukimateriaalit (supports) — ne kannattelevat mallia tulostuksen aikana. Tukien sijoittelu on kriittinen: väärät tuet voivat vaurioittaa pintaa.</span></div></div>
+      <div class="pf-item"><div class="pf-dot">3</div><div class="pf-body"><strong>Tulostus</strong><span>UV-hartsi kovettuu kerroksittain tulostimen valoaltaan päällä. Kerrosresoluutio on tyypillisesti 0,025–0,05 mm — tarkempi kuin käsin veistetty vahamalli. Tulostusaika pienelle korulle: 1–3 tuntia.</span></div></div>
+      <div class="pf-item"><div class="pf-dot">4</div><div class="pf-body"><strong>Pesu ja kovetaminen</strong><span>Tulostettu malli pestään IPA-alkoholissa (isopropyylialkoholi) kovettumattoman hartsin poistamiseksi. Pestään 2×5 min — ensin likainen, sitten puhdas IPA. Lopuksi UV-kovetus (~2 min). TÄRKEÄÄ: kaikki tämä suojavarusteet päällä.</span></div></div>
+      <div class="pf-item"><div class="pf-dot">5</div><div class="pf-body"><strong>Tukimateriaalin poisto ja tarkistus</strong><span>Tukirakenteet poistetaan pinseteillä tai sivaleikkurilla. Pinta tarkastetaan suurennuslasilla — pienet virheet korjataan hartsilakalla tai kirurgisesti hienolla viilalla. Valukelpoinen malli on täydellinen pintakäsitelty.</span></div></div>
+      <div class="pf-item"><div class="pf-dot">6</div><div class="pf-body"><strong>Vahaoksa ja vuolijanhe</strong><span>Tulostettu malli kiinnitetään vahaoksan päähän kuten perinteinen vahamalli. Vuolijanhe sekoitetaan, alipainekäsitellään ja kaadetaan sylinteriin. Uunipoltto burnout-ohjelmalla (100–750 °C, 8–12 h).</span></div></div>
+      <div class="pf-item"><div class="pf-dot dark">7</div><div class="pf-body"><strong>Valu ja viimeistely</strong><span>Metalli valetaan kuumaan muottiin sentrifugaali- tai tyhjiövaluna. Kappaleet viimeistellään kuten minkä tahansa valukappaleen — valukanaviston sahaaminen, hionta, kiillotus.</span></div></div>
+    </div>
+
+    <div class="callout warn"><span class="callout-icon">⚠️</span><div><b>HARTSITULOSTIN — TURVALLISUUS ON KRIITTINEN</b> Kovettumaton UV-hartsi on myrkyllistä, iho- ja silmäärsyttävää sekä mahdollisesti allergisoivaa. Lue koko turvallisuusosio ennen hartsitulostimen käyttöä.</div></div>
+
+    <h3>Hartsitulostimen edut vs. käsin veistetty vahamalli</h3>
+    <div class="two-col">
+      <div>
+        <h4>3D-tulostettu malli</h4>
+        <ul class="bullets">
+          <li>Täsmällinen toistettavuus — identtiset sarjat</li>
+          <li>Monimutkaiset geometriat ja sisäiset rakenteet</li>
+          <li>Nopea prototyyppi: malli muutetaan ja tulostetaan uudelleen tunnissa</li>
+          <li>Mittatarkkuus: ±0,05 mm mahdollinen</li>
+          <li>Erittäin ohut filigranityö mahdollista</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Käsin veistetty vahamalli</h4>
+        <ul class="bullets">
+          <li>Orgaaninen, käsintehty tuntu — ainutlaatuinen</li>
+          <li>Ei vaadi CAD-osaamista</li>
+          <li>Nopeampi pienmääräiseen yksilötyöhön</li>
+          <li>Helpompi korjata veistosvaiheessa</li>
+          <li>Ei laiteinvestointeja</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout tip"><span class="callout-icon">💡</span><div><b>Paras käytäntö</b> Yhdistä molemmat: suunnittele 3D:llä, tulosta malli, korjaa käsin vahatyökalulla, ja sitten valu. Tulos on digitaalinen tarkkuus yhdistettynä käsityön intuitiiviseen viimeistelyyn.</div></div>
+  </div>
+</section>
+
+<!-- 03 MODERNIT VALUTEKNIIKAT -->
+<section class="section" id="modernivalu">
+  <div class="sec-hd"><span class="sec-num">03</span><h2><span class="sub">Valutekniikat</span>Muut modernit valutekniikat</h2></div>
+  <div class="prose">
+    <div class="cast-grid">
+      <div class="cast-card"><span class="cast-badge mod">Moderni</span><h4>Sentrifugaalivalu</h4><p>Muotin täyttyminen tapahtuu sentrifugivoiman avulla — tasainen täyttyminen, vähemmän ilmakuplia. Sopii sarjatuotantoon.</p><div class="cast-pros"><span>Ohut seinämä mahdollinen</span><span>Hyvä metallinen rakenne</span></div></div>
+      <div class="cast-card"><span class="cast-badge mod">Moderni</span><h4>Tyhjiövalu</h4><p>Alipaine vedetään muotin taakse kaatamisen hetkellä. Soveltuu erityisesti ohuille ja monimutkaisille rakenteille.</p><div class="cast-pros"><span>Vähemmän huokosia</span><span>Parempi pintalaatu</span></div></div>
+      <div class="cast-badge mod">Kumimalli + injektiovalu</div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 PERINTEISET VALUTEKNIIKAT -->
+<section class="section" id="valaminen">
+  <div class="sec-hd"><span class="sec-num">04</span><h2><span class="sub">Valutekniikat</span>Perinteiset valutekniikat</h2></div>
+  <div class="prose">
+    <h3>Hiekkamuottivalu (Sand Casting)</h3>
+    <div class="process-flow">
+      <div class="pf-item"><div class="pf-dot">1</div><div class="pf-body"><strong>Mallineen valmistus</strong><span>Puinen tai metalliinen positiivimalli — pinta sileä, päästökulmat huomioitu.</span></div></div>
+      <div class="pf-item"><div class="pf-dot">2</div><div class="pf-body"><strong>Hiekan pakkaaminen</strong><span>Erikoishiekka pakataan tiukasti mallineen ympärille kahdessa osassa. Malli poistetaan jättäen negatiiviontelon.</span></div></div>
+      <div class="pf-item"><div class="pf-dot">3</div><div class="pf-body"><strong>Valu</strong><span>Metalli sulatetaan ja kaadetaan nopeasti valureikään.</span></div></div>
+      <div class="pf-item"><div class="pf-dot dark">4</div><div class="pf-body"><strong>Irrotus</strong><span>Annetaan jähmettyä, rikotaan hiekkamuotti. Valukanavisto sahataan irti.</span></div></div>
+    </div>
+    <h3>Kuttrifevalanta (Cuttlefish Casting)</h3>
+    <p>Mustekalan selkäluuhun kaiverretaan haluttu muoto — jokaisella valukerralla muotti tuhoutuu, mutta antaa ainutlaatuisen orgaanisen pintarakenteen. Erittäin soveltuva taiteelliseen piensarjatuotantoon.</p>
+    <div class="callout warn"><span class="callout-icon">⚠️</span><div><b>Vuolijanhe on vaarallinen</b> Sekoitettaessa syntyy silikaa. Käytä aina FFP3-hengityssuojainta, suojalaseja ja käsineitä. Käytä vetokaappia tai tee ulkona.</div></div>
+  </div>
+</section>
+
+<!-- 05 ESIVALMISTELU -->
+<section class="section" id="esivalmistelu">
+  <div class="sec-hd"><span class="sec-num">05</span><h2><span class="sub">Esivalmistelu</span>Valssaus, langan veto ja hehkutus</h2></div>
+  <div class="prose">
+    <h3>Hehkutus (Annealing)</h3>
+    <div class="process-flow">
+      <div class="pf-item"><div class="pf-dot" style="background:var(--silver);color:var(--forge)">1</div><div class="pf-body"><strong>Kuumenna himmeän punaiseksi</strong><span>Hopea ~700 °C, kulta 650–800 °C. Himmeä punainen hehku pimeässä on merkki oikeasta lämpötilasta — älä ylikuumenna.</span></div></div>
+      <div class="pf-item"><div class="pf-dot" style="background:var(--silver);color:var(--forge)">2</div><div class="pf-body"><strong>Sammutus</strong><span>Hopea: sammuta vedessä. Kulta: riippuu seoksesta. Platina: ei koskaan nopeasti.</span></div></div>
+      <div class="pf-item"><div class="pf-dot dark">3</div><div class="pf-body"><strong>Happokylpy (Pickling)</strong><span>Kappale upotetaan 10% rikkihappo- tai sitruunahappoliuokseen hapettuman poistamiseksi. Käytä VAIN muovisia tai puisia pinsettejä.</span></div></div>
+    </div>
+    <h3>Valssaus ja langan vetäminen</h3>
+    <p>Valssikone ohenee metallia tasaisesti — hehkuta aina kun metalli alkaa vastustaa. Langan vetorauta (draw plate) vetää langan oikeaan profiiliin — pyöreä, puolipyöreä tai neliö. Voitele lanka aina mehiläisvahalla ennen vetoa.</p>
+  </div>
+</section>
+
+<!-- LASKURI -->
+<section class="section" id="mitoitus" style="background:var(--forge)">
+  <div class="sec-hd"><span class="sec-num" style="background:rgba(201,168,76,.15);border-color:rgba(201,168,76,.4);color:var(--gold)">★</span><h2 style="color:var(--gold-lt)"><span class="sub" style="color:var(--gold)">Interaktiivinen laskin</span>Sormuksen mitoituslaskuri</h2></div>
+  <div class="prose" style="max-width:840px">
+    <p style="color:rgba(255,255,255,.52)">Laske sormuksen aihion pituus kaavan <strong style="color:var(--gold-lt)">L = (d + s) · π</strong> mukaan, tai hae koon avulla sisähalkaisija.</p>
+    <div class="calc-outer">
+      <div class="calc-title">Sormuksen aihion pituuslaskuri</div>
+      <div class="calc-tabs">
+        <button class="calc-tab on" onclick="switchRingTab('length')">📏 Aihion pituus</button>
+        <button class="calc-tab" onclick="switchRingTab('size')">🔢 Koon haku</button>
+        <button class="calc-tab" onclick="switchRingTab('chart')">📊 Mittataulu</button>
+      </div>
+      <div class="calc-form on" id="ring-length">
+        <div class="calc-row">
+          <div class="calc-field"><label>Sisähalkaisija d (mm)</label><input type="number" id="ring-d" value="17.0" min="10" max="30" step="0.1" oninput="calcRing()"></div>
+          <div class="calc-field"><label>Materiaalin paksuus s (mm)</label><input type="number" id="ring-s" value="1.5" min="0.3" max="5" step="0.1" oninput="calcRing()"></div>
+          <div class="calc-field"><label>Materiaalin leveys w (mm)</label><input type="number" id="ring-w" value="5" min="1" max="30" step="0.5" oninput="calcRing()"></div>
+          <div class="calc-field"><label>Sauman varan lisäys (mm)</label><input type="number" id="ring-extra" value="1.5" min="0" max="5" step="0.5" oninput="calcRing()"></div>
+        </div>
+        <hr class="calc-divider">
+        <div class="calc-results">
+          <div class="result-card highlight"><span class="r-val" id="res-length">–</span><span class="r-unit">mm</span><span class="r-lbl">Aihion pituus (sis. sauman vara)</span></div>
+          <div class="result-card"><span class="r-val" id="res-length-base">–</span><span class="r-unit">mm</span><span class="r-lbl">Teoreettinen L=(d+s)·π</span></div>
+          <div class="result-card silver-card"><span class="r-val" id="res-diam-out">–</span><span class="r-unit">mm</span><span class="r-lbl">Ulkohalkaisija</span></div>
+          <div class="result-card silver-card"><span class="r-val" id="res-ring-size">–</span><span class="r-unit">FIN/EU</span><span class="r-lbl">Sormuskokonumero</span></div>
+        </div>
+        <p class="calc-note">Kaava: L = (d + s) · π | Leimaus ennen taivutusta!</p>
+      </div>
+      <div class="calc-form" id="ring-size">
+        <div class="calc-row">
+          <div class="calc-field"><label>Sormusmittanumero (FIN/EU)</label><input type="number" id="sz-num" value="17" min="6" max="30" step="1" oninput="calcFromSize()"></div>
+          <div class="calc-field"><label>Materiaalin paksuus s (mm)</label><input type="number" id="sz-s" value="1.5" min="0.3" max="5" step="0.1" oninput="calcFromSize()"></div>
+        </div>
+        <hr class="calc-divider">
+        <div class="calc-results">
+          <div class="result-card"><span class="r-val" id="sz-dia">–</span><span class="r-unit">mm</span><span class="r-lbl">Sisähalkaisija</span></div>
+          <div class="result-card highlight"><span class="r-val" id="sz-length">–</span><span class="r-unit">mm</span><span class="r-lbl">Aihion pituus (+1,5 mm)</span></div>
+          <div class="result-card silver-card"><span class="r-val" id="sz-circ">–</span><span class="r-unit">mm</span><span class="r-lbl">Sormen ympärysmitta</span></div>
+        </div>
+        <p class="calc-note">FIN/EU-sormusnumero ≈ sisähalkaisija millimetreinä</p>
+      </div>
+      <div class="calc-form" id="ring-chart">
+        <div style="overflow-x:auto">
+          <table class="size-chart">
+            <thead><tr><th>FIN/EU</th><th>Sisähalk.</th><th>Ympärys</th><th>UK koko</th><th>US koko</th></tr></thead>
+            <tbody id="size-chart-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 TYÖVAIHEET -->
+<section class="section" id="tyovaiheet">
+  <div class="sec-hd"><span class="sec-num">06</span><h2><span class="sub">Työvaiheet</span>Sahaaminen, viilaaminen ja leimaaminen</h2></div>
+  <div class="prose">
+    <h3>Sahaaminen</h3>
+    <p>Jalometallisahaamisessa käytetään lehtisahaa, jonka hampaat osoittavat alaspäin. Terä vedetään alaspäin — ei paineta. Voitele mehiläisvahalla. Tue metalli viilauspuuta (pinnaa) vasten, sahausviiva lähellä tukea.</p>
+    <h3>Viilaaminen</h3>
+    <p>Viilaa aina eteenpäin, ei takaisin. Eri viilat eri pintamuotoihin: neula, lehti, kolmio, puolipyöreä, pyöreä. Puhdista viila harjalla säännöllisesti. Kerää viilausjauho talteen!</p>
+    <h3>Leimaaminen — ennen taivutusta</h3>
+    <p>Pitoisuusleima (925, 585, 750) ja nimileima lyödään aihion sisäpuolelle <strong>ennen taivutusta</strong>. Taivutettuna leimaaminen on mahdotonta rikkoutumatta.</p>
+    <div class="callout warn"><span class="callout-icon">⚠️</span><div><b>Suojalasit aina konetyössä</b> Poran terä voi katketa ja lentää korkealla nopeudella. Suojalasit kaikessa konetyössä — ei poikkeuksia.</div></div>
+  </div>
+</section>
+
+<!-- 07 MUOTOILU JA JUOTTAMINEN -->
+<section class="section" id="muotoilu">
+  <div class="sec-hd"><span class="sec-num">07</span><h2><span class="sub">Työvaiheet</span>Muotoilu ja juottaminen</h2></div>
+  <div class="prose">
+    <h3>Muotoilu</h3>
+    <p>Hehkutettu aihio taivutetaan sormuspihdillä pyöreäksi. Käytä suojapinnoitettuja pihtiä — teräspihdeistä jää jälkiä. Viimeistele pyöreäksi sormuskaran päällä puuvasaralla.</p>
+    <h3>Juottaminen</h3>
+    <div class="callout info"><span class="callout-icon">🔥</span><div><b>Juotteiden järjestys</b> Useissa juotoissa aloitetaan kovalla juotteella — sitten lasketaan helpommin sulavia. Aiemmat liitokset eivät avaudu myöhempien juotusten aikana.</div></div>
+    <ol class="steps">
+      <li><strong>Puhdistus:</strong> Pintojen oltava täysin puhtaita. Rasva estää juotteen virtauksen.</li>
+      <li><strong>Kokoonpano:</strong> Liitospintojen koskettava toisiaan — juote ei täytä rakoja.</li>
+      <li><strong>Juoksute (booraksi):</strong> Suojelee pintaa hapettumiselta ja mahdollistaa juotteen kapillaarivirtauksen.</li>
+      <li><strong>Juotospalan asettelu:</strong> Pieniä paloja (1–2 mm²) liitoksen viereen pinseteillä.</li>
+      <li><strong>Lämmitys:</strong> Kuumenna koko kappaletta — juote virtaa sinne, missä lämpö on.</li>
+      <li><strong>Sammutus ja happokylpy:</strong> Sammuta ja upota happokylpyyn puhdistukseen.</li>
+    </ol>
+    <div class="callout warn"><span class="callout-icon">⚠️</span><div><b>Juotoshuurut</b> Käytä aina riittävää ilmanvaihtoa, vetokaappia tai poistoilmapuhallinta. Kadmiumia sisältäviä vanhoja juotteita ei saa enää käyttää — ne ovat myrkyllisiä.</div></div>
+  </div>
+</section>
+
+<!-- 08 VIIMEISTELY -->
+<section class="section" id="viimeistely">
+  <div class="sec-hd"><span class="sec-num">08</span><h2><span class="sub">Työvaiheet</span>Viimeistely ja pintakäsittely</h2></div>
+  <div class="prose">
+    <h3>Hiontajärjestys</h3>
+    <div class="process-flow">
+      <div class="pf-item"><div class="pf-dot" style="background:#888;color:white">1</div><div class="pf-body"><strong>Karkeahionta — viilat (180–240)</strong><span>Poistetaan suurimmat epätasaisuudet.</span></div></div>
+      <div class="pf-item"><div class="pf-dot" style="background:#aaa;color:white">2</div><div class="pf-body"><strong>Hiomapaperi 400</strong><span>Ensimmäinen vesihiomapaperi. Tarkista: edellisen vaiheen naarmut hävisivät.</span></div></div>
+      <div class="pf-item"><div class="pf-dot" style="background:#ccc;color:var(--forge)">3</div><div class="pf-body"><strong>Hiomapaperi 600 → 1200</strong><span>Hio kohtisuoraan edelliseen suuntaan — näet milloin edellinen vaihe on valmis.</span></div></div>
+      <div class="pf-item"><div class="pf-dot" style="background:var(--gold);color:var(--forge)">4</div><div class="pf-body"><strong>Kiillotuskone</strong><span>Ensin Tripoli (karkea), sitten Rouge (hieno). Pidä kappale tiukasti MOLEMMILLA käsillä.</span></div></div>
+    </div>
+    <div class="callout danger"><span class="callout-icon">🚨</span><div><b>Kiillotuskone on vaarallinen</b> Rumpuun tarttunut kappale voi repäistä työn kädestä tai viiltohaavan. Pidä AINA molemmin käsin kiinni. Sido hiukset, poista löysä vaatetus, älä koskaan vie pitkiä ketjuja lähelle rumpua.</div></div>
+    <h3>Pintakäsittelyvaihtoehdot</h3>
+    <div class="card-grid">
+      <div class="card"><span class="card-icon">✨</span><h4>Kiiltäväksi kiillottaminen</h4><p>Peilikiilto kiillotuskoneessa — Tripoli ensin, sitten Rouge. Puhdista saippuaveteen.</p></div>
+      <div class="card silver-top"><span class="card-icon">〰️</span><h4>Harjattu satiinipinta</h4><p>Teräsharjalla tai hiekkakivipaperilla yhteen suuntaan — älä sekoita suuntia.</p></div>
+      <div class="card silver-top"><span class="card-icon">🔨</span><h4>Takominen</h4><p>Pallovasaralla takominen antaa orgaanisen teksturellun pinnan.</p></div>
+      <div class="card"><span class="card-icon">🌊</span><h4>Hiekkapuhallus</h4><p>Tasainen mattapinta — hiekka- tai lasikuulapuhallus koko kappaleelle.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 KAIVERRUS -->
+<section class="section" id="kaiverrus">
+  <div class="sec-hd"><span class="sec-num">09</span><h2><span class="sub">Erikoistekniikat</span>Kaiverrus</h2></div>
+  <div class="prose">
+    <p>Kaiverrus on metallin pintaan tehtävää kuvioiden leikkaamista kaivertimilla. Käsinkaiversin työnnetään metallin pintaan tasaisella paineella — vasen käsi ohjaa kaiverruskuulaa, oikea käsi kaivertimea. Voidaan tehdä myös koneellisesti (pantografi, laser).</p>
+    <div class="callout tip"><span class="callout-icon">💡</span><div><b>Testaa ensin</b> Testaa kaiverruksen fontti ja koko aina paperilla tai kuparilevylle ennen varsinaista työtä — metallia ei voi "kumittaa".</div></div>
+  </div>
+</section>
+
+<!-- 10 KIVEN ISTUTTAMINEN -->
+<section class="section" id="kivistysvaiheet">
+  <div class="sec-hd"><span class="sec-num">10</span><h2><span class="sub">Erikoistekniikat</span>Kiven istuttaminen</h2></div>
+  <div class="prose">
+    <div class="card-grid">
+      <div class="card"><span class="card-icon">👑</span><h4>Kruunuistutus (Prong)</h4><p>4 tai 6 prong-kärkeä taivutetaan kiven päälle. Kivi näkyy hyvin, nopea toteuttaa.</p></div>
+      <div class="card"><span class="card-icon">⬜</span><h4>Kehäistutus (Bezel)</h4><p>Ympäröivä metallinen kehys painetaan kiven päälle. Suojaa parhaiten.</p></div>
+      <div class="card"><span class="card-icon">⚫</span><h4>Raeistutus (Pavé)</h4><p>Metallirakeita nostetaan kaivertimella kiven reunan yli. Tiheästi asetetut kivet.</p></div>
+      <div class="card"><span class="card-icon">💎</span><h4>Kanavistutus (Channel)</h4><p>Kivet asetetaan kahden metallikaistan väliin. Tasainen moderni ulkonäkö.</p></div>
+    </div>
+    <div class="callout warn"><span class="callout-icon">⚠️</span><div><b>Poista kivet ennen kuumennusta</b> Monet kivet — smaragdi, opaalit, pehmeämmät — ovat herkkiä lämmölle. Kivet poistetaan ENNEN juottamista tai hiomapaperilla käsittelyä.</div></div>
+  </div>
+</section>
+
+<!-- 11 PATINOINTI -->
+<section class="section" id="patinointi">
+  <div class="sec-hd"><span class="sec-num">11</span><h2><span class="sub">Erikoistekniikat</span>Patinointi ja pintaefektit</h2></div>
+  <div class="prose">
+    <p>Patinointi on kontrolloidun hapettuman aiheuttamista. Rikkimaksa (liver of sulfur) on yleisin hopealle: lyhyt altistus → keltainen, pidempi → oranssi, violetti, lopulta musta. Musta patinointi korostaa kaiverrusten syvyyttä erinomaisesti.</p>
+    <div class="callout warn"><span class="callout-icon">⚠️</span><div><b>Patinointi ulkona tai vetokaapissa</b> Rikkimaksa ja muut patinointiaineet aiheuttavat ärsyttäviä höyryjä. Käytä aina hyvää ilmanvaihtoa.</div></div>
+    <ul class="bullets">
+      <li><strong>Ammoniakkipatinointi:</strong> Kuparia sisältävät metallit → vihreä verdigris</li>
+      <li><strong>Ferrikloridi:</strong> Etsaustekniikka — syövyttää metallia tekstuuria varten</li>
+      <li><strong>Rhodinointi (PVD):</strong> Hopean hapettumisen estämiseksi</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 12 TURVALLISUUS -->
+<section class="section" id="turvallisuus">
+  <div class="sec-hd"><span class="sec-num">12</span><h2><span class="sub">Turvallisuus &amp; suojautuminen</span>Kattava turvallisuusopas — jokaisen tekijän on luettava tämä</h2></div>
+  <div class="prose">
+    <div class="callout danger"><span class="callout-icon">🚨</span><div><b>Turvallisuus ei ole valinnainen</b> Jalometallipajassa on useita vakavia riskejä: terävät työkalut, avotuli, happoliuokset, myrkylliset huurut ja UV-hartsi. Jokainen tekijä on vastuussa omasta ja muiden turvallisuudesta.</div></div>
+
+    <h3>Henkilösuojainten käyttöohje (PPE)</h3>
+    <p>Alla on taulukko oikeista suojavarusteista eri työvaiheisiin. <strong>Ei ole yksittäistä työtä, johon ei tarvita mitään suojainta.</strong></p>
+    <table class="ppe-table">
+      <thead><tr><th>Työvaihe</th><th>Suojalasit</th><th>Hengityssuojain</th><th>Käsineet</th><th>Muuta</th></tr></thead>
+      <tbody>
+        <tr><td>Sahaaminen / viilaaminen</td><td class="ppe-yes">✓ AINA</td><td class="ppe-no">—</td><td class="ppe-no">—</td><td>Kiinnitä työ tukevasti</td></tr>
+        <tr><td>Poraaminen / koneistus</td><td class="ppe-yes">✓ AINA</td><td class="ppe-no">—</td><td class="ppe-no">—</td><td>Ei löysiä hiuksia tai vaatteita</td></tr>
+        <tr><td>Kiillotuskone</td><td class="ppe-yes">✓ AINA</td><td class="ppe-no">—</td><td class="ppe-no">—</td><td>Molemmin käsin, hiukset sidottuna</td></tr>
+        <tr><td>Juottaminen (kaasuliekki)</td><td class="ppe-yes">✓ AINA</td><td class="ppe-yes">FFP2 suositeltu</td><td class="ppe-no">—</td><td>Vetokaappi, sammutin lähettyvillä</td></tr>
+        <tr><td>Happokylpy (rikkihappo/sitruuna)</td><td class="ppe-yes">✓ AINA</td><td class="ppe-yes">FFP2</td><td class="ppe-yes">Nitriili AINA</td><td>Vain muoviset pinsettit</td></tr>
+        <tr><td>Patinointi (rikkimaksa)</td><td class="ppe-yes">✓</td><td class="ppe-yes">FFP2</td><td class="ppe-yes">Nitriili</td><td>Ulkona tai vetokaapissa</td></tr>
+        <tr><td>Hartsitulostin — tulostus</td><td class="ppe-yes">✓</td><td class="ppe-no">—</td><td class="ppe-yes">Nitriili</td><td>Älä kosketa hartsia paljain käsin</td></tr>
+        <tr><td>Hartsitulostin — pesu (IPA)</td><td class="ppe-yes">✓ AINA</td><td class="ppe-yes">FFP2 tai A-tyypin</td><td class="ppe-yes">Nitriili</td><td>Erittäin tärkeää: IPA on syttyvää</td></tr>
+        <tr><td>Hartsitulostin — UV-kovetrus</td><td class="ppe-yes">✓ UV-suoja</td><td class="ppe-no">—</td><td class="ppe-yes">Nitriili</td><td>Älä katso UV-valoa suoraan</td></tr>
+        <tr><td>Vuolijanhe-sekoitus (valussa)</td><td class="ppe-yes">✓</td><td class="ppe-yes">FFP3 PAKOLLINEN</td><td class="ppe-yes">Nitriili</td><td>Vetokaappi tai ulkona AINA</td></div></tr>
+        <tr><td>Valu (sulametalli)</td><td class="ppe-yes">✓ Lämpösuoja</td><td class="ppe-yes">FFP2</td><td class="ppe-yes">Lämpökestävät</td><td>Kuiva lattia, sammutin, ensiapupiste</td></tr>
+        <tr><td>Hiekkapuhallus</td><td class="ppe-yes">✓ AINA</td><td class="ppe-yes">FFP2</td><td class="ppe-yes">Suositeltu</td><td>Suljettava hiekkapuhalluskabinetti</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Hartsitulostimen erikoisturvallisuus</h3>
+    <p>UV-hartsi on yksi vakavin kemikaali jalometallipajassa. Kovettumaton hartsi on <strong>herkistävä, ihoärsyttävä ja mahdollisesti karsinogeeninen</strong>. Kerran herkistynyt henkilö voi menettää mahdollisuuden käyttää hartsia ikinä uudelleen.</p>
+
+    <div class="safety-grid">
+      <div class="safety-item">
+        <h4>⚠ Kovettumaton hartsi — MYRKYLLINEN</h4>
+        <p>Älä koskaan koske kovettumattomaan hartsiin paljain käsin. Nitriilikorut ovat pakollisia. Kontakti iholle voi aiheuttaa herkistymistä — joka voi olla pysyvää.</p>
+      </div>
+      <div class="safety-item">
+        <h4>⚠ IPA-pesualtaan käsittely</h4>
+        <p>Isopropyylialkoholi on erittäin syttyvää (leimahduspiste 12 °C). Ei avotulia pesun lähettyvillä. Käytä suljetussa tilassa hyvällä ilmanvaihdolla.</p>
+      </div>
+      <div class="safety-item">
+        <h4>⚠ UV-kovetrus — silmäriski</h4>
+        <p>UV-valo vahingoittaa silmiä ja ihoa. Käytä UV-suojalaseja kovettimen lähettyvillä. Älä katso suoraan UV-lampun valoon.</p>
+      </div>
+      <div class="safety-item ok">
+        <h4>✓ Käytetyn IPA:n hävitys</h4>
+        <p>IPA jossa on hartsia on ongelmajätettä — ei viemäriin! Kerätään kanisteriin ja toimitetaan ongelmajätteen keräyspisteeseen.</p>
+      </div>
+      <div class="safety-item ok">
+        <h4>✓ Kovettunut hartsi on turvallinen</h4>
+        <p>Täysin kovettunut (UV-käsitelty) hartsi on huomattavasti turvallisempaa käsitellä kuin kovettumaton. Varmista aina täydellinen kovetuminen.</p>
+      </div>
+      <div class="safety-item">
+        <h4>⚠ Kertakäyttöiset nitriilikorut</h4>
+        <p>Hartsiset nitriilikorut vaihdetaan usein — läpikuumat korut antavat herkästi suojauksen, jos hartsit pääsevät läpi. Paksuus vähintään 0,2 mm.</p>
+      </div>
+    </div>
+
+    <h3>Valu ja avotuli — pelastautuminen</h3>
+    <div class="safety-grid">
+      <div class="safety-item">
+        <h4>⚠ Sulametalli — palovammariski</h4>
+        <p>Sulametalli (960–1100 °C) on äärimmäisen vaarallinen. Ei koskaan vettä lähellä valualuetta — vesi sulametallissa aiheuttaa höyryrähähdyksen. Lattia kuivana aina.</p>
+      </div>
+      <div class="safety-item">
+        <h4>⚠ Kaasupoltin</h4>
+        <p>Sammuta kaasupolttin aina välittömästi käytön jälkeen. Tarkista kaasuletkujen kunto säännöllisesti. Ei syttyviä materiaaleja juottamistilan lähellä.</p>
+      </div>
+      <div class="safety-item ok">
+        <h4>✓ Palosammutin</h4>
+        <p>ABC-sammutin on aina oltava helposti saatavilla juottamis- ja valupisteen lähellä. Kaikki tietävät sen sijainnin.</p>
+      </div>
+      <div class="safety-item ok">
+        <h4>✓ Ensiapupiste</h4>
+        <p>Ensiapulaatikko lähellä — sisältää silmähuuhtelupullon, haavasiteen ja palovammahoitoaineen. Ensiapupiste merkittynä selvästi.</p>
+      </div>
+    </div>
+
+    <h3>Jätehuolto ja kierrätys</h3>
+    <div class="callout info"><span class="callout-icon">♻️</span><div><b>Jalometalliromu on arvokasta</b> Hopea ja kulta erotetaan omiin astioihinsa. Viilausjauho, leikkuujätteet, nahkakaukalon sisältö — kaikki talteen. Lähetetään puhdistusliikkeelle säännöllisesti.</div></div>
+    <table class="warn-table">
+      <thead><tr><th>Jätetyyppi</th><th>Hävitystapa</th></tr></thead>
+      <tbody>
+        <tr><td>Jalometalliromu (Ag, Au)</td><td>Talteen — lähetetään puhdistusliikkeeseen</td></tr>
+        <tr><td>Happokylpyliuos</td><td>Ongelmajäte — neutraloidaan soodalla, keräyspisteeseen</td></tr>
+        <tr><td>IPA + hartsi-jäte</td><td>Ongelmajäte — kanisteriin, keräyspisteeseen</td></tr>
+        <tr><td>Kovettumaton hartsi (pisteytys)</td><td>Ongelmajäte — ei roskakoriin</td></tr>
+        <tr><td>Vuolijanhe-jäte</td><td>Rakennus/erityisjäte — ei viemäriin</td></tr>
+        <tr><td>Kiillotusvahat ja -rätit</td><td>Keräykseen metallipitoisuuden takia</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 13 TYÖKALUT -->
+<section class="section" id="tyokalut">
+  <div class="sec-hd"><span class="sec-num">13</span><h2><span class="sub">Ympäristö</span>Työkalut ja jalometallipenkki</h2></div>
+  <div class="prose">
+    <div class="card-grid">
+      <div class="card"><span class="card-icon">🪵</span><h4>Viilauspuu (Pinni)</h4><p>Puinen tuki, jota vasten sahataan ja viilataan. Kuluu käytössä — vaihdetaan tarvittaessa.</p></div>
+      <div class="card"><span class="card-icon">🫙</span><h4>Nahka/Kaukalo</h4><p>Kerää talteen arvokkaan metallipölyn ja pienet palaset. Tyhjennetään säännöllisesti.</p></div>
+      <div class="card silver-top"><span class="card-icon">🔥</span><h4>Kaasupoltin</h4><p>Juottamiseen ja hehkuttamiseen. Eri koon polttimia eri kappaleen kokoihin.</p></div>
+      <div class="card silver-top"><span class="card-icon">🔬</span><h4>Suurennuslasi / Loupe</h4><p>10× suurennuslasi välttämätön pienten yksityiskohtien tarkastamiseen.</p></div>
+      <div class="card"><span class="card-icon">⚖️</span><h4>Tarkkuusvaaka</h4><p>0,01 g tarkkuudella — välttämätön materiaalien punnitsemiseen.</p></div>
+    </div>
+    <h3>Keskeinen sanasto</h3>
+    <table class="tool-table">
+      <thead><tr><th>Työkalu</th><th>Käyttötarkoitus</th></tr></thead>
+      <tbody>
+        <tr><td>Sormuskara (Ring mandrel)</td><td>Kartion muotoinen rauta sormuksen pyöristämiseen ja koon mittaamiseen</td></tr>
+        <tr><td>Lattapihdit</td><td>Tarttumiseen ja taivuttamiseen — pehmeät leuat suojelevat metallia</td></tr>
+        <tr><td>Pintsetit / pinssetit</td><td>Juotospalojen ja pienten osien asetteluun kuumassa työssä</td></tr>
+        <tr><td>Lieriöporat (Burs)</td><td>Kivisijan kovertamiseen — eri koko ja muoto eri kivityypeille</td></tr>
+        <tr><td>Kaiverruskuula</td><td>Kappaleen kiinnittämiseen kaiverrusvaiheessa</td></tr>
+        <tr><td>Vetorautatikku (Draw plate)</td><td>Langan vetämiseen — eri profiileja eri muotoihin</td></tr>
+        <tr><td>Valssikone</td><td>Metallilevyn ohenteluun tasaisesti</td></tr>
+        <tr><td>Hartsitulostin (DLP/MSLA)</td><td>Valukelpoisten 3D-mallien tulostamiseen koruvahasta</td></tr>
+      </tbody>
+    </table>
+    <div class="faq">
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Miksi juote ei virtaa liitokseen?</div><div class="faq-a">Yleisin syy: pinta ei ole puhdas (rasva, hapettuma) tai kappaletta kuumennetaan pelkästään liitoskohdasta. Kuumenna koko kappaletta tasaisesti — juote virtaa sinne, missä lämpö on.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Miten erotan eri kultalaadut?</div><div class="faq-a">Luotettavin tapa on happotesti (acid test) erityisillä testihappoilla tai XRF-metallianturia (röntgenfluoresenssitestaus) joka antaa tarkan pitoisuuden tuhoamatta kappaletta.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Miksi hartsimalli ei mahdu valuun suoraan?</div><div class="faq-a">Valukelpoinen castable-resin vaatii täydellisen kovetumisen (UV-kovetrus), tukimateriaalin poistamisen ja pinnan tarkistamisen. Standard-resin ei sovellu valuun — se jättää tuhkaa muottiin.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Miksi hopea tummuu niin nopeasti?</div><div class="faq-a">Hopea reagoi ilman rikkiyhdisteillä (ihosta, saippuasta, ruuasta) muodostaen hopeasulfidin. Rhodinointi estää tummumisen lähes kokonaan. Säilytä suljetuissa pusseissa silikageelin kanssa.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer id="footer">
+  <p>Jalometallialan materiaaliopas · Muotoilun pajat · Metropolia AMK</p>
+  <p>Hopea &amp; Kulta — jalometallien ikuinen viehätys · käsityöstä moderniin valuun</p>
+</footer>
+
+</main></div>
+
+<script>
+function toggleToc() {
+  document.getElementById('toc').classList.toggle('open');
+  document.getElementById('toc-overlay').classList.toggle('open');
+}
+
+const sections = document.querySelectorAll('section[id]');
+const tocLinks = document.querySelectorAll('#toc a[href^="#"]');
+sections.forEach(s => new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    tocLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+    const active = document.querySelector(`#toc a[href="#${e.target.id}"]`);
+    if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  });
+}, { rootMargin: '-15% 0px -75% 0px' }).observe(s));
+tocLinks.forEach(a => a.addEventListener('click', () => {
+  document.getElementById('toc').classList.remove('open');
+  document.getElementById('toc-overlay').classList.remove('open');
+}));
+
+function toggleFaq(el) { el.closest('.faq-item').classList.toggle('open'); }
+
+let ringTab = 'length';
+function switchRingTab(tab) {
+  ringTab = tab;
+  document.querySelectorAll('.calc-tab').forEach((b,i) => b.classList.toggle('on',['length','size','chart'][i]===tab));
+  document.querySelectorAll('.calc-form').forEach(f => f.classList.remove('on'));
+  document.getElementById('ring-'+tab).classList.add('on');
+  if (tab==='length') calcRing();
+  else if (tab==='size') calcFromSize();
+  else buildChart();
+}
+
+function calcRing() {
+  const d = parseFloat(document.getElementById('ring-d').value)||0;
+  const s = parseFloat(document.getElementById('ring-s').value)||0;
+  const extra = parseFloat(document.getElementById('ring-extra').value)||0;
+  const base = (d+s)*Math.PI;
+  ss('res-length',(base+extra).toFixed(1));
+  ss('res-length-base',base.toFixed(1));
+  ss('res-diam-out',(d+2*s).toFixed(1));
+  ss('res-ring-size',Math.round(d));
+}
+
+function calcFromSize() {
+  const n = parseFloat(document.getElementById('sz-num').value)||17;
+  const s = parseFloat(document.getElementById('sz-s').value)||0;
+  const base = (n+s)*Math.PI;
+  ss('sz-dia',n.toFixed(1));
+  ss('sz-length',(base+1.5).toFixed(1));
+  ss('sz-circ',(n*Math.PI).toFixed(1));
+}
+
+function toUK(d) {
+  const circ=d*Math.PI;
+  const idx=Math.round((circ-37.8)/1.25);
+  const letters=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+  return idx>=0&&idx<letters.length?letters[idx]:'–';
+}
+function toUS(d) {
+  const us=((d*Math.PI-36.5)/3.1).toFixed(1);
+  return parseFloat(us)>0?us:'–';
+}
+
+function buildChart() {
+  const tbody=document.getElementById('size-chart-body');
+  tbody.innerHTML='';
+  for(let n=10;n<=28;n++) {
+    const d=n, circ=(d*Math.PI).toFixed(1);
+    tbody.innerHTML+=`<tr><td>${n}</td><td>${d}.0 mm</td><td>${circ} mm</td><td>${toUK(d)}</td><td>${toUS(d)}</td></tr>`;
+  }
+}
+
+calcRing();
+calcFromSize();
+</script>
+</body>
+</html>

@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kipsi & Savi — Keramiikka-alan materiaaliopas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ══ TOKENS ════════════════════════════════════════════════════════ */
+:root {
+  --clay:      #c4704a;
+  --clay-dk:   #8b4a2e;
+  --clay-lt:   #e8b99a;
+  --earth:     #3d2b1f;
+  --ash:       #e8e0d8;
+  --smoke:     #f9f5f1;
+  --white:     #fdfaf7;
+  --slate:     #5c4d44;
+  --ink:       #1e140e;
+  --accent:    #2d6a5e;
+  --accent-lt: #e0f0ec;
+  --warn:      #9b3a1a;
+  --gold:      #b5853a;
+  --bar-h:     48px;
+  --toc-w:     230px;
+  --font-h:    'Playfair Display', Georgia, serif;
+  --font-b:    'Source Serif 4', Georgia, serif;
+  --font-m:    'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--smoke); color: var(--ink); font-family: var(--font-b); line-height: 1.75; }
+
+/* ══ TOP BAR (slim — brand only) ══════════════════════════════════ */
+#topbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--bar-h);
+  background: var(--earth);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+}
+
+.tb-brand {
+  display: flex; align-items: center; gap: 0.55rem;
+  text-decoration: none;
+}
+.tb-brand .sym { font-size: 1.15rem; }
+.tb-brand .nm {
+  font-family: var(--font-h); font-size: 0.9rem; font-weight: 700;
+  color: var(--clay-lt); white-space: nowrap;
+}
+
+.tb-sub {
+  font-family: var(--font-m); font-size: 0.62rem;
+  color: rgba(255,255,255,0.28); letter-spacing: 0.08em;
+}
+
+#mb-btn {
+  display: none; align-items: center; justify-content: center;
+  background: none; border: none; color: var(--clay-lt);
+  font-size: 1.2rem; cursor: pointer; width: 36px; height: 36px;
+}
+
+/* ══ LAYOUT ════════════════════════════════════════════════════════ */
+#layout {
+  display: flex;
+  padding-top: var(--bar-h);
+  min-height: 100vh;
+}
+
+/* ══ RIGHT TOC ═════════════════════════════════════════════════════ */
+#toc {
+  position: fixed;
+  top: var(--bar-h); right: 0;
+  width: var(--toc-w);
+  height: calc(100vh - var(--bar-h));
+  background: var(--earth);
+  overflow-y: auto;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+}
+
+#toc::-webkit-scrollbar { width: 3px; }
+#toc::-webkit-scrollbar-track { background: transparent; }
+#toc::-webkit-scrollbar-thumb { background: var(--clay-dk); border-radius: 2px; }
+
+.toc-head {
+  padding: 1.25rem 1.2rem 0.75rem;
+  border-bottom: 1px solid rgba(196,112,74,0.2);
+  flex-shrink: 0;
+}
+
+.toc-head p {
+  font-family: var(--font-m); font-size: 0.6rem;
+  color: rgba(255,255,255,0.25); text-transform: uppercase;
+  letter-spacing: 0.12em; line-height: 1.4;
+}
+
+.toc-head h3 {
+  font-family: var(--font-h); font-size: 0.82rem; font-weight: 700;
+  color: var(--clay-lt); margin-top: 0.2rem;
+}
+
+.toc-nav { flex: 1; padding: 0.5rem 0 1.5rem; overflow-y: auto; }
+
+.toc-group { margin-bottom: 0.25rem; }
+
+.toc-group-label {
+  padding: 0.65rem 1.2rem 0.2rem;
+  font-family: var(--font-m); font-size: 0.58rem;
+  color: rgba(255,255,255,0.2); text-transform: uppercase; letter-spacing: 0.12em;
+}
+
+.toc-nav a {
+  display: flex; align-items: flex-start; gap: 0.55rem;
+  padding: 0.42rem 1.2rem;
+  text-decoration: none; color: rgba(255,255,255,0.48);
+  font-size: 0.76rem; line-height: 1.3;
+  border-left: 2px solid transparent;
+  transition: color .18s, border-color .18s, background .18s;
+}
+
+.toc-nav a:hover { color: var(--clay-lt); background: rgba(196,112,74,0.08); }
+.toc-nav a.active {
+  color: var(--clay-lt); border-left-color: var(--clay);
+  background: rgba(196,112,74,0.1);
+}
+
+.toc-num {
+  font-family: var(--font-m); font-size: 0.58rem;
+  color: var(--clay-dk); flex-shrink: 0; margin-top: 0.1rem;
+}
+.toc-nav a.active .toc-num { color: var(--clay); }
+
+.toc-star { color: var(--gold); font-size: 0.7rem; flex-shrink: 0; margin-top: 0.05rem; }
+
+.toc-footer {
+  padding: 0.9rem 1.2rem;
+  border-top: 1px solid rgba(196,112,74,0.15);
+  font-family: var(--font-m); font-size: 0.6rem;
+  color: rgba(255,255,255,0.18); line-height: 1.6;
+  flex-shrink: 0;
+}
+
+/* Mobile TOC overlay */
+#toc-overlay {
+  display: none;
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 190;
+}
+#toc-overlay.open { display: block; }
+
+/* ══ MAIN CONTENT ══════════════════════════════════════════════════ */
+#content {
+  flex: 1;
+  margin-right: var(--toc-w);
+  min-width: 0;
+}
+
+/* ══ HERO ══════════════════════════════════════════════════════════ */
+#hero {
+  background: var(--earth);
+  min-height: 88vh;
+  display: flex; align-items: center;
+  padding: 5rem 6rem;
+  position: relative; overflow: hidden;
+}
+
+#hero::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 65% 80% at 75% 50%, rgba(196,112,74,.18) 0%,transparent 70%),
+    radial-gradient(ellipse 40% 60% at 8% 80%, rgba(45,106,94,.12) 0%,transparent 60%);
+}
+
+.h-grid {
+  position: absolute; inset: 0; opacity: .03;
+  background-image: repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 1px,transparent 48px),
+                    repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 1px,transparent 48px);
+}
+
+.h-cont { position: relative; z-index: 1; max-width: 640px; }
+
+.h-eye {
+  font-family: var(--font-m); font-size: .68rem; color: var(--clay);
+  text-transform: uppercase; letter-spacing: .18em; margin-bottom: 1.4rem;
+  display: flex; align-items: center; gap: .75rem;
+}
+.h-eye::before { content: ''; display: block; width: 34px; height: 1px; background: var(--clay); }
+
+#hero h1 {
+  font-family: var(--font-h); font-size: clamp(2.6rem,4.5vw,4.2rem);
+  font-weight: 900; line-height: 1.06; color: var(--white); margin-bottom: 1.4rem;
+}
+#hero h1 em { font-style: italic; color: var(--clay-lt); }
+#hero p { font-size: 1rem; color: rgba(255,255,255,.58); max-width: 500px; line-height: 1.85; margin-bottom: 2.4rem; }
+
+.h-stats { display: flex; gap: 2.2rem; flex-wrap: wrap; }
+.h-stat { display: flex; flex-direction: column; gap: .15rem; }
+.h-stat .v { font-family: var(--font-h); font-size: 1.85rem; font-weight: 700; color: var(--clay-lt); line-height: 1; }
+.h-stat .l { font-size: .65rem; color: rgba(255,255,255,.28); font-family: var(--font-m); text-transform: uppercase; letter-spacing: .08em; }
+
+.h-orn { position: absolute; right: 5rem; top: 50%; transform: translateY(-50%); width: 280px; height: 280px; opacity: .07; }
+
+/* ══ SECTIONS ══════════════════════════════════════════════════════ */
+.section { padding: 4rem 6rem; border-bottom: 1px solid var(--ash); }
+.section:nth-child(even) { background: var(--white); }
+.section:nth-child(odd)  { background: var(--smoke); }
+
+.sec-hd { display: flex; align-items: flex-start; gap: 1.1rem; margin-bottom: 2.25rem; }
+
+.sec-num {
+  font-family: var(--font-m); font-size: .66rem; color: var(--clay);
+  padding: .27rem .5rem; background: rgba(196,112,74,.1);
+  border: 1px solid rgba(196,112,74,.25); border-radius: 3px;
+  flex-shrink: 0; margin-top: .5rem; letter-spacing: .05em;
+}
+
+.sec-hd h2 { font-family: var(--font-h); font-size: clamp(1.5rem,3vw,2.1rem); font-weight: 700; line-height: 1.2; color: var(--earth); }
+.sec-hd h2 .sub { display: block; font-size: .7rem; font-family: var(--font-m); font-weight: 400; color: var(--clay); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .22rem; }
+
+/* ══ PROSE ═════════════════════════════════════════════════════════ */
+.prose { max-width: 740px; }
+.prose p { font-size: .98rem; color: var(--slate); margin-bottom: 1rem; line-height: 1.85; }
+.prose h3 { font-family: var(--font-h); font-size: 1.15rem; font-weight: 700; color: var(--earth); margin: 1.9rem 0 .65rem; display: flex; align-items: center; gap: .55rem; }
+.prose h3::before { content: ''; display: inline-block; width: 4px; height: 1em; background: var(--clay); border-radius: 2px; flex-shrink: 0; }
+.prose h4 { font-size: .79rem; font-weight: 600; color: var(--clay-dk); text-transform: uppercase; letter-spacing: .08em; margin: 1.35rem 0 .35rem; }
+
+/* steps */
+.steps { counter-reset: step; list-style: none; margin: 1.1rem 0; display: flex; flex-direction: column; gap: .5rem; }
+.steps li { counter-increment: step; display: flex; gap: .8rem; align-items: flex-start; padding: .75rem .9rem; background: var(--white); border: 1px solid var(--ash); border-radius: 5px; font-size: .91rem; color: var(--slate); line-height: 1.65; transition: border-color .18s, transform .18s; }
+.steps li:hover { border-color: var(--clay-lt); transform: translateX(4px); }
+.steps li::before { content: counter(step); font-family: var(--font-m); font-size: .67rem; font-weight: 600; color: var(--white); background: var(--clay); width: 1.5rem; height: 1.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: .05rem; }
+
+/* bullets */
+.bullets { list-style: none; margin: .65rem 0; display: flex; flex-direction: column; gap: .3rem; }
+.bullets li { display: flex; gap: .65rem; align-items: flex-start; font-size: .91rem; color: var(--slate); line-height: 1.65; }
+.bullets li::before { content: '◆'; color: var(--clay); font-size: .45rem; flex-shrink: 0; margin-top: .57rem; }
+
+/* callouts */
+.callout { border-radius: 5px; padding: .9rem 1.2rem; margin: 1.1rem 0; font-size: .88rem; line-height: 1.7; display: flex; gap: .8rem; align-items: flex-start; }
+.callout-icon { font-size: 1rem; flex-shrink: 0; margin-top: .05rem; }
+.callout.tip  { background: var(--accent-lt); border-left: 3px solid var(--accent); color: #1e4040; }
+.callout.warn { background: #fdf0eb; border-left: 3px solid var(--warn); color: #5c2010; }
+.callout.info { background: #f0ecf8; border-left: 3px solid #6b52a3; color: #2d1f5a; }
+.callout.gold { background: #fdf6e3; border-left: 3px solid var(--gold); color: #4a3410; }
+.callout b { font-weight: 600; display: block; margin-bottom: .12rem; }
+
+/* pills */
+.data-row { display: flex; flex-wrap: wrap; gap: .55rem; margin: .9rem 0; }
+.pill { background: var(--earth); color: var(--clay-lt); font-family: var(--font-m); font-size: .72rem; padding: .3rem .8rem; border-radius: 20px; }
+.pill.accent { background: var(--accent); color: #e0f5f0; }
+.pill.warn   { background: var(--warn);   color: #fde8e0; }
+.pill.gold   { background: var(--gold);   color: #fdf2dc; }
+
+/* card grid */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: .9rem; margin: 1.1rem 0; }
+.card { background: var(--white); border: 1px solid var(--ash); border-radius: 7px; padding: 1.2rem 1.3rem; transition: border-color .18s, box-shadow .18s; }
+.card:hover { border-color: var(--clay-lt); box-shadow: 0 4px 18px rgba(196,112,74,.1); }
+.card-icon { font-size: 1.6rem; margin-bottom: .55rem; display: block; }
+.card h4 { font-family: var(--font-h); font-size: .94rem; font-weight: 700; color: var(--earth); margin-bottom: .3rem; }
+.card p { font-size: .83rem; color: var(--slate); line-height: 1.65; }
+
+/* two-col */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.8rem; margin: 1.1rem 0; }
+
+/* process flow */
+.process-flow { display: flex; flex-direction: column; margin: 1.1rem 0; position: relative; }
+.process-flow::before { content: ''; position: absolute; left: 1.1rem; top: 1.3rem; bottom: 1.3rem; width: 2px; background: linear-gradient(to bottom,var(--clay),var(--accent)); }
+.pf-item { display: flex; gap: 1.3rem; align-items: flex-start; padding: .8rem .9rem; position: relative; }
+.pf-dot { width: 2.2rem; height: 2.2rem; border-radius: 50%; background: var(--clay); color: white; font-family: var(--font-m); font-size: .68rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; z-index: 1; font-weight: 600; }
+.pf-dot.g { background: var(--accent); }
+.pf-body { flex: 1; padding-top: .22rem; }
+.pf-body strong { display: block; font-weight: 600; font-size: .91rem; color: var(--earth); margin-bottom: .12rem; }
+.pf-body span { font-size: .84rem; color: var(--slate); line-height: 1.6; }
+
+/* shrink visual */
+.shrink-vis { background: var(--earth); border-radius: 9px; padding: 1.65rem 1.9rem; margin: 1.1rem 0; }
+.shrink-vis h4 { font-family: var(--font-m); font-size: .65rem; color: var(--clay); text-transform: uppercase; letter-spacing: .12em; margin-bottom: 1.1rem; }
+.shrink-rows { display: flex; flex-direction: column; gap: .8rem; }
+.s-row { display: flex; align-items: center; gap: .8rem; }
+.s-lbl { font-family: var(--font-m); font-size: .67rem; color: rgba(255,255,255,.42); width: 95px; flex-shrink: 0; }
+.s-track { flex: 1; background: rgba(255,255,255,.07); border-radius: 4px; height: 24px; overflow: hidden; }
+.s-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: .55rem; font-family: var(--font-m); font-size: .67rem; font-weight: 600; }
+.s-fill.raw   { background: linear-gradient(90deg,#c4704a,#e8b99a); color: #3d2b1f; width: 100%; }
+.s-fill.dry   { background: linear-gradient(90deg,#b5853a,#d4a855); color: #3d2b1f; width: 92%; }
+.s-fill.fired { background: linear-gradient(90deg,#2d6a5e,#4d9a8e); color: white; width: 84%; }
+.s-pct { font-family: var(--font-m); font-size: .74rem; color: var(--clay-lt); width: 52px; text-align: right; flex-shrink: 0; }
+
+/* warn table */
+.warn-table { width: 100%; border-collapse: separate; border-spacing: 0 .4rem; margin: .9rem 0; }
+.warn-table th { font-family: var(--font-m); font-size: .62rem; text-transform: uppercase; letter-spacing: .1em; color: var(--slate); padding: 0 .8rem .3rem; text-align: left; border-bottom: 1px solid var(--ash); }
+.warn-table td { padding: .6rem .8rem; font-size: .84rem; color: var(--slate); background: var(--white); }
+.warn-table tr td:first-child { border-left: 3px solid var(--warn); border-radius: 4px 0 0 4px; font-weight: 600; color: var(--earth); }
+.warn-table tr td:last-child { border-radius: 0 4px 4px 0; }
+
+/* tool table */
+.tool-table { width: 100%; border-collapse: separate; border-spacing: 0 .4rem; margin: 1rem 0; }
+.tool-table th { font-family: var(--font-m); font-size: .62rem; text-transform: uppercase; letter-spacing: .1em; color: var(--slate); padding: 0 .8rem .3rem; text-align: left; border-bottom: 1px solid var(--ash); }
+.tool-table td { padding: .6rem .8rem; font-size: .87rem; color: var(--slate); background: var(--white); }
+.tool-table tr td:first-child { border-left: 3px solid var(--accent); border-radius: 4px 0 0 4px; font-weight: 600; color: var(--earth); }
+.tool-table tr td:last-child { border-radius: 0 4px 4px 0; }
+
+/* info & recipe boxes */
+.info-box { background: var(--white); border: 1px solid var(--ash); border-left: 4px solid var(--clay); border-radius: 6px; padding: 1rem 1.3rem; margin: 1.1rem 0; font-size: .91rem; color: var(--slate); line-height: 1.75; }
+.info-box h4 { font-family: var(--font-h); font-size: .97rem; font-weight: 700; color: var(--earth); margin-bottom: .45rem; }
+.recipe-box { background: #fdf6e3; border: 1px solid rgba(181,133,58,.3); border-radius: 6px; padding: .75rem 1.1rem; font-family: var(--font-m); font-size: .78rem; color: #4a3410; margin-top: .7rem; }
+
+/* faq */
+.faq { margin: 1.1rem 0; display: flex; flex-direction: column; gap: .75rem; }
+.faq-item { background: var(--white); border: 1px solid var(--ash); border-radius: 6px; overflow: hidden; }
+.faq-q { padding: .85rem 1.1rem; font-weight: 600; font-size: .92rem; color: var(--earth); cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+.faq-q::after { content: '+'; font-family: var(--font-m); font-size: 1rem; color: var(--clay); font-weight: 400; }
+.faq-item.open .faq-q::after { content: '−'; }
+.faq-a { display: none; padding: 0 1.1rem .85rem; font-size: .88rem; color: var(--slate); line-height: 1.7; border-top: 1px solid var(--ash); padding-top: .75rem; }
+.faq-item.open .faq-a { display: block; }
+
+/* ══ KIPSILASKURI ══════════════════════════════════════════════════ */
+.calc-outer { background: var(--earth); border-radius: 12px; padding: 1.9rem 2.2rem; margin: 0 0 2rem; color: white; }
+.calc-tabs { display: flex; gap: 0; margin-bottom: 1.65rem; background: rgba(255,255,255,.07); border-radius: 7px; padding: 3px; }
+.calc-tab { flex: 1; padding: .5rem .4rem; background: none; border: none; border-radius: 5px; color: rgba(255,255,255,.42); font-family: var(--font-b); font-size: .79rem; cursor: pointer; transition: background .18s,color .18s; text-align: center; }
+.calc-tab.on { background: var(--clay); color: white; }
+.calc-tab:hover:not(.on) { background: rgba(255,255,255,.1); color: rgba(255,255,255,.7); }
+.calc-form { display: none; }
+.calc-form.on { display: block; }
+.calc-row { display: grid; grid-template-columns: repeat(auto-fill,minmax(125px,1fr)); gap: .8rem; margin-bottom: .9rem; }
+.calc-field { display: flex; flex-direction: column; gap: .28rem; }
+.calc-field label { font-family: var(--font-m); font-size: .6rem; color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .08em; }
+.calc-field input[type=number] { background: rgba(255,255,255,.1); border: 1px solid rgba(196,112,74,.3); border-radius: 5px; padding: .5rem .65rem; color: white; font-family: var(--font-m); font-size: .88rem; width: 100%; transition: border-color .18s; -moz-appearance: textfield; }
+.calc-field input[type=number]::-webkit-outer-spin-button,.calc-field input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+.calc-field input[type=number]:focus { outline: none; border-color: var(--clay); background: rgba(255,255,255,.14); }
+.calc-field input.green { border-color: rgba(45,160,120,.6); background: rgba(45,160,120,.12); }
+.calc-divider { border: none; border-top: 1px solid rgba(255,255,255,.08); margin: 1.1rem 0; }
+.calc-toggle-row { display: flex; align-items: center; gap: .7rem; margin-bottom: .9rem; }
+.calc-toggle { position: relative; width: 34px; height: 19px; flex-shrink: 0; }
+.calc-toggle input { opacity: 0; width: 0; height: 0; }
+.calc-toggle .slider { position: absolute; inset: 0; background: rgba(255,255,255,.15); border-radius: 20px; cursor: pointer; transition: background .2s; }
+.calc-toggle .slider::before { content: ''; position: absolute; width: 13px; height: 13px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: transform .2s; }
+.calc-toggle input:checked + .slider { background: var(--clay); }
+.calc-toggle input:checked + .slider::before { transform: translateX(15px); }
+.calc-toggle-label { font-size: .8rem; color: rgba(255,255,255,.52); }
+.calc-malline { display: none; }
+.calc-malline.on { display: block; }
+.ratio-section { margin: 1.1rem 0; }
+.ratio-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: .45rem; }
+.ratio-header label { font-family: var(--font-m); font-size: .6rem; color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .08em; }
+.ratio-val { font-family: var(--font-m); font-size: .98rem; font-weight: 600; color: var(--clay-lt); }
+.ratio-val small { font-size: .63rem; color: rgba(255,255,255,.32); margin-left: .45rem; }
+input[type=range].ratio-slider { width: 100%; -webkit-appearance: none; height: 4px; border-radius: 4px; background: linear-gradient(90deg,var(--clay) var(--pct,50%),rgba(255,255,255,.15) var(--pct,50%)); outline: none; cursor: pointer; }
+input[type=range].ratio-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 17px; height: 17px; border-radius: 50%; background: var(--clay-lt); border: 2px solid white; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,.3); }
+input[type=range].ratio-slider::-moz-range-thumb { width: 17px; height: 17px; border-radius: 50%; background: var(--clay-lt); border: 2px solid white; cursor: pointer; }
+.ratio-labels { display: flex; justify-content: space-between; margin-top: .3rem; }
+.ratio-labels span { font-family: var(--font-m); font-size: .58rem; color: rgba(255,255,255,.26); }
+.calc-results { display: grid; grid-template-columns: repeat(auto-fill,minmax(135px,1fr)); gap: .7rem; margin-top: 1.4rem; }
+.result-card { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.08); border-radius: 8px; padding: .9rem 1rem; text-align: center; }
+.result-card.highlight { background: rgba(196,112,74,.18); border-color: rgba(196,112,74,.4); }
+.result-card .r-val { font-family: var(--font-h); font-size: 1.7rem; font-weight: 700; color: var(--clay-lt); line-height: 1; display: block; margin-bottom: .18rem; }
+.result-card.highlight .r-val { color: #fff; }
+.result-card .r-unit { font-family: var(--font-m); font-size: .65rem; color: rgba(255,255,255,.42); display: block; margin-bottom: .22rem; }
+.result-card .r-lbl { font-size: .73rem; color: rgba(255,255,255,.48); line-height: 1.3; }
+.result-card.highlight .r-lbl { color: rgba(255,255,255,.7); }
+.calc-note { font-family: var(--font-m); font-size: .68rem; color: rgba(255,255,255,.26); margin-top: .9rem; text-align: center; line-height: 1.6; }
+
+/* ══ FOOTER ════════════════════════════════════════════════════════ */
+#footer { background: var(--earth); color: rgba(255,255,255,.26); text-align: center; padding: 2.2rem 5rem; font-family: var(--font-m); font-size: .68rem; letter-spacing: .06em; line-height: 2; }
+
+/* ══ RESPONSIVE ════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  :root { --toc-w: 0px; }
+  #toc { transform: translateX(100%); width: 250px; transition: transform .28s; }
+  #toc.open { transform: translateX(0); --toc-w: 250px; width: 250px; }
+  #content { margin-right: 0; }
+  #mb-btn { display: flex; }
+  .section { padding: 3rem 1.75rem; }
+  #hero { padding: 3.5rem 1.75rem; min-height: auto; }
+  .h-orn { display: none; }
+  .two-col { grid-template-columns: 1fr; }
+  #footer { padding: 2rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ TOP BAR ══════════════════════════════════════════════════════ -->
+<header id="topbar">
+  <a class="tb-brand" href="#hero">
+    <span class="sym">🏺</span>
+    <span class="nm">Kipsi &amp; Savi</span>
+  </a>
+  <span class="tb-sub">Keramiikka-alan materiaaliopas · Metropolia AMK</span>
+  <button id="mb-btn" aria-label="Sisällysluettelo" onclick="toggleToc()">☰</button>
+</header>
+
+<div id="toc-overlay" onclick="toggleToc()"></div>
+
+<!-- ══ RIGHT TOC ═════════════════════════════════════════════════════ -->
+<aside id="toc">
+  <div class="toc-head">
+    <p>Sisällysluettelo</p>
+    <h3>Kipsi &amp; Savi</h3>
+  </div>
+  <nav class="toc-nav">
+
+    <div class="toc-group">
+      <div class="toc-group-label">Johdanto</div>
+      <a href="#intro"><span class="toc-num">00</span>Materiaalit alalla</a>
+    </div>
+
+    <div class="toc-group">
+      <div class="toc-group-label">Muotit &amp; Valutekniikat</div>
+      <a href="#kipsimuotti-kaavaus"><span class="toc-num">01</span>Kaavaus mallineesta</a>
+      <a href="#kipsilaskuri"><span class="toc-star">★</span>Kipsilaskuri</a>
+      <a href="#3d-muotti"><span class="toc-num">02</span>3D-tulostettu muotti</a>
+      <a href="#slipcasting"><span class="toc-num">03</span>Slipcasting</a>
+      <a href="#lautanen"><span class="toc-num">03a</span>Lautasen valu</a>
+      <a href="#muki"><span class="toc-num">03b</span>Mukin valu</a>
+    </div>
+
+    <div class="toc-group">
+      <div class="toc-group-label">Savenmuovaus</div>
+      <a href="#dreijaus"><span class="toc-num">04</span>Dreijaus</a>
+      <a href="#klinkkerilaatat"><span class="toc-num">05</span>Klinkkerilaatta</a>
+      <a href="#savilevytekniikka"><span class="toc-num">06</span>Savilevytekniikka</a>
+      <a href="#makkaratekniikka"><span class="toc-num">07</span>Makkaratekniikka</a>
+      <a href="#extruuderi"><span class="toc-num">08</span>Extruuderi</a>
+    </div>
+
+    <div class="toc-group">
+      <div class="toc-group-label">Viimeistely &amp; Laatu</div>
+      <a href="#siivous"><span class="toc-num">09</span>Siivous</a>
+      <a href="#lasitus"><span class="toc-num">10</span>Lasitus &amp; poltto</a>
+      <a href="#kutistuma"><span class="toc-num">11</span>Kutistuma &amp; suunnittelu</a>
+    </div>
+
+  </nav>
+  <div class="toc-footer">Muotoilun pajat<br>Metropolia AMK</div>
+</aside>
+
+<!-- ══ MAIN LAYOUT ══════════════════════════════════════════════════ -->
+<div id="layout">
+<main id="content">
+
+<!-- HERO -->
+<section id="hero">
+  <div class="h-grid"></div>
+  <div class="h-cont">
+    <div class="h-eye">Keramiikka-alan materiaaliopas</div>
+    <h1>Kipsi &amp; <em>Savi</em> —<br>prosessien kokonaisuus</h1>
+    <p>Kattava opas kipsimuottien valmistuksesta, saven muovaustekniikoista, drejauksesta, lasituksesta ja polttoprosessista. Avaa sisällysluettelo oikeasta reunasta.</p>
+    <div class="h-stats">
+      <div class="h-stat"><span class="v">~16%</span><span class="l">Kokonaiskutistuma</span></div>
+      <div class="h-stat"><span class="v">1240–1260°</span><span class="l">Polttolämpötila</span></div>
+      <div class="h-stat"><span class="v">11+</span><span class="l">Tekniikkaa</span></div>
+    </div>
+  </div>
+  <svg class="h-orn" viewBox="0 0 300 300">
+    <circle cx="150" cy="150" r="140" stroke="rgba(255,255,255,1)" stroke-width="1" stroke-dasharray="8 6" fill="none"/>
+    <circle cx="150" cy="150" r="108" stroke="rgba(255,255,255,1)" stroke-width=".5" fill="none"/>
+    <circle cx="150" cy="150" r="74"  stroke="rgba(255,255,255,1)" stroke-width="1" stroke-dasharray="3 7" fill="none"/>
+    <circle cx="150" cy="150" r="38"  stroke="rgba(255,255,255,1)" stroke-width=".5" fill="none"/>
+    <line x1="10" y1="150" x2="290" y2="150" stroke="rgba(255,255,255,1)" stroke-width=".5" stroke-dasharray="4 6"/>
+    <line x1="150" y1="10" x2="150" y2="290" stroke="rgba(255,255,255,1)" stroke-width=".5" stroke-dasharray="4 6"/>
+  </svg>
+</section>
+
+<!-- 00 -->
+<section class="section" id="intro">
+  <div class="sec-hd"><span class="sec-num">00</span><h2><span class="sub">Johdanto</span>Kipsi ja savi keramiikka-alan materiaaleina</h2></div>
+  <div class="prose">
+    <p>Keramiikka-alalla kaksi materiaalia muodostavat toiminnan ytimen: <strong>kipsi</strong> ja <strong>savi</strong>. Kipsiä käytetään ensisijaisesti muottien valmistukseen — se on huokoinen, vettä imevä materiaali, joka mahdollistaa savisuspension valuamisen ja muotoutumisen. Savi puolestaan on varsinainen tuotantoraaka-aine, jota muokataan erilaisilla tekniikoilla.</p>
+    <p>Prosessien ymmärtäminen kokonaisuutena on kriittistä: savi kutistuu merkittävästi sekä kuivumis- että polttovaiheessa, muottien on avauduttava oikeaan suuntaan, ja jokaisen vaiheen välillä on huolehdittava siisteydestä.</p>
+    <div class="card-grid">
+      <div class="card"><span class="card-icon">🧱</span><h4>Kipsi (CaSO₄·2H₂O)</h4><p>Ihanteellinen muottimateriaali: imee vettä kapillaarivoimalla, helppo muotoilla ja kestävä toistuvaan käyttöön.</p></div>
+      <div class="card"><span class="card-icon">🫙</span><h4>Posliinisavi &amp; Stoneware</h4><p>Valuvalannassa käytetään vesipitoista slippiä. Klinkkerilaattoihin sopii plastisempi stoneware-savi.</p></div>
+      <div class="card"><span class="card-icon">🎡</span><h4>Dreijaus</h4><p>Pyörähdyssymmetriset kappaleet valmistetaan dreijalla. Vaatii harjoittelua mutta mahdollistaa nopean sarjatuotannon.</p></div>
+      <div class="card"><span class="card-icon">🔥</span><h4>Poltto 1240–1260 °C</h4><p>Keramiikka tiivistyy sintrauksessa. Lasitteen on oltava yhteensopiva savityypin kanssa.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 01 KIPSIMUOTTI KAAVAUS -->
+<section class="section" id="kipsimuotti-kaavaus">
+  <div class="sec-hd"><span class="sec-num">01</span><h2><span class="sub">Muotinvalmistus</span>Kipsimuotti — kaavaus mallineen avulla</h2></div>
+  <div class="prose">
+    <p>Kaavausmenetelmässä kipsimuotti valmistetaan pyörittämällä tai liu'uttamalla terästä tai muovista valmistettua <strong>mallinetta</strong> märän kipsin yli niin, että kipsimassa saa halutun profiilin. Tekniikkaa käytetään erityisesti pyörähdyssymmetrisiin muotoihin: lautasiin, kulhoihin ja kuppeihin.</p>
+    <h3>Kaaviausvaiheet</h3>
+    <ol class="steps">
+      <li>Suunnittele lopullinen muoto ottaen huomioon <strong>~16% kokonaiskutistuma</strong>. Mallineen profiili piirrettävä tätä suuremmaksi.</li>
+      <li>Valmista mallinneterä (ruostumaton teräs tai kovapintainen muovi) — terän reunan on oltava täsmälleen halutun profiilin mukainen.</li>
+      <li>Asenna mallineen tuki pyörähtelyn mahdollistavaan laitteistoon. Varmista, että mallinneterä liikkuu tasaisesti ja toistettavasti.</li>
+      <li>Sekoita kipsi ja vesi suhteessa 4:3 (kipsi:vesi painon mukaan). Sekoita tasaiseksi ilman ilmakuplia.</li>
+      <li>Kun kipsi alkaa jähmettyä (n. 5–10 min), aloita kaavaus — pyöritä mallinetta hitaasti useita kierroksia kunnes profiili on tarkka.</li>
+      <li>Anna kovettua täysin (30–45 min). Irrota malline varovaisesti ja kuivata muottia 2–3 vrk.</li>
+    </ol>
+    <div class="callout tip"><span class="callout-icon">💡</span><div><b>Päästöt</b> Suunnittele profiilit niin, että ne kapenevat ylöspäin. Saven kutistuma purristaa kappaletta sisäänpäin — alaspäin levenevä muoto johtaa kiinnijäämiseen.</div></div>
+    <div class="two-col">
+      <div><h4>Ulkoprofiilikaavaus</h4><p>Mallinneterä muotoilee kappaleen ulkopinnan. Ihanteellinen koverapinnaisille muodoille, kuten lautasen alaosalle.</p></div>
+      <div><h4>Sisäprofiilikaavaus</h4><p>Mallinneterä muotoilee kappaleen sisäpinnan. Soveltuu kuperille muodoille, vaatii tarkan kutistumavarauksen.</p></div>
+    </div>
+    <div class="callout warn"><span class="callout-icon">⚠️</span><div><b>Kuivuminen on kriittistä</b> Liian kostea muotti imee vettä hitaasti tai epätasaisesti. Anna muottien kuivua aina täysin käyttökertojen välillä.</div></div>
+  </div>
+</section>
+
+<!-- KIPSILASKURI -->
+<section class="section" id="kipsilaskuri" style="background:var(--earth)">
+  <div class="sec-hd">
+    <span class="sec-num" style="background:rgba(181,133,58,.15);border-color:rgba(181,133,58,.4);color:var(--gold)">★</span>
+    <h2 style="color:var(--clay-lt)"><span class="sub" style="color:var(--gold)">Interaktiivinen laskin</span>Kipsilaskuri — kipsi/vesi-sekoitussuhde</h2>
+  </div>
+  <div class="prose" style="max-width:820px">
+    <p style="color:rgba(255,255,255,.55)">Syötä muottisi mitat tai haluamasi kipsimäärä. Laite laskee tarvittavan veden ja kipsin valitun sekoitussuhteen mukaan.</p>
+
+    <div class="calc-outer">
+      <div class="calc-tabs">
+        <button class="calc-tab on" onclick="switchTab('rect')">◻ Suorakulmainen</button>
+        <button class="calc-tab" onclick="switchTab('cyl')">○ Sylinteri</button>
+        <button class="calc-tab" onclick="switchTab('free')">≡ Vapaa tilavuus</button>
+      </div>
+
+      <div class="calc-form on" id="form-rect">
+        <p style="font-size:.78rem;color:rgba(255,255,255,.35);margin-bottom:.9rem;font-family:var(--font-m)">MUOTIN ULKOMITAT (cm)</p>
+        <div class="calc-row">
+          <div class="calc-field"><label>Leveys</label><input type="number" id="r-w" value="15" min="1" oninput="calc()"></div>
+          <div class="calc-field"><label>Pituus</label><input type="number" id="r-l" value="15" min="1" oninput="calc()"></div>
+          <div class="calc-field"><label>Syvyys</label><input type="number" id="r-d" value="7" min="1" oninput="calc()"></div>
+          <div class="calc-field"><label>Tilavuus (L)</label><input type="number" id="r-vol" readonly style="opacity:.5;cursor:default" tabindex="-1"></div>
+        </div>
+        <div class="calc-toggle-row">
+          <label class="calc-toggle"><input type="checkbox" id="tog-rect" onchange="toggleMalline('rect')"><span class="slider"></span></label>
+          <span class="calc-toggle-label">Vähennä mallineen tilavuus</span>
+        </div>
+        <div class="calc-malline" id="mal-rect">
+          <p style="font-size:.78rem;color:rgba(255,255,255,.35);margin-bottom:.7rem;font-family:var(--font-m)">MALLINEEN MITAT (cm)</p>
+          <div class="calc-row">
+            <div class="calc-field"><label>Leveys</label><input type="number" id="m-w" value="9" min="0" oninput="calc()"></div>
+            <div class="calc-field"><label>Pituus</label><input type="number" id="m-l" value="13" min="0" oninput="calc()"></div>
+            <div class="calc-field"><label>Syvyys</label><input type="number" id="m-d" value="9" min="0" oninput="calc()"></div>
+            <div class="calc-field"><label>Tilavuus (L)</label><input type="number" id="m-vol" readonly style="opacity:.5;cursor:default" tabindex="-1"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-form" id="form-cyl">
+        <p style="font-size:.78rem;color:rgba(255,255,255,.35);margin-bottom:.9rem;font-family:var(--font-m)">MUOTIN SYLINTERIMITAT (cm)</p>
+        <div class="calc-row">
+          <div class="calc-field"><label>Halkaisija</label><input type="number" id="c-dia" value="20" min="1" oninput="calc()"></div>
+          <div class="calc-field"><label>Korkeus</label><input type="number" id="c-h" value="10" min="1" oninput="calc()"></div>
+          <div class="calc-field"><label>Tilavuus (L)</label><input type="number" id="c-vol" readonly style="opacity:.5;cursor:default" tabindex="-1"></div>
+        </div>
+        <div class="calc-toggle-row">
+          <label class="calc-toggle"><input type="checkbox" id="tog-cyl" onchange="toggleMalline('cyl')"><span class="slider"></span></label>
+          <span class="calc-toggle-label">Vähennä mallineen tilavuus (sylinteri)</span>
+        </div>
+        <div class="calc-malline" id="mal-cyl">
+          <p style="font-size:.78rem;color:rgba(255,255,255,.35);margin-bottom:.7rem;font-family:var(--font-m)">MALLINEEN SYLINTERIMITAT (cm)</p>
+          <div class="calc-row">
+            <div class="calc-field"><label>Halkaisija</label><input type="number" id="cm-dia" value="15" min="0" oninput="calc()"></div>
+            <div class="calc-field"><label>Korkeus</label><input type="number" id="cm-h" value="8" min="0" oninput="calc()"></div>
+            <div class="calc-field"><label>Tilavuus (L)</label><input type="number" id="cm-vol" readonly style="opacity:.5;cursor:default" tabindex="-1"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-form" id="form-free">
+        <p style="font-size:.78rem;color:rgba(255,255,255,.35);margin-bottom:.9rem;font-family:var(--font-m)">SYÖTÄ HALUAMASI KIPSIMÄÄRÄ SUORAAN</p>
+        <div class="calc-row" style="max-width:240px">
+          <div class="calc-field"><label>Tavoitetilavuus (L)</label><input type="number" id="f-vol" value="1.8" min="0.1" step="0.1" class="green" oninput="calc()"></div>
+        </div>
+        <p style="font-size:.75rem;color:rgba(255,255,255,.28);margin-top:.4rem">Käytä kun tiedät kuinka paljon valmista kipsilietettä haluat.</p>
+      </div>
+
+      <hr class="calc-divider">
+
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px">
+          <div style="font-family:var(--font-m);font-size:.6rem;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.35rem">Lisävaraa % — varmistaa riittävän määrän</div>
+          <input type="range" id="buf-slider" min="0" max="50" value="20" step="5" class="ratio-slider" oninput="updateBuf()" style="--pct:40%">
+        </div>
+        <div style="font-family:var(--font-m);font-size:1.05rem;font-weight:600;color:var(--clay-lt);min-width:46px;text-align:right"><span id="buf-val">20</span>%</div>
+      </div>
+
+      <div class="ratio-section">
+        <div class="ratio-header">
+          <label>Sekoitussuhde — kipsi : vesi (painon mukaan)</label>
+          <div class="ratio-val"><span id="ratio-disp">1.50</span><small id="ratio-desc"> — normaali</small></div>
+        </div>
+        <input type="range" id="ratio-slider" min="1.4" max="1.6" value="1.5" step="0.05" class="ratio-slider" oninput="calc()" style="--pct:50%">
+        <div class="ratio-labels">
+          <span>1.40 huokoinen</span>
+          <span>1.50 normaali</span>
+          <span>1.60 kova</span>
+        </div>
+      </div>
+
+      <hr class="calc-divider">
+
+      <p style="font-family:var(--font-m);font-size:.6rem;color:rgba(255,255,255,.32);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem">Tarvittavat aineet</p>
+      <div class="calc-results">
+        <div class="result-card"><span class="r-val" id="res-net">–</span><span class="r-unit">litraa</span><span class="r-lbl">Muotin nettotilavuus</span></div>
+        <div class="result-card highlight"><span class="r-val" id="res-target">–</span><span class="r-unit">litraa</span><span class="r-lbl">Valmistettava kipsi (sis. vara)</span></div>
+        <div class="result-card"><span class="r-val" id="res-water-l">–</span><span class="r-unit">litraa (kg)</span><span class="r-lbl">Vesi</span></div>
+        <div class="result-card"><span class="r-val" id="res-plaster-kg">–</span><span class="r-unit">kg</span><span class="r-lbl">Kipsi (paino)</span></div>
+        <div class="result-card"><span class="r-val" id="res-plaster-l">–</span><span class="r-unit">litraa</span><span class="r-lbl">Kipsi (tilavuus)</span></div>
+      </div>
+      <p class="calc-note">1 L valmista kipsilietettä ≈ <span id="note-water">0.63</span> L vettä + <span id="note-plaster">0.94</span> kg kipsiä &nbsp;|&nbsp; Kipsijauhe ≈ 1.18 kg/L</p>
+    </div>
+
+    <h3>Kipsin sekoittaminen</h3>
+    <p>Kädenlämpöistä tai vähän viileämpää vettä mitataan puhtaaseen astiaan. Punnittu kipsijauhe <em>sirotellaan</em> veteen välttäen paakkuja — ei kipsi ensin ja vesi päälle. Seoksen annetaan seistä 1–5 minuuttia, jonka jälkeen aloitetaan sekoitus voimakkaasti veden alla ilmakuplien poistamiseksi. Kun kipsiliete alkaa paksuuntua, se on valmista kaadettavaksi.</p>
+    <p>Muottikipsin sekoitussuhde on kipsistä riippuen <strong>1,4 (huokoinen)</strong> – <strong>1,6 (kova)</strong>. Muottisarjaa tehdessä on olennaista käyttää täsmälleen oikeaa suhdetta, jotta muotit ovat tasalaatuisesti huokoisia ja niiden valuaika on sama.</p>
+    <div class="callout tip"><span class="callout-icon">💡</span><div><b>Silmämääräinen testi</b> Kipsin määrä voidaan arvioida silmämääräisesti: oikea määrä muodostaa keon kipsiämpärin keskelle sirotellessa.</div></div>
+    <h3>Erotusaineet</h3>
+    <div class="info-box"><h4>1. Sellakka</h4><p style="margin:0">Kipsimallineisiin — sivellään 1–3 ohutta kerrosta, kovettaa pintaa ja vähentää huokoisuutta. Saatavilla lastuina, jotka liotetaan esim. Sinoliin.</p></div>
+    <div class="info-box"><h4>2. Soopaus</h4><p style="margin:0">Mäntysuopa tai vastaava saippua vaahdotetaan siveltimellä kipsin pintaan, kunnes pinta hylkii vettä.</p></div>
+    <div class="info-box"><h4>3. Rasva (tärkein)</h4><p style="margin-bottom:.45rem">Saippuan, öljyn ja veden seos — valmistetaan vuolemalla saippuaa lämpimään veteen, lisätään öljy ja sekoitetaan vaahdoksi sähkövatkaimella. Levitetään ohuelti kaikille pinnoille.</p><div class="recipe-box">📋 Resepti: 1 saippua · 0,5 l vettä · 3 dl rypsiöljyä</div></div>
+    <div class="callout tip"><span class="callout-icon">💡</span><div><b>Savimallineeseen</b> ei välttämättä tarvita erotusainetta — se on yleensä kertakäyttöinen. Kipsiä kipsin päälle valettaessa erotusaine on aina tarpeen.</div></div>
+  </div>
+</section>
+
+<!-- 02 3D-MUOTTI -->
+<section class="section" id="3d-muotti">
+  <div class="sec-hd"><span class="sec-num">02</span><h2><span class="sub">Digitaalinen valmistus</span>3D-tulostettu muotti kipsimuotille</h2></div>
+  <div class="prose">
+    <p>Perinteisten kipsimallineiden rinnalle on tullut <strong>3D-tulostus</strong> muottien välimallineiden valmistukseen. Kipsimuottia ei tulosteta suoraan — tulostettava kappale toimii mallina, jonka ympärille kipsi valetaan.</p>
+    <div class="card-grid">
+      <div class="card"><span class="card-icon">🖨️</span><h4>Positiivinen malli (master)</h4><p>Tulostetaan valmiin kappaleen muotoinen positiivi. Sen ympärille valetaan kipsi negatiiviseksi muotiksi. Pinta on viimeisteltävä ja käsiteltävä irrotusaineella.</p></div>
+      <div class="card"><span class="card-icon">🔧</span><h4>Suora kipsimuotin kotelo</h4><p>Tulostetaan kipsimuotin oma kotelo johon nestekipsi kaadetaan. Sopii erityisesti moniosaisten muottien valmistukseen.</p></div>
+    </div>
+    <h3>Suunnitteluohjeet</h3>
+    <ol class="steps">
+      <li><strong>Kutistumavaraus:</strong> Skaalaa 3D-malli ylös ~16–17%. Esimerkki: 100 mm → mallinna 117 mm.</li>
+      <li><strong>Päästökulmat:</strong> Vähintään 2–5° päästökulma kaikkiin pystysuoriin seinämiin. Terävät alaleikkaukset kiellettyjä.</li>
+      <li><strong>Puolituslinja:</strong> Suunnittele niin, ettei kummallekaan puolelle jää alaleikkauksia.</li>
+      <li><strong>Rekisteröintipisteet:</strong> Pyöreät nupit tai kolot muotin osien yhteensovittamiseen (esim. 8 mm nuppi + vastaava kolo).</li>
+      <li><strong>Pintaviimeistely:</strong> Hio PLA/PETG-tulostuksen kerrokset ja käsittele akryylilakalla ennen kipsin valua.</li>
+    </ol>
+    <div class="callout gold"><span class="callout-icon">✨</span><div><b>Hyöty</b> 3D-tulostettu malline mahdollistaa monimutkaiset geometriat, joita ei perinteisellä kaaviausmallineella pysty tekemään. Muutokset ovat nopeita — päivitä .stl ja tulosta uudelleen.</div></div>
+  </div>
+</section>
+
+<!-- 03 SLIPCASTING -->
+<section class="section" id="slipcasting">
+  <div class="sec-hd"><span class="sec-num">03</span><h2><span class="sub">Valuvalanta</span>Slipcasting kipsimuottiin</h2></div>
+  <div class="prose">
+    <p><strong>Slipcasting</strong> eli valuvalanta on prosessi, jossa nestemäistä savisuspensiota (slippiä) kaadetaan huokoiseen kipsimuottiin. Kipsi imee kapillaarivoimalla vettä suspension pinnasta, jolloin savihiukkaset tiivistyvät muotin seinämiä vasten muodostaen tasaisen seinämäkerroksen.</p>
+    <ul class="bullets">
+      <li><strong>Tiheys:</strong> 1,65–1,80 g/ml — liian ohut slip ei muodosta riittävää seinämää, liian paksu ei valu kunnolla.</li>
+      <li><strong>Deflokulantit:</strong> natriumsilikaatti ja natriumkarbonaatti pitävät savihiukkaset erillään pienellä vesimäärällä.</li>
+      <li><strong>Sekoitus:</strong> sekoita slippi aina ennen käyttöä ja poista ilmakuplat.</li>
+    </ul>
+    <h3>Prosessi vaiheittain</h3>
+    <ol class="steps">
+      <li>Tarkista muotin kuivuus — paina kämmen muottiin, ihon ei pidä jäädä kosteaksi.</li>
+      <li>Kokoa muotin osat ja sido puristimilla. Varmista, ettei muottien välistä vuoda slippiä.</li>
+      <li>Kaada slippi nopeasti mutta tasaisesti. Pidä taso vakiona 5 min lisäslipillä.</li>
+      <li>Seuraa seinämän muodostumista. Kun paksuus on 4–8 mm (10–25 min), kaada ylimäärä takaisin.</li>
+      <li>Jätä muotti vinoon 20–30 min — liika slip valuu ulos kokonaan.</li>
+      <li>Leikkaa suuaukko siistiksi metallilangalla tai veitsellä.</li>
+      <li>Anna kuivua muotissa 30–60 min, kunnes kappale kutistuu irti seinämistä.</li>
+    </ol>
+    <div class="callout tip"><span class="callout-icon">💡</span><div><b>Uusi muotti</b> Kostuta uuden kuivan kipsimuotin sisäpinta kevyesti ennen ensimmäistä valua — muuten seinämä muodostuu liian nopeasti ja epätasaisesti.</div></div>
+  </div>
+</section>
+
+<!-- 03a LAUTANEN -->
+<section class="section" id="lautanen">
+  <div class="sec-hd"><span class="sec-num">03a</span><h2><span class="sub">Slipcastin sovellus</span>Lautasen valu — kaksipuoleinen muotti</h2></div>
+  <div class="prose">
+    <p>Lautasen valuvalanta vaatii <strong>kaksipuoleisen muotin</strong>: yläpuoli määrää ruokailupinnan profiilin, alapuoli muodostaa jalkarenkaan. Valu tapahtuu <em>vinossa asennossa jalkarenkaan reiän kautta</em>, jotta ilma pääsee nousemaan ulos yläkautta.</p>
+    <div class="process-flow">
+      <div class="pf-item"><div class="pf-dot">1</div><div class="pf-body"><strong>Alapuolimuotti (hump mold)</strong><span>Muodostaa lautasen yläpinnan profiilin ja sisäkoveran muodon. Jalkarenkaan positio määräytyy tästä osasta.</span></div></div>
+      <div class="pf-item"><div class="pf-dot">2</div><div class="pf-body"><strong>Yläpuolimuotti (cap mold)</strong><span>Sulkee muotin yläpuolelta ja määrittää lautasen alapinnan profiilin. Puristuu alempaa muottia vasten tiivistäen valuontelon.</span></div></div>
+      <div class="pf-item"><div class="pf-dot">3</div><div class="pf-body"><strong>Valu vinossa jalkarenkaan reiästä</strong><span>Muottia pidetään vinossa ~30–45° niin, että ilma nousee ulos yläkautta eikä jää loukkuun.</span></div></div>
+      <div class="pf-item"><div class="pf-dot g">4</div><div class="pf-body"><strong>Kuivuminen ja irrotus</strong><span>Ylimääräinen slippi valutetaan pois jalkarenkaan reiästä. Lautanen kutistuu muotissa ja irtoaa siististi molemmilta pinnoilta.</span></div></div>
+    </div>
+    <div class="callout warn"><span class="callout-icon">⚠️</span><div><b>Jalkarenkaan puhdistus</b> Puhdista lautasen jalkarengas lasikeesta aina ennen polttoa — lasitteinen pohja tarttuu kiinni uunilevyyn.</div></div>
+  </div>
+</section>
+
+<!-- 03b MUKI -->
+<section class="section" id="muki">
+  <div class="sec-hd"><span class="sec-num">03b</span><h2><span class="sub">Slipcastin sovellus</span>Mukin valu — avovalunta &amp; valurengas</h2></div>
+  <div class="prose">
+    <p>Muki on tyypillinen <strong>avovalunnan</strong> tuote. Slippi kaadetaan yläkautta, seinämä muodostuu ympäri muottia, ja ylimääräinen slippi valutetaan pois yläkautta. Korva valetaan mukin rungon yhteydessä muotin sisäisten kanavien kautta.</p>
+    <div class="callout info"><span class="callout-icon">🔵</span><div><b>Valurengas</b> Asetetaan muotin päälle ennen slipinkaatoa, nostaa valutason haluttuun korkeuteen. Kun kappale on kuivunut riittävästi, valurengas poistetaan ja suuaukko leikataan metallilangalla muotin yläpintaa vasten — näin saadaan täsmälleen oikea muoto.</div></div>
+    <div class="two-col">
+      <div><h4>Suuaukko valun korkuinen</h4><ul class="bullets"><li>Yksinkertaisempi, vaatii hiomista märänä</li><li>Muotoutuu slipinpinnan mukaan — usein hieman epätasainen</li></ul></div>
+      <div><h4>Valurenkaalla ja leikaten</h4><ul class="bullets"><li>Tarkempi lopputulos — identtiset suuaukot</li><li>Leikkaus nahkakuivana metallilangalla muotin yläpintaa vasten</li></ul></div>
+    </div>
+    <div class="callout warn"><span class="callout-icon">⚠️</span><div><b>Korvan halkeaminen</b> Korva kutistuu eri nopeudella kuin runko. Peitä muki muovilla ja anna kuivua hitaasti vähintään 24 h ennen muotista irrottamista.</div></div>
+  </div>
+</section>
+
+<!-- 04 DREIJAUS -->
+<section class="section" id="dreijaus">
+  <div class="sec-hd"><span class="sec-num">04</span><h2><span class="sub">Savenmuovaus</span>Dreijaus — keramiikan pyörittäminen</h2></div>
+  <div class="prose">
+    <p>Dreijaaminen on taito, jossa yhdistyvät fysiikka, tuntuma ja kärsivällisyys. Dreijalla valmistetaan pyörähdyssymmetrisiä kappaleita — maljakkoja, kulhoja, mukeja, lautasia — nopeasti ja toistettavasti. Tekniikka vaatii motorista harjoittelua: keskittäminen onnistuu useimmiten muutaman kerran jälkeen, mutta tasalaatuisen seinämän nosto vaatii kymmeniä tunteja harjoittelua.</p>
+
+    <h3>Ennen aloitusta</h3>
+    <div class="two-col">
+      <div>
+        <h4>Saven vaivaus (Wedging)</h4>
+        <p>Savi on aina vaivattava ennen dreijausta. Tavoitteena on poistaa ilmakuplat ja homogenisoida saven kosteus. Ilmakupla dreijatessa aiheuttaa epätasapainoa — uunissa se voi räjäyttää työn.</p>
+      </div>
+      <div>
+        <h4>Turvallisuus</h4>
+        <ul class="bullets">
+          <li>Sido pitkät hiukset</li>
+          <li>Poista roikkuvat korut</li>
+          <li>Käytä lyhyitä kynsiä — pitkät kynnet tekevät helposti jälkiä märkään saveen</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Tarvittavat työkalut</h3>
+    <table class="tool-table">
+      <thead><tr><th>Työkalu</th><th>Käyttötarkoitus</th></tr></thead>
+      <tbody>
+        <tr><td>Savi</td><td>Valmiiksi vaivattu ja palloiksi muotoiltu massa</td></tr>
+        <tr><td>Dreija</td><td>Sähköinen tai poljettava alusta</td></tr>
+        <tr><td>Vesiastia &amp; sieni</td><td>Saven pitämiseen liukkaana</td></tr>
+        <tr><td>Savenkatkaisulanka</td><td>Työn irrottamiseen alustasta</td></tr>
+        <tr><td>Lastat (Ribs)</td><td>Seinämien suoristamiseen ja pinnan viimeistelyyn</td></tr>
+        <tr><td>Neula (Pin tool)</td><td>Seinämän paksuuden mittaamiseen ja yläreunan tasaukseen</td></tr>
+        <tr><td>Sorvaustyökalut</td><td>Nahkakuivan työn viimeistelyyn ja jalan sorvukseen</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Dreijauksen 5 päävaihetta</h3>
+    <div class="process-flow">
+      <div class="pf-item">
+        <div class="pf-dot">1</div>
+        <div class="pf-body">
+          <strong>Kiinnitys ja tiivistys</strong>
+          <span>Heitä savipallo mahdollisimman keskelle puhdasta ja kuivaa dreijan levyä. Lyö palloa kämmenellä, jotta se tarttuu tiukasti. Käynnistä dreija ja varmista sormella painamalla, että saven alareuna on tiiviisti kiinni levyssä.</span>
+        </div>
+      </div>
+      <div class="pf-item">
+        <div class="pf-dot">2</div>
+        <div class="pf-body">
+          <strong>Keskittäminen (Centering)</strong>
+          <span>Tärkein vaihe — jos savi ei ole keskellä, koko astiasta tulee vino. Lukitse kyynärpäät reisiäsi vasten ja käytä koko kehosi painoa, älä vain käsivoimia. <em>Kartiointi (Coning):</em> Nosta savi kartioksi ylös ja paina takaisin alas. Toista kunnes savi ei enää "voblaa" kättäsi vasten.</span>
+        </div>
+      </div>
+      <div class="pf-item">
+        <div class="pf-dot">3</div>
+        <div class="pf-body">
+          <strong>Avaaminen ja pohjan tiivistäminen</strong>
+          <span>Tee peukaloilla tai sormilla reikä keskelle savea — pysähdy noin 1–1,5 cm ennen pohjaa. <em>Kriittinen vaihe:</em> Kun olet avannut pohjan haluamaasi leveyteen, paina pohjaa sormilla tai lastalla keskeltä ulospäin useita kertoja. Tämä estää S-halkeamien syntymisen kuivumisvaiheessa.</span>
+        </div>
+      </div>
+      <div class="pf-item">
+        <div class="pf-dot">4</div>
+        <div class="pf-body">
+          <strong>Seinämän nosto (Pulling)</strong>
+          <span>Vähennä dreijan nopeutta. Aseta toinen käsi sisäpuolelle ja toinen ulkopuolelle. Purista savea kevyesti alareunasta ja nosta käsiäsi hitaasti ja tasaisesti ylöspäin. Pidä kädet yhdessä (peukalot koskettavat toisiaan), jotta ne liikkuvat synkronoidusti.</span>
+        </div>
+      </div>
+      <div class="pf-item">
+        <div class="pf-dot g">5</div>
+        <div class="pf-body">
+          <strong>Viimeistely ja irrotus</strong>
+          <span>Poista ylimääräinen vesi työn sisältä sienellä — vesi pohjalla pehmittää saven ja saa sen romahtamaan. Tasoita ulkopinta lastalla. Käytä katkaisulankaa: pidä se kireällä ja vedä työn alta dreijan pyöriessä hitaasti.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout warn"><span class="callout-icon">⚠️</span><div><b>Liiallinen vesi</b> on yleisin aloittelijan virhe. Savi vettyy, menettää rakenteensa ja romahtaa nostovaiheessa. Käytä vettä vain sen verran kuin saven pitämiseen liukkaana tarvitaan.</div></div>
+
+    <h3>Dreijauksen jälkeiset vaiheet</h3>
+    <div class="process-flow">
+      <div class="pf-item">
+        <div class="pf-dot" style="background:var(--slate)">N</div>
+        <div class="pf-body">
+          <strong>Nahkakuivuminen</strong>
+          <span>Työn annetaan kuivua kunnes se tuntuu kovalta juustolta — ei enää muotoiltavissa, mutta leikattavissa. Tässä vaiheessa työ on valmis sorvukseen.</span>
+        </div>
+      </div>
+      <div class="pf-item">
+        <div class="pf-dot" style="background:var(--slate)">S</div>
+        <div class="pf-body">
+          <strong>Sorvaus (Trimming)</strong>
+          <span>Työ laitetaan ylösalaisin dreijalle ja pohjaan muotoillaan "jalka" sorvaustyökaluilla. Tässä vaiheessa viimeistellään pohjan muoto ja seinämäpaksuus.</span>
+        </div>
+      </div>
+      <div class="pf-item">
+        <div class="pf-dot" style="background:var(--slate)">R</div>
+        <div class="pf-body">
+          <strong>Raakapoltto (~900–1000 °C)</strong>
+          <span>Täysin kuiva työ poltetaan ensimmäisen kerran. Savi muuttuu keramiikaksi mutta pysyy huokoisena lasitusta varten.</span>
+        </div>
+      </div>
+      <div class="pf-item">
+        <div class="pf-dot" style="background:var(--gold)">L</div>
+        <div class="pf-body">
+          <strong>Lasitus</strong>
+          <span>Työ kastetaan lasitteeseen tai maalataan. Pohjan jalkarengas on puhdistettava lasikeesta ennen polttoa.</span>
+        </div>
+      </div>
+      <div class="pf-item">
+        <div class="pf-dot g">P</div>
+        <div class="pf-body">
+          <strong>Lasituspoltto (1240–1260 °C)</strong>
+          <span>Toinen poltto sulattaa lasitteen lasimaiseksi pinnaksi ja tekee astiasta vedenpitävän.</span>
+        </div>
+      </div>
+    </div>
+
+    <h3>Usein kysytyt kysymykset</h3>
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Miksi saveni romahtaa nostovaiheessa?</div>
+        <div class="faq-a">Yleisimmät syyt ovat liiallinen veden käyttö (savi vettyy) tai seinämien ohentaminen liikaa alareunasta ennen kuin yläosa on valmis. Yritä käyttää mahdollisimman vähän vettä ja nosta seinämiä tasaisesti koko matkalta alhaalta ylös.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Voiko dreijalla tehdä neliöitä?</div>
+        <div class="faq-a">Dreijalla tehdään pyöreitä muotoja keskipakoisvoiman vuoksi. Neliömäiset muodot saadaan muokkaamalla pyöreää työtä käsin heti dreijauksen jälkeen — painamalla sivuja sisään ennen nahkakuivumista.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Onko dreijaaminen vaikeaa?</div>
+        <div class="faq-a">Se vaatii motorista harjoittelua. Useimmat oppivat keskittämisen muutaman kerran jälkeen, mutta tasalaatuisen seinämän nosto vaatii kymmeniä tunteja harjoittelua. Tuntoaisti on tärkein — videoiden katsominen auttaa, mutta vain "savituntuma" opettaa, kuinka paljon painetta savi kestää.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Miksi pohjaan tulee S-halkeama?</div>
+        <div class="faq-a">S-halkeama syntyy, kun pohja ei ole tiivistetty kunnolla avaamisvaiheessa. Pohjan savihiukkaset ovat stressitilassa ja kutistuessaan halkeavat S-kirjaimen muotoon. Ratkaisu: paina pohja aina huolellisesti sormilla tai lastalla keskeltä ulospäin ennen seinämän nostoa.</div>
+      </div>
+    </div>
+
+    <div class="callout gold"><span class="callout-icon">🎓</span><div><b>Opetuskäyttöön</b> Dreijatessa tuntoaisti on tärkein oppimisväline. Videoiden katsominen auttaa ymmärtämään tekniikan, mutta vain käytännön harjoittelu kehittää tarvittavan savituntuman — kuinka paljon painetta savi kestää ennen murtumista.</div></div>
+  </div>
+</section>
+
+<!-- 05 KLINKKERILAATTA -->
+<section class="section" id="klinkkerilaatat">
+  <div class="sec-hd"><span class="sec-num">05</span><h2><span class="sub">Savenmuovaus</span>Klinkkerilaatta — valssaus &amp; poltto</h2></div>
+  <div class="prose">
+    <p>Klinkkerilaatta on korkealaatuinen, täyspoltettu keraaminen laatta, joka valmistetaan <strong>valssaamalla</strong> saviseos tasaiseksi levyksi, kuvioidaan ja poltetaan korkeassa lämpötilassa erittäin alhaiseen huokoisuuteen.</p>
+    <ol class="steps">
+      <li><strong>Saven valmistelu:</strong> Vaivaa savi huolellisesti ilmakuplien poistamiseksi. Varmista tasainen kosteus koko massan läpi.</li>
+      <li><strong>Valssaus:</strong> Aja levy useamman kerran pienentäen rakoa asteittain. Käännä 90° ajojen välillä. Tavoitepaksuus 8–15 mm raakana.</li>
+      <li><strong>Kuviointi:</strong> Paina kuvio nahkakuivaan levyyn strukturointitelan tai tekstuurimaton avulla. Min. 1–2 mm syvyys kutistuman jälkeen.</li>
+      <li><strong>Leikkaus:</strong> Leikkaa haluttuun mittaan metallitangolla. Muista kutistumavaraus! Leikkaa aina suoraan alaspäin.</li>
+      <li><strong>Kuivaus:</strong> Peitä muovilla 24 h, sitten hitaasti avaten 2–4 päivää. Käännä laatta päivittäin käpristymisen estämiseksi.</li>
+    </ol>
+    <div class="data-row"><span class="pill warn">1240–1260 °C</span><span class="pill">Nousu ≤ 100 °C/h</span><span class="pill accent">Kvartsimuutos 573 °C — tauko</span><span class="pill gold">Laskuaika min. 8 h</span></div>
+  </div>
+</section>
+
+<!-- 06 SAVILEVYTEKNIIKKA -->
+<section class="section" id="savilevytekniikka">
+  <div class="sec-hd"><span class="sec-num">06</span><h2><span class="sub">Savenmuovaus</span>Savilevytekniikka — kolmiulotteiset kappaleet</h2></div>
+  <div class="prose">
+    <p>Savilevytekniikassa (engl. <em>slab building</em>) tasaisista savilevyistä rakennetaan kolmiulotteisia kappaleita. Tekniikka mahdollistaa geometriset muodot ja terävät kulmat.</p>
+    <ol class="steps">
+      <li>Liittyvien pintojen tulee olla <strong>samassa kuivumisasteessa</strong> (leather hard).</li>
+      <li>Raaputa molemmat liitospinnat viilloin metallisella raaputtimella tai haarukalla.</li>
+      <li>Sivele molemmat pinnat <strong>slipillä tai slip-liimalla</strong>. Älä käytä pelkkää vettä.</li>
+      <li>Paina pinnat yhteen ja hiero liitoskohtaa sisäpuolelta sormella tiivistäen.</li>
+      <li>Siisti liitos ulkopuolelta — äläkä jätä rakoa tai ilmataskua.</li>
+    </ol>
+    <div class="callout warn"><span class="callout-icon">⚠️</span><div><b>Suljetut tilat räjähtävät</b> Jos kappaleessa on täysin suljettu ilmatila, kosteus höyrystyy poltossa ja räjäyttää kappaleen. Jätä aina pieni reikä suljettuihin tiloihin.</div></div>
+    <table class="warn-table">
+      <thead><tr><th>Riski</th><th>Syy</th><th>Ehkäisy</th></tr></thead>
+      <tbody>
+        <tr><td>Liitoskohdan halkeaminen</td><td>Levyt eri kuivumisasteessa</td><td>Liitä aina samankosteat levyt</td></tr>
+        <tr><td>Pohjan lohkeaminen</td><td>Pohja kutistuu, sivut pidättelevät</td><td>Ei tiukkoja kulmia, pohja ei ulotu sivujen yli</td></tr>
+        <tr><td>Kulman halkeilu poltossa</td><td>Paksu liitos kuumenee epätasaisesti</td><td>Tasoita kaikki liitoskohtien paksuudet</td></tr>
+        <tr><td>Käpristyminen</td><td>Yksi pinta kuivuu toista nopeammin</td><td>Peitä muovilla, käännä päivittäin</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 07 MAKKARATEKNIIKKA -->
+<section class="section" id="makkaratekniikka">
+  <div class="sec-hd"><span class="sec-num">07</span><h2><span class="sub">Savenmuovaus</span>Makkaratekniikka (Coil Building)</h2></div>
+  <div class="prose">
+    <p>Makkaratekniikka on yksi vanhimmista keramiikan muovausmenetelmistä. Pitkiä, tasapaksuisia savimakkaroita rakennetaan kerroksittain muodostaen astia, veistos tai muu kolmiulotteinen kappale. Soveltuu erittäin suurille kappaleille.</p>
+    <ol class="steps">
+      <li>Aloita tasaisesta pohjalevystä tai ensimmäisestä makkarakerroksesta.</li>
+      <li>Aseta seuraava makkara pohjan päälle. Hiero liitos sisäpuolelta ylöspäin.</li>
+      <li>Rakenna kerros kerrokselta. Anna rakennelman kovettua jokaisen 3–5 kerroksen jälkeen.</li>
+      <li>Liitoskohdat: raaputa (score) ja käytä slippiä — erityisesti jos makkarat alkavat kuivua.</li>
+      <li>Hiero sisäpinta tasaiseksi sormella tai ribillä — vahvistaa rakennetta merkittävästi.</li>
+    </ol>
+    <div class="callout gold"><span class="callout-icon">⭐</span><div><b>Tekniikan etu</b> Makkaratekniikalla pystyy tekemään hyvin suuria kappaleita yhdestä palasta. Kutistuma on tasaisempaa kuin levytekniikassa, koska rakenne on joustava.</div></div>
+  </div>
+</section>
+
+<!-- 08 EXTRUUDERI -->
+<section class="section" id="extruuderi">
+  <div class="sec-hd"><span class="sec-num">08</span><h2><span class="sub">Savenmuovaus</span>Extruuderi — pursotuskone &amp; profiilit</h2></div>
+  <div class="prose">
+    <p>Extruuderi eli <strong>pursotuskone</strong> puristaa savimassaa eri muotoisten suuttimien (matriisien) läpi, jolloin syntyy jatkuvia profiileja: putkia, makkaroita, listoja ja monimutkaisempia ristileikkauksia.</p>
+    <div class="card-grid">
+      <div class="card"><span class="card-icon">🔩</span><h4>Syöttölieriö (barrel)</h4><p>Savi lastataan lieriöön, jossa mäntä tai ruuvi puristaa massan eteenpäin. Suuri lieriö mahdollistaa pidemmät pursotukset.</p></div>
+      <div class="card"><span class="card-icon">⬡</span><h4>Matriisi (die)</h4><p>Vaihdettava suutin, joka määrää profiilin muodon. Valmistetaan muovista, alumiinista tai keramiikasta.</p></div>
+      <div class="card"><span class="card-icon">📏</span><h4>Profiilit</h4><p>Pyörö, neliö, putket, ribilistat, koristeelliset leikkaukset — myös mukin kahvat extruusionauhasta leikaten.</p></div>
+    </div>
+    <div class="callout tip"><span class="callout-icon">💡</span><div><b>Kosteuden tasaisuus on avain</b> Extruuderi paljastaa epätasaisen kosteuden — kostea laikku aiheuttaa profiiliin pullistuman tai halkeaman. Vaivaa savi perusteellisesti tai käytä pug milliä.</div></div>
+    <ol class="steps">
+      <li>Tarkista saven kosteus — liian kuiva rikkoo matriisin, liian märkä pursottuu epätasaisesti.</li>
+      <li>Vaivaa tai käytä pug milliä tasaistamiseen. Homogenisoi massa kunnolla.</li>
+      <li>Voitele matriisi kevyesti öljyllä helpottamaan pursottumista.</li>
+      <li>Purso hitaasti ja tasaisesti — nopea pursotus aiheuttaa revenneen pinnan.</li>
+      <li>Leikkaa profiilit haluttuun mittaan heti pursottamisen jälkeen.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 09 SIIVOUS -->
+<section class="section" id="siivous">
+  <div class="sec-hd"><span class="sec-num">09</span><h2><span class="sub">Laatu &amp; turvallisuus</span>Siivous — keramiikan prosessin keskiö</h2></div>
+  <div class="prose">
+    <p>Keramiikkatyöskentelyssä <strong>siivous ei ole jälkityö — se on osa prosessia</strong>. Saviaines kertyy pinnoille, kuivaa ja hienonee pölyksi, joka sisältää silikaa. Pitkäaikainen altistuminen silikapölylle voi aiheuttaa <strong>silikoosin</strong>.</p>
+    <div class="callout warn"><span class="callout-icon">☣️</span><div><b>Silikoosin vaara — älä lakaisse kuivaa savipölyä</b> Käytä aina märkäsiivousta: märkä sieni, märkä moppi tai imuri HEPA-suodattimella.</div></div>
+    <div class="process-flow">
+      <div class="pf-item"><div class="pf-dot">A</div><div class="pf-body"><strong>Työpisteen välisiivous — jokaisen työsession jälkeen</strong><span>Poista savimassajätteet astioihin (ei viemäriin). Pyyhi työtaso märällä sienellä. Kerää kaikki savimurut ennen kuin ne kuivuvat lattialle.</span></div></div>
+      <div class="pf-item"><div class="pf-dot">B</div><div class="pf-body"><strong>Lattia — märkämenetelmä</strong><span>Käytä märkää moppia, ei harjaa. Savivesi kaadetaan laskeuttumisastiaan — ei suoraan viemäriin.</span></div></div>
+      <div class="pf-item"><div class="pf-dot">C</div><div class="pf-body"><strong>Muotit ja laitteet</strong><span>Kipsimuottien ylimääräinen savi poistetaan pehmeällä sieniellä. Älä käytä metallityökaluja kuivan saven kaapimiseen muotista.</span></div></div>
+      <div class="pf-item"><div class="pf-dot g">D</div><div class="pf-body"><strong>Saviviemäri ja lietesäiliö</strong><span>Savivesi ei saa mennä suoraan viemäriin — se tukkii putket. Käytä lietekaivoa tai -astiaa, josta vesi haihtuu ja kuiva savimassa kerätään jätteeksi.</span></div></div>
+    </div>
+    <ul class="bullets">
+      <li><strong>Kipsinpalat savessa:</strong> Jos kipsiä pääsee savimassaan, savi on hylättävä — kipsipalat räjähtävät poltossa.</li>
+      <li><strong>Lasitepöly:</strong> Käytä FFP2-maskia. Lasitepöly sisältää myrkyllisiä metalleja.</li>
+      <li><strong>Polttouuni:</strong> Ensimmäisessä poltossa vapautuu orgaanisia kaasuja — varmista riittävä ilmanvaihto.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 10 LASITUS -->
+<section class="section" id="lasitus">
+  <div class="sec-hd"><span class="sec-num">10</span><h2><span class="sub">Viimeistely</span>Lasitus &amp; poltto</h2></div>
+  <div class="prose">
+    <p>Lasitus antaa keramiikalle visuaalisen lopputuloksen, suojaa pintaa ja tekee astiasta hygieenistä käyttöä varten soveltuvan. Käytössä <strong>yksinkertainen musta ja valkoinen lasite</strong>.</p>
+    <div class="data-row"><span class="pill warn">1240–1260 °C</span><span class="pill">Musta lasite</span><span class="pill">Valkoinen lasite</span><span class="pill accent">Suoraan kuivuneelle</span><span class="pill gold">Tai esipoltetulle</span></div>
+    <div class="two-col">
+      <div><h4>Suoraan kuivuneelle (raakapoltto)</h4><ul class="bullets"><li>Nopein — vain yksi poltto</li><li>Kappale on hauras, lasite imeytyy vahvasti</li><li>Taloudellisesti edullisempi</li></ul></div>
+      <div><h4>Esipoltetulle (biskviitti + lasitus)</h4><ul class="bullets"><li>Poltetaan ensin ~900–1000 °C</li><li>Kestää paremmin käsittelyä</li><li>Virheet korjattavissa helpommin</li></ul></div>
+    </div>
+    <div class="callout warn"><span class="callout-icon">⚠️</span><div><b>POHJA ON AINA PUHDISTETTAVA</b> Jalkarengas tai pohjan kehä tulee puhdistaa lasikeesta aina ennen polttoon asettamista. Lasitteinen pohja tarttuu kiinni uunilevyyn tai -hyllyyn.</div></div>
+    <h3>Polttoohjelma</h3>
+    <div class="process-flow">
+      <div class="pf-item"><div class="pf-dot">1</div><div class="pf-body"><strong>Hidas nousu → 200 °C (50–80 °C/h)</strong><span>Poistetaan jäljellä oleva kosteus rauhallisesti — liian nopea räjäyttää kappaleet.</span></div></div>
+      <div class="pf-item"><div class="pf-dot">2</div><div class="pf-body"><strong>200 °C → 573 °C (80–100 °C/h)</strong><span>Kvartsimuutos 573 °C:ssa — pidä lyhyt tasanko ~15–20 min.</span></div></div>
+      <div class="pf-item"><div class="pf-dot">3</div><div class="pf-body"><strong>573 °C → 1000 °C (100–150 °C/h)</strong><span>Orgaaninen aines poistuu, savi muuttuu keramiikaksi.</span></div></div>
+      <div class="pf-item"><div class="pf-dot">4</div><div class="pf-body"><strong>1000 °C → 1240–1260 °C (80–100 °C/h)</strong><span>Lasite sulaa ja kiinnittyy pintaan. Huipussa 15–30 min tasaantumisjakso.</span></div></div>
+      <div class="pf-item"><div class="pf-dot g">5</div><div class="pf-body"><strong>Jäähtyminen — älä kiirehdi</strong><span>Luonnollinen jäähtyminen vähintään 8–12 h. Avaa uuni vasta alle 80 °C:ssa.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 KUTISTUMA -->
+<section class="section" id="kutistuma">
+  <div class="sec-hd"><span class="sec-num">11</span><h2><span class="sub">Suunnitteluopas</span>Saven kutistuma &amp; muotin suunnittelu</h2></div>
+  <div class="prose">
+    <p>Saven kutistuma on <strong>yleisin suunnitteluvirhe</strong> aloittelevilla keramiikantekijöillä. Kutistuma tapahtuu kahdessa vaiheessa ja on huomioitava jo muotin suunnittelussa.</p>
+    <div class="shrink-vis">
+      <h4>Kutistumavisualisointi — lineaarinen</h4>
+      <div class="shrink-rows">
+        <div class="s-row"><span class="s-lbl">Raaka savi</span><div class="s-track"><div class="s-fill raw">100%</div></div><span class="s-pct">100 mm</span></div>
+        <div class="s-row"><span class="s-lbl">Kuivunut</span><div class="s-track"><div class="s-fill dry">~8%</div></div><span class="s-pct">~92 mm</span></div>
+        <div class="s-row"><span class="s-lbl">Poltettu</span><div class="s-track"><div class="s-fill fired">~16%</div></div><span class="s-pct">~84 mm</span></div>
+      </div>
+    </div>
+    <div class="callout gold"><span class="callout-icon">📐</span><div><b>Kutistumakaava</b> Jos haluat valmiin kappaleen olevan 100 mm, muotin mitan tulee olla: 100 / 0,84 = <strong>119 mm</strong>. Mittaa aina testikappale omalla savellas.</div></div>
+    <h3>Kriittiset suunnittelukohdat</h3>
+    <ul class="bullets">
+      <li><strong>Päästöt:</strong> Jokainen pystysuora seinämä vähintään 2–5° kalteva — ilman päästöä savi kiilautuu kiinni kutistuessaan.</li>
+      <li><strong>Jalkarenkaan sisäpuoli:</strong> Erityisen kriittinen — savi kutistuu sisäänpäin ja voi kiilatua kiinni.</li>
+      <li><strong>Rengasmaiset rakenteet:</strong> Irrota muotin rengasmaiset osat ennen kuin savi on täysin kuiva (leather hard -vaiheessa) — savi saa kutistua vapaasti.</li>
+    </ul>
+    <table class="warn-table">
+      <thead><tr><th>Ongelma</th><th>Seuraus</th><th>Ratkaisu</th></tr></thead>
+      <tbody>
+        <tr><td>Muotti avautuu vain 2 osaan mutta alaleikkaus</td><td>Kappale ei irtoa</td><td>Lisää 3. tai 4. muottiosa</td></tr>
+        <tr><td>Jalkarengas liian jyrkkä sisäpuolelta</td><td>Savi kiilautuu kiinni</td><td>Loivenna sisäkulma tai lisää pyöristys</td></tr>
+        <tr><td>Viruminen / lohkeaminen / ratkeaminen</td><td>Kutistumavoima murtaa kappaleen</td><td>Irrota muotti leather hard -vaiheessa</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer id="footer">
+  <p>Keramiikka-alan materiaaliopas · Muotoilun pajat · Metropolia AMK</p>
+  <p>Kipsi &amp; Savi — valuvalannasta dreijaukseen ja polttoon</p>
+</footer>
+
+</main>
+</div><!-- /#layout -->
+
+<script>
+// ── TOC TOGGLE (MOBILE) ──────────────────────────────────────────
+function toggleToc() {
+  document.getElementById('toc').classList.toggle('open');
+  document.getElementById('toc-overlay').classList.toggle('open');
+}
+
+// ── ACTIVE TOC LINK ON SCROLL ────────────────────────────────────
+const sections = document.querySelectorAll('section[id]');
+const tocLinks = document.querySelectorAll('#toc a[href^="#"]');
+
+new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const id = e.target.id;
+    tocLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+    // scroll active link into view in TOC
+    const active = document.querySelector(`#toc a[href="#${id}"]`);
+    if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  });
+}, { rootMargin: '-15% 0px -75% 0px' }).observe
+  ? sections.forEach(s => new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        tocLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+        const active = document.querySelector(`#toc a[href="#${e.target.id}"]`);
+        if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      });
+    }, { rootMargin: '-15% 0px -75% 0px' }).observe(s))
+  : null;
+
+// close mobile toc on link click
+tocLinks.forEach(a => a.addEventListener('click', () => {
+  document.getElementById('toc').classList.remove('open');
+  document.getElementById('toc-overlay').classList.remove('open');
+}));
+
+// ── FAQ TOGGLE ───────────────────────────────────────────────────
+function toggleFaq(el) {
+  el.closest('.faq-item').classList.toggle('open');
+}
+
+// ── KIPSILASKURI ─────────────────────────────────────────────────
+let activeTab = 'rect';
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.calc-tab').forEach((b, i) => {
+    b.classList.toggle('on', ['rect','cyl','free'][i] === tab);
+  });
+  document.querySelectorAll('.calc-form').forEach(f => f.classList.remove('on'));
+  document.getElementById('form-' + tab).classList.add('on');
+  calc();
+}
+
+function toggleMalline(type) {
+  const checked = document.getElementById('tog-' + type).checked;
+  document.getElementById('mal-' + type).classList.toggle('on', checked);
+  calc();
+}
+
+function updateBuf() {
+  const v = document.getElementById('buf-slider').value;
+  document.getElementById('buf-val').textContent = v;
+  document.getElementById('buf-slider').style.setProperty('--pct', ((v / 50) * 100) + '%');
+  calc();
+}
+
+function calc() {
+  const ratio = parseFloat(document.getElementById('ratio-slider').value);
+  const buf   = parseFloat(document.getElementById('buf-slider').value) / 100;
+
+  // update ratio display
+  document.getElementById('ratio-disp').textContent = ratio.toFixed(2);
+  const desc = ratio <= 1.42 ? 'huokoinen' : ratio >= 1.58 ? 'kova' : 'normaali';
+  document.getElementById('ratio-desc').textContent = ' — ' + desc;
+  const pct = ((ratio - 1.4) / 0.2) * 100;
+  document.getElementById('ratio-slider').style.setProperty('--pct', pct + '%');
+
+  // water & plaster per litre of final plaster
+  const waterFrac      = 0.65 - 0.25 * (ratio - 1.4);
+  const plasterKgFrac  = waterFrac * ratio;
+  const plasterLFrac   = plasterKgFrac / 1.18;
+
+  document.getElementById('note-water').textContent   = waterFrac.toFixed(2);
+  document.getElementById('note-plaster').textContent = plasterKgFrac.toFixed(2);
+
+  let netVol = 0;
+
+  if (activeTab === 'rect') {
+    const w = gn('r-w'), l = gn('r-l'), d = gn('r-d');
+    const mold = w * l * d / 1000;
+    si('r-vol', mold.toFixed(3));
+    let sub = 0;
+    if (document.getElementById('tog-rect').checked) {
+      sub = gn('m-w') * gn('m-l') * gn('m-d') / 1000;
+      si('m-vol', sub.toFixed(3));
+    }
+    netVol = Math.max(0, mold - sub);
+
+  } else if (activeTab === 'cyl') {
+    const dia = gn('c-dia'), h = gn('c-h');
+    const mold = Math.PI * (dia / 2) ** 2 * h / 1000;
+    si('c-vol', mold.toFixed(3));
+    let sub = 0;
+    if (document.getElementById('tog-cyl').checked) {
+      sub = Math.PI * (gn('cm-dia') / 2) ** 2 * gn('cm-h') / 1000;
+      si('cm-vol', sub.toFixed(3));
+    }
+    netVol = Math.max(0, mold - sub);
+
+  } else {
+    netVol = gn('f-vol');
+  }
+
+  const target = netVol * (1 + buf);
+  ss('res-net',        activeTab === 'free' ? '–' : netVol.toFixed(2));
+  ss('res-target',     target.toFixed(2));
+  ss('res-water-l',    (target * waterFrac).toFixed(2));
+  ss('res-plaster-kg', (target * plasterKgFrac).toFixed(2));
+  ss('res-plaster-l',  (target * plasterLFrac).toFixed(2));
+}
+
+function gn(id) { return parseFloat(document.getElementById(id)?.value) || 0; }
+function si(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
+function ss(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+
+calc();
+</script>
+</body>
+</html>

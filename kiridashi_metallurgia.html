@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiridashi — Metallurgian perusteet teolliselle muotoilijalle</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0c0a;
+    --bg2: #161210;
+    --bg3: #1e1a16;
+    --amber: #d4853a;
+    --amber-light: #f0a855;
+    --amber-dim: #8a4e1a;
+    --gold: #c9a84c;
+    --cream: #f0e8d8;
+    --text: #c8bfb0;
+    --text-dim: #7a6e62;
+    --red: #c43c2a;
+    --blue-steel: #4a7fa5;
+    --green-patina: #3d7a5c;
+    --border: rgba(212,133,58,0.18);
+    --radius: 3px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(14,12,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .nav-logo {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.05rem;
+    color: var(--amber-light);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 0;
+    list-style: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a {
+    display: block;
+    padding: 0 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+    white-space: nowrap;
+    line-height: 56px;
+  }
+  .nav-links a:hover { color: var(--amber-light); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 6rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 70% 40%, rgba(180,80,20,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(80,40,10,0.25) 0%, transparent 60%),
+      linear-gradient(160deg, #0e0c0a 0%, #1a1008 100%);
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(212,133,58,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,133,58,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-kanji {
+    position: absolute;
+    right: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(6rem, 15vw, 14rem);
+    color: rgba(212,133,58,0.06);
+    writing-mode: vertical-rl;
+    letter-spacing: 0.1em;
+    user-select: none;
+    line-height: 1;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 680px; }
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--amber);
+  }
+  h1 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+  }
+  h1 span { color: var(--amber-light); }
+  .hero-desc {
+    font-size: 1.05rem;
+    color: var(--text);
+    max-width: 520px;
+    margin-bottom: 3rem;
+    line-height: 1.8;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 3rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .hero-meta strong { display: block; color: var(--amber); font-size: 1rem; letter-spacing: 0; margin-bottom: 0.25rem; font-family: 'DM Sans', sans-serif; font-weight: 500; }
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    right: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-dim);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .scroll-hint::after {
+    content: '';
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--amber-dim), transparent);
+    animation: scrollpulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollpulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 6rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .section-full {
+    max-width: 100%;
+    padding: 6rem 0;
+  }
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 4rem;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), var(--amber-dim), var(--border), transparent);
+    margin: 0;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .section-num::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--amber);
+  }
+  h2 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 2rem;
+  }
+  h3 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--amber-light);
+    margin-bottom: 0.75rem;
+    margin-top: 2.5rem;
+  }
+  h4 {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  p { margin-bottom: 1.1rem; }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--cream); font-weight: 500; }
+  em { color: var(--amber-light); font-style: italic; }
+  a { color: var(--amber); text-decoration: underline; text-underline-offset: 3px; }
+  a:hover { color: var(--amber-light); }
+
+  /* ── LEAD ── */
+  .lead {
+    font-size: 1.15rem;
+    color: var(--cream);
+    line-height: 1.85;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+  }
+
+  /* ── TWO-COL ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2rem; }
+  .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 2rem; }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+  }
+  .card-accent {
+    border-top: 2px solid var(--amber);
+  }
+  .card-red { border-top-color: var(--red); }
+  .card-blue { border-top-color: var(--blue-steel); }
+  .card-green { border-top-color: var(--green-patina); }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 2rem; margin-top: 2.5rem; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--amber), var(--blue-steel), var(--green-patina));
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+    padding-left: 1.5rem;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2.375rem;
+    top: 0.55rem;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    border: 1px solid var(--bg);
+  }
+  .timeline-item:nth-child(3n+2)::before { background: var(--blue-steel); }
+  .timeline-item:nth-child(3n+3)::before { background: var(--green-patina); }
+  .timeline-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--amber);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+  }
+  .timeline-item:nth-child(3n+2) .timeline-year { color: var(--blue-steel); }
+  .timeline-item:nth-child(3n+3) .timeline-year { color: var(--green-patina); }
+  .timeline-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.1rem;
+    color: var(--cream);
+    margin-bottom: 0.4rem;
+  }
+
+  /* ── TERM TABLE ── */
+  .term-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-top: 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .term-row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .term-row:last-child { border-bottom: none; }
+  .term-key {
+    background: var(--bg3);
+    padding: 0.9rem 1.25rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--amber-light);
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+  }
+  .term-val {
+    padding: 0.9rem 1.25rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  /* ── TEMP SCALE ── */
+  .temp-scale {
+    margin: 2.5rem 0;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .temp-bar {
+    display: flex;
+    height: 52px;
+  }
+  .temp-seg {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: rgba(255,255,255,0.9);
+    padding: 0 4px;
+    transition: flex 0.3s;
+  }
+  .temp-labels {
+    display: flex;
+    border-top: 1px solid var(--border);
+  }
+  .temp-label {
+    flex: 1;
+    padding: 0.6rem 0.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+  .temp-label:last-child { border-right: none; }
+  .temp-label strong { display: block; color: var(--cream); font-size: 0.8rem; }
+
+  /* ── CRYSTAL DIAGRAM ── */
+  .crystal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .crystal-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .crystal-svg { margin: 0 auto 1rem; display: block; }
+  .crystal-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 0.5rem;
+  }
+  .crystal-fi {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.05rem;
+    color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+  .crystal-props { font-size: 0.8rem; color: var(--text-dim); }
+
+  /* ── PROCESS STEPS ── */
+  .process-steps { margin-top: 2rem; counter-reset: step; }
+  .step {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .step::after {
+    content: '';
+    position: absolute;
+    left: 25px;
+    top: 52px;
+    bottom: -1.5rem;
+    width: 1px;
+    background: var(--border);
+  }
+  .step:last-child::after { display: none; }
+  .step-num {
+    width: 52px; height: 52px;
+    border: 1px solid var(--amber-dim);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 1.1rem;
+    color: var(--amber);
+    flex-shrink: 0;
+    background: var(--bg2);
+    position: relative;
+    z-index: 1;
+  }
+  .step-content { padding-top: 0.6rem; }
+  .step-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.1rem;
+    color: var(--cream);
+    margin-bottom: 0.3rem;
+  }
+  .step-temp {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    padding: 0.15rem 0.5rem;
+    background: rgba(212,133,58,0.12);
+    border: 1px solid var(--amber-dim);
+    border-radius: 2px;
+    color: var(--amber);
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── STONE GRID ── */
+  .stone-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr 1fr;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    gap: 1rem;
+  }
+  .stone-row:last-child { border-bottom: none; }
+  .stone-header {
+    background: var(--bg3);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+  }
+  .stone-grit { font-family: 'DM Mono', monospace; font-size: 0.9rem; color: var(--amber-light); }
+  .grit-bar { height: 4px; background: var(--bg3); border-radius: 2px; overflow: hidden; }
+  .grit-fill { height: 100%; background: var(--amber); border-radius: 2px; }
+
+  /* ── FUTURE CARDS ── */
+  .future-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .future-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .future-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--amber), var(--blue-steel));
+  }
+  .future-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .future-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.2rem;
+    color: var(--cream);
+    margin-bottom: 0.75rem;
+  }
+
+  /* ── CALLOUT ── */
+  .callout {
+    background: linear-gradient(135deg, rgba(212,133,58,0.08), rgba(212,133,58,0.03));
+    border: 1px solid rgba(212,133,58,0.3);
+    border-left: 3px solid var(--amber);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    font-size: 0.92rem;
+    color: var(--cream);
+  }
+  .callout-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 0.5rem;
+  }
+  .callout.danger {
+    background: linear-gradient(135deg, rgba(196,60,42,0.08), rgba(196,60,42,0.02));
+    border-color: rgba(196,60,42,0.3);
+    border-left-color: var(--red);
+  }
+  .callout.danger .callout-label { color: var(--red); }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    margin-right: 0.35rem;
+    margin-bottom: 0.35rem;
+  }
+  .tag-amber { background: rgba(212,133,58,0.15); color: var(--amber-light); border: 1px solid rgba(212,133,58,0.3); }
+  .tag-blue { background: rgba(74,127,165,0.15); color: #7ab8d8; border: 1px solid rgba(74,127,165,0.3); }
+  .tag-green { background: rgba(61,122,92,0.15); color: #6bbf96; border: 1px solid rgba(61,122,92,0.3); }
+  .tag-red { background: rgba(196,60,42,0.15); color: #e07060; border: 1px solid rgba(196,60,42,0.3); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+  .footer-logo {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.2rem;
+    color: var(--amber);
+  }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin: 2rem 0;
+  }
+
+  /* ── LIST ── */
+  ul.styled, ol.styled {
+    padding-left: 1.25rem;
+    margin: 0.75rem 0 1rem;
+  }
+  ul.styled li, ol.styled li {
+    margin-bottom: 0.5rem;
+    font-size: 0.93rem;
+  }
+  ul.styled li::marker { color: var(--amber); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 1rem; }
+    .hero { padding: 5rem 1.5rem 3rem; }
+    section { padding: 4rem 1.5rem; }
+    .two-col, .three-col, .crystal-grid, .future-grid { grid-template-columns: 1fr; }
+    .term-row { grid-template-columns: 1fr; }
+    .term-key { border-right: none; border-bottom: 1px solid var(--border); }
+    footer { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
+    .stone-row { grid-template-columns: 70px 1fr; }
+    .stone-row .stone-col-3, .stone-row .stone-col-4 { display: none; }
+    .hero-kanji { display: none; }
+    h1 { font-size: 2.5rem; }
+    .section-inner { padding: 0 1.5rem; }
+  }
+
+  /* ── ANIMATION ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-content > * {
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+  .hero-content > *:nth-child(3) { animation-delay: 0.3s; }
+  .hero-content > *:nth-child(4) { animation-delay: 0.45s; }
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <a class="nav-logo" href="#top">切り出し &nbsp;·&nbsp; Metallurgia</a>
+  <ul class="nav-links">
+    <li><a href="#historia">Historia</a></li>
+    <li><a href="#materiaalit">Materiaalit</a></li>
+    <li><a href="#termit">Termit</a></li>
+    <li><a href="#kasittely">Käsittely</a></li>
+    <li><a href="#lampokasittely">Lämpökäsittely</a></li>
+    <li><a href="#hila">Hilarakenteet</a></li>
+    <li><a href="#teroitus">Teroitus</a></li>
+    <li><a href="#valmistus">Valmistus</a></li>
+    <li><a href="#tulevaisuus">Tulevaisuus</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<div id="top" class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-kanji">切り出し鍛冶</div>
+  <div class="hero-content">
+    <div class="hero-tag">Teollinen muotoilu · 1. vuosikurssi · Valinnainen harjoitustyö</div>
+    <img src="kiridashi.png" width="614" height="132" alt=""/>
+    <h1>Kiridashi<br><span>Metallin sielu</span></h1>
+    <p class="hero-desc">
+      Japanilainen perinneveitsi avaa portin metallurgian maailmaan — atomirakenteista käsityötaitoon, kivikaudelta supertankoihin. Tämä on materiaalin kunnioitusta parhaimmillaan.
+    </p>
+    <div class="hero-meta">
+      <div><strong>8–12 h</strong>Työmäärä</div>
+      <div><strong>HRC 60+</strong>Kovuustavoite</div>
+      <div><strong>80CrV2</strong>Teräslaatu</div>
+      <div><strong>6 000 grit</strong>Viimeistelyaste</div>
+    </div>
+  </div>
+  <div class="scroll-hint">Vieritä alas</div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════
+     1. HISTORIA
+══════════════════════════════════════ -->
+<section id="historia">
+  <div class="section-num">01 · Historia</div>
+  <h2>Metallin tarina — kivikaudelta nanoteräkseen</h2>
+  <p class="lead">
+    Metallien historia on ihmiskunnan historia. Jokainen löytö — kupari, rauta, teräs — ei vain muuttanut työkaluja vaan muutti yhteiskuntia, valtasuhteita ja maailmankuvia.
+  </p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-year">n. 5 000 eKr.</div>
+      <div class="timeline-title">Kuparikausi — ensimmäinen metalli</div>
+      <p>Kupari löydettiin luonnonmukaisessa muodossaan. Se oli pehmeää, mutta mullisti kaiken. Anatolia, Lähi-itä ja Egypti alkoivat valaa esineitä malmeista. <strong>Metalliurgia syntyi.</strong></p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">n. 3 300 eKr.</div>
+      <div class="timeline-title">Pronssikausi — seoksen voima</div>
+      <p>Kupari + tina = <strong>pronssi</strong>. Keksittiin vahingossa tai kokeilemalla: seokset voivat olla huomattavasti lujempia kuin puhtaat metallit. Tämä periaate pätee edelleen. Sivilisaatiot — Mesopotamia, Kreeta, Kiina — rakennettiin pronssille.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">n. 1 200 eKr.</div>
+      <div class="timeline-title">Rautakausi — demokratisoituminen</div>
+      <p>Rautaa oli kaikkialla, kuparin raaka-aineet harvoilla. <strong>Raudan sulatustekniikka</strong> levisi nopeasti. Aseet, työkalut ja maatalousvälineet yleistyivät. Kulttuuri, jolla oli parempi teräs, voitti.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">n. 300 eKr. — 1 700 jKr.</div>
+      <div class="timeline-title">Teräksen kultakausi — Intia, Kiina, Japani</div>
+      <p><strong>Wootz-teräs</strong> (Intia) ja <strong>tamahagane</strong> (Japani) edustivat käsin valmistetun teräksen huippua. Japanilainen miekkataito — <em>tamahaganen</em> taonta, poimitus ja karkaisutekniikat — ovat suoraa perintöä kiridashi-veitsessä.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1855–1900</div>
+      <div class="timeline-title">Bessemer-prosessi — teollinen vallankumous</div>
+      <p>Henry Bessemerin keksintö mahdollisti <strong>massateräksen</strong> valmistuksen. Siltojen, rautateiden ja pilvenpiirtäjien aikakausi alkoi. Teräs ei ollut enää käsityöläisten aarreaitta vaan teollinen raaka-aine.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1912</div>
+      <div class="timeline-title">Ruostumaton teräs — Harry Brearley</div>
+      <p>Kromi (yli 10,5 %) muodostaa teräksen pintaan näkymättömän <strong>kromidioksidikalvon</strong>, joka suojaa korroosiolta. Tämä keksintö muutti kirurgian, elintarviketeollisuuden ja arkkitehtuurin.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1900-luku</div>
+      <div class="timeline-title">Seosterästen aikakausi</div>
+      <p>Volframi, vanadium, molybdeeni, koboltti — jokainen seosaine toi uuden ominaisuuden. <strong>Pikateräs</strong> (HSS) mahdollisti modernin konepajan. Titaaniseokset mullistivat ilmailun ja lääketieteen.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2000-luku →</div>
+      <div class="timeline-title">Metamateriaalit ja nanoteräs</div>
+      <p>Atomitasolla suunnitellut rakenteet, <strong>korkeatyppinen teräs</strong>, amorfinen metalli ja additiivisesti valmistetut metallirakenteet. Metalliurgia sulautuu tietojenkäsittelytieteeseen.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════
+     2. MATERIAALIT
+══════════════════════════════════════ -->
+<section id="materiaalit">
+  <div class="section-num">02 · Materiaalit</div>
+  <h2>Metallilaatujen maailma</h2>
+  <p class="lead">Kaikki teräkset eivät ole samaa ainetta. Hiilipitoisuus, seosaineet ja valmistustapa määräävät lopputuloksen yhtä vahvasti kuin taonta ja lämpökäsittely.</p>
+
+  <h3>Teräksen luokittelu hiilipitoisuuden mukaan</h3>
+  <div class="term-grid">
+    <div class="term-row">
+      <div class="term-key">Matalahiilinen<br>0,05–0,25 % C</div>
+      <div class="term-val"><span class="tag tag-green">pehmeä</span><span class="tag tag-green">sitkeä</span> Rakenneteräs, levyt, putket. Ei kovene karkaisemalla. Helppo hitsata. Tyypillinen esimerkki: <strong>S235, S355</strong>.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Keskihiilinen<br>0,25–0,60 % C</div>
+      <div class="term-val"><span class="tag tag-amber">koveneva</span><span class="tag tag-amber">tasapainoinen</span> Akselit, rattaat, työkalut. Karkaisulla saavutetaan kohtalainen kovuus. <strong>C45, C60</strong>.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Korkea­hiilinen<br>0,60–1,4 % C</div>
+      <div class="term-val"><span class="tag tag-red">kova</span><span class="tag tag-amber">terävä</span> Veitset, jousiteräkset, vaivakset. Erittäin korkea mahdollinen kovuus, hauraampi. <strong>80CrV2, 1095, Shirogami #2</strong>.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Työkaluteräs<br>1,0–2,3 % C</div>
+      <div class="term-val"><span class="tag tag-red">äärimmäinen</span><span class="tag tag-blue">erikois</span> Tappiteräkset, muotit, leikkuuterät. Usein seostettu volframilla, vanadiinilla. <strong>D2, M2, VG-10</strong>.</div>
+    </div>
+  </div>
+
+  <h3>Seosaineiden vaikutukset</h3>
+  <div class="three-col" style="margin-top:1.5rem">
+    <div class="card card-accent">
+      <h4>Kromi (Cr)</h4>
+      <p style="font-size:0.88rem">Yli 10,5 % tekee ruostumattoman. Pienet määrät parantavat kovuutta ja korroosiokestävyyttä. <strong>80CrV2:ssa</strong> ~0,5 % Cr.</p>
+    </div>
+    <div class="card card-accent card-blue">
+      <h4>Vanadium (V)</h4>
+      <p style="font-size:0.88rem">Hienojakoisempi kiderakenne. Parempi kulumiskestävyys ja sitkeys. <strong>80CrV2:ssa</strong> ~0,2 % V — tämän takia se antaa anteeksi lämpökäsittelyvirheitä.</p>
+    </div>
+    <div class="card card-accent card-green">
+      <h4>Mangaani (Mn)</h4>
+      <p style="font-size:0.88rem">Parantaa karkenevuutta eli teräs kovettuu syvemmältä öljyssä. Myös rikkiä sitova vaikutus estää haurautta. Useimmissa terästangoissa 0,3–1,0 %.</p>
+    </div>
+    <div class="card card-accent card-red">
+      <h4>Molybdeeni (Mo)</h4>
+      <p style="font-size:0.88rem">Nostaa karkenevuutta ja korkean lämpötilan lujuutta. Pikateräksissä (HSS M2) keskeinen aine. Teräksen "backstage-sankari".</p>
+    </div>
+    <div class="card card-accent">
+      <h4>Nikkeli (Ni)</h4>
+      <p style="font-size:0.88rem">Parantaa sitkeyyttä myös matalissa lämpötiloissa. Säiliöteräkset, laivojen rungot. Ruostumattomissa terästyypeissä (316) korvaamattomuus.</p>
+    </div>
+    <div class="card card-accent card-blue">
+      <h4>Volframi (W)</h4>
+      <p style="font-size:0.88rem">Korkein sulamislämpötila kaikista metalleista (3 422 °C). HSS-terästen tärkein aine — kovuus säilyy kuumuudessakin. Sorvausterät, poranterät.</p>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:2.5rem">
+    <div class="callout-label">Kiridashi-projekti: Materiaalivalinta</div>
+    <strong>80CrV2</strong> on ylivertainen valinta ensimmäiselle veitsiharjoitukselle. Se on anteeksiantava lämpökäsittelyssä (V:n ansiosta), sillä on erinomainen terän pito (korkea C), riittävä sitkeys (Cr+V) ja se on edullisesti saatavilla tanko- tai levymuodossa. Japanilainen <strong>Shirogami #2</strong> (White #2) on "puhtaampaa" ja vaativampaa — sopii kun perusteet ovat hallussa.
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════
+     3. METALLURGIAN TERMIT
+══════════════════════════════════════ -->
+<section id="termit">
+  <div class="section-num">03 · Termistö</div>
+  <h2>Metallurgian keskeinen sanasto</h2>
+  <p class="lead">Nämä termit esiintyvät jatkuvasti materiaalitieteessä, konetekniikassa ja muotoilun dokumentaatiossa. Opettele ne — ne ovat ammattilaisen perussanasto.</p>
+
+  <div class="term-grid">
+    <div class="term-row">
+      <div class="term-key">Austeniitointi</div>
+      <div class="term-val">Teräksen kuumentaminen austeniitin alueelle (n. 750–900 °C hiiliteräksillä) ennen karkaisua. Kiderakenne muuttuu FCC-muotoon, hiili liukenee rautaan tasaisesti.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Martensiitti</div>
+      <div class="term-val">Kovuuden lähde veitsessä. Syntyy kun austeniitti jäähdytetään niin nopeasti (öljy, vesi), ettei hiilellä ole aikaa diffundoitua. Ylijännitteinen BCT-hila — äärimmäisen kova, mutta hauras.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Perliitti</div>
+      <div class="term-val">Austeniitista hitaasti jäähtymällä syntyvä rakenne — vuorottelevat ferriitti- ja sementiiittilamellat. Pehmeä ja sitkeä. Haluttu rakenne pehmeäksi hehkutuksessa (hiontaa varten).</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Ferriitti</div>
+      <div class="term-val">Puhtaan raudan BCC-hila. Pehmeä, sitkeä, magneettinen. Matalan hiilipitoisuuden terästen perusta. Kiridashissa pyritään ferriittisempään runkoon terässuun ulkopuolella.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Sementtii (Fe₃C)</div>
+      <div class="term-val">Rauta­karbidi — erittäin kova (HV ~1000) mutta hauras yhdiste. Muodostuu kun hiilipitoisuus ylittää 6,67 %. Perliitissä lamellimaisena, ledeburiitissa verkkomaisena.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Bainiitti</div>
+      <div class="term-val">Martensiittia pehmeämpi mutta perliittiä kovempi välituote. Syntyy kun austeniitti jäähdytetään keskivauhtiisesti (esim. suolakylpyyn). Austin-austemper-menetelmissä tavoiteltava rakenne.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Karkaisukyky</div>
+      <div class="term-val">Kuinka syvälle terässä kovuus ulottuu karkaisun jälkeen. Riippuu seosaineista (Cr, Mn, Mo nostavat). Mitataan Jominy-kokeella.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Normalisointi</div>
+      <div class="term-val">Kuumennus austeniittialueelle → ilmajäähdytys. Ei kovenneta, mutta poistetaan taonnan jännitykset ja pienennetään raekoko. Tehdään 2–3 kertaa ennen varsinaista karkaisua.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Hehkutus (annealing)</div>
+      <div class="term-val">Kuumennus + erittäin hidas jäähdytys (uunissa tai hiekassa). Teräs pehmenee maksimiin — helpottaa koneistusta ja hiontaa. Hiiliteräkselle n. 700–750 °C → hidas jäähdytys.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Päästäminen (tempering)</div>
+      <div class="term-val">Karkaisun jälkeinen matalampilämpötilakäsittely (150–300 °C). Vähentää sisäisiä jännityksiä, muuttaa osan martensiitista sitkeämmäksi — terä ei katkea iskusta vaikka kovuus laskee hieman.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Rockwell-kovuus (HRC)</div>
+      <div class="term-val">Kovuusmittaus jossa timanttikartio painetaan teräkseen. Asteikko 0–70 HRC. Veitset: 56–64 HRC. Karkaisematon teräs ~20 HRC. Mitataan Rockwell-kovuusmittarilla.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Diffuusio</div>
+      <div class="term-val">Atomien liikkuminen kiderakenteen läpi. Korkea lämpötila → nopea diffuusio → tasainen rakenne. Nopea jäähdytys "jäädyttää" atomit paikoilleen → epätasapainoinen martensiitti → kovuus.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Eutektoidi (0,77 % C)</div>
+      <div class="term-val">Hiilipitoisuus, jossa perliitti syntyy suoraan austeniiitista (ns. eutektoidinen reaktio). Kiridashi-terästangoissa pyritään lähelle tätä arvoa — tasapaino kovuuden ja sitkeyden välillä.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Raerakenne</div>
+      <div class="term-val">Metallin kiderakeiden koko ja järjestys. Pieni raekoko → sitkeämpi ja kovempi. Vanadium ja normalisointi pienentävät raekokoa. Taonta yleensä kasvattaa raekokoa → siksi normalisointi on välttämätöntä.</div>
+    </div>
+    <div class="term-row">
+      <div class="term-key">Kriittinen piste (Ac₃)</div>
+      <div class="term-val">Lämpötila jossa magneetti lakkaa tarttumasta teräkseen — merkki siitä että austeniitointi on tapahtunut. Perinteinen tapa tarkistaa karkaisu ilman mittalaitteita. Noin 750–830 °C.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════
+     4. METALLIN KÄSITTELY
+══════════════════════════════════════ -->
+<section id="kasittely">
+  <div class="section-num">04 · Käsittely</div>
+  <h2>Metallin muokkaus — kylmä ja kuuma</h2>
+  <p class="lead">Metalli käyttäytyy eri tavoin riippuen siitä, käsitelläänkö sitä huoneenlämmössä vai punakuumana. Muotoilijana ymmärrät molemmat ja valitset tilanteen mukaan.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Kylmämuokkaus</h3>
+      <p>Metallia muokataan sen rekristallisaatiolämpötilan alapuolella (teräksillä alle ~400 °C). Kiderakenne venyy ja vääntyy — <strong>lujittuminen</strong> (work hardening) tapahtuu.</p>
+      <h4>Menetelmät</h4>
+      <ul class="styled">
+        <li><strong>Kylmävalssaus</strong> — levyt, nauhat; pinnanlaatu erinomainen</li>
+        <li><strong>Stanssaus ja leikkaus</strong> — ohutlevyt, nopea sarja</li>
+        <li><strong>Kylmätaivutus</strong> — profiiliteräkset, säteenpuristus</li>
+        <li><strong>Vetäminen (drawing)</strong> — putket, langat, napit</li>
+        <li><strong>Hionta ja viimistely</strong> — terän muoto ja pinta</li>
+      </ul>
+      <div class="callout" style="margin-top:1.5rem">
+        <div class="callout-label">Muotoilijan huomio</div>
+        Kylmämuokattu pinta on usein laadukkaampi ja mittatarkempi. Mutta lujittuminen tarkoittaa myös, että materiaali muuttuu hauraammaksi — se saattaa halkeilla liialla muokkauksella ilman välihehkutusta.
+      </div>
+    </div>
+    <div>
+      <h3>Kuumamuokkaus (Taonta)</h3>
+      <p>Yli rekristallisaatiolämpötilan tehtävä muokkaus. Teräs on pehmeää ja muovattavissa — rakenne tiivistyy ja parantuu taonnan myötä.</p>
+      <h4>Lämpötilat ja värit (80CrV2)</h4>
+      <div class="temp-scale">
+        <div class="temp-bar">
+          <div class="temp-seg" style="background:#3a1a0a;flex:0.5">Musta</div>
+          <div class="temp-seg" style="background:#6b2010">Tumman­punainen</div>
+          <div class="temp-seg" style="background:#a03010">Kirsikan­punainen</div>
+          <div class="temp-seg" style="background:#c85010">Oranssin­punainen</div>
+          <div class="temp-seg" style="background:#d47020">Kirkas oranssi</div>
+          <div class="temp-seg" style="background:#d4a030">Keltainen</div>
+          <div class="temp-seg" style="background:#e0d060">Vaalean­keltainen</div>
+        </div>
+        <div class="temp-labels">
+          <div class="temp-label" style="flex:0.5"><strong>&lt;200°</strong>Ei muokkausta</div>
+          <div class="temp-label"><strong>400–500°</strong>Päästö</div>
+          <div class="temp-label"><strong>650–750°</strong>Hehkutus</div>
+          <div class="temp-label"><strong>750–850°</strong>Karkaisu</div>
+          <div class="temp-label"><strong>900–1050°</strong>Taonta</div>
+          <div class="temp-label"><strong>1100–1200°</strong>Vältetään</div>
+          <div class="temp-label"><strong>&gt;1250°</strong>Ylilämpö!</div>
+        </div>
+      </div>
+      <h4>Taonnan periaatteet</h4>
+      <ul class="styled">
+        <li>Aloita taonta kun teräs on kirkas oranssi — ei keltainen eikä tumman punainen</li>
+        <li>Lopeta kun väri himmenee — uudelleenkuumennus ennen jatkamista</li>
+        <li>Yksipuolinen viiste (chisel grind) — vain toinen puoli taotaan kulmaan</li>
+        <li>Tasaiset iskut — vältä pistämästä terässuuta ensin alasimeen</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Muut metallintyöstömenetelmät</h3>
+  <div class="three-col" style="margin-top:1rem">
+    <div class="card">
+      <h4>Sorvaus & jyrsintä</h4>
+      <p style="font-size:0.88rem">CNC-koneistus mahdollistaa äärimmäisen tarkkuuden. Teräs poistetaan lastuamalla — nopeus, syöttö ja lastuamisgeometria ovat avainasemassa.</p>
+    </div>
+    <div class="card">
+      <h4>Hionta (grinding)</h4>
+      <p style="font-size:0.88rem">Epätarkka mutta nopea materiaalinpoisto. Terän profiili muovataan kulmahiomakoneella tai hiomaremmelillä. <strong>Ylikuumeneminen vaarana</strong> — käytä vettä tai jäähdytä usein.</p>
+    </div>
+    <div class="card">
+      <h4>Hitsaus & juottaminen</h4>
+      <p style="font-size:0.88rem">Korkea­hiilinen teräs on haastavaa hitsata — vaarana halkeilu. Juottaminen (brasaus) sopii paremmin veitsinteon liitoksiin esim. kädensijan kiinnityksessä.</p>
+    </div>
+    <div class="card">
+      <h4>Elektroerosio (EDM)</h4>
+      <p style="font-size:0.88rem">Sähköpurkaus poistaa materiaalia — jopa karkaistu teräs käy. Muottiteollisuuden peruskivi. Ei mekaaninen leikkaus → ei jännityksiä.</p>
+    </div>
+    <div class="card">
+      <h4>3D-tulostus metalleilla</h4>
+      <p style="font-size:0.88rem">SLM (Selective Laser Melting) sulattaa metallijauhetta kerros kerrokselta. Titaani, ruostumaton, alumiini. Vielä harvinainen pajaympäristössä, mutta kasvussa.</p>
+    </div>
+    <div class="card">
+      <h4>Kemiallinen käsittely</h4>
+      <p style="font-size:0.88rem">Happoetsaus, anodisointi (Al), parkerointi (Fe₃O₄). Kiridashissa käytetään <strong>happopatinointi</strong> tai öljynpolttomenetelmää korroosionestoon esteettisen pinnan lisäksi.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════
+     5. LÄMPÖKÄSITTELY
+══════════════════════════════════════ -->
+<section id="lampokasittely">
+  <div class="section-num">05 · Lämpökäsittely</div>
+  <h2>Lämpökäsittelyn vaiheet</h2>
+  <p class="lead">Lämpökäsittely on hetki, jossa terä joko onnistuu tai epäonnistuu. Jokainen vaihe on täsmällinen ja syy-seuraus on suora atomirakenteen muutoksista.</p>
+
+  <div class="process-steps">
+    <div class="step">
+      <div class="step-num">A</div>
+      <div class="step-content">
+        <div class="step-title">Normalisointi — 3× sykli</div>
+        <div class="step-temp">800–850 °C → ilmajäähdytys</div>
+        <p style="font-size:0.9rem">Taonnan jälkeen kiderakenne on epätasainen ja sisäiset jännitykset suuria. Kolme normalisointisykliä (kuumennus → ilmajäähdytys) pienentää raekoon ja tasaa jännitykset. Tämä on pitkäpiimäistä mutta välttämätöntä.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">B</div>
+      <div class="step-content">
+        <div class="step-title">Pehmeäksi hehkutus — hiontaa varten</div>
+        <div class="step-temp">740–760 °C → uunijäähdytys 8–12 h</div>
+        <p style="font-size:0.9rem">Erittäin hidas jäähdytys (alle 20 °C/h) tuottaa pallomaisempaa sementtiittiä ferriittimatriisissa — maksimaalinen pehmeys (&lt;HRC 20). Nyt teräs hioutuu helposti oikeaan muotoon. <strong>Jätä terässuuhun 0,5 mm lihaa</strong> — ei saa palaa karkaisussa.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">C</div>
+      <div class="step-content">
+        <div class="step-title">Austeniitointi — kriittinen piste</div>
+        <div class="step-temp">790–830 °C (80CrV2) · magneettitesti</div>
+        <p style="font-size:0.9rem">Teräs kuumennetaan tasaisesti (<strong>ei liian nopeasti</strong>) austeniitin alueelle. Hiili liukenee rautahilaan. Tarkistus: kun magneetti ei enää tartu, austeniitointi on tapahtunut (Curie-piste). Pidä lämpötilassa 5–10 min tasaisen rakenteen varmistamiseksi.</p>
+        <div class="callout danger">
+          <div class="callout-label">Varoitus</div>
+          Ylilämpö (yli 900 °C pitkään) kasvattaa raekokoa räjähdysmäisesti. Liian alhainen lämpötila → epätäydellinen austeniitointi → pehmeät kohdat. Käytä pystyuunia tai suolakylpyä tarkkuuden vuoksi.
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">D</div>
+      <div class="step-content">
+        <div class="step-title">Karkaisu — martensiitin synty</div>
+        <div class="step-temp">Öljy 50–70 °C (esilämmitetty)</div>
+        <p style="font-size:0.9rem">Terä upotetaan <strong>nopeasti</strong> öljyyn — ei hitaasti laskien. Liike öljyssä (edestakaisin, ei pyörteilevä) parantaa jäähdytystasaisuutta. Teräs saavuttaa HRC 65+ — nyt se on lasinkovaa ja äärimmäisen haurasta. Pidä terässuun suuntaus tasaisena ettei se vääristy.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">E</div>
+      <div class="step-content">
+        <div class="step-title">Päästäminen — sitkeyttä lisäämässä</div>
+        <div class="step-temp">180–220 °C · 2 × 1 h · ilmajäähdytys välissä</div>
+        <p style="font-size:0.9rem">Välittömästi karkaisun jälkeen uuniin. Kaksi päästökierrosta 1 tunti per kierros antaa tasaisemman tuloksen. Tavoite: HRC 60–63. Tässä lämpötilassa osa martensiitista muuttuu <strong>päästömarteniitiksi</strong> — jousimaisempaa, vähemmän haurasta. Terä taittuu ennen katkeamistaan.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <h4>Koe: Magneettikarkaisu (ilman mittalaitteita)</h4>
+    <p style="font-size:0.9rem">Pidä pieni neodyymimagneetti hiilihangen tai propaanikaasupolttimen vieressä. Kuumenna terä hitaasti — kun magneetti ei enää tartu, olet Curie-pisteessä (~770 °C). Lisää vielä 30–50 °C kirkkaamman värin verran, sitten öljyyn. Yksinkertainen, tehokas, perinteinen.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════
+     6. HILARAKENTEET
+══════════════════════════════════════ -->
+<section id="hila">
+  <div class="section-num">06 · Hila- ja kiderakenteet</div>
+  <h2>Atomit järjestyksessä — kiderakenteet</h2>
+  <p class="lead">Metallin ominaisuudet ovat suora seuraus siitä, miten atomit ovat järjestäytyneet. Kiridashi-veitsen koko tavoite on hallita tätä järjestystä lämpökäsittelyllä.</p>
+
+  <div class="crystal-grid">
+    <div class="crystal-card">
+      <svg class="crystal-svg" width="100" height="100" viewBox="0 0 100 100">
+        <!-- BCC lattice -->
+        <rect x="15" y="15" width="40" height="40" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
+        <rect x="35" y="35" width="40" height="40" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
+        <line x1="15" y1="15" x2="35" y2="35" stroke="#4a7fa5" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="55" y1="15" x2="75" y2="35" stroke="#4a7fa5" stroke-width="1"/>
+        <line x1="15" y1="55" x2="35" y2="75" stroke="#4a7fa5" stroke-width="1"/>
+        <line x1="55" y1="55" x2="75" y2="75" stroke="#4a7fa5" stroke-width="1"/>
+        <!-- atoms corners -->
+        <circle cx="15" cy="15" r="5" fill="#4a7fa5"/>
+        <circle cx="55" cy="15" r="5" fill="#4a7fa5"/>
+        <circle cx="15" cy="55" r="5" fill="#4a7fa5"/>
+        <circle cx="55" cy="55" r="5" fill="#4a7fa5"/>
+        <circle cx="35" cy="35" r="5" fill="#4a7fa5"/>
+        <circle cx="75" cy="35" r="5" fill="#4a7fa5"/>
+        <circle cx="35" cy="75" r="5" fill="#4a7fa5"/>
+        <circle cx="75" cy="75" r="5" fill="#4a7fa5"/>
+        <!-- center atom -->
+        <circle cx="45" cy="45" r="7" fill="#7ab8d8"/>
+      </svg>
+      <div class="crystal-name">BCC</div>
+      <div class="crystal-fi">Tilaakeskinen kuutio</div>
+      <p class="crystal-props">Ferriitti (α-Fe) · huoneenlämpö<br><span class="tag tag-green" style="font-size:0.6rem">pehmeä</span><span class="tag tag-green" style="font-size:0.6rem">sitkeä</span><span class="tag tag-green" style="font-size:0.6rem">magneettinen</span></p>
+    </div>
+
+    <div class="crystal-card">
+      <svg class="crystal-svg" width="100" height="100" viewBox="0 0 100 100">
+        <!-- FCC lattice -->
+        <rect x="10" y="10" width="45" height="45" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+        <rect x="30" y="30" width="45" height="45" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+        <line x1="10" y1="10" x2="30" y2="30" stroke="#c9a84c" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="55" y1="10" x2="75" y2="30" stroke="#c9a84c" stroke-width="1"/>
+        <line x1="10" y1="55" x2="30" y2="75" stroke="#c9a84c" stroke-width="1"/>
+        <line x1="55" y1="55" x2="75" y2="75" stroke="#c9a84c" stroke-width="1"/>
+        <!-- Face atoms -->
+        <circle cx="10" cy="10" r="5" fill="#c9a84c"/>
+        <circle cx="55" cy="10" r="5" fill="#c9a84c"/>
+        <circle cx="10" cy="55" r="5" fill="#c9a84c"/>
+        <circle cx="55" cy="55" r="5" fill="#c9a84c"/>
+        <circle cx="30" cy="30" r="5" fill="#c9a84c"/>
+        <circle cx="75" cy="30" r="5" fill="#c9a84c"/>
+        <circle cx="30" cy="75" r="5" fill="#c9a84c"/>
+        <circle cx="75" cy="75" r="5" fill="#c9a84c"/>
+        <!-- face centers -->
+        <circle cx="32" cy="10" r="5" fill="#f0a855"/>
+        <circle cx="10" cy="32" r="5" fill="#f0a855"/>
+        <circle cx="55" cy="32" r="5" fill="#f0a855"/>
+        <circle cx="32" cy="55" r="5" fill="#f0a855"/>
+      </svg>
+      <div class="crystal-name">FCC</div>
+      <div class="crystal-fi">Tasoakeskinen kuutio</div>
+      <p class="crystal-props">Austeniitti (γ-Fe) · 727–1400 °C<br><span class="tag tag-amber" style="font-size:0.6rem">ei magneetti</span><span class="tag tag-amber" style="font-size:0.6rem">hiili liukenee</span></p>
+    </div>
+
+    <div class="crystal-card">
+      <svg class="crystal-svg" width="100" height="100" viewBox="0 0 100 100">
+        <!-- BCT lattice (stretched) -->
+        <rect x="15" y="20" width="40" height="50" fill="none" stroke="#c43c2a" stroke-width="1.5"/>
+        <rect x="35" y="30" width="40" height="50" fill="none" stroke="#c43c2a" stroke-width="1.5"/>
+        <line x1="15" y1="20" x2="35" y2="30" stroke="#c43c2a" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="55" y1="20" x2="75" y2="30" stroke="#c43c2a" stroke-width="1"/>
+        <line x1="15" y1="70" x2="35" y2="80" stroke="#c43c2a" stroke-width="1"/>
+        <line x1="55" y1="70" x2="75" y2="80" stroke="#c43c2a" stroke-width="1"/>
+        <circle cx="15" cy="20" r="5" fill="#c43c2a"/>
+        <circle cx="55" cy="20" r="5" fill="#c43c2a"/>
+        <circle cx="15" cy="70" r="5" fill="#c43c2a"/>
+        <circle cx="55" cy="70" r="5" fill="#c43c2a"/>
+        <circle cx="35" cy="30" r="5" fill="#c43c2a"/>
+        <circle cx="75" cy="30" r="5" fill="#c43c2a"/>
+        <circle cx="35" cy="80" r="5" fill="#c43c2a"/>
+        <circle cx="75" cy="80" r="5" fill="#c43c2a"/>
+        <circle cx="45" cy="50" r="7" fill="#e07060"/>
+      </svg>
+      <div class="crystal-name">BCT</div>
+      <div class="crystal-fi">Tilaakeskinen tetragonaali</div>
+      <p class="crystal-props">Martensiitti · syntyy karkaisussa<br><span class="tag tag-red" style="font-size:0.6rem">äärimmäisen kova</span><span class="tag tag-red" style="font-size:0.6rem">hauras</span></p>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:2rem">
+    <div class="callout-label">Miksi BCT on kova?</div>
+    Karkaisussa austeniitti jäähdytetään niin nopeasti, että hiiliatomit "jäätyvät" rautahilan välitilaan — hila venyy c-akselin suuntaan (tetragonaalinen vääristymä). Tämä jännitys tekee hilasta äärimmäisen jäykän ja vastustuskykyisen muodonmuutoksille → kovuus. Päästäminen vapauttaa osan tästä jännityksestä → pienempi kovuus, enemmän sitkeyttä.
+  </div>
+
+  <h3>Faasimuutokset Fe-C -piirroksessa</h3>
+  <div class="highlight-box">
+    <p style="font-size:0.9rem">Rauta-hiili-piirros (Fe-C phase diagram) on metallurgian perusdokumentti. Se kertoo minkä faasin/rakenteen terässeos muodostaa tietyssä lämpötilassa ja hiilipitoisuudessa. Tärkeimmät pisteet:</p>
+    <ul class="styled" style="margin-top:1rem">
+      <li><strong>723 °C / 0,77 % C</strong> — eutektoidipiste: perliitti syntyy suoraan austeniiitista (A₁-viiva)</li>
+      <li><strong>912 °C</strong> — raudan BCC→FCC-muutos (A₃-viiva), hiilipitoisuudesta riippumaton</li>
+      <li><strong>1148 °C / 4,3 % C</strong> — eutektinen piste: ledeburiitti sulasta</li>
+      <li><strong>1394 °C</strong> — δ-ferriitti — korkein ferriitin muoto ennen sulamista</li>
+    </ul>
+    <p style="margin-top:1rem; font-size:0.9rem">80CrV2:ssa (n. 0,8 % C) liikumme hyvin lähellä eutektoidipisteettä — optimaalisin lähtökohta terästä varten joka tarvitsee sekä kovuutta että sitkeyyttä.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════
+     7. TEROITUS & HOITO
+══════════════════════════════════════ -->
+<section id="teroitus">
+  <div class="section-num">07 · Teroitus ja hoito</div>
+  <h2>Terän teroitus, kiillotus ja huolto</h2>
+  <p class="lead">Terä on valmis vasta kun se on teroitettu. Japanilainen teroitusperinne on maailman hienostuneinta — se perustuu kärsivällisyyteen, tasaiseen kulmaan ja oikeaan progressioon.</p>
+
+  <h3>Japanilaiset vesihiomakivet — progressio</h3>
+  <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-top:1rem">
+    <div class="stone-row stone-header">
+      <div class="stone-grit">Raekoko</div>
+      <div>Kivi & käyttö</div>
+      <div>Tehtävä</div>
+      <div class="stone-col-4">Pinta­laatu</div>
+    </div>
+    <div class="stone-row">
+      <div class="stone-grit">120–220</div>
+      <div><strong>Karkeuskivi</strong><br><span style="font-size:0.78rem;color:var(--text-dim)">Shaptonin oranssi, DMT</span></div>
+      <div style="font-size:0.85rem">Materiaalinpoisto, muodon korjaus. Käytetään vain jos terässuu on erittäin tylsä tai vaurioitunut.</div>
+      <div style="font-size:0.85rem">
+        <div class="grit-bar"><div class="grit-fill" style="width:15%"></div></div>
+        <span style="font-size:0.72rem;color:var(--text-dim)">Karkea huurre</span>
+      </div>
+    </div>
+    <div class="stone-row">
+      <div class="stone-grit">400</div>
+      <div><strong>Muodonantokivi</strong><br><span style="font-size:0.78rem;color:var(--text-dim)">King 400, Naniwa Lobster</span></div>
+      <div style="font-size:0.85rem">Terässuun perusmuodon luominen. Burr (purseen) muodostuminen — tarkista sormella!</div>
+      <div style="font-size:0.85rem">
+        <div class="grit-bar"><div class="grit-fill" style="width:30%"></div></div>
+        <span style="font-size:0.72rem;color:var(--text-dim)">Huurre näkyy</span>
+      </div>
+    </div>
+    <div class="stone-row">
+      <div class="stone-grit">1 000</div>
+      <div><strong>Välikivenä</strong><br><span style="font-size:0.78rem;color:var(--text-dim)">King 1000, Shapton Glass 1000</span></div>
+      <div style="font-size:0.85rem">Karkean kiven jäljet poistetaan. Terä alkaa leikata tehokkasti. Tämä on päivittäisteroituksen kivi.</div>
+      <div style="font-size:0.85rem">
+        <div class="grit-bar"><div class="grit-fill" style="width:50%"></div></div>
+        <span style="font-size:0.72rem;color:var(--text-dim)">Hieno huurre</span>
+      </div>
+    </div>
+    <div class="stone-row">
+      <div class="stone-grit">3 000</div>
+      <div><strong>Viimistelykivi</strong><br><span style="font-size:0.78rem;color:var(--text-dim)">Naniwa 3000, Suehiro Cerax</span></div>
+      <div style="font-size:0.85rem">Huurre tasoittuu. Terä alkaa kiiltää. Hiusten leikkaus mahdollista tässä vaiheessa.</div>
+      <div style="font-size:0.85rem">
+        <div class="grit-bar"><div class="grit-fill" style="width:68%"></div></div>
+        <span style="font-size:0.72rem;color:var(--text-dim)">Satiinikiilto</span>
+      </div>
+    </div>
+    <div class="stone-row">
+      <div class="stone-grit">6 000</div>
+      <div><strong>Polishingkivi</strong><br><span style="font-size:0.78rem;color:var(--text-dim)">King 6000, Shapton Pro 5000</span></div>
+      <div style="font-size:0.85rem">Partaveitsen terävyys. Terä viiltää paperin ilman vastustusta. Kiridashi-tavoitearvo.</div>
+      <div style="font-size:0.85rem">
+        <div class="grit-bar"><div class="grit-fill" style="width:85%"></div></div>
+        <span style="font-size:0.72rem;color:var(--text-dim)">Peilikiilto</span>
+      </div>
+    </div>
+    <div class="stone-row">
+      <div class="stone-grit">12 000+</div>
+      <div><strong>Finishing</strong><br><span style="font-size:0.78rem;color:var(--text-dim)">Kitayama, Jnats, Okudo</span></div>
+      <div style="font-size:0.85rem">Japanilainen luonnonkivi. Poleerattu terä leikkaa hiusta ilmassa. Kokoajan harjoittelu.</div>
+      <div style="font-size:0.85rem">
+        <div class="grit-bar"><div class="grit-fill" style="width:100%; background:linear-gradient(to right, var(--amber), var(--gold))"></div></div>
+        <span style="font-size:0.72rem;color:var(--text-dim)">Täydellinen peili</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Teroituskulma ja tekniikka</h3>
+  <div class="two-col" style="margin-top:1rem">
+    <div>
+      <h4>Kiridashi: yksipuolinen viiste</h4>
+      <p style="font-size:0.9rem">Kiridashi on <strong>chisel grind</strong> — vain yksi puoli on hiottu kulmaan, toinen on täysin tasainen (Ura, 裏). Tämä tekee terästä äärimmäisen terävän mutta vaatii tasaisen, litteän teroitustekniikan.</p>
+      <ul class="styled">
+        <li>Tasainen puoli (Ura) — pitä kivenä tasaisena, liikuta edestakaisin painottaen koko pinnan. Poistaa purseen.</li>
+        <li>Viistepuoli — kulma noin 10–15° kivestä. Hitaat, tasaiset vedot kohti leikkuureunaa.</li>
+        <li>Burr (purse) — syntyvä metallihuippuja viistepuolella — merkki että materiaali poistuu. Poistettava ura-puolella.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Kulman merkitys</h4>
+      <div class="term-grid" style="margin-top:0">
+        <div class="term-row">
+          <div class="term-key">5–10°</div>
+          <div class="term-val" style="font-size:0.83rem">Kirurgiset skalpellit. Äärimmäinen terävyys, ei kestä voimaa.</div>
+        </div>
+        <div class="term-row">
+          <div class="term-key">10–15°</div>
+          <div class="term-val" style="font-size:0.83rem">Kiridashi, japanilaiset veitset. Terävyys ja kestävyys tasapainossa.</div>
+        </div>
+        <div class="term-row">
+          <div class="term-key">15–20°</div>
+          <div class="term-val" style="font-size:0.83rem">Länsimaiset veitset. Kestää kovempaa käyttöä.</div>
+        </div>
+        <div class="term-row">
+          <div class="term-key">25–30°</div>
+          <div class="term-val" style="font-size:0.83rem">Hakiraudat, taltat. Puuntyöstö, iskua kestävä.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Oikeaoppinen terän hoito</h3>
+  <div class="three-col" style="margin-top:1rem">
+    <div class="card card-accent card-green">
+      <h4>Päivittäinen huolto</h4>
+      <ul class="styled">
+        <li>Pyyhi kuivaksi jokaisen käytön jälkeen</li>
+        <li>Ohut öljykerros (kamelia- tai mineraaliöljy)</li>
+        <li>Välttele sitrushappoja ja suolaa</li>
+        <li>Säilytä tupessa tai puupidikkeessä</li>
+      </ul>
+    </div>
+    <div class="card card-accent">
+      <h4>Teroitustaajuus</h4>
+      <ul class="styled">
+        <li>Hihnaoikaisu (strop) — jokaisen käytön jälkeen</li>
+        <li>1 000 grit — kuukausittain tai kun tylsä</li>
+        <li>Täysi progressio — tarpeen mukaan</li>
+        <li>Korkea­hiilinen kestää terän paremmin → harvemmin</li>
+      </ul>
+    </div>
+    <div class="card card-accent card-red">
+      <h4>Vältä näitä</h4>
+      <ul class="styled">
+        <li>Sähköinen teroitin — tuhoaa terän profiilin</li>
+        <li>Astianpesukone — haurastuttaa ja ruostuttaa</li>
+        <li>Kova leikkuualusta (lasi, marmori)</li>
+        <li>Ylilämpö — pehmentää martensiitin</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Hihnaoikaisu (Stropping)</h3>
+  <p>Nahkahihna + stroppauspasta (Cr₂O₃ tai Al₂O₃) oikaisee purseen ja kiillottaa terää kiviä käyttämättä. <strong>Aina vastakarvaanleikkuusuuntaan</strong> — ei kohti terää. 10–20 vetoa kummallakin puolella riittää päivittäiseen ylläpitoon.</p>
+</section>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════
+     8. VALMISTUSOHJE
+══════════════════════════════════════ -->
+<section id="valmistus">
+  <div class="section-num">08 · Kiridashi-projekti</div>
+  <h2>Valmistusohje — vaihe vaiheelta</h2>
+  <p class="lead">Referenssiprojekti: <a href="https://www.instructables.com/DIY-Kiridashi-Knives/" target="_blank">instructables.com/DIY-Kiridashi-Knives</a>. Valmistuksessa sovelletaan kaikkea tässä materiaalissa opittua.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Tarvittavat materiaalit</h3>
+      <ul class="styled">
+        <li><strong>80CrV2-teräs</strong> — tanko n. 150 × 25 × 4 mm</li>
+        <li>Vahattu hamppunaru tai kasviparkittu nahkasuikale</li>
+        <li>Kasviparkittu nahka tuppia varten (tai leppä/kirsi)</li>
+        <li>Mehiläisvaha, pellavaöljy tai kamelijaöljy</li>
+        <li>Vahattua pellavalankaa ompelua varten</li>
+      </ul>
+      <h3>Tarvittavat työkalut</h3>
+      <ul class="styled">
+        <li>Ahjo tai propaanikaasupoltin + alasimen korvike</li>
+        <li>Vasara (500–800 g), pihdit</li>
+        <li>Kulmahiomakone / hiomaremmeli</li>
+        <li>Porakone + 4–6 mm terä (reikä narua varten)</li>
+        <li>Vesihiomakivet: 400, 1000, 6000 grit</li>
+        <li>Uuni tai suolakylpy lämpökäsittelyyn</li>
+        <li>Öljysäiliö karkaisuun (esilämmitetty canola/rapsiöljy)</li>
+        <li>Magneettikoepala kriittisen pisteen tarkistamiseen</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Valmistuksen vaiheet</h3>
+      <ol class="styled">
+        <li><strong>Aihion katkaisu</strong> — sopiva pätkä teräksestä</li>
+        <li><strong>Muodon profilointi</strong> — kulmahiomakoneella karkeasti</li>
+        <li><strong>Kuumennus + taonta</strong> — yksipuolinen viiste, kärki</li>
+        <li><strong>Normalisointi 3×</strong> — ilmajäähdytys</li>
+        <li><strong>Pehmeäksi hehkutus</strong> — uunijäähdytys</li>
+        <li><strong>Puhdistushionta</strong> — muoto tarkaksi, 0,5 mm teräss-suuhun</li>
+        <li><strong>Reiän poraus</strong> — ennen karkaisua!</li>
+        <li><strong>Austeniitointi + karkaisu öljyyn</strong></li>
+        <li><strong>Päästäminen 2 × 1 h / 200 °C</strong></li>
+        <li><strong>Hiontaprogressio</strong> 400 → 1000 → 6000</li>
+        <li><strong>Kahvan punonta</strong> (tsukamaki tai kierrepunaus)</li>
+        <li><strong>Tupin valmistus</strong> nahasta tai puusta</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">Muotoilijan perspektiivi</div>
+    Kiridashissa muoto seuraa täydellisesti funktiota — käyttäjän peukalo ohjautuu luonnollisesti juuri oikeaan kohtaan geometrian ansiosta. Pohdi: miten kahvan tekstuuri (naru vs. nahka) muuttaa käyttötuntumaa? Miten viistepuolen suunta määrittää, onko veitsi oikeakätisille vai vasenkätisille? Nämä ovat teollisen muotoilun ydinkysymyksiä.
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════
+     9. TULEVAISUUS
+══════════════════════════════════════ -->
+<section id="tulevaisuus">
+  <div class="section-num">09 · Tulevaisuus</div>
+  <h2>Metallien tulevaisuus</h2>
+  <p class="lead">Metallurgia ei ole museum-tiede — se kehittyy nopeammin kuin koskaan. Tekoäly, nanoteknologia ja kestävä kehitys muuttavat alan perusteita.</p>
+
+  <div class="future-grid">
+    <div class="future-card">
+      <span class="future-icon">⚛️</span>
+      <div class="future-title">Korkea­entropiseokset (HEA)</div>
+      <p style="font-size:0.9rem">Perinteinen seos: yksi päämetalli + pieniä seosaineita. HEA: viisi tai useampi metalli tasasuhteissa. Tulokset yllättävät — esim. MnFeCoNiCr on <strong>yhtä aikaa erittäin kova ja erittäin sitkeä</strong>, mikä on normaalisti ristiriitainen vaatimus. Lentokone- ja biomateriaalisovellukset kasvavat.</p>
+    </div>
+    <div class="future-card">
+      <span class="future-icon">🖨️</span>
+      <div class="future-title">Additiivinen metallivalmistus</div>
+      <p style="font-size:0.9rem">SLM, EBM, DED — laseri tai elektronisuihku sulattaa metallijauhetta kerros kerrokselta. Mahdollistaa geometrioita, joita ei voida koneistaa tai valaa. NASA käyttää titaanikomponentteja. <strong>Muotoilijana: topologiaoptimointi + 3D-metallitulostus</strong> muuttaa koneenosien estetiikkaa radikaalisti.</p>
+    </div>
+    <div class="future-card">
+      <span class="future-icon">🤖</span>
+      <div class="future-title">Tekoäly materiaalikehityksessä</div>
+      <p style="font-size:0.9rem">Perinteinen uuden teräksen kehitys: vuosia kokeita ja virheitä. Koneoppiminen + DFT-simulaatiot (Density Functional Theory) ennustavat materiaalin ominaisuuksia atomitasolta ennen kuin grammaakaan on valmistettu. <strong>Materials Project</strong> -tietokanta sisältää jo 150 000+ materiaalin laskennalliset ominaisuudet.</p>
+    </div>
+    <div class="future-card">
+      <span class="future-icon">♻️</span>
+      <div class="future-title">Kiertotalous ja vihreä teräs</div>
+      <p style="font-size:0.9rem">Teräksentuotanto vastaa ~8 % maailman CO₂-päästöistä. <strong>SSAB:n HYBRIT-teknologia</strong> (Suomi/Ruotsi) korvaa hiilen vedyllä — nollapäästöinen teräs on jo valmistettu. Kierrätysasteen nosto ja prosessien sähköistäminen ovat alan suurimmat haasteet seuraavalle vuosikymmenelle.</p>
+    </div>
+    <div class="future-card">
+      <span class="future-icon">🧬</span>
+      <div class="future-title">Biomimetiikka ja metamateriaalit</div>
+      <p style="font-size:0.9rem">Simpukan kuori, hämähäkinseittiä jäljittelevät rakenteet — luonto ratkaisee kovuuden ja sitkeyden ristiriidan kerrosrakenteilla. Metalliset lattice-rakenteet (hilakko) ovat lujia, kevyitä ja energiaa absorboivia. Lääkintäimplanttien uusi aikakausi.</p>
+    </div>
+    <div class="future-card">
+      <span class="future-icon">🌡️</span>
+      <div class="future-title">Muisti­metallit ja aktiiviset materiaalit</div>
+      <p style="font-size:0.9rem">NiTi (Nitinol) muistaa muotonsa ja palaa siihen lämpötilan muuttuessa. Lääketieteelliset stenttilainat, robotiikan lihakset, älykkäät rakenteet. Muotoilijalle: materiaali ei ole enää passiivinen — se reagoi ympäristöön. <strong>4D-tulostus</strong> vie tämän seuraavalle tasolle.</p>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:2.5rem">
+    <div class="callout-label">Teollisen muotoilijan rooli</div>
+    Metallien kehitys ei tapahdu tyhjiössä — muotoilijat ovat avainasemassa siinä, miten uudet materiaalit löytävät tiensä tuotteisiin, joita ihmiset haluavat käyttää. Vihreän teräksen estetiikka, additiivisesti valmistettujen komponenttien uudet muodot, muistimetallien tuomat mahdollisuudet — nämä kaikki tarvitsevat muotoilijan kättä, ei vain insinööriä.
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div>
+    <div class="footer-logo">切り出し</div>
+    <div style="margin-top:0.5rem; font-size:0.72rem">Teollinen muotoilu · 1. vuosikurssi · Metropolia AMK</div>
+  </div>
+  <div style="text-align:right">
+    <div>Referenssi: <a href="https://www.instructables.com/DIY-Kiridashi-Knives/" target="_blank" style="font-size:0.78rem">instructables.com/DIY-Kiridashi-Knives</a></div>
+    <div style="margin-top:0.25rem">Materiaali on tarkoitettu opetuskäyttöön. Terävät esineet — käsittele vastuullisesti.</div>
+  </div>
+</footer>
+
+</body>
+</html>

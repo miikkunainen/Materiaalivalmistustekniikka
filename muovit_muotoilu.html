@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polymeerit — Muovien maailma teolliselle muotoilijalle</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f1ec;
+    --bg2: #edeae3;
+    --bg3: #e4e0d8;
+    --white: #faf8f4;
+    --ink: #1a1814;
+    --ink2: #3d3a34;
+    --ink3: #6b6660;
+    --teal: #0d6e6e;
+    --teal-light: #15a0a0;
+    --teal-pale: #e0f0f0;
+    --orange: #d4531c;
+    --orange-light: #e8703e;
+    --orange-pale: #fce8e0;
+    --blue: #1a4f7a;
+    --blue-light: #2878b8;
+    --blue-pale: #deeaf5;
+    --green: #2d6b3e;
+    --green-light: #3d8f52;
+    --green-pale: #e0f0e6;
+    --purple: #6b2d8a;
+    --purple-pale: #f0e6f5;
+    --border: rgba(26,24,20,0.1);
+    --border-strong: rgba(26,24,20,0.18);
+    --radius: 4px;
+    --shadow: 0 2px 16px rgba(26,24,20,0.08);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink2);
+    font-family: 'Instrument Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.75;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(244,241,236,0.94);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border-strong);
+    height: 54px;
+    display: flex; align-items: center;
+    padding: 0 2.5rem;
+    gap: 1rem;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--teal);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex; list-style: none;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a {
+    display: block; padding: 0 0.8rem;
+    font-size: 0.7rem; font-weight: 500;
+    letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--ink3); text-decoration: none;
+    transition: color 0.2s; white-space: nowrap;
+    line-height: 54px;
+  }
+  .nav-links a:hover { color: var(--teal); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    position: relative;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 8rem 4rem 4rem;
+    background: var(--ink);
+    position: relative; overflow: hidden;
+  }
+  .hero-left-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 30% 70%, rgba(13,110,110,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 20%, rgba(212,83,28,0.2) 0%, transparent 60%),
+      #1a1814;
+  }
+  .hero-blob {
+    position: absolute; top: 15%; right: -10%;
+    width: 380px; height: 380px;
+    border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%;
+    background: rgba(13,110,110,0.15);
+    border: 1px solid rgba(13,110,110,0.3);
+    animation: morph 10s ease-in-out infinite;
+  }
+  .hero-blob2 {
+    position: absolute; bottom: 20%; left: -5%;
+    width: 220px; height: 220px;
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    background: rgba(212,83,28,0.1);
+    border: 1px solid rgba(212,83,28,0.2);
+    animation: morph 14s ease-in-out infinite reverse;
+  }
+  @keyframes morph {
+    0%,100% { border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%; }
+    33% { border-radius: 30% 70% 60% 40% / 70% 30% 60% 40%; }
+    66% { border-radius: 50% 50% 40% 60% / 30% 60% 70% 40%; }
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--teal-light); margin-bottom: 1.25rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 28px; height: 1px; background: var(--teal-light);
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: #f4f1ec;
+    margin-bottom: 1.5rem;
+  }
+  h1 em {
+    font-style: italic;
+    font-family: 'Instrument Serif', serif;
+    color: var(--teal-light);
+    font-weight: 400;
+  }
+  .hero-desc {
+    font-size: 1rem; color: rgba(244,241,236,0.65);
+    max-width: 420px; margin-bottom: 2.5rem; line-height: 1.8;
+  }
+  .hero-stats {
+    display: flex; gap: 2.5rem;
+    border-top: 1px solid rgba(244,241,236,0.1);
+    padding-top: 2rem;
+  }
+  .stat-item strong {
+    display: block; font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 1.6rem; color: var(--teal-light); letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .stat-item span { font-size: 0.72rem; color: rgba(244,241,236,0.45); text-transform: uppercase; letter-spacing: 0.08em; }
+  .hero-right {
+    background: var(--bg2);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-right-pattern {
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(26,24,20,0.05) 39px, rgba(26,24,20,0.05) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(26,24,20,0.05) 39px, rgba(26,24,20,0.05) 40px);
+  }
+  .hero-right-content { position: relative; z-index: 1; }
+  .hero-right h2 {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 1.75rem;
+    color: var(--ink);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+  }
+  .nav-index { list-style: none; }
+  .nav-index li {
+    display: flex; align-items: baseline; gap: 1rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .nav-index li:last-child { border-bottom: none; }
+  .nav-index a { color: var(--ink2); text-decoration: none; transition: color 0.2s; }
+  .nav-index a:hover { color: var(--teal); }
+  .nav-index .idx {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    color: var(--ink3); min-width: 24px; flex-shrink: 0;
+  }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; height: 1px; background: var(--border-strong); margin: 0; }
+
+  /* ── SECTION STRUCTURE ── */
+  .section-wrap { padding: 6rem 0; }
+  .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 4rem; }
+  .section-alt { background: var(--bg2); }
+  .section-dark { background: var(--ink); color: rgba(244,241,236,0.8); }
+  .section-dark h2 { color: #f4f1ec; }
+  .section-dark h3 { color: var(--teal-light); }
+  .section-dark .section-num { color: var(--teal-light); }
+  .section-dark .section-num::before { background: var(--teal-light); }
+  .section-dark p { color: rgba(244,241,236,0.72); }
+  .section-dark strong { color: #f4f1ec; }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.63rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .section-num::before {
+    content: ''; width: 22px; height: 1px; background: var(--teal);
+  }
+  h2 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    color: var(--ink); line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.75rem;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif; font-weight: 600;
+    font-size: 1.25rem; color: var(--teal);
+    margin-bottom: 0.65rem; margin-top: 2.25rem;
+    letter-spacing: -0.01em;
+  }
+  h4 {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--orange);
+    margin-bottom: 0.5rem; margin-top: 1.25rem;
+  }
+  p { margin-bottom: 1rem; }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--ink); font-weight: 500; }
+  em { color: var(--teal); font-style: italic; }
+  a { color: var(--teal); text-underline-offset: 3px; }
+  a:hover { color: var(--teal-light); }
+
+  .lead {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.2rem; color: var(--ink); line-height: 1.8;
+    margin-bottom: 2.5rem; font-weight: 400;
+    font-style: italic;
+    border-left: 3px solid var(--teal);
+    padding-left: 1.25rem;
+  }
+
+  /* ── GRID LAYOUTS ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin-top: 2rem; }
+  .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem; margin-top: 2rem; }
+  .four-col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 2rem; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  .card-teal { border-top: 3px solid var(--teal); }
+  .card-orange { border-top: 3px solid var(--orange); }
+  .card-blue { border-top: 3px solid var(--blue); }
+  .card-green { border-top: 3px solid var(--green); }
+  .card-purple { border-top: 3px solid var(--purple); }
+  .card-dark { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); color: rgba(244,241,236,0.8); }
+  .card-dark strong { color: #f4f1ec; }
+  .card-dark h4 { color: var(--teal-light); }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 2.5rem; margin-top: 2.5rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--teal), var(--orange), var(--blue), var(--green), var(--purple));
+  }
+  .tl-item { position: relative; margin-bottom: 2.5rem; }
+  .tl-dot {
+    position: absolute; left: -2.875rem; top: 0.5rem;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--teal); border: 2px solid var(--bg);
+  }
+  .tl-item:nth-child(2) .tl-dot { background: var(--orange); }
+  .tl-item:nth-child(3) .tl-dot { background: #1a7a5e; }
+  .tl-item:nth-child(4) .tl-dot { background: var(--blue); }
+  .tl-item:nth-child(5) .tl-dot { background: var(--orange-light); }
+  .tl-item:nth-child(6) .tl-dot { background: var(--green); }
+  .tl-item:nth-child(7) .tl-dot { background: var(--purple); }
+  .tl-item:nth-child(8) .tl-dot { background: var(--teal); }
+  .tl-item:nth-child(9) .tl-dot { background: var(--green-light); }
+  .tl-year {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    color: var(--teal); letter-spacing: 0.08em; margin-bottom: 0.2rem;
+  }
+  .tl-item:nth-child(2) .tl-year { color: var(--orange); }
+  .tl-item:nth-child(3) .tl-year { color: #1a7a5e; }
+  .tl-item:nth-child(4) .tl-year { color: var(--blue); }
+  .tl-item:nth-child(5) .tl-year { color: var(--orange-light); }
+  .tl-item:nth-child(6) .tl-year { color: var(--green); }
+  .tl-item:nth-child(7) .tl-year { color: var(--purple); }
+  .tl-item:nth-child(8) .tl-year { color: var(--teal); }
+  .tl-item:nth-child(9) .tl-year { color: var(--green-light); }
+  .tl-title {
+    font-family: 'Syne', sans-serif; font-weight: 600;
+    font-size: 1.05rem; color: var(--ink); margin-bottom: 0.35rem;
+  }
+
+  /* ── TERM TABLE ── */
+  .term-grid {
+    border: 1px solid var(--border-strong); border-radius: var(--radius);
+    overflow: hidden; margin-top: 2rem;
+    background: var(--white); box-shadow: var(--shadow);
+  }
+  .term-row {
+    display: grid; grid-template-columns: 210px 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .term-row:last-child { border-bottom: none; }
+  .term-key {
+    background: var(--bg2); padding: 0.9rem 1.25rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+    color: var(--teal); border-right: 1px solid var(--border);
+    display: flex; align-items: center; font-weight: 500;
+  }
+  .term-val { padding: 0.9rem 1.25rem; font-size: 0.88rem; line-height: 1.65; }
+
+  /* ── POLYMER CHAIN VISUAL ── */
+  .chain-vis {
+    display: flex; align-items: center; gap: 0;
+    padding: 2rem; background: var(--bg3);
+    border-radius: var(--radius); margin: 2rem 0;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .monomer {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+    font-weight: 500; color: white; flex-shrink: 0;
+  }
+  .chain-link {
+    width: 16px; height: 3px; flex-shrink: 0;
+  }
+
+  /* ── PROCESS STEPS ── */
+  .process { margin-top: 2rem; }
+  .process-step {
+    display: grid; grid-template-columns: 48px 1fr;
+    gap: 1.25rem; margin-bottom: 1.5rem;
+    align-items: start;
+  }
+  .ps-num {
+    width: 48px; height: 48px;
+    background: var(--teal); color: white;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: var(--radius); flex-shrink: 0;
+  }
+  .ps-num.orange { background: var(--orange); }
+  .ps-num.blue { background: var(--blue); }
+  .ps-num.green { background: var(--green); }
+  .ps-num.purple { background: var(--purple); }
+  .ps-body {}
+  .ps-title {
+    font-family: 'Syne', sans-serif; font-weight: 600;
+    font-size: 1rem; color: var(--ink); margin-bottom: 0.25rem;
+  }
+  .ps-temp {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    padding: 0.1rem 0.5rem; background: var(--teal-pale);
+    border: 1px solid rgba(13,110,110,0.25); border-radius: 2px;
+    color: var(--teal); margin-bottom: 0.4rem;
+  }
+  .ps-temp.orange { background: var(--orange-pale); border-color: rgba(212,83,28,0.25); color: var(--orange); }
+  .ps-temp.blue { background: var(--blue-pale); border-color: rgba(26,79,122,0.25); color: var(--blue); }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-radius: 0 var(--radius) var(--radius) 0;
+    border-left: 3px solid var(--teal);
+    background: var(--teal-pale);
+    padding: 1.25rem 1.5rem; margin: 2rem 0;
+    font-size: 0.92rem;
+  }
+  .callout-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 0.4rem; font-weight: 500;
+  }
+  .callout.orange { border-left-color: var(--orange); background: var(--orange-pale); }
+  .callout.orange .callout-label { color: var(--orange); }
+  .callout.blue { border-left-color: var(--blue); background: var(--blue-pale); }
+  .callout.blue .callout-label { color: var(--blue); }
+  .callout.green { border-left-color: var(--green); background: var(--green-pale); }
+  .callout.green .callout-label { color: var(--green); }
+  .callout.purple { border-left-color: var(--purple); background: var(--purple-pale); }
+  .callout.purple .callout-label { color: var(--purple); }
+  .callout.dark { border-left-color: var(--teal-light); background: rgba(13,110,110,0.15); color: rgba(244,241,236,0.82); }
+  .callout.dark .callout-label { color: var(--teal-light); }
+  .callout.dark strong { color: #f4f1ec; }
+
+  /* ── TAGS ── */
+  .tag {
+    display: inline-block; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; padding: 0.18rem 0.5rem;
+    border-radius: 2px; letter-spacing: 0.07em;
+    margin-right: 0.3rem; margin-bottom: 0.3rem;
+  }
+  .tag-teal { background: var(--teal-pale); color: var(--teal); border: 1px solid rgba(13,110,110,0.2); }
+  .tag-orange { background: var(--orange-pale); color: var(--orange); border: 1px solid rgba(212,83,28,0.2); }
+  .tag-blue { background: var(--blue-pale); color: var(--blue); border: 1px solid rgba(26,79,122,0.2); }
+  .tag-green { background: var(--green-pale); color: var(--green); border: 1px solid rgba(45,107,62,0.2); }
+  .tag-purple { background: var(--purple-pale); color: var(--purple); border: 1px solid rgba(107,45,138,0.2); }
+
+  /* ── MATERIAL BADGE ── */
+  .mat-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--white); border: 1px solid var(--border-strong);
+    border-radius: var(--radius); padding: 0.4rem 0.85rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+    color: var(--ink); font-weight: 500;
+    box-shadow: var(--shadow);
+  }
+  .mat-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+
+  /* ── PROPERTY TABLE ── */
+  .prop-table {
+    width: 100%; border-collapse: collapse;
+    margin: 1.5rem 0; font-size: 0.85rem;
+    box-shadow: var(--shadow);
+  }
+  .prop-table th {
+    background: var(--teal); color: white;
+    padding: 0.65rem 1rem; text-align: left;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+  }
+  .prop-table td {
+    padding: 0.65rem 1rem; border-bottom: 1px solid var(--border);
+    background: var(--white);
+  }
+  .prop-table tr:last-child td { border-bottom: none; }
+  .prop-table tr:nth-child(even) td { background: var(--bg2); }
+
+  /* ── BAR CHART ── */
+  .bar-row {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 0.65rem; font-size: 0.82rem;
+  }
+  .bar-label { min-width: 80px; color: var(--ink3); font-size: 0.75rem; }
+  .bar-track { flex: 1; height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; }
+  .bar-val {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+    color: var(--ink3); min-width: 40px; text-align: right;
+  }
+
+  /* ── HIGHLIGHT ── */
+  .highlight {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 2rem; margin: 2rem 0;
+  }
+
+  /* ── BIG QUOTE ── */
+  .big-quote {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    line-height: 1.4;
+    color: #f4f1ec;
+    text-align: center;
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .big-quote-attr {
+    text-align: center;
+    font-size: 0.75rem;
+    color: rgba(244,241,236,0.4);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── FUTURE GRID ── */
+  .future-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 2rem;
+  }
+  .future-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius); padding: 1.75rem;
+    position: relative; overflow: hidden;
+  }
+  .future-card::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(to right, var(--teal-light), transparent);
+  }
+  .future-card:nth-child(2)::after { background: linear-gradient(to right, var(--orange-light), transparent); }
+  .future-card:nth-child(3)::after { background: linear-gradient(to right, var(--blue-light), transparent); }
+  .future-card:nth-child(4)::after { background: linear-gradient(to right, var(--green-light), transparent); }
+  .future-card:nth-child(5)::after { background: linear-gradient(to right, var(--purple), transparent); }
+  .future-card:nth-child(6)::after { background: linear-gradient(to right, var(--teal-light), var(--orange-light), transparent); }
+  .future-icon { font-size: 2rem; margin-bottom: 0.85rem; display: block; }
+  .future-title { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 1rem; color: #f4f1ec; margin-bottom: 0.6rem; }
+
+  /* ── LISTS ── */
+  ul.styled { padding-left: 1.25rem; margin: 0.5rem 0 1rem; }
+  ul.styled li { margin-bottom: 0.4rem; font-size: 0.92rem; }
+  ul.styled li::marker { color: var(--teal); }
+  ol.styled { padding-left: 1.25rem; margin: 0.5rem 0 1rem; }
+  ol.styled li { margin-bottom: 0.5rem; font-size: 0.92rem; }
+  ol.styled li::marker { color: var(--orange); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; }
+
+  /* ── SECTION HERO-BANNER ── */
+  .section-banner {
+    padding: 3.5rem 4rem;
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; gap: 3rem;
+  }
+  .section-banner-icon {
+    font-size: 4rem; flex-shrink: 0; line-height: 1;
+    opacity: 0.85;
+  }
+  .section-banner-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 0.5rem;
+  }
+  .section-banner h2 { margin-bottom: 0.5rem; font-size: clamp(1.6rem, 2.5vw, 2.2rem); }
+  .section-banner p { font-size: 0.92rem; color: var(--ink3); max-width: 600px; margin: 0; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink); color: rgba(244,241,236,0.5);
+    padding: 3.5rem 4rem;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 2rem; flex-wrap: wrap;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 1.4rem; color: var(--teal-light);
+    letter-spacing: -0.01em; margin-bottom: 0.5rem;
+  }
+  footer a { color: var(--teal-light); font-size: 0.8rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { padding: 3rem 2rem; display: none; }
+    .hero-left { padding: 6rem 2rem 3rem; }
+    .section-inner { padding: 0 1.5rem; }
+    .two-col, .three-col, .four-col, .future-grid { grid-template-columns: 1fr; }
+    .term-row { grid-template-columns: 1fr; }
+    .term-key { border-right: none; border-bottom: 1px solid var(--border); }
+    footer { padding: 2.5rem 1.5rem; flex-direction: column; }
+    nav { padding: 0 1rem; }
+    .section-banner { padding: 2.5rem 1.5rem; flex-direction: column; gap: 1.5rem; }
+  }
+
+  /* ── ANIMATION ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-content > * { animation: fadeUp 0.75s ease both; }
+  .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+  .hero-content > *:nth-child(3) { animation-delay: 0.32s; }
+  .hero-content > *:nth-child(4) { animation-delay: 0.45s; }
+
+  /* ── APP CASE LABEL ── */
+  .case-label {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 0.3rem 0.75rem; border-radius: 20px;
+    background: var(--teal); color: white; margin-bottom: 1.25rem;
+  }
+  .case-label.orange { background: var(--orange); }
+  .case-label.blue { background: var(--blue); }
+  .case-label.green { background: var(--green); }
+  .case-label.purple { background: var(--purple); }
+
+  /* Molecule decoration */
+  .mol-deco {
+    position: absolute; opacity: 0.07;
+    pointer-events: none; user-select: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <a class="nav-logo" href="#top">POLYMEERIT</a>
+  <ul class="nav-links">
+    <li><a href="#historia">Historia</a></li>
+    <li><a href="#perusteet">Perusteet</a></li>
+    <li><a href="#termit">Termistö</a></li>
+    <li><a href="#tonttikaivo">Tonttikaivo</a></li>
+    <li><a href="#pakkaukset">Pakkaukset</a></li>
+    <li><a href="#vaate">Vaate</a></li>
+    <li><a href="#elektroniikka">Elektroniikka</a></li>
+    <li><a href="#maailma">Ilman muovia</a></li>
+    <li><a href="#tulevaisuus">Tulevaisuus</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<div id="top" class="hero">
+  <div class="hero-left">
+    <div class="hero-left-bg"></div>
+    <div class="hero-blob"></div>
+    <div class="hero-blob2"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Teollinen muotoilu · 1. vuosikurssi · Materiaalioppi</div>
+      <h1>Poly<em>meerit</em><br>muotoilun<br>DNA</h1>
+      <p class="hero-desc">
+        Muovi ei ole yksi materiaali — se on yli 50 000 eri polymeeriyhdisteen kirjasto. Ymmärtämällä rakenteen ymmärrät mahdollisuuden.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-item"><strong>400M t</strong><span>Vuosituotanto</span></div>
+        <div class="stat-item"><strong>1907</strong><span>Bakeliitti syntyi</span></div>
+        <div class="stat-item"><strong>50 000+</strong><span>Muovilaatua</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-pattern"></div>
+    <div class="hero-right-content">
+      <h2>Mitä tässä materiaalissa käsitellään</h2>
+      <ul class="nav-index">
+        <li><span class="idx">01</span><a href="#historia">Historia kivihiilestä bionyloniin</a></li>
+        <li><span class="idx">02</span><a href="#perusteet">Polymeerien perusteet ja rakenne</a></li>
+        <li><span class="idx">03</span><a href="#termit">Keskeinen termistö</a></li>
+        <li><span class="idx">04</span><a href="#tonttikaivo">Tonttikaivo — materiaalit & valmistus</a></li>
+        <li><span class="idx">05</span><a href="#pakkaukset">Ruokapakkaukset & pinnoitteet</a></li>
+        <li><span class="idx">06</span><a href="#vaate">Vaateteollisuus & tekstiilit</a></li>
+        <li><span class="idx">07</span><a href="#elektroniikka">Kulutuselektroniikka</a></li>
+        <li><span class="idx">08</span><a href="#maailma">Maailma ilman muovia</a></li>
+        <li><span class="idx">09</span><a href="#tulevaisuus">Tulevaisuus — biopolymeerit & kiertotalous</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════
+     01  HISTORIA
+══════════════════════════════ -->
+<div id="historia" class="section-wrap">
+  <div class="section-inner">
+    <div class="section-num">01 · Historia</div>
+    <h2>Muovien tarina — kivihiilestä bionyloniin</h2>
+    <p class="lead">Ihminen on käyttänyt luonnonpolymeerejä aina — kasvikumi, selluloosa, silkki. Synteettinen muovi on kuitenkin vain noin 120 vuotta vanha keksintö, joka muutti kaiken.</p>
+
+    <div class="two-col">
+      <div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1839</div>
+            <div class="tl-title">Vulkanointi — Charles Goodyear</div>
+            <p style="font-size:0.88rem">Luonnonkumi + rikki + kuumuus = <strong>vulkanoitu kumi</strong>. Kumi ei enää sulanut kesällä tai halkeillut talvella. Polymeeriketjujen ristisidonta — periaate joka toistuu kaikissa termosetti­muoveissa.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1869</div>
+            <div class="tl-title">Selluloidi — John Wesley Hyatt</div>
+            <p style="font-size:0.88rem">Norsunluun korvaajaksi kehitetty selluloosanitriitti — maailman ensimmäinen laajamittainen muovilaatu. Biljardipalloista valokuvausfilmiin. Ongelma: <strong>syttymisherkkyys</strong>.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1907</div>
+            <div class="tl-title">Bakeliitti — Leo Baekeland</div>
+            <p style="font-size:0.88rem">Fenoli + formaldehydi → maailman ensimmäinen täysin synteettinen muovi. Ei sulajaoikeuttanut koskaan kovettumisen jälkeen (termosetti). Puhelinten, radion, sähköeristeiden materiaali. <em>Muovikausi alkoi.</em></p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1935–1939</div>
+            <div class="tl-title">Nylon & polyeteeni — suuret löydöt</div>
+            <p style="font-size:0.88rem">Wallace Carothers (DuPont) syntetisoi <strong>nylonin</strong> 1935 — ensimmäinen synteettinen tekstiilikuitu. Samanaikaisesti ICI löysi <strong>polyeteenin</strong> vahingossa painekokeiden sivutuotteena.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1938–1946</div>
+            <div class="tl-title">Toinen maailmansota — muovi strategisena materiaalina</div>
+            <p style="font-size:0.88rem">Sodan tarpeisiin kehitettiin <strong>akryyliä</strong> (lentäjien suojalasit), <strong>PTFE:tä</strong> (Teflon, Manhattan-projekti), <strong>ABS:ää</strong> ja polyesteriä. Sotateollisuus kiihdytti kehitystä vuosikymmenillä.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1950–1970</div>
+            <div class="tl-title">Muovien kulta-aika — massa­kulutus</div>
+            <p style="font-size:0.88rem">PET (1941, laajamittainen käyttö 1950-luvulta), PP (1954 Natta & Ziegler → Nobel), <strong>polykarbonaatti</strong> (1953). Kertakäyttö­kulttuuri syntyi — Tupperware, muovipussit, styrox. Tuotanto kasvoi 2 % per vuosi.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1970–1990</div>
+            <div class="tl-title">Engineering plastics & tekniset muovit</div>
+            <p style="font-size:0.88rem">Muoveja, jotka korvasivat metallin vaativissa sovelluksissa: <strong>PEEK</strong> (lentokone), <strong>UHMWPE</strong> (ortopediset implantit), <strong>polysulfoni</strong>. Muovi ei enää ollut halpa korvike — se oli parempi.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1990–2010</div>
+            <div class="tl-title">Ympäristötietoisuus herää</div>
+            <p style="font-size:0.88rem">Tyynenmeren muoviläjä löydettiin 1997. EU:n pakkausdirektiivi (1994). Kierrätyssymbolit (SPI-koodi) käyttöön. Ensimmäiset biomuovit — PLA kaupalliseen käyttöön. Muoviongelma nousi julkiseen tietoisuuteen.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2010 →</div>
+            <div class="tl-title">Nykypäivä — kiertotalous & biomuovit</div>
+            <p style="font-size:0.88rem">EU:n Single-Use Plastics -direktiivi (2021). Kemiallinen kierrätys skaalautuu. <strong>PHA-bioplastit</strong> (bakteerin tuottamat) kaupallistuvat. Muovin hiilijalanjälki ja korvattavuus — alan suurin haaste. Tekoäly optimoi polymeerirakenteita.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════
+     02  PERUSTEET
+══════════════════════════════ -->
+<div id="perusteet" class="section-wrap section-alt">
+  <div class="section-inner">
+    <div class="section-num">02 · Perusteet</div>
+    <h2>Polymeerien rakenne ja luokittelu</h2>
+    <p class="lead">Polymeeri tarkoittaa "monta osaa". Pienet monomeeri­molekyylit ketjuuntuvat polymerisaatioreaktiossa pitkiksi ketjuiksi — ketjun rakenne määrää kaiken.</p>
+
+    <div class="chain-vis">
+      <div class="monomer" style="background:var(--teal)">C₂H₄</div>
+      <div class="chain-link" style="background:var(--teal)"></div>
+      <div class="monomer" style="background:var(--teal)">C₂H₄</div>
+      <div class="chain-link" style="background:var(--teal)"></div>
+      <div class="monomer" style="background:var(--teal)">C₂H₄</div>
+      <div class="chain-link" style="background:var(--teal)"></div>
+      <div class="monomer" style="background:var(--teal-light)">C₂H₄</div>
+      <div class="chain-link" style="background:var(--teal-light)"></div>
+      <div class="monomer" style="background:var(--teal-light)">C₂H₄</div>
+      <div class="chain-link" style="background:var(--teal-light)"></div>
+      <div class="monomer" style="background:var(--teal-light)">C₂H₄</div>
+      <div style="padding:0 0.75rem; color:var(--ink3); font-size:1.5rem">→</div>
+      <div style="display:flex;flex-direction:column;align-items:center">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--ink3);margin-bottom:0.3rem">n × monomeeri</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:var(--teal);font-weight:500">—[C₂H₄]ₙ—</div>
+        <div style="font-size:0.7rem;color:var(--ink3);margin-top:0.2rem">Polyeteeni (PE)</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h3>Termoplastit vs. Termosetit</h3>
+        <div class="card card-teal">
+          <h4>Termoplastit — uudelleen muovattavat</h4>
+          <p style="font-size:0.88rem">Kuumentamalla pehmenevät, jäähtymällä kovettuvat — ja tämä voidaan toistaa. Polymeeriketjut eivät ole toisiinsa sitoutuneita kovalenttisidoksin. <strong>Kierrätettävissä!</strong></p>
+          <div style="margin-top:0.75rem">
+            <span class="tag tag-teal">PE</span><span class="tag tag-teal">PP</span><span class="tag tag-teal">PET</span><span class="tag tag-teal">ABS</span><span class="tag tag-teal">PA (Nylon)</span><span class="tag tag-teal">PC</span><span class="tag tag-teal">PVC</span><span class="tag tag-teal">PEEK</span>
+          </div>
+        </div>
+        <div class="card card-orange" style="margin-top:1rem">
+          <h4>Termosetit — pysyvästi kovettuneet</h4>
+          <p style="font-size:0.88rem">Kovettumisvaiheessa muodostuu 3D-ristisidosverkosto. Ei enää pehmennetä uudelleen — voidaan vain mekaanisesti hajottaa. Erittäin korkea lämpökestävyys.</p>
+          <div style="margin-top:0.75rem">
+            <span class="tag tag-orange">Epoksi</span><span class="tag tag-orange">Polyuretaani</span><span class="tag tag-orange">Bakeliitti</span><span class="tag tag-orange">Silikoni</span><span class="tag tag-orange">Polyesteri</span>
+          </div>
+        </div>
+        <div class="card card-blue" style="margin-top:1rem">
+          <h4>Elastomeerit — joustavat polymeerit</h4>
+          <p style="font-size:0.88rem">Hyvin löysästi ristisidottu verkosto — materiaali venyy moninkertaisesti ja palautuu. Kumi (SBR, EPDM), silikoni, TPE (termoplastinen elastomeeri).</p>
+        </div>
+      </div>
+      <div>
+        <h3>Amorfinen vs. puolikiteinen rakenne</h3>
+        <div class="highlight">
+          <h4>Amorfinen (epäjärjestynyt)</h4>
+          <p style="font-size:0.88rem">Ketjut kietoutuvat satunnaisesti — ei pitkälle­kantaista järjestystä. Optisesti <strong>kirkas</strong>, pehmenee tasaisesti (ei selvää sulamislämpötilaa). Helpompi muovata.</p>
+          <div style="margin-top:0.5rem"><span class="tag tag-teal">PC</span><span class="tag tag-teal">ABS</span><span class="tag tag-teal">PMMA (akryyli)</span><span class="tag tag-teal">PS</span></div>
+          <h4 style="margin-top:1.25rem">Puolikiteinen (semi-crystalline)</h4>
+          <p style="font-size:0.88rem">Osa ketjuista on pakkautunut järjestäytyneisiin kide­alueisiin. Selvä sulamislämpötila, parempi <strong>kemiallinen kestävyys</strong> ja väsymis­lujuus. Usein samea tai valkoinen.</p>
+          <div style="margin-top:0.5rem"><span class="tag tag-orange">PE</span><span class="tag tag-orange">PP</span><span class="tag tag-orange">PET</span><span class="tag tag-orange">PA (Nylon)</span><span class="tag tag-orange">PEEK</span></div>
+        </div>
+
+        <h3>Tärkein muovien luokittelu käytännössä</h3>
+        <div style="margin-top:0.75rem">
+          <div class="bar-row">
+            <div class="bar-label">Commodity</div>
+            <div class="bar-track"><div class="bar-fill" style="width:95%;background:var(--teal)"></div></div>
+            <div class="bar-val">PE, PP, PET, PVC, PS — volyymit valtavat, hinta alhainen</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Engineering</div>
+            <div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--blue)"></div></div>
+            <div class="bar-val">ABS, PA, PC, POM — paremmat ominaisuudet, kalliimpi</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">High-perf.</div>
+            <div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--orange)"></div></div>
+            <div class="bar-val">PEEK, PTFE, PEI — vaativin käyttö, erittäin kallis</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════
+     03  TERMISTÖ
+══════════════════════════════ -->
+<div id="termit" class="section-wrap">
+  <div class="section-inner">
+    <div class="section-num">03 · Termistö</div>
+    <h2>Muovien keskeinen sanasto</h2>
+    <p class="lead">Nämä käsitteet toistuvat materiaalivalinnassa, prosessisuunnittelussa ja tuotekehitysprojekteissa. Jokainen termi on työkalu.</p>
+
+    <div class="term-grid">
+      <div class="term-row"><div class="term-key">Polymerisaatio</div><div class="term-val">Kemiallinen reaktio, jossa pienet monomeerimolekyylit liittyvät pitkiksi ketjuiksi. Additio­polymerisaatio (PE, PP) tai kondensaatiopolymerisaatio (nylon, PET) — mekanismi vaikuttaa ominaisuuksiin.</div></div>
+      <div class="term-row"><div class="term-key">Molekyylipaino (Mw)</div><div class="term-val">Polymeeriketjun keskimääräinen massa. Korkea Mw → parempi sitkeys ja kulumiskestävyys, mutta vaikeampi prosessoida. UHMWPE:n Mw voi olla 10 miljoonaa g/mol.</div></div>
+      <div class="term-row"><div class="term-key">Lasitumislämpötila (Tg)</div><div class="term-val">Lämpötila, jonka alapuolella amorfinen polymeeri muuttuu hauraaksi lasimaiseksi. Suunnittelun kriittinen raja — tuote ei saa käytössä ylittää Tg:tä. PC:n Tg ≈ 147 °C, PS:n ≈ 100 °C.</div></div>
+      <div class="term-row"><div class="term-key">Sulamislämpötila (Tm)</div><div class="term-val">Puolikiteisen polymeerin kiderakenteiden sulaminen. Tärkeä prosessointiparametri — sulalämpötilan yläpuolella muovaus mahdollista. PP:n Tm ≈ 160–170 °C, PEEK:n ≈ 343 °C.</div></div>
+      <div class="term-row"><div class="term-key">Viskositeetti (sulan)</div><div class="term-val">Muovisulan virtausvastus. Korkea viskositeetti → vaikea täyttää ohut­seinäiset muotit. Lasketaan korkeammalla lämpötilalla tai pienemmällä molekyylipainolla. MFR (Melt Flow Rate) -indeksi kuvaa tätä.</div></div>
+      <div class="term-row"><div class="term-key">Täyteaine (filler)</div><div class="term-val">Lisäaine joka muuttaa ominaisuuksia: lasikuitu (lujuus), hiilimusta (UV-suoja + johtavuus), talk (jäykkyys), barium­sulfaatti (röntgen­läpäisevyys). Composite-rakenteet perustuvat täyteaineisiin.</div></div>
+      <div class="term-row"><div class="term-key">Pehmitin (plasticizer)</div><div class="term-val">PVC:lle välttämätön — ilman pehmitintä PVC on hauras. DOP, DINP ja uudemmat biopohjaiset pehmitimet. Liikkuvat ketjujen välissä ja laskevat Tg:tä → pehmeämpi materiaali.</div></div>
+      <div class="term-row"><div class="term-key">Stabilisaattori</div><div class="term-val">UV-stabilisaattori (HALS, UVA) estää UV-hajoamista, kuumastabilisaattori (Sn, Ca/Zn) estää lämpöhajoamista prosessoinnissa. Kriittinen ulkokäytön muoveille.</div></div>
+      <div class="term-row"><div class="term-key">Kutistuma (shrinkage)</div><div class="term-val">Muoviosa kutistuu jäähtyessään muotissa. Puolikitieset materiaalit kutistuvat enemmän (PP ~1,5–2,0 %) kuin amorfinen PC (~0,5 %). Muottisuunnittelussa huomioitava kriittisesti mittatarkkuudessa.</div></div>
+      <div class="term-row"><div class="term-key">Jälkikutistuma</div><div class="term-val">Prosessoinnin jälkeen tapahtuva lisäkutistuminen — erityisesti puolikiteisillä muoveilla. Osien toleranssit voivat muuttua päiviä prosessoinnin jälkeen.</div></div>
+      <div class="term-row"><div class="term-key">Huopakerros (skin-core)</div><div class="term-val">Ruiskuvalussa muotin seinää vasten jäähtynyt ohut kuorikerros eroaa sisäosasta rakenteeltaan. Ulkopinta amorfisempi, sisäosa puolikiteisempi — näkyy optiikassa ja lujuudessa.</div></div>
+      <div class="term-row"><div class="term-key">Polymeeriseos (blend)</div><div class="term-val">Kahden tai useamman polymeerin mekaaninen sekoitus — ABS/PC on yleisin. Seoksella saavutetaan ominaisuuksia, joita kumpikaan komponentti ei yksin anna. Yhteensopivuus ei ole itsestäänselvyys.</div></div>
+      <div class="term-row"><div class="term-key">Monikerrosrakenne</div><div class="term-val">Coextrusion tai laminointi — eri polymeerit kerrostetusti. Elintarvike­pakkausten barrierirakenteet tyypillisesti 5–9 kerrosta: PE/tie/EVOH/tie/PE. Jokainen kerros tekee oman tehtävänsä.</div></div>
+      <div class="term-row"><div class="term-key">Kierrätyskoodi (SPI)</div><div class="term-val">1=PET, 2=HDPE, 3=PVC, 4=LDPE, 5=PP, 6=PS, 7=muu. Ei lupaus kierrätettävyydestä — vain tunnistuskoodi. Monikerros­rakenteet (koodi 7) ovat käytännössä kierrätys­mahdottomia mekaanisesti.</div></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════
+     04  TONTTIKAIVO
+══════════════════════════════ -->
+<div id="tonttikaivo" class="section-wrap section-alt">
+  <div class="section-inner">
+    <div class="case-label">Sovellustapaus 01</div>
+    <div class="section-num">04 · Tonttikaivo</div>
+    <h2>Tonttikaivo — materiaalivalinta & valmistusprosessit</h2>
+    <p class="lead">Tonttikaivo on äärimmäisen vaativa käyttöympäristö: jäätyminen, UV-rasitus, maaperän kemikaalit, mekaaninen rasitus ja 50+ vuoden käyttöikävaatimus. Materiaalivalinta on elintärkeä.</p>
+
+    <div class="two-col">
+      <div>
+        <h3>Käyttöympäristön vaatimukset</h3>
+        <ul class="styled">
+          <li>Maaperän kemikaalikestävyys (hapot, emäkset, liuottimet, lannoitteet)</li>
+          <li>Lämpötilaväli Suomessa: −40 °C … +60 °C (maaperä+aurinkorasitus)</li>
+          <li>Mekaaninen kuormitus: ajoneuvot, routaliike, maanpaine</li>
+          <li>UV-rasitus (maanpäälliset osat)</li>
+          <li>Pitkäaikaisväsymis­kestävyys — ei virumaa 50 vuodessa</li>
+          <li>Hygieenisyys (jätevesikaivot)</li>
+          <li>Asennettavuus pakkasessa</li>
+        </ul>
+
+        <h3>Materiaalivaihtoehdot</h3>
+        <table class="prop-table">
+          <tr>
+            <th>Materiaali</th><th>Etu</th><th>Haitta</th>
+          </tr>
+          <tr>
+            <td><strong>PE-HD</strong><br><span style="font-size:0.75rem;color:var(--ink3)">HDPE</span></td>
+            <td style="font-size:0.82rem">Erinomainen kemikaali- ja pakkaskestävyys. Helppo hitsata. Pitkä track record.</td>
+            <td style="font-size:0.82rem">Viruma pitkäaikaisessa kuormituksessa, alhainen jäykkyys vs. betoni.</td>
+          </tr>
+          <tr>
+            <td><strong>PP-H / PP-B</strong><br><span style="font-size:0.75rem;color:var(--ink3)">Homopolymeeri / block</span></td>
+            <td style="font-size:0.82rem">Jäykempi kuin PE, hyvä kemikaali­kestävyys. Block-kopolymeeri parempi pakkasessa.</td>
+            <td style="font-size:0.82rem">Homopolymeeri haurastuu kylmässä. Kalliimpi prosessoida.</td>
+          </tr>
+          <tr>
+            <td><strong>PVC-U</strong><br><span style="font-size:0.75rem;color:var(--ink3)">Pehmentämätön</span></td>
+            <td style="font-size:0.82rem">Erittäin kova ja jäykkä. Halpa raaka-aine. Hyväksi tutkittu putki­materiaali.</td>
+            <td style="font-size:0.82rem">Hauras kylmässä (&lt;0 °C). Sisältää kloorin — ympäristöhuolet. Ei helposti hitsattavissa.</td>
+          </tr>
+          <tr>
+            <td><strong>GRP-komposiitti</strong><br><span style="font-size:0.75rem;color:var(--ink3)">Lasikuitu + polyesteri</span></td>
+            <td style="font-size:0.82rem">Erittäin korkea lujuus/paino-suhde. Ei ruostu. Mittatarkka.</td>
+            <td style="font-size:0.82rem">Ei kierrätettävä. Kallis valmistaa. Pinnan haurastuminen UV:ssa.</td>
+          </tr>
+        </table>
+
+        <div class="callout green">
+          <div class="callout-label">Suosittu ratkaisu</div>
+          <strong>PE-HD (HDPE) + mustapigmentointi</strong> on suomalaisen tonttikaivomarkkinan standardi. Musta hiilimusta-pigmentti antaa UV-suojan, materiaali kestää pakkaset ja kemikaalit erinomaisesti, ja polyetyleeni hitsataan standardin mukaisesti tiiviiksi rakenteeksi.
+        </div>
+      </div>
+
+      <div>
+        <h3>Valmistusprosessit</h3>
+
+        <div class="process">
+          <div class="process-step">
+            <div class="ps-num">1</div>
+            <div class="ps-body">
+              <div class="ps-title">Ekstruusio — putki ja renkaat</div>
+              <div class="ps-temp">PE-HD: 180–230 °C</div>
+              <p style="font-size:0.88rem">Kaivon putkiosa valmistetaan jatkuva­toimisella <strong>ruuviekstruuderilla</strong>. Sula HDPE puristetaan rengasmaisen suuttimen läpi → jäähdytysvesi → vedätyslaite. Seinämävahvuus vakio koko pituudelta. Halkaisijat tyypillisesti 110–600 mm.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="ps-num orange">2</div>
+            <div class="ps-body">
+              <div class="ps-title">Rotaatiomuovaus — kaivon pohja</div>
+              <div class="ps-temp orange">150–200 °C · 15–25 min</div>
+              <p style="font-size:0.88rem">PE-jauhe laitetaan suljettuun muottiin, joka pyörii bi-aksiaalisesti uunissa. Muovisula vuoraa muotin pinnan tasaisesti → yksiosainen ontto rakenne ilman hitsaussaumoja. Kaivon pohjakappale, kansirengas.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="ps-num blue">3</div>
+            <div class="ps-body">
+              <div class="ps-title">Pursotushitsaus — kokoonpano</div>
+              <div class="ps-temp blue">PE: 210–240 °C (hitsaustanko)</div>
+              <p style="font-size:0.88rem">Pohjakappale ja putki liitetään <strong>ekstruusiohitsauksella</strong>: sulaa PE-lisäainetta pursotaan liitossaumaan samanaikaisesti kuumailmapuhaltimen kanssa. Muodostuu homogeeninen liitos — oikein tehtynä yhtä luja kuin perusmateriaali. Standardi: EN 12814.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="ps-num green">4</div>
+            <div class="ps-body">
+              <div class="ps-title">Laadunvarmistus</div>
+              <div class="ps-temp blue">Tiiveyskoe 0,5 bar · 30 min</div>
+              <p style="font-size:0.88rem">Kaivo täytetään vedellä tai ilmalla ja paineistetaan. Mahdolliset vuotokohdat merkitään. Tiiviysvaatimus: EN 1610. Hitsaussaumoille tehdään otantana vetokoe (tensile test).</p>
+            </div>
+          </div>
+        </div>
+
+        <h3>Kestävyys & elinkaarikestävyys</h3>
+        <p style="font-size:0.9rem">HDPE-tonttikaivon suunniteltu käyttöikä on <strong>50+ vuotta</strong>. Tärkeimmät pitkäaikaisominaisuudet:</p>
+        <div class="bar-row"><div class="bar-label">Kemikaali</div><div class="bar-track"><div class="bar-fill" style="width:92%;background:var(--green)"></div></div><div class="bar-val" style="font-size:0.72rem">Erinomainen</div></div>
+        <div class="bar-row"><div class="bar-label">UV-kesto</div><div class="bar-track"><div class="bar-fill" style="width:88%;background:var(--green)"></div></div><div class="bar-val" style="font-size:0.72rem">Hyvä (pigm.)</div></div>
+        <div class="bar-row"><div class="bar-label">Pakkanen</div><div class="bar-track"><div class="bar-fill" style="width:95%;background:var(--teal)"></div></div><div class="bar-val" style="font-size:0.72rem">Erinomainen</div></div>
+        <div class="bar-row"><div class="bar-label">Viruma</div><div class="bar-track"><div class="bar-fill" style="width:65%;background:var(--orange)"></div></div><div class="bar-val" style="font-size:0.72rem">Kohtalainen</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════
+     05  RUOKAPAKKAUKSET
+══════════════════════════════ -->
+<div id="pakkaukset" class="section-wrap">
+  <div class="section-inner">
+    <div class="case-label orange">Sovellustapaus 02</div>
+    <div class="section-num">05 · Ruokapakkaukset & pinnoitteet</div>
+    <h2>Muovi elintarviketeollisuudessa — barrierit, turvallisuus, säilyvyys</h2>
+    <p class="lead">Muovipakkaus ei ole este ruoan ja ympäristön välillä — se on tarkoin suunniteltu usean kerroksen barrierijärjestelmä, joka voi kolminkertaistaa elintarvikkeen säilymisajan.</p>
+
+    <div class="two-col">
+      <div>
+        <h3>Kriittiset barrieriominaisuudet</h3>
+        <p style="font-size:0.9rem">Elintarvikepakkauksen tehtävä on estää haitallisten aineiden läpäisy molempiin suuntiin:</p>
+        <div class="highlight" style="margin-top:1rem">
+          <div class="bar-row"><div class="bar-label" style="min-width:100px">O₂-barrieri</div><div class="bar-track"><div class="bar-fill" style="width:5%;background:var(--red,#c43c2a)"></div></div><div class="bar-val" style="font-size:0.72rem;min-width:60px">PE — huono</div></div>
+          <div class="bar-row"><div class="bar-label" style="min-width:100px">O₂-barrieri</div><div class="bar-track"><div class="bar-fill" style="width:95%;background:var(--green)"></div></div><div class="bar-val" style="font-size:0.72rem;min-width:60px">EVOH — erinomainen</div></div>
+          <div class="bar-row"><div class="bar-label" style="min-width:100px">Kosteus-barrieri</div><div class="bar-track"><div class="bar-fill" style="width:90%;background:var(--teal)"></div></div><div class="bar-val" style="font-size:0.72rem;min-width:60px">PE — erinomainen</div></div>
+          <div class="bar-row"><div class="bar-label" style="min-width:100px">Kosteus-barrieri</div><div class="bar-track"><div class="bar-fill" style="width:30%;background:var(--orange)"></div></div><div class="bar-val" style="font-size:0.72rem;min-width:60px">EVOH — kohtalainen</div></div>
+          <div class="bar-row"><div class="bar-label" style="min-width:100px">CO₂-barrieri</div><div class="bar-track"><div class="bar-fill" style="width:78%;background:var(--blue)"></div></div><div class="bar-val" style="font-size:0.72rem;min-width:60px">PET — hyvä</div></div>
+          <p style="font-size:0.78rem;color:var(--ink3);margin-top:0.75rem">→ Siksi yksi materiaali ei koskaan riitä — tarvitaan monikerrosrakenne.</p>
+        </div>
+
+        <h3>Monikerrosrakenne (multilayer)</h3>
+        <div style="display:flex;flex-direction:column;gap:0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:1rem">
+          <div style="background:#f0f8f0;padding:0.6rem 1rem;font-size:0.8rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between"><span><strong>Kerros 1</strong> — PE (LDPE)</span><span style="color:var(--ink3)">Saumakerros / elintarvikekontakti</span></div>
+          <div style="background:#e8f4f8;padding:0.6rem 1rem;font-size:0.8rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between"><span><strong>Kerros 2</strong> — Tie-layer</span><span style="color:var(--ink3)">Adheesiokerros (maleic anhydride)</span></div>
+          <div style="background:#fff3e0;padding:0.6rem 1rem;font-size:0.8rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between"><span><strong>Kerros 3</strong> — EVOH</span><span style="color:var(--ink3)">O₂-barrieri, 5–15 µm</span></div>
+          <div style="background:#e8f4f8;padding:0.6rem 1rem;font-size:0.8rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between"><span><strong>Kerros 4</strong> — Tie-layer</span><span style="color:var(--ink3)">Adheesiokerros</span></div>
+          <div style="background:#f0f8f0;padding:0.6rem 1rem;font-size:0.8rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between"><span><strong>Kerros 5</strong> — PA (Nylon)</span><span style="color:var(--ink3)">Mekaaninen lujuus ja läpäisy­suoja</span></div>
+          <div style="background:#e8f4f8;padding:0.6rem 1rem;font-size:0.8rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between"><span><strong>Kerros 6</strong> — Tie-layer</span><span style="color:var(--ink3)">Adheesiokerros</span></div>
+          <div style="background:#f8f0f0;padding:0.6rem 1rem;font-size:0.8rem;display:flex;justify-content:space-between"><span><strong>Kerros 7</strong> — PE (HDPE/LDPE)</span><span style="color:var(--ink3)">Ulkokerros, kosteus­suoja, jäykkyys</span></div>
+        </div>
+        <p style="font-size:0.78rem;color:var(--ink3);margin-top:0.5rem">Esimerkki: tyhjiöpakatun lihan kalvo, kokonaispaksuus n. 60–120 µm.</p>
+      </div>
+
+      <div>
+        <h3>Valmistusprosessit</h3>
+        <div class="process">
+          <div class="process-step">
+            <div class="ps-num">1</div>
+            <div class="ps-body">
+              <div class="ps-title">Coextrusion — monikerroskalvo</div>
+              <div class="ps-temp">PE: 200–240 °C / EVOH: 190–220 °C</div>
+              <p style="font-size:0.85rem">7 erillistä ekstruuderia syöttää sula­muoveja samanaikaisesti yhteiseen feedblock-rakenteeseen → kerrokset yhdistyvät ennen suutinta ja vedetään levyksi tai puhalletaan putkeksi (blown film). Nopeus jopa 200 m/min.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="ps-num orange">2</div>
+            <div class="ps-body">
+              <div class="ps-title">Pinnoitus (coating)</div>
+              <div class="ps-temp orange">Paperi/kartonki + muovikerros</div>
+              <p style="font-size:0.85rem">Paperille tai kartongille levitetään ohut LDPE- tai PE-kerros <strong>ekstruusiokäytöllä</strong> tai dispersionä. Maitopurkit, kupit, pakastepakete. Pinnoitteen paksuus 10–30 µm. Myös <strong>ALD-pinnoitus</strong> (alumiinioksidi) nanometritasolla kasvaa.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="ps-num blue">3</div>
+            <div class="ps-body">
+              <div class="ps-title">Thermoforming — pakkauksen muoto</div>
+              <div class="ps-temp blue">PP: 160–180 °C / PET: 130–170 °C</div>
+              <p style="font-size:0.85rem">Kalvo kuumennetaan ja muodostetaan muottiin ali- tai ylipaineella. <strong>Alipainetermoforming</strong>: kalvo imeytetään muotin muotoon. Nopea, halpa prosessi — jogurttipurkit, lihavadnat, kahvilakupit.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3>MAP — Modified Atmosphere Packaging</h3>
+        <p style="font-size:0.9rem">Pakkauksen sisäinen kaasuseos korvataan optimaalisella seoksella — tyypillisesti <strong>CO₂ + N₂ (+ O₂)</strong> tuotteesta riippuen:</p>
+        <div class="card card-green" style="margin-top:0.75rem">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;font-size:0.82rem">
+            <div><h4>Punainen liha</h4>60–80 % O₂ + 20–40 % CO₂ → Myoglobin säilyy punaisena</div>
+            <div><h4>Leikkeleet</h4>0 % O₂, 30 % CO₂, 70 % N₂ → Aerobinen kasvu estyy</div>
+            <div><h4>Tuore kala</h4>30–40 % CO₂, 30 % O₂, 30–40 % N₂</div>
+            <div><h4>Salaatti</h4>3–5 % O₂, 5–10 % CO₂, 85–92 % N₂ → Hengitys hidastuu</div>
+          </div>
+        </div>
+
+        <div class="callout orange" style="margin-top:1.5rem">
+          <div class="callout-label">Säilyvyysvaikutus</div>
+          Oikea MAP + monikerrosbarrieri voi pidentää lihan säilymisajan <strong>3 päivästä 21 päivään</strong>. Ruokahävikki vähenee merkittävästi — muovipakkaus on usein pienempi ympäristötaakka kuin se ruoka, jonka pilaantumisen se estää.
+        </div>
+      </div>
+    </div>
+
+    <h3>Elintarviketurvallisuus ja säädökset</h3>
+    <div class="three-col" style="margin-top:1rem">
+      <div class="card card-teal">
+        <h4>EU-asetus 10/2011</h4>
+        <p style="font-size:0.85rem">Muovien elintarvikekontakti­materiaaleille asetus. Positiivinen lista sallituista monomeereeistä ja lisäaineista. Migraatio­testit — kuinka paljon aineita siirtyy ruokaan.</p>
+      </div>
+      <div class="card card-orange">
+        <h4>BPA & ftaliaatit</h4>
+        <p style="font-size:0.85rem">Bisfenoli-A (PC:ssä) ja ftaliaatti­pehmitimet (PVC:ssä) rajoitettu tai kielletty monissa sovelluksissa. Teollisuus siirtynyt BPA-free ratkaisuihin — mutta korvaajienkin turvallisuus tutkimuksen alla.</p>
+      </div>
+      <div class="card card-blue">
+        <h4>Mikromuovit</h4>
+        <p style="font-size:0.85rem">Alle 5 mm hiukkasia löytyy nyt kaikkialta — ihmisen verestä, merivedestä, pölystaä. Pakkausten mekaaninen kuluminen yksi lähde. EU tutkii raja-arvoja.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════
+     06  VAATETEOLLISUUS
+══════════════════════════════ -->
+<div id="vaate" class="section-wrap section-alt">
+  <div class="section-inner">
+    <div class="case-label" style="background:var(--blue)">Sovellustapaus 03</div>
+    <div class="section-num">06 · Vaateteollisuus</div>
+    <h2>Muovi vaatteissa — polyesteri Gopasta tulevaisuuden älykankaaseen</h2>
+    <p class="lead">Yli 60 % maailman tekstiilikuiduista on synteettisiä — käytännössä muovia. Urheiluvaatteet, vuoritakkit, suoja­vaatetukset ja älykkäät tekstiilit perustuvat polymeeriteknologiaan.</p>
+
+    <div class="two-col">
+      <div>
+        <h3>Tärkeimmät tekstiilipolymeerit</h3>
+        <div class="term-grid" style="margin-top:0.75rem">
+          <div class="term-row">
+            <div class="term-key">PET-polyesteri</div>
+            <div class="term-val" style="font-size:0.85rem">Ylivoimaisesti yleisin synteettinen kuitu (52 % maailman kaikista kuiduista). Halpa, kestävä, helppo värjätä, nopea kuivuminen. Fleece, gore-pohjaiset materiaalit, urheiluvaatteet, nauhakankaat.</div>
+          </div>
+          <div class="term-row">
+            <div class="term-key">Polyamidi (nylon)</div>
+            <div class="term-val" style="font-size:0.85rem">Parempi hankauksen­kestävyys kuin polyesterillä. Sukat, uimapuvut, vuorikangas, tekniset kuoret. Nylon 6.6 vs. nylon 6 — eri ominaisuudet. Elastaania yleensä seassa joustavuuden vuoksi.</div>
+          </div>
+          <div class="term-row">
+            <div class="term-key">Elastaani (Lycra/Spandex)</div>
+            <div class="term-val" style="font-size:0.85rem">Polyuretaanipohjainen — venyminen 500–600 %. Lähes aina seoksena (5–20 %) muiden kuitujen kanssa antamassa joustoa. Alusvaatteet, leggingsit, uima­puvut.</div>
+          </div>
+          <div class="term-row">
+            <div class="term-key">PTFE (Gore-Tex)</div>
+            <div class="term-val" style="font-size:0.85rem">Polytetrafluorieteeni kalvo mikroskooppisilla huokosilla: sadepisara on 20 000× suurempi kuin huokonen → ei vettä sisälle. Vesihöyry (hiki) pääsee ulos — hengittävyys. Laminoitu polyesterin tai nylonin väliin.</div>
+          </div>
+          <div class="term-row">
+            <div class="term-key">PP-mikrokuitu</div>
+            <div class="term-val" style="font-size:0.85rem">Polypropyleeni ei ime kosteutta lainkaan — hiki siirtyy kuidun pinnalla kapillaari-efektillä poispäin ihosta. Ns. "wicking" -toiminnallisuus. Aluskerrokset, juoksutrikoot.</div>
+          </div>
+          <div class="term-row">
+            <div class="term-key">Ultra-HDPE kuidut</div>
+            <div class="term-val" style="font-size:0.85rem">Dyneema (UHMWPE): paino­yksikköä kohti 15× lujempi kuin teräs. Purjeveneiden köydet, luotisuoja­liivien leikkaus­suoja, lääkinnälliset langat.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3>Valmistusprosessit</h3>
+        <div class="process">
+          <div class="process-step">
+            <div class="ps-num">1</div>
+            <div class="ps-body">
+              <div class="ps-title">Sulakehruu (melt spinning)</div>
+              <div class="ps-temp">PET: 280–295 °C · PA: 260–285 °C</div>
+              <p style="font-size:0.85rem">Polymeeri sulatetaan ja pumpataan <strong>spinnerettisivujen</strong> (suuttimien) läpi. Syntyvät filamentit jäähtyvät ilmassa ja vedetään kovalla voimalla → ketjut suuntautuvat → <strong>kiderakenne muodostuu vetämällä</strong> → lujuus kasvaa dramaattisesti. Yhdestä spinneretistä samanaikaisesti 24–144 filamenttia.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="ps-num orange">2</div>
+            <div class="ps-body">
+              <div class="ps-title">Teksturointi & kiharrus</div>
+              <div class="ps-temp orange">150–200 °C (lämpöasetus)</div>
+              <p style="font-size:0.85rem">Suorat filamentit prosessoidaan kiharrus­yksiköllä (false-twist texturing) → kuidut saavat pysyvän kiharteen → lanka saa volyymiä ja joustavuutta ilman elastaania. <em>Stretch polyester</em> syntyy näin.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="ps-num blue">3</div>
+            <div class="ps-body">
+              <div class="ps-title">Laminointi (Gore-Tex -tyyppi)</div>
+              <div class="ps-temp blue">130–160 °C · nip-paine</div>
+              <p style="font-size:0.85rem">PTFE-kalvo laminoidaan kangaskerrokseen kuumapressillä tai adheesivalla. 2-layer (kalvo + ulkokangas), 2,5-layer (painettu sisäpinta) tai 3-layer (kalvo + sisäkangas). Kolmikerros paras suorituskyky, raskain.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="ps-num green">4</div>
+            <div class="ps-body">
+              <div class="ps-title">DWR-pintakäsittely</div>
+              <div class="ps-temp blue">Dispersio + kuumennus 130–170 °C</div>
+              <p style="font-size:0.85rem">Durable Water Repellency — fluorokarbonaatti (C8→C6→C4) tai uudet fluorovapaat (PFC-free) käsittelyt. Vesi helmeilee pinnalta. Pesu ja mekaaninen kulutus heikentää → reaktivoitava kuumentamalla (silitysrauta, kuivausrumpu).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout blue">
+          <div class="callout-label">Muotoilijan huomio — PFC-vapaat pinnoitteet</div>
+          Perinteiset C8-fluorokarbonaatti­pinnoitteet (PFAS) ovat erittäin pysyviä ympäristössä — "ikuiset kemikaalit". EU rajoittaa kovasti. Uudet dendrimeri- ja siloksaanipohjaiset PFC-vapaat pinnoitteet ovat jo markkinoilla mutta suorituskyky ei täysin vastaa vanhaa. <strong>Tämä on alan kuuma suunnitteluongelma 2024–2030.</strong>
+        </div>
+      </div>
+    </div>
+
+    <h3>Toiminnalliset tekstiilit — esimerkkejä</h3>
+    <div class="four-col" style="margin-top:1rem">
+      <div class="card card-teal">
+        <h4>Lämmön hallinta</h4>
+        <p style="font-size:0.82rem">PCM-materiaalit (Phase Change Materials) mikrokapseloidaan kuidun sisään — sulava parafiini absorboi lämpöä kehosta ja vapauttaa sen viileässä. NASA:n kehittämä, nyt urheiluvaatteissa.</p>
+      </div>
+      <div class="card card-orange">
+        <h4>Antimikrobisuus</h4>
+        <p style="font-size:0.82rem">Hopeanano­hiukkaset tai kupariionit sidotaan kuituun. Estävät bakteerien kasvun — haju vähenee. Hygieniatekstiileissä (sairaalat) ja urheiluvaatteissa yleinen.</p>
+      </div>
+      <div class="card card-blue">
+        <h4>Sähkönjohtavuus</h4>
+        <p style="font-size:0.82rem">Grafeeni- tai hiilipohjainen pinnoite tekee tekstiilistä johtavan. Sensorien integroiminen, lämmittäminen (heated jackets), EKG-mittaus tekstiilistä. E-tekstiilit kasvava ala.</p>
+      </div>
+      <div class="card card-green">
+        <h4>Suoja­vaatetukset</h4>
+        <p style="font-size:0.82rem">Nomex (meta-aramiidi) — ei sula, palaa ilman liekiä. Kevlar (para-aramiidi) — viiltosuoja, luotisuoja. Tyvek (PP/PE) — kerta­käyttöinen kemikaalisuoja. Jokainen eri polymeeriarkkitehtuuri.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════
+     07  ELEKTRONIIKKA
+══════════════════════════════ -->
+<div id="elektroniikka" class="section-wrap">
+  <div class="section-inner">
+    <div class="case-label" style="background:var(--purple)">Sovellustapaus 04</div>
+    <div class="section-num">07 · Kulutuselektroniikka</div>
+    <h2>Muovi elektroniikassa — kotelosta komponenttiin</h2>
+    <p class="lead">Älypuhelimesi kotelo, kuulokkeiden pehmusteet, kaapelien eristys, piirilevyn laminaatti — kaikki ovat huolellisesti valittuja polymeerejä. Elektroniikka ei toimisi ilman muovia.</p>
+
+    <div class="two-col">
+      <div>
+        <h3>Kriittiset vaatimukset elektroniikkamuoveille</h3>
+        <ul class="styled">
+          <li><strong>Palonkestävyys</strong> — UL94 V-0 tai V-2 sertifiointi pakollinen sisäosille</li>
+          <li><strong>Dimensiostabiliteetti</strong> — osat eivät saa vääristyä kosteudessa tai lämmössä</li>
+          <li><strong>Dielektrinen eristyskyky</strong> — estää virran kulkeutuminen kehikkoon</li>
+          <li><strong>EMI-suojaus</strong> — joissain sovelluksissa kotelo johtava (sähkömagneettinen häiriö)</li>
+          <li><strong>Pinta­laatu</strong> — Class A -pinta suoraan muotista tai vähäisellä käsittelyllä</li>
+          <li><strong>Kierrätettävyys</strong> — EU:n WEEE-direktiivi, broom­atut palontorjunta-aineet kiellettyinä kasvavassa määrin</li>
+        </ul>
+
+        <h3>Tärkeimmät materiaalit</h3>
+        <table class="prop-table">
+          <tr><th>Materiaali</th><th>Sovellus</th><th>Erityisominaisuus</th></tr>
+          <tr>
+            <td><strong>ABS</strong></td>
+            <td style="font-size:0.82rem">Kotelorakenteet, näppäimistöt</td>
+            <td style="font-size:0.82rem">Helppo ruiskuvalu, erinomainen pinta, väritettävissä</td>
+          </tr>
+          <tr>
+            <td><strong>PC/ABS seos</strong></td>
+            <td style="font-size:0.82rem">Puhelimet, kannettavat</td>
+            <td style="font-size:0.82rem">PC:n iskunkestävyys + ABS:n prosessoitavuus</td>
+          </tr>
+          <tr>
+            <td><strong>PC</strong></td>
+            <td style="font-size:0.82rem">Näyttösuojat, optinen levy</td>
+            <td style="font-size:0.82rem">Optisesti kirkas, korkea iskunkestävyys</td>
+          </tr>
+          <tr>
+            <td><strong>PA66+GF30</strong></td>
+            <td style="font-size:0.82rem">Liittimet, koteloiden sisä­osat</td>
+            <td style="font-size:0.82rem">Korkea lämpöluokka, mekaaninen lujuus</td>
+          </tr>
+          <tr>
+            <td><strong>LCP</strong></td>
+            <td style="font-size:0.82rem">SMD-komponentti­kotelot</td>
+            <td style="font-size:0.82rem">Nestekide­polymeeri — erittäin dimensiostabii, 260 °C juotoslämpö</td>
+          </tr>
+          <tr>
+            <td><strong>TPE/TPU</strong></td>
+            <td style="font-size:0.82rem">Kaapelien haaroitus, grommets</td>
+            <td style="font-size:0.82rem">Joustava, kulumiskestävä, overmolding-yhteensopiva</td>
+          </tr>
+          <tr>
+            <td><strong>PTFE</strong></td>
+            <td style="font-size:0.82rem">RF-kaapelit, tiivisteet</td>
+            <td style="font-size:0.82rem">Paras dielektrinen vakio, korkein lämpökestävyys</td>
+          </tr>
+        </table>
+      </div>
+
+      <div>
+        <h3>Valmistusprosessit</h3>
+        <div class="process">
+          <div class="process-step">
+            <div class="ps-num">1</div>
+            <div class="ps-body">
+              <div class="ps-title">Ruiskuvalu (Injection Molding)</div>
+              <div class="ps-temp">ABS: 220–250 °C · PC: 270–310 °C</div>
+              <p style="font-size:0.85rem">Elektroniikkakotelointien perusprosessi. Sykli­aika 15–60 s. Toleranssit: ±0,05–0,1 mm. <strong>Ohut­seinävalut</strong> (0,5–1 mm) — jäähtyminen erittäin nopeaa, vaatii korkeaa injektiopaita. Sisäiset kiinnitys­tornit, snap-fits ja pintarakenteet integroidaan suoraan.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="ps-num orange">2</div>
+            <div class="ps-body">
+              <div class="ps-title">Overmolding (kaksois­valu)</div>
+              <div class="ps-temp orange">TPE/TPU 170–210 °C jälkeen</div>
+              <p style="font-size:0.85rem">Kovempi osa (PC/ABS) valmistetaan ensin, asetetaan muottiin, ja TPE injektoidaan sen päälle. <strong>Kemiallinen tai mekaaninen tartunta</strong> materiaalien välillä — ei liimaa tarvita. Puhelin­kuorien pehmeät päät, kaapelisuojat, grippipinnat.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="ps-num blue">3</div>
+            <div class="ps-body">
+              <div class="ps-title">IMD / IML — pintakoristelu muotissa</div>
+              <div class="ps-temp blue">Kalvo muotissa, valuprosessi normaali</div>
+              <p style="font-size:0.85rem">In-Mould Decoration: painettu kalvo asetetaan muottiin, muovi valuu sen taakse → kuvio on suojattu muovin alla. Ei kuluvaa pintakäsittelyä. TV-kehykset, autokonsolin paneelit.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="ps-num green">4</div>
+            <div class="ps-body">
+              <div class="ps-title">Johtokykyinen pinnoitus (EMI shielding)</div>
+              <div class="ps-temp blue">Electroless Ni/Cu · tai johtava maali</div>
+              <p style="font-size:0.85rem">Muovin pinta metalloidaan — ensin etsi­käsittely, sitten <strong>electroless copper</strong> tai nickel­pinnoitus. Alternatiivina johtava maali tai suoramaali grafeenilla. Estää sähkömagneettisten häiriöiden leviämisen laitteen sisälle tai ulos.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout purple">
+          <div class="callout-label">Muotoilijan perspektiivi</div>
+          Puhelimesi design on neuvottelu materiaalin, valmistusprosessin ja estetiikan välillä. Apple siirtyi alumiiniin 2008 (iPhone 3G → 4) ja palasi lasiin (iPhone X) — jokainen ratkaisu vaikutti antennirakenteisiin, valmistus­kustannuksiin ja tuntumaan. <strong>Materiaali on designin osa, ei sen tulos.</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════
+     08  MAAILMA ILMAN MUOVIA
+══════════════════════════════ -->
+<div id="maailma" class="section-wrap section-dark" style="background:var(--ink)">
+  <div class="section-inner">
+    <div class="section-num">08 · Filosofinen pohdinta</div>
+    <h2>Maailma ilman muovia — mitä menetettäisiin?</h2>
+
+    <div class="big-quote">
+      "Muovi ei ole ongelma. Se on vastaus lähes kaikkeen. Ongelma on se, mitä me sille teemme sen jälkeen."
+    </div>
+    <div class="big-quote-attr">— muotoilijan dilemma, 2024</div>
+
+    <div class="two-col" style="margin-top:3rem">
+      <div>
+        <p style="color:rgba(244,241,236,0.75);font-size:0.95rem">Kuvitellaanpa hetki maailmaa, jossa polymeerien <strong>plastinen muovailtavuus</strong> — kyky ottaa lähes mikä tahansa muoto, pinnan tekstuuri, väri tai läpinäkyvyys — ei olisi muotoilun käytettävissä.</p>
+
+        <h3>Mitä häviäisi?</h3>
+        <div class="card card-dark" style="margin-top:1rem">
+          <h4>Lääketiede</h4>
+          <p style="font-size:0.85rem;color:rgba(244,241,236,0.72)">Ruiskut, katetrit, tekoventtiilit, dialyysilaitteet, MRI-magneetin eristys, sairaalan kertakäyttötarvikkeet. <strong>Miljoonia ihmisiä ei olisi elossa.</strong> Korvike olisi lasi, metalli, luonnonkumi — kaikilla vakavat rajoitteet steriloitavuudessa tai muodossa.</p>
+        </div>
+        <div class="card card-dark" style="margin-top:1rem">
+          <h4>Liikenne & turvallisuus</h4>
+          <p style="font-size:0.85rem;color:rgba(244,241,236,0.72)">Autojen turva­tyynyt, törmäys­puskurit, polttoaine­säiliöt, lentokoneen ikkunat (PMMA), pyörän rengas (synteettinen kumi). Lentokoneiden muovirakenteet säästävät polttoainetta — ilman niitä lento­matkustaminen kallistuisi dramaattisesti.</p>
+        </div>
+        <div class="card card-dark" style="margin-top:1rem">
+          <h4>Ruokaturva</h4>
+          <p style="font-size:0.85mel;color:rgba(244,241,236,0.72)">Lannoite­pussit, kasvihuone­kalvot, kaste­lujärjestelmien putket, pakkaukset jotka mahdollistavat globaalin ruoka­ketjun. Arviolta 30 % maailman ruoasta pilaantuu käsittelyssä — muovipakkaus leikkaa tätä merkittävästi.</p>
+        </div>
+        <div class="card card-dark" style="margin-top:1rem">
+          <h4>Viestintä & tieto</h4>
+          <p style="font-size:0.85rem;color:rgba(244,241,236,0.72)">Valokuitu­kaapelit (PMMA tai lasi), internet­serverilaitteiden muovikomponentit, matka­puhelimien kuoret, näyttöjen polarisointi­kalvot. Internet ei toimisi nykyisessä muodossaan.</p>
+        </div>
+      </div>
+      <div>
+        <h3>Muotoilun muodot­kieli ilman polymeerejä</h3>
+        <p style="color:rgba(244,241,236,0.72);font-size:0.9rem">Muovin korvaamattomuus piilee sen <em>muodollisessa vapaudessa</em>. Muut materiaalit asettavat perustavanlaatuisia rajoitteita:</p>
+
+        <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:1rem">
+          <div class="callout dark">
+            <div class="callout-label">Puu</div>
+            <p style="color:rgba(244,241,236,0.78);font-size:0.88rem">Kaunis, uusiutuva — mutta anisotrooppinen (suuntariippuva lujuus), kosteusherkkä, ei läpinäkyvä, ei tartu yhteen itseensä. Monimutkaisia yksiosioita on mahdotonta valmistaa. Jokainen kappale yksilöllinen — ei massatuotantoon.</p>
+          </div>
+          <div class="callout dark">
+            <div class="callout-label">Metalli</div>
+            <p style="color:rgba(244,241,236,0.78);font-size:0.88rem">Luja, kierrätettävä — mutta painava, johtaa lämpöä ja sähköä (eristysongelmia), vaatii paljon energiaa sulattamisessa. Orgaanisia muotoja vaikea valmistaa kustannustehokkaasti — valussa toleranssit heikot, koneistus kallista.</p>
+          </div>
+          <div class="callout dark">
+            <div class="callout-label">Lasi & keramiikka</div>
+            <p style="color:rgba(244,241,236,0.78);font-size:0.88rem">Optisesti erinomainen, kemikaali­kestävä — mutta hauras. Yhden­osaisia mutkikkaita muotoja lähes mahdoton valmistaa. Kuusikulmio paristojen koteloiden muodosta: mahdottomuus keraamilla.</p>
+          </div>
+        </div>
+
+        <div style="margin-top:2rem;background:rgba(13,110,110,0.15);border:1px solid rgba(13,110,110,0.3);border-radius:var(--radius);padding:1.75rem">
+          <h3 style="color:var(--teal-light);margin-top:0">Muotoilun ydinajatus</h3>
+          <p style="color:rgba(244,241,236,0.8);font-size:0.9rem">Muovi antoi muotoilulle jotain ennennäkemätöntä: <strong>materiaalin, joka palvelee muotoa eikä pakota muodon palvelemaan materiaalia.</strong></p>
+          <p style="color:rgba(244,241,236,0.7);font-size:0.88rem;margin-top:0.75rem">Raymond Loewy, Charles Eames, Dieter Rams — kaikki heidän ikonisin työnsä 1950–70-luvuilla hyödynsi juuri tätä vapautta. Eamesin muotolautanen (1950, lasimuovinen), Loewyin Coca-Cola-pullo­muotoiluajattelun vaikutus PET-pulloihin — polymeeri vapautti muodon.</p>
+          <p style="color:rgba(244,241,236,0.7);font-size:0.88rem;margin-top:0.75rem">Kysymys ei ole <em>"käytetäänkö muovia"</em> vaan <em>"käytetäänkö oikeaa muovia oikeaan tarkoitukseen oikeassa elinkaaressa."</em></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════
+     09  TULEVAISUUS
+══════════════════════════════ -->
+<div id="tulevaisuus" class="section-wrap section-dark" style="background:#141210">
+  <div class="section-inner">
+    <div class="section-num">09 · Tulevaisuus</div>
+    <h2>Polymeerien tulevaisuus — 2030–2050</h2>
+    <p style="color:rgba(244,241,236,0.65);font-size:1rem;line-height:1.8;margin-bottom:2.5rem;max-width:700px">Alan suurimmat haasteet — ympäristö­kuorma, fossiili­riippuvuus, mikromuovit — ohjaavat innovaatiota voimakkaasti. Tulevaisuuden polymeeri on bioperäinen, kierrätettävä ja älykkäämpi kuin koskaan.</p>
+
+    <div class="future-grid">
+      <div class="future-card">
+        <span class="future-icon">🌿</span>
+        <div class="future-title">PHA-bioplastit — bakteerien tuottama muovi</div>
+        <p style="font-size:0.85rem;color:rgba(244,241,236,0.65)">Polyhydroksialkanoaatit ovat bakteerin solunsisäisiä energia­varastoja — kerätään bio­prosessissa. 100 % biohajoavia maa­perässä ja vedessä (toisin kuin PLA). Vielä kalliita mutta tuotanto skaalautuu. Soveltuu elintarvike­pakkauksiin, lääkinnällisiin implant­teihin ja maatalousmuoveihin.</p>
+        <div style="margin-top:0.75rem"><span class="tag tag-green">biohajoava</span><span class="tag tag-green">uusiutuva</span><span class="tag tag-teal">FDA-hyväksyntä</span></div>
+      </div>
+      <div class="future-card">
+        <span class="future-icon">♻️</span>
+        <div class="future-title">Kemiallinen kierrätys — muovi takaisin monomeeriksi</div>
+        <p style="font-size:0.85rem;color:rgba(244,241,236,0.65)">Mekaaninen kierrätys laskee laadun — kemiallinen palauttaa raaka-aineen alkuperäiseen muotoon. Pyrolyysi (kuumuus + ei happea), glykolyysi (PET → BHET), entsymaattinen hydrolyysi (PET → TPA). Loop Industries, Plastic Energy, Carbios — kilpailu skaalautuva ratkaisusta käy kuumana.</p>
+        <div style="margin-top:0.75rem"><span class="tag tag-teal">suljettu kierto</span><span class="tag tag-orange">skaalautuminen</span></div>
+      </div>
+      <div class="future-card">
+        <span class="future-icon">🧠</span>
+        <div class="future-title">AI-ohjattu polymeerikehitys</div>
+        <p style="font-size:0.85rem;color:rgba(244,241,236,0.65)">Koneoppimis­mallit ennustavat polymeerin ominaisuudet rakenteen perusteella ennen synteesiä. Google DeepMindin AlphaFold-lähestymistapa polymeerien ominaisuus­ennusteeseen. Polymer Genome -tietokanta. Uuden materiaalin kehitys­aika voi lyhentyä vuosista kuukausiin.</p>
+        <div style="margin-top:0.75rem"><span class="tag tag-blue">ML/AI</span><span class="tag tag-teal">DFT-simulaatio</span></div>
+      </div>
+      <div class="future-card">
+        <span class="future-icon">🔋</span>
+        <div class="future-title">Johtavat polymeerit — elektroninen sovellus</div>
+        <p style="font-size:0.85rel;color:rgba(244,241,236,0.65)">Polyaniline, PEDOT:PSS, polytiofeen — polymeerit jotka johtavat sähköä kuin metallit. Nobel-kemia 2000. Orgaaniset aurinkokennot, OLED-näytöt, taipuisat elektroniikka, biolääketieteelliset anturit. Ei metalleja, ei painavaa rakennetta.</p>
+        <div style="margin-top:0.75rem"><span class="tag tag-orange">OLED</span><span class="tag tag-blue">aurinkoenergia</span><span class="tag tag-teal">wearables</span></div>
+      </div>
+      <div class="future-card">
+        <span class="future-icon">💧</span>
+        <div class="future-title">Mikromuoviseuranta & poisto</div>
+        <p style="font-size:0.85rem;color:rgba(244,241,236,0.65)">Alle 5 mm hiukkasia löytyy jo kaikkialta — ihmisen verestä, vuorilumiperästä, syvänmeren sedimentistä. Kehitteillä: biologiset suodattimet, nanotasolla toimivat poistumat, säädökset (EU:n mikromuovirajoitukset voimaan 2023–2030 portaittain). Isompi ongelma kuin näkyvä roskaaminen.</p>
+        <div style="margin-top:0.75rem"><span class="tag tag-orange">EU-säädös</span><span class="tag tag-teal">tutkimus</span></div>
+      </div>
+      <div class="future-card">
+        <span class="future-icon">🏗️</span>
+        <div class="future-title">4D-tulostus & ohjelmoitavat materiaalit</div>
+        <p style="font-size:0.85rem;color:rgba(244,241,236,0.65)">3D-tulostettu rakenne, joka <em>muuttaa muotoaan</em> lämpötilan, kosteuden tai valon vaikutuksesta. Muisti-polymeerit ohjelmoituna haluttuun muotoon. Sovellukset: itse­kokoontuvat rakenteet, adaptiiviset lääkinnälliset laitteet, vaatteet jotka sopeutuvat vartaloon automaattisesti.</p>
+        <div style="margin-top:0.75rem"><span class="tag tag-purple">shape-memory</span><span class="tag tag-blue">4D-print</span></div>
+      </div>
+    </div>
+
+    <div style="margin-top:4rem;text-align:center">
+      <div class="big-quote" style="font-size:clamp(1.2rem,2.5vw,1.7rem)">
+        "Paras muovipakkaus on se, josta ei tarvitse luopua — koska se on suunniteltu uuteen elämään alusta alkaen."
+      </div>
+      <div class="big-quote-attr" style="margin-top:1rem">— Kiertotalouden muotoiluajattelu</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div>
+    <div class="footer-logo">POLYMEERIT</div>
+    <div style="margin-top:0.5rem;font-size:0.78rem">Teollinen muotoilu · 1. vuosikurssi · Metropolia AMK</div>
+    <div style="margin-top:0.25rem;font-size:0.72rem">Kurssi­materiaali opetuskäyttöön</div>
+  </div>
+  <div>
+    <div style="font-size:0.78rem;margin-bottom:0.5rem">Viite­lähteitä</div>
+    <div><a href="https://www.plasticseurope.org" target="_blank">PlasticsEurope — Plastics the Facts</a></div>
+    <div><a href="https://www.materialsproject.org" target="_blank">Materials Project — tietokanta</a></div>
+    <div><a href="https://www.ellenmacarthurfoundation.org" target="_blank">Ellen MacArthur Foundation — kiertotalous</a></div>
+    <div><a href="https://echa.europa.eu" target="_blank">ECHA — EU:n kemikaalivirasto</a></div>
+  </div>
+  <div style="text-align:right">
+    <div style="font-size:0.72rem;color:rgba(244,241,236,0.3);max-width:240px">
+      Materiaalissa esitetyt prosessi­parametrit ovat viite­arvoja. Todelliset parametrit riippuvat materiaalin toimittajasta, kone­konfiguraatiosta ja tuotevaatimuksista.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
