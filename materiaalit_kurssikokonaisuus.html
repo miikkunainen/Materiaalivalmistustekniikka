@@ -98,11 +98,11 @@ nav {
     radial-gradient(ellipse 40% 40% at 50% 50%, rgba(90,171,90,0.06) 0%, transparent 60%);
 }
 .hero-grid-overlay {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(124,77,255,0.04) 1px, transparent 1px),
+	position: absolute;
+	inset: 0;
+	background-image: linear-gradient(rgba(124,77,255,0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(124,77,255,0.04) 1px, transparent 1px);
-  background-size: 80px 80px;
+	background-size: 80px 80px;
 }
 
 /* Atom SVG decoration */
@@ -132,7 +132,10 @@ h1 {
   margin-bottom: 2rem;
 }
 h1 .accent-quark { color: var(--quark); }
-h1 .accent-future { color: var(--future); }
+h1 .accent-future {
+	color: var(--future);
+	text-align: center;
+}
 
 .hero-sub {
   font-family: 'Libre Baskerville', serif;
@@ -573,7 +576,10 @@ footer {
 .hero-content > *:nth-child(1) { animation-delay: 0.05s; }
 .hero-content > *:nth-child(2) { animation-delay: 0.15s; }
 .hero-content > *:nth-child(3) { animation-delay: 0.28s; }
-.hero-content > *:nth-child(4) { animation-delay: 0.42s; }
+.hero-content > *:nth-child(4) {
+	animation-delay: 0.42s;
+	text-align: center;
+}
 
 @keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:0.8} }
 .pt-cell { animation: pulse 4s ease-in-out infinite; }
@@ -604,6 +610,7 @@ footer {
     <li><a href="#tulevaisuus">Tulevaisuus</a></li>
   </ul>
   <div style="display:flex;gap:0.5rem;flex-shrink:0">
+	<a class="nav-pill pill-lasi" href="metropolia_lasin_maailma.html" target="_blank">Lasi →</a>
 	<a class="nav-pill pill-keram" href="keramiikka.html" target="_blank">Keramiikka →</a>
     <a class="nav-pill pill-metal" href="kiridashi_metallurgia.html" target="_blank">Metallit →</a>
     <a class="nav-pill pill-plastic" href="muovit_muotoilu.html" target="_blank">Muovit →</a>
