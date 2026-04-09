@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prusa 3D-tulostusopas – Metropolia</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --prusa: #FA6831;
+    --prusa-dark: #E55520;
+    --metro: #E5534A;
+    --metro-dark: #C0392B;
+    --dark: #1A1A1A;
+    --darker: #111111;
+    --mid: #2A2A2A;
+    --card: #232323;
+    --border: #333333;
+    --text: #F0F0F0;
+    --muted: #888888;
+    --success: #2ECC71;
+    --warning: #F39C12;
+    --danger: #E74C3C;
+    --info: #3498DB;
+    --sidebar-w: 280px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--darker);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: var(--sidebar-w);
+    background: var(--dark);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    transition: transform .3s ease;
+  }
+
+  .sidebar-brand {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .brand-logos {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-prusa {
+    width: 40px; height: 40px;
+    background: var(--prusa);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; color: white; letter-spacing: -0.5px;
+  }
+
+  .logo-metro {
+    width: 40px; height: 40px;
+    background: var(--metro);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 10px; color: white; text-align: center; line-height: 1.1;
+  }
+
+  .brand-sep { width: 1px; height: 28px; background: var(--border); }
+
+  .sidebar-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .nav-section {
+    padding: 16px 12px 8px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 8px;
+    margin-bottom: 8px;
+    margin-top: 12px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #AAA;
+    transition: all .2s;
+    margin-bottom: 2px;
+    text-decoration: none;
+  }
+
+  .nav-item:hover { background: var(--mid); color: var(--text); }
+  .nav-item.active { background: rgba(250,104,49,.15); color: var(--prusa); }
+  .nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+  .nav-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+  .nav-item.active .nav-num { color: var(--prusa); }
+
+  .sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ── MAIN ── */
+  #main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #1A0A00 0%, #2A1200 40%, #1A1A1A 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 64px 56px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(250,104,49,.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 30%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(229,83,74,.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(250,104,49,.12);
+    border: 1px solid rgba(250,104,49,.3);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--prusa);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .hero h1 span { color: var(--prusa); }
+
+  .hero-sub {
+    font-size: 16px;
+    color: #AAA;
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  .hero-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+
+  .chip {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 13px;
+    color: #BBB;
+    font-weight: 500;
+  }
+
+  .chip .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--success);
+  }
+  .chip .dot.warn { background: var(--warning); }
+  .chip .dot.prusa { background: var(--prusa); }
+
+  .hero-video {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(250,104,49,.1);
+    border: 1px solid rgba(250,104,49,.25);
+    border-radius: 12px;
+    padding: 14px 20px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    font-size: 14px;
+    transition: all .2s;
+  }
+  .hero-video:hover { background: rgba(250,104,49,.2); border-color: var(--prusa); }
+  .play-btn {
+    width: 36px; height: 36px;
+    background: var(--prusa);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+
+  /* ── GEMINI TIP ── */
+  .gemini-banner {
+    margin: 0 40px;
+    background: linear-gradient(135deg, rgba(66,133,244,.1), rgba(52,168,83,.08));
+    border: 1px solid rgba(66,133,244,.3);
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 32px;
+  }
+
+  .gemini-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    background: linear-gradient(135deg, #4285F4, #34A853);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+
+  .gemini-banner h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .gemini-banner p { font-size: 13px; color: #AAA; line-height: 1.6; }
+  .gemini-banner strong { color: #7FB3FF; }
+
+  /* ── SECTIONS ── */
+  .content { padding: 0 40px 80px; }
+
+  .section {
+    padding-top: 56px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 48px;
+  }
+  .section:last-child { border-bottom: none; }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--prusa);
+    background: rgba(250,104,49,.1);
+    border: 1px solid rgba(250,104,49,.2);
+    border-radius: 6px;
+    padding: 4px 10px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    margin-top: 4px;
+  }
+
+  .section-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .section-header p {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.6;
+  }
+
+  /* ── STEP CARDS ── */
+  .steps { display: flex; flex-direction: column; gap: 16px; }
+
+  .step-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color .2s;
+  }
+
+  .step-card:hover { border-color: #555; }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .step-badge {
+    width: 32px; height: 32px; flex-shrink: 0;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+    background: rgba(250,104,49,.15);
+    color: var(--prusa);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .step-badge.warn { background: rgba(243,156,18,.15); color: var(--warning); }
+  .step-badge.danger { background: rgba(231,76,60,.15); color: var(--danger); }
+  .step-badge.ok { background: rgba(46,204,113,.15); color: var(--success); }
+
+  .step-title { font-size: 15px; font-weight: 600; flex: 1; }
+  .step-arrow { color: var(--muted); font-size: 12px; transition: transform .25s; }
+  .step-card.open .step-arrow { transform: rotate(180deg); }
+
+  .step-body {
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease, padding .25s;
+  }
+
+  .step-card.open .step-body {
+    max-height: 1000px;
+    padding: 0 20px 20px;
+  }
+
+  .step-body p { font-size: 14px; color: #CCC; line-height: 1.75; margin-bottom: 12px; }
+  .step-body p:last-child { margin-bottom: 0; }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 13.5px;
+    line-height: 1.65;
+    margin: 16px 0;
+    display: flex;
+    gap: 12px;
+  }
+
+  .callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .callout p { margin: 0; }
+
+  .callout.warn { background: rgba(243,156,18,.1); border-left: 3px solid var(--warning); color: #F5CBA7; }
+  .callout.danger { background: rgba(231,76,60,.1); border-left: 3px solid var(--danger); color: #F1948A; }
+  .callout.tip { background: rgba(46,204,113,.08); border-left: 3px solid var(--success); color: #A9DFBF; }
+  .callout.info { background: rgba(52,152,219,.08); border-left: 3px solid var(--info); color: #AED6F1; }
+
+  /* ── TEMP TABLE ── */
+  .temp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .temp-card {
+    background: var(--mid);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .temp-material { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .5px; text-transform: uppercase; }
+  .temp-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--prusa);
+  }
+  .temp-val span { font-size: 13px; color: var(--muted); }
+  .temp-sub { font-size: 12px; color: var(--muted); }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-top: 16px;
+  }
+
+  .compare-table th {
+    background: var(--mid);
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    font-weight: 600;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .compare-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: rgba(255,255,255,.02); }
+
+  .compare-table td:first-child { font-weight: 600; color: var(--text); }
+  .compare-table td:nth-child(2) { font-family: 'DM Mono', monospace; color: var(--warning); }
+  .compare-table td:nth-child(3) { color: #CCC; }
+
+  /* ── WORKFLOW ── */
+  .workflow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    margin: 16px 0;
+  }
+
+  .workflow::before {
+    content: '';
+    position: absolute;
+    left: 20px; top: 24px; bottom: 24px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--prusa), var(--metro));
+  }
+
+  .wf-step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 12px 0;
+  }
+
+  .wf-num {
+    width: 40px; height: 40px; flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--dark);
+    border: 2px solid var(--prusa);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--prusa);
+    position: relative;
+    z-index: 1;
+  }
+
+  .wf-content { flex: 1; padding-top: 8px; }
+  .wf-content h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .wf-content p { font-size: 13px; color: #AAA; line-height: 1.6; }
+
+  /* ── CHECKLIST ── */
+  .checklist { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    padding: 10px 14px;
+    border-radius: 8px;
+    transition: background .15s;
+    user-select: none;
+  }
+
+  .check-item:hover { background: rgba(255,255,255,.03); }
+
+  .check-box {
+    width: 20px; height: 20px; flex-shrink: 0;
+    border-radius: 5px;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
+    margin-top: 1px;
+    background: transparent;
+  }
+
+  .check-item.checked .check-box {
+    background: var(--prusa);
+    border-color: var(--prusa);
+  }
+
+  .check-item.checked .check-box::after {
+    content: '✓';
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .check-item.checked .check-label { text-decoration: line-through; color: var(--muted); }
+  .check-label { font-size: 14px; line-height: 1.5; }
+
+  /* ── PROGRESS ── */
+  .progress-bar-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .progress-bar-wrap h4 { font-size: 14px; font-weight: 600; margin-bottom: 12px; display: flex; justify-content: space-between; }
+  .progress-bar-wrap h4 span { font-family: 'DM Mono', monospace; color: var(--prusa); }
+  .pbar { background: var(--mid); border-radius: 100px; height: 8px; overflow: hidden; }
+  .pbar-fill { height: 100%; background: linear-gradient(90deg, var(--prusa), var(--metro)); border-radius: 100px; transition: width .4s ease; }
+
+  /* ── CRITICAL SECTION ── */
+  .critical-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .crit-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    transition: border-color .2s, transform .2s;
+  }
+
+  .crit-card:hover { border-color: #555; transform: translateY(-2px); }
+
+  .crit-card .crit-icon { font-size: 28px; margin-bottom: 12px; }
+  .crit-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .crit-card p { font-size: 13px; color: #AAA; line-height: 1.6; }
+  .crit-badge {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+    letter-spacing: .5px;
+  }
+  .crit-badge.save { background: rgba(46,204,113,.15); color: var(--success); }
+  .crit-badge.quality { background: rgba(52,152,219,.15); color: var(--info); }
+  .crit-badge.time { background: rgba(243,156,18,.15); color: var(--warning); }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    background: #0D0D0D;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: #B5D3FF;
+    line-height: 1.8;
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+
+  .code-block .c { color: #6A9955; }
+  .code-block .k { color: var(--prusa); }
+  .code-block .v { color: #B5D3FF; }
+
+  /* ── MOBILE TOGGLE ── */
+  #menu-toggle {
+    display: none;
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 200;
+    background: var(--prusa);
+    border: none;
+    border-radius: 10px;
+    width: 44px; height: 44px;
+    cursor: pointer;
+    font-size: 20px;
+    color: white;
+  }
+
+  @media (max-width: 800px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    #menu-toggle { display: flex; align-items: center; justify-content: center; }
+    .hero { padding: 72px 24px 40px; }
+    .content { padding: 0 20px 60px; }
+    .gemini-banner { margin: 0 20px; }
+  }
+
+  /* ── SCROLL PROGRESS ── */
+  #scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--prusa), var(--metro));
+    z-index: 9999;
+    transition: width .1s;
+  }
+
+  /* ── BACK TO TOP ── */
+  #back-top {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    background: var(--prusa);
+    border: none;
+    border-radius: 12px;
+    width: 44px; height: 44px;
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .3s, transform .3s;
+    z-index: 50;
+  }
+  #back-top.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+<button id="menu-toggle" onclick="toggleSidebar()">☰</button>
+<button id="back-top" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-logos">
+      <div class="logo-prusa">P</div>
+      <div class="brand-sep"></div>
+      <div class="logo-metro">MET<br>RO</div>
+    </div>
+    <div class="sidebar-title">3D-Tulostusopas</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Sisällysluettelo</div>
+    <a class="nav-item active" href="#hero" onclick="setActive(this)">
+      <span class="nav-icon">🏠</span> Etusivu
+    </a>
+    <a class="nav-item" href="#kayttoonotto" onclick="setActive(this)">
+      <span class="nav-icon">⚙️</span> Käyttöönotto & Kalibrointi
+      <span class="nav-num">01</span>
+    </a>
+    <a class="nav-item" href="#ohjelmisto" onclick="setActive(this)">
+      <span class="nav-icon">💻</span> PrusaSlicer
+      <span class="nav-num">02</span>
+    </a>
+    <a class="nav-item" href="#tulostus" onclick="setActive(this)">
+      <span class="nav-icon">🖨️</span> Tulostusprosessi
+      <span class="nav-num">03</span>
+    </a>
+    <a class="nav-item" href="#optimointi" onclick="setActive(this)">
+      <span class="nav-icon">📊</span> Resurssien Optimointi
+      <span class="nav-num">04</span>
+    </a>
+    <a class="nav-item" href="#turvallisuus" onclick="setActive(this)">
+      <span class="nav-icon">🛡️</span> Turvallisuus & Huolto
+      <span class="nav-num">05</span>
+    </a>
+
+    <div class="nav-label" style="margin-top:20px;">Pikaohjeet</div>
+    <a class="nav-item" href="#checklist-section" onclick="setActive(this)">
+      <span class="nav-icon">✅</span> Tulostuksen tarkistuslista
+    </a>
+    <a class="nav-item" href="#lampotilat" onclick="setActive(this)">
+      <span class="nav-icon">🌡️</span> Lämpötilat pikataulu
+    </a>
+  </div>
+
+  <div class="sidebar-footer">
+    Metropolia Muotoilun Pajat<br>
+    Prusa MK3S+ · MK4 · MINI+
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-badge">📖 Virallinen referenssidokumentti</div>
+    <h1>Prusa 3D-tulostimien<br><span>Asennus- & Käyttöopas</span></h1>
+    <p class="hero-sub">Kattava ohje opiskelijoille ja henkilökunnalle Metropolia AMK:n muotoilun pajoissa. Lue huolellisesti ennen ensimmäistä tulostusta.</p>
+
+    <div class="hero-chips">
+      <div class="chip"><div class="dot prusa"></div> Prusa MK3S+</div>
+      <div class="chip"><div class="dot prusa"></div> Prusa MK4</div>
+      <div class="chip"><div class="dot prusa"></div> Prusa MINI+</div>
+      <div class="chip"><div class="dot ok"></div> PrusaSlicer</div>
+      <div class="chip"><div class="dot warn"></div> Oppilaitoskäyttö</div>
+    </div>
+
+    <a class="hero-video" href="https://www.youtube.com/watch?v=Q_Wt0l6SKPo" target="_blank">
+      <div class="play-btn">▶</div>
+      Katso video-ohje YouTubessa
+    </a>
+  </section>
+
+  <!-- GEMINI BANNER -->
+  <div class="gemini-banner">
+    <div class="gemini-icon">✨</div>
+    <div>
+      <h4>💡 Vinkki: Google Gemini auttaa reaaliajassa!</h4>
+      <p>
+        <strong>Google Geminin "Video + Chat" -ominaisuudella</strong> voit lähettää suoran kuvan tai videon tulostimesi tilanteesta — Gemini analysoi ongelman ja antaa konkreettisia neuvoja. Avaa <strong>gemini.google.com</strong>, aktivoi kamerayhteys, suuntaa puhelimesi tulostimeen tai PrusaSlicer-näyttöön ja kysy vapaasti. Tämä on ylivoimaisesti nopein tapa saada apua ongelmatilanteissa!
+      </p>
+    </div>
+  </div>
+
+  <!-- SISÄLTÖ -->
+  <div class="content">
+
+    <!-- 01 KÄYTTÖÖNOTTO -->
+    <section class="section" id="kayttoonotto">
+      <div class="section-header">
+        <div class="section-num">01</div>
+        <div>
+          <h2>Laitteen fyysinen käyttöönotto ja kalibrointi</h2>
+          <p>Ennen ensimmäistäkään tulostusta laite on kalibroitava. Oppilaitosympäristössä tulostimet altistuvat siirtelylle ja tärinälle, mikä vaatii säännöllistä tarkastusta.</p>
+        </div>
+      </div>
+
+      <div class="callout danger">
+        <div class="callout-icon">🔥</div>
+        <p><strong>Palovammavaara:</strong> Suutin (200–285°C) ja tulostusalusta (50–90°C) ovat erittäin kuumia. Älä koskaan koske näihin tulostuksen aikana tai heti sen jälkeen.</p>
+      </div>
+
+      <div class="steps">
+
+        <div class="step-card open" id="sc1">
+          <div class="step-header" onclick="toggleCard('sc1')">
+            <div class="step-badge ok">1</div>
+            <div class="step-title">Tulostusalustan puhdistus (IPA)</div>
+            <span class="step-arrow">▼</span>
+          </div>
+          <div class="step-body">
+            <p>Tulostusalusta (PEI-teräslevy) on <strong>aina</strong> puhdistettava isopropyylialkoholilla (IPA) ennen jokaista tulostusta. Sormistasi irtoava ihorasva tuhoaa muovin tarttuvuuden alustaan — tämä on ylivoimaisesti yleisin syy tulostuksen epäonnistumiseen.</p>
+            <div class="callout tip">
+              <div class="callout-icon">✅</div>
+              <p>Käytä puhdasta liinaa tai talouspaperia. Pyyhi koko alusta pyörivin liikkein. Anna haihtua 30–60 sekuntia ennen käynnistystä.</p>
+            </div>
+            <p>Erityisen tärkeää: jos alusta on jo kuuma edellisestä tulostuksesta, irrota se magneettipedistä, anna jäähtyä huoneenlämpöön ja puhdista vasta sitten.</p>
+          </div>
+        </div>
+
+        <div class="step-card" id="sc2">
+          <div class="step-header" onclick="toggleCard('sc2')">
+            <div class="step-badge warn">2</div>
+            <div class="step-title">Z-akselin kalibrointi – First Layer Calibration</div>
+            <span class="step-arrow">▼</span>
+          </div>
+          <div class="step-body">
+            <p>Suuttimen etäisyys tulostusalustasta on koko tulostuksen kriittisin yksittäinen muuttuja. Tee First Layer Calibration aina, jos tulostinta on siirretty tai se on epäonnistunut aiemmin.</p>
+            <div class="compare-table" style="font-size:13px; margin:0;">
+              <table class="compare-table" style="width:100%; background:var(--mid); border-radius:10px; overflow:hidden;">
+                <thead>
+                  <tr>
+                    <th>Tilanne</th><th>Oire</th><th>Korjaus</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>⬆️ Liian ylhäällä</td>
+                    <td style="color:#E74C3C; font-family:'DM Mono',monospace;">Ei tartu alustaan</td>
+                    <td>Siirrä Z-offset alaspäin (–)</td>
+                  </tr>
+                  <tr>
+                    <td>⬇️ Liian alhaalla</td>
+                    <td style="color:#E74C3C; font-family:'DM Mono',monospace;">Raapii/tukkii suuttimen</td>
+                    <td>Siirrä Z-offset ylöspäin (+)</td>
+                  </tr>
+                  <tr>
+                    <td>✅ Oikein</td>
+                    <td style="color:#2ECC71; font-family:'DM Mono',monospace;">Kevyesti litistynyt linja</td>
+                    <td>Ei toimenpiteitä</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="callout warn" style="margin-top:16px;">
+              <div class="callout-icon">⚠️</div>
+              <p>Jos suutin raapii alustaa: pysäytä tulostus <strong>heti</strong> ja ilmoita pajamestarille. Naarmut PEI-pinnassa heikentävät koko laitteen käyttökelpoisuutta.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-card" id="sc3">
+          <div class="step-header" onclick="toggleCard('sc3')">
+            <div class="step-badge">3</div>
+            <div class="step-title">Filamentin lataus oikein</div>
+            <span class="step-arrow">▼</span>
+          </div>
+          <div class="step-body">
+            <p>Lämmitä suutin oikeaan materiaalin vaatimaan lämpötilaan <strong>ennen</strong> filamentin syöttöä. Leikkaa filamentin pää 45° kulmaan ennen pursottimeen asettamista — tämä estää filamentin jumiutumisen hammaspyöriin.</p>
+            <div id="lampotilat" class="temp-grid">
+              <div class="temp-card">
+                <div class="temp-material">PLA</div>
+                <div class="temp-val">215 <span>°C</span></div>
+                <div class="temp-sub">Alusta: 60°C</div>
+              </div>
+              <div class="temp-card">
+                <div class="temp-material">PETG</div>
+                <div class="temp-val">235 <span>°C</span></div>
+                <div class="temp-sub">Alusta: 80°C</div>
+              </div>
+              <div class="temp-card">
+                <div class="temp-material">ASA/ABS</div>
+                <div class="temp-val">255 <span>°C</span></div>
+                <div class="temp-sub">Alusta: 100°C</div>
+              </div>
+              <div class="temp-card">
+                <div class="temp-material">TPU</div>
+                <div class="temp-val">230 <span>°C</span></div>
+                <div class="temp-sub">Alusta: 40°C</div>
+              </div>
+            </div>
+            <div class="callout tip">
+              <div class="callout-icon">💡</div>
+              <p>Älä vaihda filamenttia kylmässä suuttimessa koskaan — se voi rikkoa pursottimen. Käytä aina Unload Filament -toimintoa laitteen valikosta.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 02 OHJELMISTO -->
+    <section class="section" id="ohjelmisto">
+      <div class="section-header">
+        <div class="section-num">02</div>
+        <div>
+          <h2>Ohjelmiston asennus ja työnkulku (PrusaSlicer)</h2>
+          <p>3D-malli on muutettava tulostimen ymmärtämään G-koodiksi. Oppilaitoksessa käytetään <strong>yksinomaan PrusaSlicer-ohjelmistoa</strong> Prusan omilla laiteprofiileilla luotettavuuden varmistamiseksi.</p>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-icon">ℹ️</div>
+        <p>PrusaSlicer on ilmainen ja avoimen lähdekoodin ohjelma. Lataa viimeisin versio osoitteesta <strong>prusa3d.com/prusaslicer</strong>. Asenna Prusan valmiit laite- ja materiaaliprofilit ohjelman ensimmäisen käynnistyksen yhteydessä.</p>
+      </div>
+
+      <div class="workflow">
+        <div class="wf-step">
+          <div class="wf-num">1</div>
+          <div class="wf-content">
+            <h4>Mallin tuonti</h4>
+            <p>Tuo .stl, .obj tai .step -tiedosto ohjelmaan. Varmista että mittakaava on oikea (mm vs. inches). PrusaSlicer skaalaa tarvittaessa automaattisesti.</p>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-num">2</div>
+          <div class="wf-content">
+            <h4>Orientointi ja sijoittelu</h4>
+            <p>Aseta kappaleen tasaisin ja laajin pinta alustaa vasten. Minimoi tukimateriaalin tarve — optimaali orientointi säästää sekä aikaa että materiaalia merkittävästi.</p>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-num">3</div>
+          <div class="wf-content">
+            <h4>Asetusten valinta</h4>
+            <p>Valitse oikea <strong>tulostinprofiili</strong> (MK4 / MK3S+ / MINI+), <strong>materiaaliprofiili</strong> (PLA / PETG jne.) ja <strong>laatu</strong> (0.10–0.30 mm kerrospaksuus). Väärä profiili = epäonnistunut tulostus.</p>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-num">4</div>
+          <div class="wf-content">
+            <h4>Viipalointi ja esikatselu</h4>
+            <p>Paina "Slice now" ja tutki esikatselu huolellisesti. Tarkista tukimateriaalin sijainti, rakennetta ja arvioitu kesto. Jos aika ylittää 8h, harkitse orientoinnin tai asetusten muuttamista.</p>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-num">5</div>
+          <div class="wf-content">
+            <h4>G-koodin vienti</h4>
+            <p>Tallenna G-koodi SD-kortille tai USB-tikulle. Tiedostonimessä kannattaa olla lyhyt kuvaus ja päivämäärä, esim. <span style="font-family:'DM Mono',monospace; color:var(--prusa);">konsepti_v3_20240510.gcode</span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 TULOSTUSPROSESSI -->
+    <section class="section" id="tulostus">
+      <div class="section-header">
+        <div class="section-num">03</div>
+        <div>
+          <h2>Tulostusprosessi ja laitteen hallinta</h2>
+          <p>Itse tulostustapahtuma vaatii käyttäjältä tarkkaavaisuutta etenkin ensimmäisen kerroksen aikana — se on kriittisin vaihe koko tulostuksessa.</p>
+        </div>
+      </div>
+
+      <div id="checklist-section" style="margin-bottom:24px;">
+        <div class="progress-bar-wrap">
+          <h4>Ennen tulostusta — tarkistuslista <span id="check-pct">0%</span></h4>
+          <div class="pbar"><div class="pbar-fill" id="pbar-fill" style="width:0%"></div></div>
+        </div>
+
+        <div class="checklist" id="checklist">
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label">Alusta puhdistettu IPA:lla (ei sormenjälkiä)</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label">Oikea filamentti ladattuna ja Z-kalibrointi tarkistettu</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label">G-koodi viipattu oikealla tulostimella ja materiaalilla</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label">Ensimmäisen kerroksen arvioitu aika tiedossa (jään valvomaan)</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label">Suutin ja alusta lämmittyvät oikein (ei poikkeavaa ääntä)</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label">Ensimmäinen kerros tulostunut virheettömästi — lähden pois</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step-card" id="sc4">
+          <div class="step-header" onclick="toggleCard('sc4')">
+            <div class="step-badge">1</div>
+            <div class="step-title">Tiedoston valinta ja lämpeneminen</div>
+            <span class="step-arrow">▼</span>
+          </div>
+          <div class="step-body">
+            <p>Aseta SD-kortti tai USB-tikku laitteeseen. Valitse tiedosto pyöritettävän valitsimen (MK3S+) tai kosketusnäytön (MK4) avulla. Tulostin lämmittää ensin alustan ja suuttimen — tämä kestää 1–3 minuuttia.</p>
+          </div>
+        </div>
+
+        <div class="step-card" id="sc5">
+          <div class="step-header" onclick="toggleCard('sc5')">
+            <div class="step-badge warn">2</div>
+            <div class="step-title">🔴 KRIITTINEN: Ensimmäisen kerroksen valvonta</div>
+            <span class="step-arrow">▼</span>
+          </div>
+          <div class="step-body">
+            <div class="callout danger">
+              <div class="callout-icon">🚨</div>
+              <p><strong>Älä koskaan poistu tulostimen luota ennen kuin ensimmäinen kerros on valmis.</strong> Jos muovi ei tartu alustaan, keskeytä tulostus välittömästi — muuten saat "spagetti-tulostuksen" joka tukkii koko laitteen.</p>
+            </div>
+            <p>Mesh Bed Leveling mittaa alustan korkeuserot automaattisesti ennen tulostuksen aloittamista. Tarkkaile ensimmäisen kerroksen linjoja: niiden tulee olla kevyesti litistyneitä, tasaisia ja hyvin toisiinsa kiinnittyneitä.</p>
+          </div>
+        </div>
+
+        <div class="step-card" id="sc6">
+          <div class="step-header" onclick="toggleCard('sc6')">
+            <div class="step-badge ok">3</div>
+            <div class="step-title">Tulostuksen irrotus oikein</div>
+            <span class="step-arrow">▼</span>
+          </div>
+          <div class="step-body">
+            <p>Kun tulostus on valmis, <strong>anna alustan jäähtyä</strong> ennen irrotusta — PETG ja ASA erityisesti tarttuvat kuumaan alustaan tiukasti. Nosta joustava teräslevy magneettitiepedistä ja taivuta sitä kevyesti — tuloste ponnahtaa irti.</p>
+            <div class="callout danger">
+              <div class="callout-icon">🚫</div>
+              <p><strong>Älä koskaan käytä metallisia työkaluja, veitsejä tai talttoja PEI-levyn raapimiseen.</strong> Yksikin naarmupäivä voi tehdä koko alustan käyttökelvottomaksi.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 OPTIMOINTI -->
+    <section class="section" id="optimointi">
+      <div class="section-header">
+        <div class="section-num">04</div>
+        <div>
+          <h2>Kriittinen tarkastelu: Resurssien optimointi</h2>
+          <p>Oppilaitosympäristössä materiaali- ja aikatehokkuus ovat keskeisiä. Alla analyysi yleisimmistä virheistä ja parhaista käytännöistä.</p>
+        </div>
+      </div>
+
+      <table class="compare-table" style="width:100%; background:var(--card); border-radius:14px; overflow:hidden; border:1px solid var(--border);">
+        <thead>
+          <tr>
+            <th>Asetus</th>
+            <th>Vaikutus</th>
+            <th>Kriittinen analyysi & Suositus</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Täyttöaste (Infill)</td>
+            <td>Suuri ↑</td>
+            <td>Opiskelijat valitsevat usein tarpeettoman suuren täyttöasteen (50–100%). <strong>10–15% Gyroid-kuviolla</strong> on lähes aina riittävä mekaaniseen kestävyyteen. Lisää ulkokuorien (perimeters) määrää lujuuden kasvattamiseksi — se on tehokkaampi keino.</td>
+          </tr>
+          <tr>
+            <td>Kerrospaksuus</td>
+            <td>Erittäin suuri ↑↑</td>
+            <td>0.10 mm kaksinkertaistaa tulostusajan vs. 0.20 mm. Prototyypeille 0.20 mm tai <strong>0.30 mm Draft</strong> on oikea valinta. Viimeistelyyn 0.15 mm — älä käytä 0.10 mm muuten kuin estetiikkaa vaativiin lopputuotteisiin.</td>
+          </tr>
+          <tr>
+            <td>Tukimateriaali</td>
+            <td>Keskisuuri</td>
+            <td>Tuhlaa materiaalia ja jättää kappaleen pintaan epäsiistin jäljen. Suunnittele mallit <strong>Design for Additive Manufacturing -periaatteella</strong>: yli 45° ylityksiä vältetään, jolloin tukia ei tarvita lainkaan.</td>
+          </tr>
+          <tr>
+            <td>Täyttökuvio</td>
+            <td>Pieni</td>
+            <td><strong>Gyroid</strong> on paras valinta isotropiseen lujuuteen (tasainen kaikissa suunnissa). Honeycomb hyvä visuaalisiin töihin. Grid/Rectilinear nopeampaan tulostukseen.</td>
+          </tr>
+          <tr>
+            <td>Ulkokuoret (Perimeters)</td>
+            <td>Merkittävä</td>
+            <td>Kasvata 3–4 kuoreen normaalin 2:n sijaan kun tarvitset lujempaa kappaletta. Tämä on materiaalitehokkaampi tapa kuin täyttöasteen kasvattaminen.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="critical-grid" style="margin-top:24px;">
+        <div class="crit-card">
+          <div class="crit-icon">🔄</div>
+          <h4>Design for Additive Manufacturing</h4>
+          <p>Suunnittele yli 45° ylitykset pois — ei tukimateriaalia, nopeampi tulostus, siistimpi pinta.</p>
+          <span class="crit-badge quality">Parempi laatu</span>
+        </div>
+        <div class="crit-card">
+          <div class="crit-icon">⚡</div>
+          <h4>Draft-asetuksella prototyypeiksi</h4>
+          <p>0.30 mm kerrospaksuus tulostaa kolme kertaa nopeammin kuin 0.10 mm. Prototyypeille tämä on aina oikea valinta.</p>
+          <span class="crit-badge time">Säästää aikaa</span>
+        </div>
+        <div class="crit-card">
+          <div class="crit-icon">📦</div>
+          <h4>Gyroid 15% riittää</h4>
+          <p>10–15% Gyroid-täyttö kestää mekaanisesti lähes saman kuin 50% Grid-täyttö. Käytä säästyvä aika toisiin töihin.</p>
+          <span class="crit-badge save">Säästää materiaalia</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 TURVALLISUUS -->
+    <section class="section" id="turvallisuus">
+      <div class="section-header">
+        <div class="section-num">05</div>
+        <div>
+          <h2>Turvallisuus, huolto ja vianmääritys</h2>
+          <p>Yhteiskäytössä olevien laitteiden turvallisuus on kaikkien vastuulla. Pienetkin viat on raportoitava välittömästi.</p>
+        </div>
+      </div>
+
+      <div class="callout danger">
+        <div class="callout-icon">🚨</div>
+        <p><strong>Tärkein sääntö:</strong> Älä jätä laitetta seuraavalle käyttäjälle rikkinäisenä tai tunnistamattomassa vikatilassa. Raportointi on osa oppilaitoksen turvallisuuskulttuuria.</p>
+      </div>
+
+      <div class="steps" style="margin-top:20px;">
+
+        <div class="step-card" id="sc7">
+          <div class="step-header" onclick="toggleCard('sc7')">
+            <div class="step-badge danger">!</div>
+            <div class="step-title">Palovammavaara ja fyysiset riskit</div>
+            <span class="step-arrow">▼</span>
+          </div>
+          <div class="step-body">
+            <p>Suutin (200–285°C) ja alusta (50–100°C) pysyvät kuumina pitkään myös tulostuksen päätyttyä. Älä koskaan koske liikkuviin osiin tai kuumiin pintoihin tulostuksen aikana.</p>
+            <div class="callout warn">
+              <div class="callout-icon">⚠️</div>
+              <p>Hiukset, löysät vaatteet ja korut on pidettävä poissa koneen läheltä. Liikkuvat akselit voivat tarttua niihin ilman varoitusta.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-card" id="sc8">
+          <div class="step-header" onclick="toggleCard('sc8')">
+            <div class="step-badge warn">?</div>
+            <div class="step-title">Yleisimmät vikatilanteet ja niiden tunnistaminen</div>
+            <span class="step-arrow">▼</span>
+          </div>
+          <div class="step-body">
+            <table class="compare-table" style="width:100%; background:var(--mid); border-radius:10px; overflow:hidden; font-size:13px;">
+              <thead>
+                <tr><th>Oire</th><th>Syy</th><th>Toimenpide</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>🔊 Nakuttava ääni pursottimesta</td>
+                  <td style="font-family:'DM Mono',monospace; color:var(--warning);">Tukos suuttimessa</td>
+                  <td>Pysäytä heti, ilmoita pajamestarille</td>
+                </tr>
+                <tr>
+                  <td>🍝 Spagetti-tulostus</td>
+                  <td style="font-family:'DM Mono',monospace; color:var(--warning);">1. kerros ei tarttunut</td>
+                  <td>Pysäytä, puhdista alusta, kalibroi Z</td>
+                </tr>
+                <tr>
+                  <td>📉 Kerrokset irtoavat</td>
+                  <td style="font-family:'DM Mono',monospace; color:var(--warning);">Väärä lämpötila / veto</td>
+                  <td>Tarkista materiaaliprofiili, sulje ikkunat</td>
+                </tr>
+                <tr>
+                  <td>💧 Muovi vuotaa sivulle</td>
+                  <td style="font-family:'DM Mono',monospace; color:var(--warning);">Heatsink/nozzle ongelma</td>
+                  <td>Sammuta HETI, ilmoita pajamestarille</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="step-card" id="sc9">
+          <div class="step-header" onclick="toggleCard('sc9')">
+            <div class="step-badge ok">✓</div>
+            <div class="step-title">Viikoittainen huolto ja siivous</div>
+            <span class="step-arrow">▼</span>
+          </div>
+          <div class="step-body">
+            <p>Jokainen käyttäjä jättää laitteen siistimpänä kuin sen löysi. Purge-viivat, tukimateriaalit ja epäonnistuneet tulosteet kerätään <strong>niille varattuun jäteastiaan</strong> — ei roskiin eikä lattialle.</p>
+            <div class="callout tip">
+              <div class="callout-icon">🧹</div>
+              <p>Huolehdi myös PTFE-putken kunnosta ja akseleista. Öljyä Z-akseli kevyesti koneen oman huolto-ohjelman mukaan kerran kuussa. Raportoi naarmut teräslevyssä välittömästi.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- YHTEENVETO -->
+      <div style="margin-top:36px; background:linear-gradient(135deg, rgba(250,104,49,.08), rgba(229,83,74,.06)); border:1px solid rgba(250,104,49,.2); border-radius:16px; padding:28px 32px;">
+        <h3 style="font-size:18px; margin-bottom:16px;">📌 Muista aina</h3>
+        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:16px; font-size:14px; color:#CCC; line-height:1.7;">
+          <div>🧼 <strong>IPA ennen jokaista tulostusta</strong> — rasva pilaa tarttuvuuden</div>
+          <div>👁️ <strong>Valvo ensimmäinen kerros</strong> — se ratkaisee onnistumisen</div>
+          <div>⚡ <strong>Draft-asetus prototyypeille</strong> — ei viimeistelylaatua turhaan</div>
+          <div>🌀 <strong>Gyroid 15%</strong> riittää lähes aina täyttöasteeksi</div>
+          <div>📢 <strong>Raportoi jokainen vika</strong> — älä jätä ongelma seuraavalle</div>
+          <div>✨ <strong>Gemini + kamera</strong> = nopein tapa saada apua ongelmiin</div>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+</main>
+
+<script>
+// ── TOGGLES ──
+function toggleCard(id) {
+  const card = document.getElementById(id);
+  card.classList.toggle('open');
+}
+
+function setActive(el) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── CHECKLIST ──
+function toggleCheck(item) {
+  item.classList.toggle('checked');
+  const all = document.querySelectorAll('#checklist .check-item');
+  const done = document.querySelectorAll('#checklist .check-item.checked').length;
+  const pct = Math.round(done / all.length * 100);
+  document.getElementById('check-pct').textContent = pct + '%';
+  document.getElementById('pbar-fill').style.width = pct + '%';
+}
+
+// ── SCROLL PROGRESS ──
+window.addEventListener('scroll', () => {
+  const scroll = window.scrollY;
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('scroll-progress').style.width = (scroll / total * 100) + '%';
+  document.getElementById('back-top').classList.toggle('show', scroll > 400);
+});
+
+// ── SIDEBAR MOBILE ──
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ── ACTIVE NAV ON SCROLL ──
+const sections = document.querySelectorAll('section[id], div[id="lampotilat"], div[id="checklist-section"]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  document.querySelectorAll('.nav-item').forEach(item => {
+    const href = item.getAttribute('href')?.replace('#', '');
+    item.classList.toggle('active', href === current);
+  });
+});
+</script>
+</body>
+</html>
