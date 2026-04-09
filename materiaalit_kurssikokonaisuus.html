@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Materiaalit — Kvarkeista tulevaisuuteen · Metropolia AMK</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #05060a;
+  --deep: #0a0c14;
+  --panel: #0f1120;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: rgba(220,225,235,0.75);
+  --text-dim: rgba(220,225,235,0.35);
+  --white: #e8eaf0;
+
+  /* Material palette */
+  --quark:   #7c4dff;
+  --metal:   #e8a030;
+  --plastic: #00c4b4;
+  --earth:   #c4703c;
+  --organic: #5aab5a;
+  --comp:    #e84070;
+  --future:  #40b8ff;
+  --recycle: #80d060;
+
+  --r: 4px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── STAR CANVAS ── */
+#stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.6; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 52px;
+  background: rgba(5,6,10,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border2);
+  display: flex; align-items: center;
+  padding: 0 2rem; gap: 0.5rem;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem; letter-spacing: 0.15em;
+  color: var(--white); text-decoration: none;
+  white-space: nowrap;
+}
+.nav-logo span { color: var(--future); }
+.nav-links { display: flex; list-style: none; overflow-x: auto; scrollbar-width: none; gap: 0; }
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-links a {
+  display: block; padding: 0 0.75rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-dim); text-decoration: none;
+  transition: color 0.2s; white-space: nowrap; line-height: 52px;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-pill {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem;
+  padding: 0.25rem 0.65rem; border-radius: 20px;
+  text-decoration: none; white-space: nowrap;
+  border: 1px solid; transition: all 0.2s;
+}
+.nav-pill:hover { opacity: 0.8; }
+.pill-metal { color: var(--metal); border-color: rgba(232,160,48,0.4); }
+.pill-plastic { color: var(--plastic); border-color: rgba(0,196,180,0.4); }
+
+/* ── HERO ── */
+.hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 6rem 4rem 4rem;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 60% at 15% 80%, rgba(124,77,255,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 85% 20%, rgba(64,184,255,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(90,171,90,0.06) 0%, transparent 60%);
+}
+.hero-grid-overlay {
+	position: absolute;
+	inset: 0;
+	background-image: linear-gradient(rgba(124,77,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,77,255,0.04) 1px, transparent 1px);
+	background-size: 80px 80px;
+}
+
+/* Atom SVG decoration */
+.hero-atom {
+  position: absolute; right: 3rem; top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.06; pointer-events: none;
+  width: min(600px, 50vw); height: min(600px, 50vw);
+}
+
+.hero-content { position: relative; z-index: 1; max-width: 900px; }
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--quark); margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.hero-eyebrow::before {
+  content: ''; display: block; width: 40px; height: 1px; background: var(--quark);
+}
+
+h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(5rem, 13vw, 14rem);
+  line-height: 0.88; letter-spacing: 0.01em;
+  color: var(--white);
+  margin-bottom: 2rem;
+}
+h1 .accent-quark { color: var(--quark); }
+h1 .accent-future {
+	color: var(--future);
+	text-align: center;
+}
+
+.hero-sub {
+  font-family: 'Libre Baskerville', serif;
+  font-style: italic; font-size: clamp(1rem, 2vw, 1.35rem);
+  color: var(--text); max-width: 680px; line-height: 1.85;
+  margin-bottom: 3rem;
+}
+
+.hero-stats {
+  display: flex; gap: 3rem; flex-wrap: wrap;
+  border-top: 1px solid var(--border2); padding-top: 2rem;
+}
+.hstat strong {
+  display: block; font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.5rem; letter-spacing: 0.02em; line-height: 1;
+}
+.hstat span { font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* ── SECTION WRAPPERS ── */
+.sw { position: relative; z-index: 1; }
+.si { max-width: 1120px; margin: 0 auto; padding: 5rem 4rem; }
+
+/* ── DIVIDER ── */
+.div-full {
+  position: relative; z-index: 1;
+  border: none; height: 1px;
+  background: linear-gradient(to right, transparent, var(--border2), transparent);
+}
+.div-color {
+  height: 2px; border: none;
+  background: linear-gradient(to right, transparent 5%, var(--c, var(--quark)), transparent 95%);
+}
+
+/* ── SECTION HEADER ── */
+.snum {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--c, var(--quark)); margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.snum::before { content: ''; width: 20px; height: 1px; background: var(--c, var(--quark)); }
+
+h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 0.95; letter-spacing: 0.02em;
+  color: var(--white); margin-bottom: 1.75rem;
+}
+h3 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.15rem; color: var(--white);
+  margin-bottom: 0.6rem; margin-top: 2rem;
+  font-weight: 700;
+}
+h4 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--c, var(--quark)); margin-bottom: 0.4rem; margin-top: 1.25rem;
+}
+
+p { margin-bottom: 1rem; font-size: 0.93rem; }
+p:last-child { margin-bottom: 0; }
+strong { color: var(--white); font-weight: 500; }
+em { font-style: italic; color: var(--c, var(--quark)); }
+a { color: var(--c, var(--future)); text-underline-offset: 3px; }
+a:hover { opacity: 0.8; }
+
+.lead {
+  font-family: 'Libre Baskerville', serif;
+  font-style: italic; font-size: 1.1rem;
+  color: rgba(220,225,235,0.85); line-height: 1.85;
+  margin-bottom: 2.5rem;
+  border-left: 3px solid var(--c, var(--quark));
+  padding-left: 1.25rem;
+}
+
+/* ── MEGA TIMELINE ── */
+.mega-timeline {
+  position: relative; padding-left: 3rem;
+  margin-top: 2.5rem;
+}
+.mega-timeline::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+  background: linear-gradient(to bottom,
+    var(--quark) 0%, var(--future) 20%,
+    var(--metal) 40%, var(--earth) 55%,
+    var(--plastic) 70%, var(--organic) 80%,
+    var(--recycle) 90%, var(--future) 100%);
+}
+.mt-item {
+  position: relative; margin-bottom: 2.5rem;
+  padding-left: 1.5rem;
+}
+.mt-dot {
+  position: absolute; left: -3.375rem; top: 0.6rem;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--dc, var(--quark));
+  border: 2px solid var(--void);
+  box-shadow: 0 0 8px var(--dc, var(--quark));
+}
+.mt-era {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.1em;
+  color: var(--dc, var(--quark)); margin-bottom: 0.2rem;
+}
+.mt-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem; letter-spacing: 0.03em;
+  color: var(--white); margin-bottom: 0.4rem;
+}
+
+/* ── MATERIAL CARDS ── */
+.mat-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; margin-top: 2rem;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--r); overflow: hidden;
+}
+.mat-card {
+  background: var(--panel);
+  padding: 2rem 1.5rem;
+  position: relative; overflow: hidden;
+  transition: background 0.3s;
+  text-decoration: none;
+  display: block;
+}
+.mat-card:hover { background: rgba(255,255,255,0.03); }
+.mat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--mc, var(--quark));
+}
+.mat-icon { font-size: 2.2rem; margin-bottom: 1rem; display: block; line-height: 1; }
+.mat-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--mc, var(--quark)); margin-bottom: 0.35rem;
+}
+.mat-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem; letter-spacing: 0.03em;
+  color: var(--white); margin-bottom: 0.5rem; line-height: 1;
+}
+.mat-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.55; }
+
+/* ── FROM-TO SCALE ── */
+.scale-bar {
+  display: flex; align-items: stretch; height: 64px;
+  border-radius: var(--r); overflow: hidden;
+  margin: 2rem 0;
+}
+.scale-seg {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 2px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.05em; text-align: center;
+  color: rgba(255,255,255,0.85); padding: 0 4px;
+  transition: flex 0.4s;
+}
+.scale-seg:hover { flex: 2; }
+.scale-seg strong { font-size: 0.75rem; }
+
+/* ── CARDS GENERIC ── */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 1.5rem;
+}
+.card-color { border-top: 2px solid var(--c, var(--quark)); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
+.four-col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-top: 1.5rem; }
+
+/* ── TAG ── */
+.tag {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem;
+  padding: 0.15rem 0.5rem; border-radius: 2px;
+  letter-spacing: 0.07em; margin: 0.15rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text);
+}
+.tag-c { background: rgba(124,77,255,0.15); border-color: rgba(124,77,255,0.3); color: var(--quark); }
+.tag-m { background: rgba(232,160,48,0.15); border-color: rgba(232,160,48,0.3); color: var(--metal); }
+.tag-p { background: rgba(0,196,180,0.15); border-color: rgba(0,196,180,0.3); color: var(--plastic); }
+.tag-e { background: rgba(196,112,60,0.15); border-color: rgba(196,112,60,0.3); color: var(--earth); }
+.tag-o { background: rgba(90,171,90,0.15); border-color: rgba(90,171,90,0.3); color: var(--organic); }
+.tag-r { background: rgba(128,208,96,0.15); border-color: rgba(128,208,96,0.3); color: var(--recycle); }
+.tag-f { background: rgba(64,184,255,0.15); border-color: rgba(64,184,255,0.3); color: var(--future); }
+
+/* ── CALLOUT ── */
+.callout {
+  border-left: 3px solid var(--c, var(--quark));
+  background: rgba(255,255,255,0.03);
+  padding: 1.25rem 1.5rem; border-radius: 0 var(--r) var(--r) 0;
+  margin: 1.5rem 0; font-size: 0.9rem;
+}
+.callout-lbl {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--c, var(--quark)); margin-bottom: 0.35rem;
+}
+
+/* ── QUARK SECTION dark purple ── */
+.sw-quark { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,77,255,0.1) 0%, transparent 70%); }
+
+/* ── PERIOD TABLE TEASER ── */
+.ptable {
+  display: grid;
+  grid-template-columns: repeat(18, 1fr);
+  gap: 2px; margin: 2rem 0;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.pt-cell {
+  aspect-ratio: 1; border-radius: 2px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  font-size: 0.5rem; line-height: 1.2;
+  cursor: default; transition: transform 0.15s;
+  position: relative; overflow: hidden;
+}
+.pt-cell:hover { transform: scale(1.3); z-index: 10; }
+.pt-sym { font-size: 0.75rem; font-weight: 500; line-height: 1; }
+.pt-num { font-size: 0.4rem; opacity: 0.7; }
+.pt-empty { background: transparent; }
+.pt-alkali { background: rgba(232,64,112,0.25); color: #f080a0; border: 1px solid rgba(232,64,112,0.25); }
+.pt-alkearth { background: rgba(232,160,48,0.25); color: #f0c060; border: 1px solid rgba(232,160,48,0.25); }
+.pt-trans { background: rgba(64,184,255,0.2); color: #80c8f0; border: 1px solid rgba(64,184,255,0.2); }
+.pt-posttrans { background: rgba(128,208,96,0.2); color: #90d070; border: 1px solid rgba(128,208,96,0.2); }
+.pt-metalloid { background: rgba(0,196,180,0.2); color: #50d0c0; border: 1px solid rgba(0,196,180,0.2); }
+.pt-nonmetal { background: rgba(90,171,90,0.25); color: #80c880; border: 1px solid rgba(90,171,90,0.25); }
+.pt-halogen { background: rgba(196,112,60,0.25); color: #e09050; border: 1px solid rgba(196,112,60,0.25); }
+.pt-noble { background: rgba(124,77,255,0.25); color: #a080e0; border: 1px solid rgba(124,77,255,0.25); }
+.pt-lan { background: rgba(200,100,200,0.2); color: #d090d0; border: 1px solid rgba(200,100,200,0.2); }
+.pt-act { background: rgba(255,100,60,0.2); color: #f09070; border: 1px solid rgba(255,100,60,0.2); }
+.pt-label { grid-column: span 2; display: flex; align-items: center; justify-content: center; font-size: 0.45rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ── TECHNIQUE CARDS ── */
+.tech-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: var(--r); overflow: hidden;
+  margin-top: 2rem;
+}
+.tech-card {
+  background: var(--panel); padding: 1.75rem 1.5rem;
+  position: relative;
+}
+.tech-card::after {
+  content: ''; position: absolute; top: 0; left: 0; width: 2px; bottom: 0;
+  background: var(--tc, var(--metal));
+}
+.tech-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+.tech-name {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem;
+  letter-spacing: 0.05em; color: var(--white); margin-bottom: 0.4rem;
+}
+.tech-mat { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; color: var(--tc, var(--metal)); letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+
+/* ── RECYCLE CYCLE ── */
+.cycle-vis {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; flex-wrap: wrap; margin: 2rem 0;
+}
+.cycle-node {
+  text-align: center; padding: 1.25rem 1rem;
+  background: var(--panel); border: 1px solid var(--border2);
+  border-radius: var(--r); min-width: 110px; position: relative;
+  flex: 1; max-width: 140px;
+}
+.cycle-arrow {
+  font-size: 1.2rem; color: var(--recycle); padding: 0 0.25rem;
+  opacity: 0.6; flex-shrink: 0;
+}
+.cn-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+.cn-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--recycle); }
+
+/* ── FREQUENCY FUTURE ── */
+.freq-vis {
+  display: flex; align-items: flex-end; gap: 3px;
+  height: 120px; margin: 2rem 0; padding: 0 1rem;
+}
+.freq-bar {
+  flex: 1; border-radius: 2px 2px 0 0;
+  background: linear-gradient(to top, var(--future), rgba(64,184,255,0.3));
+  min-height: 8px; transition: height 0.5s ease;
+  cursor: default;
+}
+.freq-bar:hover { background: linear-gradient(to top, var(--quark), rgba(124,77,255,0.3)); }
+.freq-labels {
+  display: flex; justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem;
+  color: var(--text-dim); padding: 0.4rem 1rem 0; letter-spacing: 0.05em;
+}
+
+/* ── COURSE LINKS ── */
+.course-links {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem; margin-top: 2rem;
+}
+.course-link-card {
+  display: block; text-decoration: none;
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 2rem;
+  position: relative; overflow: hidden;
+  transition: border-color 0.3s, transform 0.2s;
+}
+.course-link-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
+.course-link-card::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: var(--lc, var(--quark));
+}
+.clc-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+.clc-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--lc, var(--quark)); margin-bottom: 0.3rem; }
+.clc-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.02em; color: var(--white); margin-bottom: 0.5rem; }
+.clc-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.55; }
+.clc-arrow { position: absolute; right: 1.5rem; top: 1.5rem; color: var(--lc, var(--quark)); font-size: 1.2rem; opacity: 0.5; }
+
+/* ── BIG QUOTE ── */
+.big-q {
+  font-family: 'Libre Baskerville', serif;
+  font-style: italic;
+  font-size: clamp(1.3rem, 3vw, 2.2rem);
+  line-height: 1.5; color: var(--white);
+  text-align: center; max-width: 820px;
+  margin: 3rem auto 1rem;
+}
+.big-q-attr {
+  text-align: center; font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem; color: var(--text-dim); letter-spacing: 0.12em; text-transform: uppercase;
+}
+
+/* ── COMPARISON TABLE ── */
+.cmp-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.82rem; margin: 1.5rem 0;
+}
+.cmp-table th {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.7rem 1rem; text-align: left;
+  background: rgba(255,255,255,0.04);
+  color: var(--text-dim); border-bottom: 1px solid var(--border2);
+}
+.cmp-table td {
+  padding: 0.7rem 1rem; border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.cmp-table tr:last-child td { border-bottom: none; }
+.cmp-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* ── HIGHLIGHT BOX ── */
+.hbox {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 2rem;
+  margin: 1.5rem 0;
+}
+
+/* ── PROCESS STEPS ── */
+.psteps { margin-top: 1.5rem; }
+.pstep {
+  display: grid; grid-template-columns: 44px 1fr;
+  gap: 1rem; margin-bottom: 1.25rem;
+}
+.psn {
+  width: 44px; height: 44px; border-radius: var(--r);
+  background: var(--c, var(--quark));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--void);
+  flex-shrink: 0;
+}
+.pst { font-family: 'Libre Baskerville', serif; font-size: 0.95rem; color: var(--white); margin-bottom: 0.2rem; font-weight: 700; }
+.psd { font-size: 0.85rem; }
+
+/* ── BAR ROWS ── */
+.bar-row {
+  display: flex; align-items: center; gap: 1rem;
+  margin-bottom: 0.5rem; font-size: 0.8rem;
+}
+.bar-lbl { min-width: 90px; color: var(--text-dim); font-size: 0.72rem; }
+.bar-track { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; }
+.bar-val { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--text-dim); min-width: 36px; text-align: right; }
+
+/* ── SCENARIO BOXES ── */
+.scenario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
+.scenario-card {
+  background: var(--panel); border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 2rem;
+  position: relative; overflow: hidden;
+}
+.sc-year {
+  font-family: 'Bebas Neue', sans-serif; font-size: 3rem;
+  line-height: 1; letter-spacing: 0.02em; margin-bottom: 0.5rem;
+}
+.sc-title { font-size: 0.8rem; color: var(--text-dim); font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+
+/* ── FOOTER ── */
+footer {
+  position: relative; z-index: 1;
+  background: var(--deep);
+  border-top: 1px solid var(--border2);
+  padding: 3rem 4rem;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  flex-wrap: wrap; gap: 2rem;
+  font-size: 0.78rem; color: var(--text-dim);
+}
+.footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.05em; color: var(--white); }
+.footer-logo span { color: var(--future); }
+.footer-links { display: flex; flex-direction: column; gap: 0.4rem; }
+.footer-links a { color: var(--text-dim); text-decoration: none; font-size: 0.75rem; transition: color 0.2s; }
+.footer-links a:hover { color: var(--white); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .si { padding: 4rem 1.5rem; }
+  .hero { padding: 5rem 1.5rem 3rem; }
+  .mat-grid { grid-template-columns: repeat(2, 1fr); }
+  .two-col, .three-col, .four-col, .tech-grid, .course-links, .scenario-grid { grid-template-columns: 1fr; }
+  footer { padding: 2rem 1.5rem; }
+  nav { padding: 0 1rem; }
+  .hero-atom { display: none; }
+  .ptable { font-size: 0.35rem; gap: 1px; }
+  .pt-sym { font-size: 0.5rem; }
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-content > * { animation: fadeUp 0.9s ease both; }
+.hero-content > *:nth-child(1) { animation-delay: 0.05s; }
+.hero-content > *:nth-child(2) { animation-delay: 0.15s; }
+.hero-content > *:nth-child(3) { animation-delay: 0.28s; }
+.hero-content > *:nth-child(4) {
+	animation-delay: 0.42s;
+	text-align: center;
+}
+
+@keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:0.8} }
+.pt-cell { animation: pulse 4s ease-in-out infinite; }
+.pt-cell:nth-child(2n) { animation-delay: 0.5s; }
+.pt-cell:nth-child(3n) { animation-delay: 1.2s; }
+.pt-cell:nth-child(5n) { animation-delay: 2.1s; }
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <a class="nav-logo" href="#top">MAT<span>ERIA</span></a>
+  <ul class="nav-links">
+    <li><a href="#kvarkit">Kvarkit</a></li>
+    <li><a href="#historia">Historia</a></li>
+    <li><a href="#materiaalit">Materiaalit</a></li>
+    <li><a href="#metallit">Metallit</a></li>
+    <li><a href="#muovit">Muovit</a></li>
+    <li><a href="#maa">Maamateriaalit</a></li>
+    <li><a href="#orgaaniset">Orgaaniset</a></li>
+    <li><a href="#komposiitit">Komposiitit</a></li>
+    <li><a href="#valmistus">Valmistus</a></li>
+    <li><a href="#kierratys">Kierrätys</a></li>
+    <li><a href="#skenaario">Skenaario</a></li>
+    <li><a href="#tulevaisuus">Tulevaisuus</a></li>
+  </ul>
+  <div style="display:flex;gap:0.5rem;flex-shrink:0">
+	<a class="nav-pill pill-lasi" href="metropolia_lasin_maailma.html" target="_blank">Lasi →</a>
+	<a class="nav-pill pill-keram" href="keramiikka.html" target="_blank">Keramiikka →</a>
+    <a class="nav-pill pill-metal" href="kiridashi_metallurgia.html" target="_blank">Metallit →</a>
+    <a class="nav-pill pill-plastic" href="muovit_muotoilu.html" target="_blank">Muovit →</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<div id="top" class="hero sw">
+  <div class="hero-glow"></div>
+  <div class="hero-grid-overlay"></div>
+  <svg class="hero-atom" viewBox="0 0 400 400" fill="none">
+    <circle cx="200" cy="200" r="12" fill="white"/>
+    <ellipse cx="200" cy="200" rx="180" ry="60" stroke="white" stroke-width="1.5"/>
+    <ellipse cx="200" cy="200" rx="180" ry="60" stroke="white" stroke-width="1.5" transform="rotate(60 200 200)"/>
+    <ellipse cx="200" cy="200" rx="180" ry="60" stroke="white" stroke-width="1.5" transform="rotate(120 200 200)"/>
+    <circle cx="380" cy="200" r="6" fill="white"/>
+    <circle cx="110" cy="96" r="6" fill="white"/>
+    <circle cx="110" cy="304" r="6" fill="white"/>
+  </svg>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Metropolia AMK · Teollinen muotoilu · 1. vuosikurssi · Materiaali- ja valmistustekniikka</div>
+    <h1><span class="accent-quark">MATERI</span><span class="accent-future">AALIT</span></h1>
+    <p class="hero-sub"><img src="materialsmanufTiny2.png" width="920" height="452" alt=""/></p>
+    <p class="hero-sub"> Kvarkeista tulevaisuuden värähtelytaajuuksiin — kattava katsaus kaikkeen, mistä maailma on tehty ja miten muotoilija hallitsee materiaalien logiikan osana suunnitteluprosessia. </p>
+<p class="hero-sub">&nbsp;</p>
+<p class="hero-sub">&nbsp;</p>
+<div class="hero-stats">
+      <div class="hstat"><strong style="color:var(--quark)">10⁻¹⁸</strong><span>Metriä — kvarkin koko</span></div>
+      <div class="hstat"><strong style="color:var(--metal)">118</strong><span>Tunnettua alkuainetta</span></div>
+      <div class="hstat"><strong style="color:var(--plastic)">50 000+</strong><span>Muovilaatua</span></div>
+      <div class="hstat"><strong style="color:var(--organic)">3,8 Mrd</strong><span>Vuotta elämää maapallolla</span></div>
+      <div class="hstat"><strong style="color:var(--future)">2100</strong><span>Visiovuosi</span></div>
+    </div>
+  </div>
+</div>
+
+<hr class="div-full">
+
+<!-- ══════════════════════════════════════
+     01  KVARKEISTA ATOMEIHIN
+══════════════════════════════════════ -->
+<div id="kvarkit" class="sw sw-quark">
+<div class="si" style="--c:var(--quark)">
+  <div class="snum">01 · Materian perusteet</div>
+  <h2>KVARKEISTA<br>ATOMEIHIN</h2>
+  <p class="lead">Kaikki materiaali — kiridashi-veitsen teräs, HDPE-tonttikaivo, ihmisen luu — koostuu lopulta samoista kvarkki-elektroni-yhdistelmistä. Tämä on muotoilijan tiedostettava että osaa tehdä oikean perustellun valinnan.</p>
+
+  <div class="two-col">
+    <div>
+      <div class="psteps" style="--c:var(--quark)">
+        <div class="pstep"><div class="psn">1</div><div><div class="pst">Kvarkit — materian pienin tunnettu rakennuspalikka</div><p class="psd">Protonit ja neutronit koostuvat kolmesta kvarkista. Kvarkki on noin 10⁻¹⁸ m — miljoona kertaa pienempi kuin atomi. Niitä ei voida erottaa toisistaan (confinement). Linkit: <a href="https://fi.wikipedia.org/wiki/Kvarkki" target="_blank">Wikipedia: Kvarkki</a></p></div></div>
+        <div class="pstep"><div class="psn">2</div><div><div class="pst">Protonit, neutronit, elektronit — atomirakenne</div><p class="psd">Protoni (+) ja neutroni muodostavat ytimen, elektroni (-) kiertää ytimen ympärillä pilvikerroksissa — ei radoilla! Elektronien määrä = alkuaineen kemiallinen käyttäytyminen. <a href="https://fi.wikipedia.org/wiki/Atomi" target="_blank">Wikipedia: Atomi</a></p></div></div>
+        <div class="pstep"><div class="psn">3</div><div><div class="pst">Sidokset — miksi materiaali on mitä on</div><p class="psd"><strong>Metallinen sidos</strong>: elektronimeri → johtavuus, muovattavuus. <strong>Kovalenttinen</strong>: jaetut elektronit → timantti, polymeerit. <strong>Ioninen</strong>: varausero → keramiikka, suola. <strong>van der Waals</strong>: heikko vetovoimia → grafiitti, muovikalvot. <a href="https://fi.wikipedia.org/wiki/Perusvuorovaikutus" target="_blank">Perusvuorovaikutus</a></p></div></div>
+        <div class="pstep"><div class="psn">4</div><div><div class="pst">Kiderakenne — atomien järjestys materiaalin ominaisuutena</div><p class="psd">Millä tavoin atomit pakkautuvat toistensa viereen (BCC, FCC, HCP) — se määrää kiinteyden, sitkeyden, liukumispinnat, optisen käyttäytymisen. Lämpökäsittely muuttaa kiderakennetta → muuttaa ominaisuuksia. <a href="https://fi.wikipedia.org/wiki/Faasimuutos" target="_blank">Faasimuutos</a></p></div></div>
+        <div class="pstep"><div class="psn">5</div><div><div class="pst">Värähtelytaajuudet — materian "allekirjoitus"</div><p class="psd">Jokaisella atomisidoksella on oma värähtelytaajuutensa — infrapunaspektroskooppi lukee tämän "allekirjoituksen" ja tunnistaa materiaalin. Tulevaisuudessa <strong>taajuuksien säätäminen</strong> tarkoittaa ominaisuuksien ohjaamista atomitasolta. Kvanttidot, metamateriaalit ja fotoninen kide — kaikki perustuvat tähän.</p></div></div>
+      </div>
+    </div>
+    <div>
+      <h3>Jaksollinen järjestelmä — muotoilijan kartta</h3>
+      <p style="font-size:0.82rem;margin-bottom:1rem">Jokainen alkuaine on paikallaan syystä — tiheys kasvaa alaspäin, reaktiivisuus vähenee oikealle, johtavuus kulkee ryhmän 11 kautta. Väri kertoo materiaalikategorian.</p>
+
+      <!-- Simplified periodic table -->
+      <div class="ptable">
+        <!-- Row 1 -->
+        <div class="pt-cell pt-nonmetal"><div class="pt-num">1</div><div class="pt-sym">H</div></div>
+        <div class="pt-cell pt-empty" style="grid-column:span 16"></div>
+        <div class="pt-cell pt-noble"><div class="pt-num">2</div><div class="pt-sym">He</div></div>
+        <!-- Row 2 -->
+        <div class="pt-cell pt-alkali"><div class="pt-num">3</div><div class="pt-sym">Li</div></div>
+        <div class="pt-cell pt-alkearth"><div class="pt-num">4</div><div class="pt-sym">Be</div></div>
+        <div class="pt-cell pt-empty" style="grid-column:span 10"></div>
+        <div class="pt-cell pt-metalloid"><div class="pt-num">5</div><div class="pt-sym">B</div></div>
+        <div class="pt-cell pt-nonmetal"><div class="pt-num">6</div><div class="pt-sym">C</div></div>
+        <div class="pt-cell pt-nonmetal"><div class="pt-num">7</div><div class="pt-sym">N</div></div>
+        <div class="pt-cell pt-nonmetal"><div class="pt-num">8</div><div class="pt-sym">O</div></div>
+        <div class="pt-cell pt-halogen"><div class="pt-num">9</div><div class="pt-sym">F</div></div>
+        <div class="pt-cell pt-noble"><div class="pt-num">10</div><div class="pt-sym">Ne</div></div>
+        <!-- Row 3 -->
+        <div class="pt-cell pt-alkali"><div class="pt-num">11</div><div class="pt-sym">Na</div></div>
+        <div class="pt-cell pt-alkearth"><div class="pt-num">12</div><div class="pt-sym">Mg</div></div>
+        <div class="pt-cell pt-empty" style="grid-column:span 10"></div>
+        <div class="pt-cell pt-posttrans"><div class="pt-num">13</div><div class="pt-sym">Al</div></div>
+        <div class="pt-cell pt-metalloid"><div class="pt-num">14</div><div class="pt-sym">Si</div></div>
+        <div class="pt-cell pt-nonmetal"><div class="pt-num">15</div><div class="pt-sym">P</div></div>
+        <div class="pt-cell pt-nonmetal"><div class="pt-num">16</div><div class="pt-sym">S</div></div>
+        <div class="pt-cell pt-halogen"><div class="pt-num">17</div><div class="pt-sym">Cl</div></div>
+        <div class="pt-cell pt-noble"><div class="pt-num">18</div><div class="pt-sym">Ar</div></div>
+        <!-- Row 4 -->
+        <div class="pt-cell pt-alkali"><div class="pt-num">19</div><div class="pt-sym">K</div></div>
+        <div class="pt-cell pt-alkearth"><div class="pt-num">20</div><div class="pt-sym">Ca</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-num">21</div><div class="pt-sym">Sc</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-num">22</div><div class="pt-sym">Ti</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-num">23</div><div class="pt-sym">V</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-num">24</div><div class="pt-sym">Cr</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-num">25</div><div class="pt-sym">Mn</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-num">26</div><div class="pt-sym">Fe</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-num">27</div><div class="pt-sym">Co</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-num">28</div><div class="pt-sym">Ni</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-num">29</div><div class="pt-sym">Cu</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-num">30</div><div class="pt-sym">Zn</div></div>
+        <div class="pt-cell pt-posttrans"><div class="pt-num">31</div><div class="pt-sym">Ga</div></div>
+        <div class="pt-cell pt-metalloid"><div class="pt-num">32</div><div class="pt-sym">Ge</div></div>
+        <div class="pt-cell pt-metalloid"><div class="pt-num">33</div><div class="pt-sym">As</div></div>
+        <div class="pt-cell pt-nonmetal"><div class="pt-num">34</div><div class="pt-sym">Se</div></div>
+        <div class="pt-cell pt-halogen"><div class="pt-num">35</div><div class="pt-sym">Br</div></div>
+        <div class="pt-cell pt-noble"><div class="pt-num">36</div><div class="pt-sym">Kr</div></div>
+        <!-- Row 5 abridged -->
+        <div class="pt-cell pt-alkali"><div class="pt-sym">Rb</div></div>
+        <div class="pt-cell pt-alkearth"><div class="pt-sym">Sr</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Y</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Zr</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Nb</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Mo</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Tc</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Ru</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Rh</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Pd</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Ag</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Cd</div></div>
+        <div class="pt-cell pt-posttrans"><div class="pt-sym">In</div></div>
+        <div class="pt-cell pt-posttrans"><div class="pt-sym">Sn</div></div>
+        <div class="pt-cell pt-metalloid"><div class="pt-sym">Sb</div></div>
+        <div class="pt-cell pt-metalloid"><div class="pt-sym">Te</div></div>
+        <div class="pt-cell pt-halogen"><div class="pt-sym">I</div></div>
+        <div class="pt-cell pt-noble"><div class="pt-sym">Xe</div></div>
+        <!-- Row 6 -->
+        <div class="pt-cell pt-alkali"><div class="pt-sym">Cs</div></div>
+        <div class="pt-cell pt-alkearth"><div class="pt-sym">Ba</div></div>
+        <div class="pt-cell pt-lan" style="font-size:0.4rem">57–71</div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Hf</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Ta</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">W</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Re</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Os</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Ir</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Pt</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Au</div></div>
+        <div class="pt-cell pt-trans"><div class="pt-sym">Hg</div></div>
+        <div class="pt-cell pt-posttrans"><div class="pt-sym">Tl</div></div>
+        <div class="pt-cell pt-posttrans"><div class="pt-sym">Pb</div></div>
+        <div class="pt-cell pt-posttrans"><div class="pt-sym">Bi</div></div>
+        <div class="pt-cell pt-metalloid"><div class="pt-sym">Po</div></div>
+        <div class="pt-cell pt-halogen"><div class="pt-sym">At</div></div>
+        <div class="pt-cell pt-noble"><div class="pt-sym">Rn</div></div>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1rem">
+        <span class="tag" style="background:rgba(232,64,112,0.15);color:#f080a0;border-color:rgba(232,64,112,0.3)">● Alkalimetallit</span>
+        <span class="tag" style="background:rgba(232,160,48,0.15);color:#f0c060;border-color:rgba(232,160,48,0.3)">● Maa-alkalit</span>
+        <span class="tag" style="background:rgba(64,184,255,0.15);color:#80c8f0;border-color:rgba(64,184,255,0.3)">● Siirtymämetallit</span>
+        <span class="tag" style="background:rgba(128,208,96,0.15);color:#90d070;border-color:rgba(128,208,96,0.3)">● Post-transition</span>
+        <span class="tag" style="background:rgba(0,196,180,0.15);color:#50d0c0;border-color:rgba(0,196,180,0.3)">● Puolimetallit</span>
+        <span class="tag" style="background:rgba(90,171,90,0.15);color:#80c880;border-color:rgba(90,171,90,0.3)">● Epämetallit</span>
+        <span class="tag" style="background:rgba(196,112,60,0.15);color:#e09050;border-color:rgba(196,112,60,0.3)">● Halogeenit</span>
+        <span class="tag" style="background:rgba(124,77,255,0.15);color:#a080e0;border-color:rgba(124,77,255,0.3)">● Jalokaasuet</span>
+      </div>
+
+      <div class="callout" style="--c:var(--quark);margin-top:1.5rem">
+        <div class="callout-lbl">Muotoilijan logiikka jaksollisessa järjestelmässä</div>
+        <strong>Tiheys kasvaa alaspäin</strong> — keveys löytyy ylärivistä (Li, Al, Ti). <strong>Johtavuus</strong> huipussaan ryhmässä 11 (Cu, Ag, Au). <strong>Kovuus</strong> siirtymämetalleissa. <strong>Orgaanisuus</strong> syntyy C+H+O+N yhdistelmistä. Neljä yksinkertaista sääntöä kattavat 90 % materiaalivalinnoista.
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="div-color" style="--c:var(--quark)">
+
+<!-- ══════════════════════════════════════
+     02  HISTORIA
+══════════════════════════════════════ -->
+<div id="historia" class="sw">
+<div class="si" style="--c:var(--future)">
+  <div class="snum">02 · Historia</div>
+  <h2>MATERIAN<br>TARINA</h2>
+  <p class="lead">13,8 miljardia vuotta sitten tapahtui jotain — ja siitä kaikki materiaali on peräisin. Ihmiskunnan historia on suuressa mittakaavassa tarina siitä, miten olemme oppineet hallitsemaan materian rakenteita yhä hienosyisemmin.</p>
+
+  <div class="two-col">
+    <div>
+      <div class="mega-timeline">
+        <div class="mt-item"><div class="mt-dot" style="--dc:var(--quark)"></div><div class="mt-era">13,8 miljardia vuotta sitten</div><div class="mt-title">ALKURÄJÄHDYS</div><p style="font-size:0.85rem">Energia tiivistyi kvarkeiksi, kvarkit protoneiksi ja neutroneiksi. 380 000 v. myöhemmin ensimmäiset atomit: vety (H) ja helium (He). Litiumia hieman. Kaikki muu syntyi myöhemmin tähdissä.</p></div>
+        <div class="mt-item"><div class="mt-dot" style="--dc:var(--future)"></div><div class="mt-era">13,5–4,5 mrd v.</div><div class="mt-title">TÄHTIEN ALKEEMIAT</div><p style="font-size:0.85rem">Tähtifuusio "poltaa" vetyä heliumiksi → hiileksi → hapeksi → raudaksi. Supernovissa syntyy raskaita alkuaineita kultaan (Au) ja uraaniin (U) saakka. Me olemme kirjaimellisesti tähtien tuhkaa.</p></div>
+        <div class="mt-item"><div class="mt-dot" style="--dc:var(--earth)"></div><div class="mt-era">3,3 miljoonaa vuotta sitten</div><div class="mt-title">KIVI — ENSIMMÄINEN TYÖKALU</div><p style="font-size:0.85rem">Homo habilis muovasi ensimmäiset kiviesineet. <em>Litteä sirpale + teräväksi lyötty reuna</em> = ensimmäinen materiaalinen suunnittelupäätös. Pii (Si) hallitsi maailmaa.</p></div>
+        <div class="mt-item"><div class="mt-dot" style="--dc:var(--organic)"></div><div class="mt-era">1,5 milj. — 10 000 eKr.</div><div class="mt-title">ORGAANISET MATERIAALIT HALLITSEVAT</div><p style="font-size:0.85rem">Puu, nahka, luu, kasvikuidut, kasvikumi. Kaikki C-H-O-N -pohjaisia. Ihminen oppi hallitsemaan tulta → biomateriaalien muokkaus kuumentamalla (keramiikka, lasi).</p></div>
+        <div class="mt-item"><div class="mt-dot" style="--dc:var(--metal)"></div><div class="mt-era">5000 eKr. — 1 200 eKr.</div><div class="mt-title">KUPARI → PRONSSI → RAUTA</div><p style="font-size:0.85rem">Metallien tarina alkoi kuparista, siirtyi pronssiin (Cu+Sn seoksen voima) ja kulminoitui rautakaudella. Jokainen siirtymä mursi valtarakenteita — paremman metallin hallitsijakansa voitti.</p></div>
+        <div class="mt-item"><div class="mt-dot" style="--dc:var(--metal)"></div><div class="mt-era">300 eKr. — 1700 jKr.</div><div class="mt-title">TERÄKSEN TAITO</div><p style="font-size:0.85rem">Intian wootz-teräs, Japanin tamahagane — käsityöläiset hallitsivat hiilen ja raudan yhdistelmää intuitiivisesti vuosisatoja ennen kuin metallurgia tieteenä syntyi. Damaskoksen teräs on nanoteknologiaa ennen nanoa.</p></div>
+        <div class="mt-item"><div class="mt-dot" style="--dc:var(--comp)"></div><div class="mt-era">1839 — 1939</div><div class="mt-title">SYNTEETTISTEN MATERIAALIEN SYNTYMÄ</div><p style="font-size:0.85rem">Goodyear vulkanoi kumin (1839), Baekeland syntetisoi bakeliittia (1907), Bessemer mullisti teräksentuotannon. DuPont kehitti nylonin (1935). Polttomoottori, sähkö ja teollisuus yhdistyivät — materiaalituotanto skaalautui sadoista tuhansista miljardeihin.</p></div>
+        <div class="mt-item"><div class="mt-dot" style="--dc:var(--plastic)"></div><div class="mt-era">1950–2000</div><div class="mt-title">MUOVIKAUSI JA MASSATUOTANTO</div><p style="font-size:0.85rem">PE, PP, PET, ABS, PC — muovi mahdollisti muodon vapauden. Eamesin tuoli, Aarnion pallotooli, Tupperware. Hinta romahti, kulutus räjähti. Tyynenmeren muoviläjä löydettiin 1997.</p></div>
+        <div class="mt-item"><div class="mt-dot" style="--dc:var(--recycle)"></div><div class="mt-era">2000 → nyt</div><div class="mt-title">KRIISI JA MURROS</div><p style="font-size:0.85rem">Lineaarinen talous osoittautui kestämättömäksi. Mikromuovit ihmisen veressä, ilmastokriisi, kriittisten raaka-aineiden ehtymisuhat. <strong>Kiertotalous</strong> ei ole vaihtoehto — se on välttämättömyys.</p></div>
+        <div class="mt-item"><div class="mt-dot" style="--dc:var(--future)"></div><div class="mt-era">2030–2100</div><div class="mt-title">TULEVAISUUS: MATERIAALIT OHJELMOITUINA</div><p style="font-size:0.85rem">AI suunnittelee polymeerit molekyylitasolta, 4D-tulostus luo muotoaan muuttavia rakenteita, kvanttimateriaaleissa taajuus on muoto. Avaruuslouhinta alkaa. Fusioreaktori muuttaa energiamatriisin.</p></div>
+      </div>
+    </div>
+    <div>
+      <h3>Materiaalien aikakaaret — muotoilun fokus</h3>
+      <table class="cmp-table">
+        <tr><th>Aikakausi</th><th>Hallitseva materiaali</th><th>Muotoilun fokus</th></tr>
+        <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-dim)">Esihistoria</td><td><span class="tag tag-e">Kivi</span><span class="tag tag-o">Puu</span><span class="tag tag-o">Luu</span></td><td style="font-size:0.82rem">Selviytyminen, perustyökalut</td></tr>
+        <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-dim)">Kivikaudesta rautakauteen</td><td><span class="tag tag-e">Savi</span><span class="tag tag-m">Kupari</span><span class="tag tag-m">Pronssi</span></td><td style="font-size:0.82rem">Aseistus, maatalous, kaupankäynti</td></tr>
+        <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-dim)">Rautakausi—1800-luku</td><td><span class="tag tag-m">Rauta</span><span class="tag tag-m">Teräs</span><span class="tag tag-o">Puu</span></td><td style="font-size:0.82rem">Rakentaminen, koneet, laivanrakennus</td></tr>
+        <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-dim)">Teoll. vallankumous</td><td><span class="tag tag-m">Teräs</span><span class="tag tag-m">Valurauta</span><span class="tag tag-e">Betoni</span></td><td style="font-size:0.82rem">Massatuotanto, mekaniikka</td></tr>
+        <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-dim)">1950–1990</td><td><span class="tag tag-p">PE, PP, ABS</span><span class="tag tag-m">Al</span></td><td style="font-size:0.82rem">Muodon vapaus, halvat kulutustuotteet</td></tr>
+        <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-dim)">1990–2020</td><td><span class="tag tag-c">Komposiitit</span><span class="tag tag-p">Tekniset muovit</span></td><td style="font-size:0.82rem">Suorituskyky, digitalisaatio</td></tr>
+        <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-dim)">2020 →</td><td><span class="tag tag-r">Biopohjaiset</span><span class="tag tag-f">Älykäät</span></td><td style="font-size:0.82rem">Vastuullisuus, elinkaari, kierto</td></tr>
+      </table>
+
+      <h3>Kriittiset raaka-aineet — EU:n lista</h3>
+      <p style="font-size:0.85rem">Aineet joilla suuri taloudellinen merkitys mutta saatavuusriski. Teollisen muotoilijan on tunnettava nämä.</p>
+      <div class="bar-row"><div class="bar-lbl">Neodyymi (Nd)</div><div class="bar-track"><div class="bar-fill" style="width:95%;background:var(--comp)"></div></div><div class="bar-val">90% Kiina</div></div>
+      <div class="bar-row"><div class="bar-lbl">Koboltti (Co)</div><div class="bar-track"><div class="bar-fill" style="width:85%;background:var(--comp)"></div></div><div class="bar-val">70% Kongo</div></div>
+      <div class="bar-row"><div class="bar-lbl">Litium (Li)</div><div class="bar-track"><div class="bar-fill" style="width:70%;background:var(--metal)"></div></div><div class="bar-val">Kasvava</div></div>
+      <div class="bar-row"><div class="bar-lbl">Fosfori (P)</div><div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--organic)"></div></div><div class="bar-val">Rajallinen</div></div>
+      <div class="bar-row"><div class="bar-lbl">Helium (He)</div><div class="bar-track"><div class="bar-fill" style="width:45%;background:var(--quark)"></div></div><div class="bar-val">Pakenee</div></div>
+      <div class="bar-row"><div class="bar-lbl">Platina (Pt)</div><div class="bar-track"><div class="bar-fill" style="width:35%;background:var(--future)"></div></div><div class="bar-val">Harvinainen</div></div>
+
+      <div class="callout" style="--c:var(--future);margin-top:2rem">
+        <div class="callout-lbl">Avaruuslouhinta — tulevaisuuden ratkaisu?</div>
+        Yksi 500 m metalliasteroidi sisältää enemmän platinaa kuin maapallolta on koskaan louhittu. Kuu sisältää He-3:a — potentiaalinen fuusiopolttoaine. NASA:n Artemis-ohjelma ja yksityiset yritykset (AstroForge, Planetary Resources) tekevät tästä totta 2030-luvulla. <a href="https://www.youtube.com/watch?v=q8aqVh-LJYA" target="_blank">Lunar Treasures →</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="div-color" style="--c:var(--future)">
+
+<!-- ══════════════════════════════════════
+     03  MATERIAALIKATEGORIAT
+══════════════════════════════════════ -->
+<div id="materiaalit" class="sw">
+<div class="si">
+  <div class="snum" style="--c:var(--white)">03 · Kaikki materiaalit</div>
+  <h2>MATERIAALIT<br>RYHMITTÄIN</h2>
+  <p class="lead">Ihminen käyttää kuutta suurta materiaalikategoriaa — ja niiden yhdistelmiä. Jokainen kategoria on oma maailmansa, omine fysikaalisine lakineen.</p>
+
+  <div class="mat-grid">
+    <a class="mat-card" href="kiridashi_metallurgia.html" target="_blank" style="--mc:var(--metal)">
+      <span class="mat-icon">⚙️</span>
+      <div class="mat-label">Kategoria 01</div>
+      <div class="mat-name">Metallit</div>
+      <p class="mat-desc">Kiderakenteinen, johtava, muovattava. BCC/FCC/HCP-hila. Lämpökäsittely muuttaa ominaisuuksia. Fe, Al, Cu, Ti, Ni ja 80+ muuta.</p>
+      <div style="margin-top:0.75rem"><span class="tag tag-m">teräs</span><span class="tag tag-m">alumiini</span><span class="tag tag-m">titaani</span><span class="tag tag-m">kupari</span></div>
+      <div style="margin-top:0.75rem;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--metal)">→ Avaa Kiridashi-sivu</div>
+    </a>
+    <a class="mat-card" href="muovit_muotoilu.html" target="_blank" style="--mc:var(--plastic)">
+      <span class="mat-icon">🔬</span>
+      <div class="mat-label">Kategoria 02</div>
+      <div class="mat-name">Polymeerit</div>
+      <p class="mat-desc">Hiiliketjut — termoplastit, termosetit, elastomeerit. 50 000+ laadut. Keveys + muodon vapaus. Elintarvikkeista avaruuteen.</p>
+      <div style="margin-top:0.75rem"><span class="tag tag-p">PE</span><span class="tag tag-p">PP</span><span class="tag tag-p">ABS</span><span class="tag tag-p">PEEK</span><span class="tag tag-p">PHA</span></div>
+      <div style="margin-top:0.75rem;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--plastic)">→ Avaa Muovit-sivu</div>
+    </a>
+    <div class="mat-card" style="--mc:var(--earth)">
+      <span class="mat-icon">🪨</span>
+      <div class="mat-label">Kategoria 03</div>
+      <div class="mat-name">Maa­materiaalit</div>
+      <p class="mat-desc">Silikaattipohjaiset — kivi, hiekka, savi, keramiikka, lasi, betoni, kipsi. Ionisidokset → kova, hauras. Paloturvalliset, kestävät ikuisuuteen.</p>
+      <div style="margin-top:0.75rem"><span class="tag tag-e">keramiikka</span><span class="tag tag-e">lasi</span><span class="tag tag-e">betoni</span><span class="tag tag-e">posliini</span></div>
+    </div>
+    <div class="mat-card" style="--mc:var(--organic)">
+      <span class="mat-icon">🌿</span>
+      <div class="mat-label">Kategoria 04</div>
+      <div class="mat-name">Orgaaniset</div>
+      <p class="mat-desc">Elävästä luonnosta — puu, bambu, nahka, korkki, kuidut, villa, silkki, sienet, luonnonkumi. Uusiutuvat mutta "elävät" — kosteusmuutokset, vanheneminen.</p>
+      <div style="margin-top:0.75rem"><span class="tag tag-o">puu</span><span class="tag tag-o">nahka</span><span class="tag tag-o">hamppu</span><span class="tag tag-o">myseeli</span></div>
+    </div>
+    <div class="mat-card" style="--mc:var(--comp)">
+      <span class="mat-icon">🏗️</span>
+      <div class="mat-label">Kategoria 05</div>
+      <div class="mat-name">Komposiitit</div>
+      <p class="mat-desc">Kahden tai useamman materiaalin yhdistelmä — ominaisuuksia, joita kumpikaan ei yksin saavuta. Hiilikuitu, lasikuitu, teräsbetoni, vaneri.</p>
+      <div style="margin-top:0.75rem"><span class="tag" style="background:rgba(232,64,112,0.15);color:var(--comp);border-color:rgba(232,64,112,0.3)">CFRP</span><span class="tag" style="background:rgba(232,64,112,0.15);color:var(--comp);border-color:rgba(232,64,112,0.3)">GFRP</span><span class="tag" style="background:rgba(232,64,112,0.15);color:var(--comp);border-color:rgba(232,64,112,0.3)">Kevlar</span></div>
+    </div>
+    <div class="mat-card" style="--mc:var(--future)">
+      <span class="mat-icon">⚛️</span>
+      <div class="mat-label">Kategoria 06</div>
+      <div class="mat-name">Älymateriaalit</div>
+      <p class="mat-desc">Reagoivat ympäristöön — muistimetallit (NiTi), pietsosähköiset, termoklroomiset, grafeeni, metamateriaalit, biohajoavat implantit, johtavat polymeerit.</p>
+      <div style="margin-top:0.75rem"><span class="tag tag-f">Nitinol</span><span class="tag tag-f">grafeeni</span><span class="tag tag-f">PEDOT</span><span class="tag tag-f">4D-tulostus</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="div-color" style="--c:var(--metal)">
+
+<!-- ══════════════════════════════════════
+     04  METALLIT
+══════════════════════════════════════ -->
+<div id="metallit" class="sw">
+<div class="si" style="--c:var(--metal)">
+  <div class="snum">04 · Metallit</div>
+  <h2>METALLIT —<br>SIVILISAATION<br>SELKÄRANKA</h2>
+  <p class="lead">Metallin "elektronimeri" tekee siitä johtavan, muovattavan ja kierrätettävän. Ei muuta materiaaliryhmää voi sulattaa ja muovata uudelleen lähes loputtomasti laadun laskematta.</p>
+
+  <div class="three-col">
+    <div class="card card-color" style="--c:var(--metal)">
+      <h4>Kevytmetallit</h4>
+      <p style="font-size:0.85rem">Al, Mg, Ti, Li — jaksollisen järjestelmän yläosa. Matala tiheys mutta riittävä lujuus. Lentokone, autonrunko, elektroniikka, akut.</p>
+      <div style="margin-top:0.5rem"><span class="tag tag-m">Al 2,7 g/cm³</span><span class="tag tag-m">Ti 4,5 g/cm³</span><span class="tag tag-m">Mg 1,7 g/cm³</span></div>
+    </div>
+    <div class="card card-color" style="--c:var(--metal)">
+      <h4>Rauta & teräkset</h4>
+      <p style="font-size:0.85rem">Fe + C (0,05–2,1%) = teräs. Kiderakennetta hallitaan lämpökäsittelyllä — martensiitti, perliitti, baniitti, ferriitti. HRC 20–65. <a href="kiridashi_metallurgia.html" target="_blank" style="color:var(--metal)">→ Syvennys: Kiridashi</a></p>
+    </div>
+    <div class="card card-color" style="--c:var(--metal)">
+      <h4>Kupari & jalometallit</h4>
+      <p style="font-size:0.85rem">Cu — paras johtavuus käytännössä. Ag parempi mutta kallis. Au korroosionkestävin. Pt katalyysit ja lääketiede. Kaikki louhittavissa avaruudesta.</p>
+    </div>
+  </div>
+
+  <h3>Metalliteollisuuden tuotantomenetelmät</h3>
+  <div class="tech-grid" style="--tc:var(--metal)">
+    <div class="tech-card"><div class="tech-icon">🔨</div><div class="tech-name">Taonta</div><div class="tech-mat">Fe, Ti, Al · 900–1300 °C</div><p style="font-size:0.82rem">Tiivistää kiderakennetta, poistaa huokosia. Kiridashi-veitsessä chisel grind muotoillaan taonnalla. Kuviotaonta, vapaa taonta, matriisitaonta.</p></div>
+    <div class="tech-card"><div class="tech-icon">🏭</div><div class="tech-name">Valu</div><div class="tech-mat">Al, Fe, Zn · hiekka/painevalua</div><p style="font-size:0.82rem">Sula metalli muottiin. Hiekkavalu yksittäisosiin, painevalu (HPDC) miljooniin alumiiniosiin. Toleranssit heikommat kuin koneistuksessa.</p></div>
+    <div class="tech-card"><div class="tech-icon">⚙️</div><div class="tech-name">CNC-koneistus</div><div class="tech-mat">Kaikki metallit</div><p style="font-size:0.82rem">Sorvaus, jyrsintä, poraus, hionta. Äärimmäinen tarkkuus (±0,01 mm). Kallis yksittäisosiin, taloudellinen sarjoissa. Lastuamisgeometria ratkaisee. <a href="https://www.sandvik.coromant.com/fi-fi/knowledge/pages/default.aspx" target="_blank" style="color:var(--metal)">Sandvik Coromant →</a></p></div>
+    <div class="tech-card"><div class="tech-icon">📏</div><div class="tech-name">Levytyöstö</div><div class="tech-mat">Teräs, Al, ruostumaton</div><p style="font-size:0.82rem">Syväveto, särmäys, laajennus, reunataivutus. Ohutlevyrakenteet kodinkoneet, autokori, kotelot. Minimimitoitus: materiaalin taivutussäde × materiaalipaksuus.</p></div>
+    <div class="tech-card"><div class="tech-icon">🔧</div><div class="tech-name">Hitsaus & liittäminen</div><div class="tech-mat">MIG, TIG, laser, FSW</div><p style="font-size:0.82rem">Kiinteä liitos — suunnittele niin ettei hitsausta tarvita (painevalu). Kun tarvitaan: laserliitos minimoi lämpövyöhykkeen. Korkea­hiilinen teräs haastavaa.</p></div>
+    <div class="tech-card"><div class="tech-icon">✨</div><div class="tech-name">Pintakäsittely</div><div class="tech-mat">Anodisointi, pulverimaalaus, PVD</div><p style="font-size:0.82rem">Anodisointi (Al) antaa värin + korroosiosuojan. Pulverimaalaus kestävin maalikerroin. PVD-pinnoitus kovuus + estetiikka. Muotoilija valitsee viimeistelyn osana konseptia.</p></div>
+  </div>
+</div>
+</div>
+
+<hr class="div-color" style="--c:var(--plastic)">
+
+<!-- ══════════════════════════════════════
+     05  MUOVIT (Summary)
+══════════════════════════════════════ -->
+<div id="muovit" class="sw">
+<div class="si" style="--c:var(--plastic)">
+  <div class="snum">05 · Polymeerit</div>
+  <h2>MUOVIT —<br>MUODON VAPAUS</h2>
+  <p class="lead">Muovi antoi muotoilulle jotain ennenkuulumatonta: materiaalin, joka palvelee muotoa eikä pakota muodon palvelemaan materiaalia. Ja samalla se loi planeetan suurimman jätekriisin.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Polymeerien hierarkia</h3>
+      <div class="card card-color" style="--c:var(--plastic);margin-top:0">
+        <h4>Standardimuovit — volyymi</h4>
+        <p style="font-size:0.85rem">PE, PP, PET, PVC, PS — yli 90 % maailman muovituotannosta. Alhaisin hinta, suurin ympäristöpaine. Pakkaukset, putket, kalvot.</p>
+      </div>
+      <div class="card card-color" style="--c:var(--plastic);margin-top:0.75rem">
+        <h4>Tekniset muovit — engineering</h4>
+        <p style="font-size:0.85rem">ABS, PA (nylon), PC, POM, PMMA — paremmat mekaaniset ja termiset ominaisuudet. Elektroniikka, autoteollisuus, urheilu.</p>
+      </div>
+      <div class="card card-color" style="--c:var(--plastic);margin-top:0.75rem">
+        <h4>Korkea­suorituskykyiset</h4>
+        <p style="font-size:0.85rem">PEEK, PTFE (Teflon), PEI, PAI — äärimmäinen lämpö- ja kemikaalienkestävyys. Lentokone, lääketiede, puolijohteet. Hinta 100–1000 €/kg.</p>
+      </div>
+      <h3 style="margin-top:1.5rem">Häirikköhormonit & turvallisuus</h3>
+      <p style="font-size:0.85rem">BPA (polykarbonaatissa), ftalaatit (PVC:ssä), bromatut palonesto­aineet — kaikki häiritsevät hormonijärjestelmää. Muotoilija vaatii food-grade tai medical-grade sertifikaatit ja tuntee REACH-asetuksen rajoitukset.</p>
+      <div class="callout" style="--c:var(--comp);margin-top:1rem">
+        <div class="callout-lbl">Kriittinen huomio</div>
+        Mikromuovit löydetty ihmisen verestä, aivokudoksesta, sikiöistä ja arktisesta lumesta. Alle 5 mm hiukkasia ei voi kerätä pois luonnosta. Ainoa todellinen ratkaisu: vähemmän muovia, suljettu kierto, oikea materiaali oikeaan käyttöön.
+      </div>
+    </div>
+    <div>
+      <h3>Valmistusprosessit</h3>
+      <div class="psteps" style="--c:var(--plastic)">
+        <div class="pstep"><div class="psn">1</div><div><div class="pst">Ruiskuvalu</div><p class="psd">Massatuotanto monimutkaisiin muotoihin. Syklin­aika 15–60 s. Päästökulmat, seinämänvahvuuden tasaisuus, kutistuma — muotoilijan kolme kriittistä parametriä. <a href="https://www.youtube.com/watch?v=b1U9W4iNDiQ" target="_blank" style="color:var(--plastic)">Video →</a></p></div></div>
+        <div class="pstep"><div class="psn">2</div><div><div class="pst">Tyhjiömuovaus</div><p class="psd">Levymäiset osat lämmön ja alipaineen avulla. Halvemmat työkalut, rajoitetummat muodot — ei umpiomuotoja. <a href="https://www.youtube.com/watch?v=alq3RDZN4jo" target="_blank" style="color:var(--plastic)">Video →</a></p></div></div>
+        <div class="pstep"><div class="psn">3</div><div><div class="pst">Ekstruusio</div><p class="psd">Jatkuva prosessi — putket, profiilit, kalvot, langat. Nopea, taloudellinen, tasalaatuinen. <a href="https://www.youtube.com/watch?v=wuVnnfEocks" target="_blank" style="color:var(--plastic)">Video →</a></p></div></div>
+        <div class="pstep"><div class="psn">4</div><div><div class="pst">Puhallusmuovaus</div><p class="psd">Pullot, säiliöt — esimuovaus + ilmanpuhallus muottiin. PET-pullot maailman yleisin muoviosa. <a href="https://www.youtube.com/watch?v=V0a74b9JPUg" target="_blank" style="color:var(--plastic)">Video →</a></p></div></div>
+        <div class="pstep"><div class="psn">5</div><div><div class="pst">Rotaatiomuovaus</div><p class="psd">Suuret onttot osat (tontti­kaivot, tankki, leikki­mökki) ilman hitsaussaumoja. <a href="https://www.youtube.com/watch?v=BE7ccORxaZ0" target="_blank" style="color:var(--plastic)">Video →</a></p></div></div>
+      </div>
+      <div style="margin-top:1rem;text-align:right">
+        <a href="muovit_muotoilu.html" target="_blank" style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--plastic);text-decoration:none;border:1px solid rgba(0,196,180,0.3);padding:0.4rem 0.85rem;border-radius:2px">Avaa täysi Muovit-kurssimateriaaali →</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="div-color" style="--c:var(--earth)">
+
+<!-- ══════════════════════════════════════
+     06  MAAMATERIAALIT
+══════════════════════════════════════ -->
+<div id="maa" class="sw">
+<div class="si" style="--c:var(--earth)">
+  <div class="snum">06 · Maamateriaalit</div>
+  <h2>MAA­MATERIAALIT —<br>MAAPALLON<br>PERINTÖ</h2>
+  <p class="lead">Silikaatit, oksiidit, karbonaatit — Maan kuori on 46 % happea ja 28 % piitä. Keramiikka, lasi ja betoni ovat ihmiskunnan vanhimmat ja nykyisin määrällisesti suurimmat materiaalit.</p>
+
+  <div class="four-col">
+    <div class="card card-color" style="--c:var(--earth)">
+      <h4>Savi & keramiikka</h4>
+      <p style="font-size:0.82rem">Al₂O₃·SiO₂·H₂O — vesipitoinen alumiinisilikaatti. Polttolämpötila määrittää laadun: 800°C = punasavi, 1200°C = kivitavara, 1400°C = posliini. <a href="http://www.airihortling.fi/" target="_blank" style="color:var(--earth)">Airihortling.fi →</a></p>
+      <div style="margin-top:0.5rem"><span class="tag tag-e">savi</span><span class="tag tag-e">fajansi</span><span class="tag tag-e">porcelain</span></div>
+    </div>
+    <div class="card card-color" style="--c:var(--earth)">
+      <h4>Lasi</h4>
+      <p style="font-size:0.82rem">SiO₂ + Na₂O + CaO — sulatettu ja nopeatijäähdytetty silikaatti. Ei kiderakennetta = amorfinen. Float-lasi, karkaistu lasi, laminoitu lasi, optinen lasi. <a href="https://www.youtube.com/watch?v=w97v7D5l8S4" target="_blank" style="color:var(--earth)">Video: Lasi →</a></p>
+    </div>
+    <div class="card card-color" style="--c:var(--earth)">
+      <h4>Betoni & sementti</h4>
+      <p style="font-size:0.82rem">Sementti + vesi + kiviaines + runkoaine. Betonin tuotanto vastaa ~8 % CO₂-päästöistä. Uudet geopolymeerikomposiitit korvaavat sementin. <a href="https://youtu.be/GSc9hu917OU" target="_blank" style="color:var(--earth)">Video →</a></p>
+    </div>
+    <div class="card card-color" style="--c:var(--earth)">
+      <h4>Kivi & mineraalit</h4>
+      <p style="font-size:0.82rem">Graniitti, marmori, liuskekivi, talkki, jalokivet. Kestävyys vuosituhansia — hiilijalanjälki lähinnä kuljetuksesta. Tekninen keramiikka (SiC, Al₂O₃) korvaa metallit ääriolosuhteissa.</p>
+    </div>
+  </div>
+
+  <h3>Lasi — erityistapaus</h3>
+  <div class="two-col" style="margin-top:1rem">
+    <div>
+      <p style="font-size:0.88rem">Lasi on ainoa laajamittainen amorfinen epäorgaaninen materiaali — ei kiteistu jäähtyessään. Tämä tekee siitä optisesti kirkkaan ja isotrooppisen (samat ominaisuudet kaikkiin suuntiin).</p>
+      <ul style="padding-left:1.25rem;font-size:0.85rem;color:var(--text)">
+        <li style="margin-bottom:0.3rem"><strong>Float-lasi</strong> — sula lasi kellutetaan sulaan tinaan → täydellinen tasaisuus</li>
+        <li style="margin-bottom:0.3rem"><strong>Karkaistu lasi</strong> — nopea jäähdytys → puristusjännitys pinnalla → 4× lujempi</li>
+        <li style="margin-bottom:0.3rem"><strong>Laminoitu</strong> — PVB-kalvo lasien välissä → sirpaleturvallinen</li>
+        <li style="margin-bottom:0.3rem"><strong>Gorilla Glass</strong> — ionivaihto K⁺ → Na⁺ → puristusjännitys → älypuhelimen näyttö</li>
+        <li style="margin-bottom:0.3rem"><strong>Aerogeli</strong> — 99,98 % ilmaa — kevyin kiinteä aine, erinomainen lämpöeriste</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Tekninen keramiikka — tulevaisuuden materiaali</h4>
+      <p style="font-size:0.85rem">Puhdas Al₂O₃ (alumiinioksidi), SiC (piikarbidi), Si₃N₄ (piinitiridi) — kovaadamanttiset, lämpöä kestävät, sähköä eristävät. Käyttö avaruustekniikassa, leikkaavissa työkaluissa, hammasimplanteissa ja vesisuodatuksessa. <a href="https://en.wikipedia.org/wiki/Ceramic_nanoparticle" target="_blank" style="color:var(--earth)">Ceramic nanoparticles →</a></p>
+      <div class="callout" style="--c:var(--earth)">
+        <div class="callout-lbl">Muotoilijan haaste</div>
+        Keramiikka on hauras — se ei jousta ennen murtumistaan (toisin kuin metalli tai muovi). Muotoilu on kriittinen: terävät sisäkulmat = jännityksen­kertyminen = murtumisriski. Pyöristykset aina.
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="div-color" style="--c:var(--organic)">
+
+<!-- ══════════════════════════════════════
+     07  ORGAANISET
+══════════════════════════════════════ -->
+<div id="orgaaniset" class="sw">
+<div class="si" style="--c:var(--organic)">
+  <div class="snum">07 · Orgaaniset & biologiset materiaalit</div>
+  <h2>LUONNON<br>MATERIAALIT</h2>
+  <p class="lead">3,8 miljardia vuotta evoluutiota on optimoinut orgaaniset materiaalit tehtäviinsä. Siidenperhosen silkki on grammakohtaisesti lujempi kuin kevlar. Äyriäisten panssari yhdistää kovuuden ja sitkeyden tavalla, jota emme osaa vielä kopioida.</p>
+
+  <div class="three-col">
+    <div>
+      <h3>Kasviperäiset</h3>
+      <table class="cmp-table">
+        <tr><th>Materiaali</th><th>Erityisyys</th></tr>
+        <tr><td><strong>Puu</strong></td><td style="font-size:0.8rem">Luonnonkomposiitti: selluloosa + ligniini. Anisotrooppinen — syysuunta ratkaisee. <a href="https://propuu.fi" target="_blank" style="color:var(--organic)">propuu.fi</a></td></tr>
+        <tr><td><strong>Bambu</strong></td><td style="font-size:0.8rem">Maailman nopeimmin kasvava materiaali. Lujuus/paino lähellä terästä. Onttoja rakenteita.</td></tr>
+        <tr><td><strong>Korkki</strong></td><td style="font-size:0.8rem">Pentagonaaliset solut — paras iskunvaimennus, eriste, vedenpitävä. Eivät saa kaataa puuta — pelkkä kuori.</td></tr>
+        <tr><td><strong>Hamppu</strong></td><td style="font-size:0.8rem">Nopeimmin kasvava kuitu. Biokomposiiteissa korvaa lasikuitua. CO₂-nielu kasvaessa.</td></tr>
+        <tr><td><strong>Nokkonen</strong></td><td style="font-size:0.8rem">Pitkä historinen tekstiilikuitu. Uudelleen muodissa — Suomessa yrityksiä.</td></tr>
+        <tr><td><strong>Sisal & juutti</strong></td><td style="font-size:0.8rem">Komposiittien luonnonkuitu­vahvistukset. Biohajoavat, uusiutuvat, edulliset.</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Eläinperäiset</h3>
+      <table class="cmp-table">
+        <tr><th>Materiaali</th><th>Erityisyys</th></tr>
+        <tr><td><strong>Silkki</strong></td><td style="font-size:0.8rem">Fibroiini-proteiini. Kimmoisuus + pehmeys + kiilto. Äyriäisproteiineja etsitään teolliseen synteesiin.</td></tr>
+        <tr><td><strong>Villa</strong></td><td style="font-size:0.8rem">Keratiini + hilsemäinen pinta. Luonnonlämmönsääntelijä, palaa ilman liekiä. Merino — tasaisimmat kuidut.</td></tr>
+        <tr><td><strong>Nahka</strong></td><td style="font-size:0.8rem">Kollaageeniverkosto — parkitus säilyttää rakenteen. Kasviparkitus vs. kromi­parkitus: ympäristöero valtava.</td></tr>
+        <tr><td><strong>Luonnonkumi</strong></td><td style="font-size:0.8rem">Polyisopreeni Hevea brasiliensis -puusta. Vulkanointi (S-ristisidokset) teki siitä käytännöllisen.</td></tr>
+        <tr><td><strong>Luu & sarvi</strong></td><td style="font-size:0.8rem">Luonnonkomposiitti: kollageeni + hydroksiapatitti. Ortopedisten implant­tien esikuva.</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Erityis­aineet & tulevaisuus</h3>
+      <div class="card card-color" style="--c:var(--organic)">
+        <h4>Sienet — myseeli</h4>
+        <p style="font-size:0.82rem">Sienirihmasto kasvaa maatalous­jätteen ympärille — muodostaa vaahtomaisen, biohajoavan rakenteen. Ecovative (USA) valmistaa jo pakkausvaahtoa ja tekstiilejä. 100 % kompostoituva.</p>
+      </div>
+      <div class="card card-color" style="--c:var(--organic)" style="margin-top:0.75rem">
+        <h4>Pihka, hartsi & mehiläisvaha</h4>
+        <p style="font-size:0.82rem">Luonnon polymeerit joita käytetty pintakäsittelyyn vuosituhansia. Shellakka, kopal, mehiläisvaha — korvaamassa öljypohjaisia pintakäsittelyjä.</p>
+      </div>
+      <div class="callout" style="--c:var(--organic);margin-top:1rem">
+        <div class="callout-lbl">Kestävä keruu</div>
+        Korkin voi kerätä tappamatta puuta (25 v. välein). Luonnonkumin voi nauttia tappamatta puuta. Bambu kasvaa takaisin 3–5 vuodessa. Norsunluu, trooppinen mahonki, tietyt merijäteet — ei koskaan.
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="div-color" style="--c:var(--comp)">
+
+<!-- ══════════════════════════════════════
+     08  KOMPOSIITIT
+══════════════════════════════════════ -->
+<div id="komposiitit" class="sw">
+<div class="si" style="--c:var(--comp)">
+  <div class="snum">08 · Komposiitit</div>
+  <h2>KOMPOSIITIT —<br>PAREMPI KUIN<br>OSASIENSA SUMMA</h2>
+  <p class="lead">Luonto keksi komposiitin miljardeja vuosia ennen ihmistä — puu on selluloosakuitujen (kova, hauras) ja ligniinin (pehmeä, sitkeä) komposiitti. Sama periaate toistuu hiilikuitukomposiiteissa ja teräsbetonissa.</p>
+
+  <div class="three-col">
+    <div class="card card-color" style="--c:var(--comp)">
+      <h4>Hiilikuitu (CFRP)</h4>
+      <p style="font-size:0.85rem">Hiili­kuitu + epoksi­matriisi. Lujuus-paino-suhde 5× parempi kuin teräksellä. Lentokone (Boeing 787: 50 % CFRP), urheiluvälineet, Formula 1. Haitta: ei mekaanisesti kierrätettävissä helposti — kemiallinen kierrätys kehitteillä.</p>
+      <div style="margin-top:0.5rem"><span class="tag" style="color:var(--comp);background:rgba(232,64,112,0.1);border-color:rgba(232,64,112,0.3)">300–1500 €/kg</span></div>
+    </div>
+    <div class="card card-color" style="--c:var(--comp)">
+      <h4>Lasikuitu (GFRP)</h4>
+      <p style="font-size:0.85rem">Lasifilamentit + polyesteri/epoksi. Edullisempi kuin hiili­kuitu. Veneet, tuulivoimalat, kaito­teet, kylpyammeet. Lasikuitu­pyörillä kierrätysongelma — 2030 mennessä EU vaatii ratkaisun.</p>
+      <div style="margin-top:0.5rem"><span class="tag" style="color:var(--comp);background:rgba(232,64,112,0.1);border-color:rgba(232,64,112,0.3)">10–50 €/kg</span></div>
+    </div>
+    <div class="card card-color" style="--c:var(--comp)">
+      <h4>Kevlar (aramiidi)</h4>
+      <p style="font-size:0.85rem">Para-aramiidi-kuitu. Luotisuoja, viiltosuoja, lentokonerakenteet. 5× lujempi kuin teräs painoyksikköä kohti. Ei sula — suojaa kuumuudelta. Dyneema (UHMWPE) kilpailija.</p>
+    </div>
+    <div class="card card-color" style="--c:var(--comp)">
+      <h4>Teräsbetoni</h4>
+      <p style="font-size:0.85rem">Betoni: hyvä puristuskesto, huono vetolujuus. Teräs: hyvä vetolujuus. Yhdistelmä kattaa molemmat. Raudoitettu betoni = 1800-luvun johtava keksintö. Karbonivahvistettu betoni — 10× lujempi, ohuempi.</p>
+    </div>
+    <div class="card card-color" style="--c:var(--comp)">
+      <h4>Luonnonkuitu­komposiitit</h4>
+      <p style="font-size:0.85rem">Hamppu, sisal, pellava + biohartsi → biokomposiitti. Kierrätettävä, uusiutuva, lähes sama jäykkyys kuin lasikuidulla tietyin sovellusin. Automobiliteollisuus (Mercedes sisäosat) jo käyttää.</p>
+    </div>
+    <div class="card card-color" style="--c:var(--comp)">
+      <h4>Sandwich-rakenteet</h4>
+      <p style="font-size:0.85rem">Ohuet lujat pinnat + kevyt sydän (kennolevy, vaahto). Maksimijäykkyys minimipainolla. Lentokoneen lattia, purjeveneen kansi, seinäelementit. Muotoilu: liitos­kohdat aina kriittisiä.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="div-color" style="--c:var(--recycle)">
+
+<!-- ══════════════════════════════════════
+     09  VALMISTUS­TEKNIIKAT
+══════════════════════════════════════ -->
+<div id="valmistus" class="sw">
+<div class="si" style="--c:var(--recycle)">
+  <div class="snum">09 · Valmistustekniikat</div>
+  <h2>VALMISTUS<br>OHJAA MUOTOA</h2>
+  <p class="lead">Valmistusmenetelmä ei ole vain tapa tehdä tuote — se on raami, jonka sisällä muoto on mahdollinen. Muotoilija, joka ei tunne valmistusta, suunnittelee tuotteita jotka ovat mahdottomia tai tarpeettoman kalliita valmistaa.</p>
+
+  <div class="callout" style="--c:var(--recycle)">
+    <div class="callout-lbl">Kolmio — muotoilijan ydinajatus</div>
+    <strong>Materiaali ↔ Valmistusmenetelmä ↔ Muoto/funktio</strong> — nämä kolme on aina sovitettava yhteen alusta alkaen. Hyvä muotoilija ei valitse materiaalia vasta lopuksi, vaan suunnittelee tuotteen materiaalin ja valmistusmenetelmän ominaisuuksien ympärille.
+  </div>
+
+  <div class="tech-grid" style="--tc:var(--recycle)">
+    <div class="tech-card"><div class="tech-icon">💉</div><div class="tech-name">Ruiskuvalu</div><div class="tech-mat">Thermoplastit · Sarjat 10 000+</div><p style="font-size:0.82rem">Monimutkaiset muodot, tarkka toistettavuus. Muotti kallis (10 000–200 000 €). Suunnitteluvaateet: päästökulmat min 1°, tasainen seinämä, välty teräviltä sisäkulmilta.</p></div>
+    <div class="tech-card"><div class="tech-icon">🏺</div><div class="tech-name">Tyhjiömuovaus</div><div class="tech-mat">Thermoplastilevyt · Pienemmät sarjat</div><p style="font-size:0.82rem">Yksinkertaisemmat muodot — ei umpinaisia onkaloita. Halvat työkalut (5 000–30 000 €). Pakkausvadnat, kylpyammeet, kotelot. <a href="https://www.youtube.com/watch?v=alq3RDZN4jo" target="_blank" style="color:var(--recycle)">Video →</a></p></div>
+    <div class="tech-card"><div class="tech-icon">🎯</div><div class="tech-name">3D-tulostus (AM)</div><div class="tech-mat">Muovit, metallit, keramiikka · 1–1000</div><p style="font-size:0.82rem">Ei muottia — kerros kerrokselta. Monimutkaiset geometriat, jotka ovat muilla menetelmillä mahdottomia. Prototyyppi → pienisarjatuotanto → massaräätälöinti.</p></div>
+    <div class="tech-card"><div class="tech-icon">🔄</div><div class="tech-name">Ekstruusio</div><div class="tech-mat">Muovit, metallit, keramiikka</div><p style="font-size:0.82rem">Jatkuva prosessi profiileille, putkille, kalvoille. Nopea, kustannustehokas. Poikkileikkaus vakio koko pituudella — ei 3D-muotoja. <a href="https://www.youtube.com/watch?v=wuVnnfEocks" target="_blank" style="color:var(--recycle)">Video →</a></p></div>
+    <div class="tech-card"><div class="tech-icon">⚗️</div><div class="tech-name">Valu (metallit)</div><div class="tech-mat">Al, Fe, Cu, Zn</div><p style="font-size:0.82rem">Hiekkavalu, painevalu, vahavalumenetelmä (investointivalu). Monimutkaiset 3D-muodot mahdollisia. Toleranssit heikommat kuin koneistuksessa.</p></div>
+    <div class="tech-card"><div class="tech-icon">🏔️</div><div class="tech-name">Laminointi (komposiitti)</div><div class="tech-mat">CFRP, GFRP, sandwich</div><p style="font-size:0.82rem">Käsin tai koneellisesti — kuitujen suunta ratkaisee lujuus­suunnan. Autoklaavi kovettaa. Hidas, kallis, äärimmäinen tulos — veneet, lentokoneet. <a href="https://www.youtube.com/watch?v=qn16JtE_vLc" target="_blank" style="color:var(--recycle)">Video →</a></p></div>
+    <div class="tech-card"><div class="tech-icon">🎨</div><div class="tech-name">Pintakäsittely</div><div class="tech-mat">Kaikki materiaalit</div><p style="font-size:0.82rem">Maalaus, anodisointi, galvanointi, PVD, teksturointi, lasiaaminen, parkitus. Muotoilija valitsee tuntuman, kestävyyden ja estetiikan yhdistelmänä — ei pelkkänä viimeistelyinä.</p></div>
+    <div class="tech-card"><div class="tech-icon">🔥</div><div class="tech-name">Sintraus (keramiikka)</div><div class="tech-mat">Savi, tekn. keramiikka · 1200–1600 °C</div><p style="font-size:0.82rem">Jauhemainen raaka-aine puristetaan ja sintataan — hiukkaset liittyvät yhteen ilman sulattamista. Hammastekniikka, elektroniikka, avaruustekniikka.</p></div>
+    <div class="tech-card"><div class="tech-icon">🌿</div><div class="tech-name">Taivutus & muovaus</div><div class="tech-mat">Vaneri, puu, akryyli, metalli</div><p style="font-size:0.82rem">Eamesin muotolautanen — vaneri höyryn ja puristimen avulla. Akryyli lämpö­taivutus linjataivuttimella. Metallilevyn syväveto. Jokainen materiaali omalla taivutussäteellään.</p></div>
+  </div>
+</div>
+</div>
+
+<hr class="div-color" style="--c:var(--recycle)">
+
+<!-- ══════════════════════════════════════
+     10  KIERRÄTYS
+══════════════════════════════════════ -->
+<div id="kierratys" class="sw" style="background:radial-gradient(ellipse 60% 50% at 50% 50%, rgba(128,208,96,0.06) 0%, transparent 70%)">
+<div class="si" style="--c:var(--recycle)">
+  <div class="snum">10 · Kierrätystekniikat & uusiutumissykli</div>
+  <h2>LINEAARISESTA<br>KIERTOTALOUTEEN</h2>
+  <p class="lead">Ota — tee — heitä pois. Tämä malli on historiaa. Kiertotalous ei ole romanttinen ajatus — se on teollinen välttämättömyys, kun fossiiliset raaka-aineet ehtyvät ja ympäristön kantokyky ylitetään.</p>
+
+  <div class="cycle-vis">
+    <div class="cycle-node"><div class="cn-icon">⛏️</div><div class="cn-label">Louhinta</div></div>
+    <div class="cycle-arrow">→</div>
+    <div class="cycle-node"><div class="cn-icon">🏭</div><div class="cn-label">Valmistus</div></div>
+    <div class="cycle-arrow">→</div>
+    <div class="cycle-node"><div class="cn-icon">📦</div><div class="cn-label">Jakelu</div></div>
+    <div class="cycle-arrow">→</div>
+    <div class="cycle-node"><div class="cn-icon">👤</div><div class="cn-label">Käyttö</div></div>
+    <div class="cycle-arrow">→</div>
+    <div class="cycle-node"><div class="cn-icon">♻️</div><div class="cn-label">Kierrätys</div></div>
+    <div class="cycle-arrow" style="transform:rotate(0deg)">↩</div>
+  </div>
+
+  <div class="three-col">
+    <div>
+      <h3>Metallien kierrätys</h3>
+      <p style="font-size:0.85rem">Metallit ovat <strong>ikuisesti kierrätettäviä</strong> laadun laskematta. Magneetti erottaa raudan — kierrätysaste jopa 80–90 %. Alumiini vaatii vain 5 % virgiinimateriaalin tuotantoenergiasta.</p>
+      <div class="bar-row"><div class="bar-lbl">Teräs</div><div class="bar-track"><div class="bar-fill" style="width:86%;background:var(--metal)"></div></div><div class="bar-val">86%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Alumiini</div><div class="bar-track"><div class="bar-fill" style="width:73%;background:var(--metal)"></div></div><div class="bar-val">73%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Kupari</div><div class="bar-track"><div class="bar-fill" style="width:65%;background:var(--metal)"></div></div><div class="bar-val">65%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Kulta</div><div class="bar-track"><div class="bar-fill" style="width:30%;background:var(--metal)"></div></div><div class="bar-val">30%</div></div>
+      <div class="callout" style="--c:var(--recycle);margin-top:1rem">
+        <div class="callout-lbl">Vihreä teräs</div>
+        SSAB:n HYBRIT-teknologia (Suomi/Ruotsi) korvaa hiilen vedyllä pelkistyksessä → nollapäästöinen teräs. Ensimmäinen toimitus VOLVO:lle 2021.
+      </div>
+    </div>
+    <div>
+      <h3>Muovien kierrätys</h3>
+      <p style="font-size:0.85rem">Muovin kierrätys on kompleksista — vain puhtaat homogeeniset jakeet soveltuvat mekaaniseen kierrätykseen. Monikerrakset, lisäaineet ja kontaminaatio heikentävät laadun.</p>
+      <div class="bar-row"><div class="bar-lbl">PET (pullot)</div><div class="bar-track"><div class="bar-fill" style="width:58%;background:var(--plastic)"></div></div><div class="bar-val">58%</div></div>
+      <div class="bar-row"><div class="bar-lbl">HDPE</div><div class="bar-track"><div class="bar-fill" style="width:30%;background:var(--plastic)"></div></div><div class="bar-val">30%</div></div>
+      <div class="bar-row"><div class="bar-lbl">PP</div><div class="bar-track"><div class="bar-fill" style="width:15%;background:var(--plastic)"></div></div><div class="bar-val">15%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Monikerros</div><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--comp)"></div></div><div class="bar-val">&lt;2%</div></div>
+      <h4>Kemiallinen kierrätys — tulevaisuus</h4>
+      <p style="font-size:0.83rem">Pyrolyysi, glykolyysi, entsymaattinen hydrolyysi — muovi takaisin monomeeriksi. Loop Industries, Carbios, Plastic Energy skaalautuvat. Mahdollistaa kierrätysmuovin käytön vaativimpiin kohteisiin.</p>
+    </div>
+    <div>
+      <h3>Orgaaniset & maamateriaalit</h3>
+      <p style="font-size:0.85rem">Puu kompostoituu, keramiikka on käytännössä ikuista, lasi kierrätyy sulattamalla täydellisesti, betoni voidaan murskata ja käyttää uudelleen (downcycling kiviainekseksi).</p>
+      <h4>Hierarkia — vähentäminen ensin</h4>
+      <div class="psteps" style="--c:var(--recycle)">
+        <div class="pstep"><div class="psn" style="background:var(--recycle);font-size:0.75rem">1</div><div><div class="pst">Refuse — kieltäydy</div><p class="psd" style="font-size:0.78rem">Ei tuoteta turhia materiaaleja lainkaan.</p></div></div>
+        <div class="pstep"><div class="psn" style="background:var(--recycle);font-size:0.75rem">2</div><div><div class="pst">Reduce — vähennä</div><p class="psd" style="font-size:0.78rem">Optimoi seinämänpaksuus, kevennä, minimointi.</p></div></div>
+        <div class="pstep"><div class="psn" style="background:var(--recycle);font-size:0.75rem">3</div><div><div class="pst">Reuse — uudelleen­käytä</div><p class="psd" style="font-size:0.78rem">Modular design, täytettävät pakkaukset.</p></div></div>
+        <div class="pstep"><div class="psn" style="background:var(--recycle);font-size:0.75rem">4</div><div><div class="pst">Recycle — kierrätä</div><p class="psd" style="font-size:0.78rem">Vasta viimeisenä — materiaali alas­luokittuu.</p></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="div-color" style="--c:var(--comp)">
+
+<!-- ══════════════════════════════════════
+     11  SKENAARIO — GOLF-VIRTA
+══════════════════════════════════════ -->
+<div id="skenaario" class="sw" style="background:radial-gradient(ellipse 70% 50% at 20% 50%, rgba(232,64,112,0.08) 0%, transparent 70%)">
+<div class="si" style="--c:var(--comp)">
+  <div class="snum">11 · Skenaario & visio</div>
+  <h2>GOLF-VIRTA<br>HIDASTUMISET JA<br>SUOMEN TULEVAISUUS</h2>
+  <p class="lead">Golf-virta kuljettaa lämmintä Atlantin vettä Pohjois-Eurooppaan — ilman sitä Suomen keskilämpötila voisi laskea 5–10 °C. Ilmastonmuutos hidastaa virtaa. Tämä on materiaalitieteen ongelma yhtä paljon kuin ilmasto-ongelma.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Mekanismi</h3>
+      <p style="font-size:0.88rem">Golf-virta on osa AMOC-virtausjärjestelmää (Atlantic Meridional Overturning Circulation). Suolaisuuserojen ja lämpötilaerojen ajama.</p>
+      <p style="font-size:0.88rem"><strong>Ilmastonmuutos häiritsee tätä:</strong> Grönlannin jäätiköt sulavat → makeaa vettä Atlantille → suolaisuus laskee → virtaus hidastuu. AMOC on heikentynyt ~15 % teollisesta ajasta.</p>
+      <p style="font-size:0.88rem"><strong>Materiaaliyhteys:</strong> Kasvihuonekaasupäästöt = fossiilisten polttoaineiden poltto = hiilipohjaisten materiaalien polttaminen. Muovien ja metallien lineaarinen talous on suoraan osa tätä ketjua.</p>
+
+      <h3 style="margin-top:1.5rem">Mistä hiilit tulevat?</h3>
+      <div class="bar-row"><div class="bar-lbl">Energiantuotanto</div><div class="bar-track"><div class="bar-fill" style="width:73%;background:var(--comp)"></div></div><div class="bar-val">73%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Maatalous</div><div class="bar-track"><div class="bar-fill" style="width:18%;background:var(--comp)"></div></div><div class="bar-val">18%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Teollisuus/mat.</div><div class="bar-track"><div class="bar-fill" style="width:22%;background:var(--comp)"></div></div><div class="bar-val">22%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Muovit/kemik.</div><div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--plastic)"></div></div><div class="bar-val">6%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Betoni/sementti</div><div class="bar-track"><div class="bar-fill" style="width:8%;background:var(--earth)"></div></div><div class="bar-val">8%</div></div>
+    </div>
+    <div>
+      <h3>Skenaariot 2100-luvulle</h3>
+      <div class="scenario-grid">
+        <div class="scenario-card">
+          <div class="sc-year" style="color:var(--organic)">2050</div>
+          <div class="sc-title">Optimistinen skenaario</div>
+          <p style="font-size:0.82rem;color:var(--text)">Kiertotalous on päävirta. Biomuovit korvaavat 60 % fossiilipohjaisista. Vihreä teräs ja vety­pelkistys yleistyvät. AMOC hidastuu mutta ei pysähdy. Suomen olosuhteet muuttuvat mutta pysyvät asuttavina.</p>
+          <div style="margin-top:0.5rem"><span class="tag tag-r">+1.5°C Suomeen</span></div>
+        </div>
+        <div class="scenario-card">
+          <div class="sc-year" style="color:var(--comp)">2050</div>
+          <div class="sc-title">Pessimistinen skenaario</div>
+          <p style="font-size:0.82rem;color:var(--text)">Päästöt kasvavat. AMOC hidastuu kriittisesti. Suomi kylmenee, Sahel kuivuu, meren­pinta nousee. Materiaalikriisi: kriittiset raaka-aineet loppuvat tai geopoliittisesti saavuttamattomia.</p>
+          <div style="margin-top:0.5rem"><span class="tag tag-c">−5°C Suomeen</span></div>
+        </div>
+        <div class="scenario-card">
+          <div class="sc-year" style="color:var(--future)">2100</div>
+          <div class="sc-title">Teknologinen hyppy</div>
+          <p style="font-size:0.82rem;color:var(--text)">Fuusioreaktori ratkaisee energian. Avaruuslouhinta tuo kriittiset raaka-aineet. AI suunnittelee materiaalit atomitasolta. Biologiset materiaalit korvaavat synteettisiä. Maapallon tila palautuu.</p>
+          <div style="margin-top:0.5rem"><span class="tag tag-f">Tasapaino</span></div>
+        </div>
+        <div class="scenario-card">
+          <div class="sc-year" style="color:var(--metal)">2100</div>
+          <div class="sc-title">Muotoilijan vastuu</div>
+          <p style="font-size:0.82rem;color:var(--text)">Jokainen materiaalivalinta on ääni skenaariossa. Pitkäikäinen tuote < lyhyt­ikäinen. Kierrätettävä < sekajäte. Biomaalerial < fossiilinen. Muotoilija on aikamme tärkein materiaalipäätösten tekijä.</p>
+          <div style="margin-top:0.5rem"><span class="tag tag-r">Sinun valintasi</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="div-color" style="--c:var(--future)">
+
+<!-- ══════════════════════════════════════
+     12  TULEVAISUUS
+══════════════════════════════════════ -->
+<div id="tulevaisuus" class="sw" style="background:radial-gradient(ellipse 80% 60% at 50% 100%, rgba(64,184,255,0.08) 0%, transparent 70%)">
+<div class="si" style="--c:var(--future)">
+  <div class="snum">12 · Tulevaisuus</div>
+  <h2>TULEVAISUUS —<br>VÄRÄHTELYTAAJUUKSISTA<br>KVANTTI­MATERIAALEIHIN</h2>
+  <p class="lead">Tulevaisuuden materiaali ei ole vain kemiallinen yhdiste — se on ohjelmoitu järjestelmä, jonka ominaisuudet voidaan asettaa ja muuttaa. Taajuuksien säätäminen on seuraava materiaalivallankumous.</p>
+
+  <!-- FREQUENCY VISUALIZATION -->
+  <div style="background:var(--panel);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem;margin-bottom:0.5rem">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--text-dim);margin-bottom:0.75rem;letter-spacing:0.1em;text-transform:uppercase">Materiaalin ominaisuuksien säätäminen värähtelytaajuuksilla</div>
+    <div class="freq-vis" id="freqVis">
+      <div class="freq-bar" style="height:30%"></div><div class="freq-bar" style="height:55%"></div><div class="freq-bar" style="height:40%"></div><div class="freq-bar" style="height:75%"></div><div class="freq-bar" style="height:60%"></div><div class="freq-bar" style="height:90%"></div><div class="freq-bar" style="height:70%"></div><div class="freq-bar" style="height:45%"></div><div class="freq-bar" style="height:80%"></div><div class="freq-bar" style="height:65%"></div><div class="freq-bar" style="height:50%"></div><div class="freq-bar" style="height:85%"></div><div class="freq-bar" style="height:55%"></div><div class="freq-bar" style="height:35%"></div><div class="freq-bar" style="height:70%"></div><div class="freq-bar" style="height:95%"></div><div class="freq-bar" style="height:60%"></div><div class="freq-bar" style="height:45%"></div><div class="freq-bar" style="height:75%"></div><div class="freq-bar" style="height:50%"></div>
+    </div>
+    <div class="freq-labels">
+      <span>Infra­puna (IR)</span><span>Näkyvä valo</span><span>UV</span><span>Röntgen</span><span>Terahertz</span>
+    </div>
+  </div>
+  <p style="font-size:0.78rem;color:var(--text-dim);margin-bottom:2rem">IR-spektroskopia tunnistaa materiaalin sidostyypit → AI analysoi → materiaali identifioitu. Tulevaisuudessa: säätämällä taajuudet → säädetään ominaisuudet.</p>
+
+  <div class="four-col">
+    <div class="card card-color" style="--c:var(--future)">
+      <h4>Metamateriaalit</h4>
+      <p style="font-size:0.82rem">Keinotekoiset mikro­rakenteet joilla luonnossa esiintymättömiä optisia tai akustisia ominaisuuksia. Negatiivinen taitekerroin → "näkymättömyysviitat". Akustiset metamateriaalit absorboivat täsmätaajuuksia.</p>
+    </div>
+    <div class="card card-color" style="--c:var(--future)">
+      <h4>Kvanttidotit</h4>
+      <p style="font-size:0.82rem">Puolijohdepartikkelit joiden koko määrää emittoitavan valon aallonpituuden — kvantti­mekaniikka värjäyksenä. QLED-näytöt. Lääketiede: biomarkkerit, syöpädiagnostiikka.</p>
+    </div>
+    <div class="card card-color" style="--c:var(--future)">
+      <h4>Grafeeni & 2D-materiaalit</h4>
+      <p style="font-size:0.82rem">Yksi hiiliatomikerros — kovempi kuin timantti, johtaa paremmin kuin kupari, läpinäkyvä. Nobel 2010. Haaste: massakaupallinen tuotanto. MoS₂, borofeen — seuraavat 2D-materiaalit.</p>
+    </div>
+    <div class="card card-color" style="--c:var(--future)">
+      <h4>AI-suunnitellut materiaalit</h4>
+      <p style="font-size:0.82rem">AlphaFold ratkaisi proteiinirakenteet — sama lähestymistapa polymeereihin. Materials Project: 150 000 materiaalin laskelmat. Uuden materiaalin kehitys vuosista viikoihin.</p>
+    </div>
+    <div class="card card-color" style="--c:var(--future)">
+      <h4>4D-tulostus</h4>
+      <p style="font-size:0.82rem">3D-tulostettu rakenne muuttaa muotoaan ajan myötä lämmöstä, kosteudesta tai valosta. Itsekokoontuva teollisuus, adaptiiviset implanttit, vaatteet jotka sopeutuvat kehoon.</p>
+    </div>
+    <div class="card card-color" style="--c:var(--future)">
+      <h4>Bioteknologia + materiaalit</h4>
+      <p style="font-size:0.82rem">Hämähäkin siidistä kaupallista tuotantoa (Bolt Threads). Bakteerikasvuinen myseelipakkaus (Ecovative). Algatuotanto: hiilineutraalit biomuovit levistä. Synteettinen biologia materiaaliteollisuutena.</p>
+    </div>
+    <div class="card card-color" style="--c:var(--future)">
+      <h4>Johtavat polymeerit</h4>
+      <p style="font-size:0.82rem">PEDOT:PSS, polyaniline — muovi joka johtaa sähköä. Nobel-kemia 2000. Orgaaniset aurinkokennot, OLED, taipuisat elektroniikka, biolääketieteelliset sensorit kehossa.</p>
+    </div>
+    <div class="card card-color" style="--c:var(--future)">
+      <h4>Avaruuslouhinta</h4>
+      <p style="font-size:0.82rem">AstroForge (USA) 2023: ensimmäinen asteroidi­louhinnan demonstraatio. He-3 Kuusta fuusiopolttoaineeksi. Rautanikkeliasteroidi 500 m = kaikki teräs mitä maapallo on tuottanut.</p>
+    </div>
+  </div>
+
+  <div class="big-q">
+    "Olemme tähtien tuhkaa, joka on oppinut tarkastelemaan itseään. Materiaali on lopulta aina sama — atomeita eri järjestyksessä. Muotoilijan tehtävä on ymmärtää järjestys ja kunnioittaa sen hintaa."
+  </div>
+  <div class="big-q-attr">— Kurssin ydinajatus · Metropolia AMK · Teollinen muotoilu</div>
+</div>
+</div>
+
+<hr class="div-full">
+
+<!-- ══════════════════════════════════════
+     KURSSILINKIT
+══════════════════════════════════════ -->
+<div class="sw">
+<div class="si">
+  <div class="snum" style="--c:var(--white)">Kurssimateriaalit</div>
+  <h2>SYVENNÄ<br>OSAAMISTASI</h2>
+
+  <div class="course-links">
+    <a class="course-link-card" href="kiridashi_metallurgia.html" target="_blank" style="--lc:var(--metal)">
+      <span class="clc-arrow">→</span>
+      <span class="clc-icon">⚒️</span>
+      <div class="clc-label">Syventävä materiaali 01</div>
+      <div class="clc-title">Kiridashi — Metallurgian perusteet</div>
+      <p class="clc-desc">Japanilainen perinneveitsi avaa metallurgian — kiderakenteista lämpökäsittelyyn, teroitukseen ja historiaan. 9 osiota, interaktiivinen.</p>
+    </a>
+    <a class="course-link-card" href="muovit_muotoilu.html" target="_blank" style="--lc:var(--plastic)">
+      <span class="clc-arrow">→</span>
+      <span class="clc-icon">🔬</span>
+      <div class="clc-label">Syventävä materiaali 02</div>
+      <div class="clc-title">Polymeerit — Muovien maailma</div>
+      <p class="clc-desc">Tonttikaivosta vaateteollisuuteen — polymeerien historia, termistö, 4 sovellustapauksta, kierrätys ja tulevaisuus. 9 osiota.</p>
+    </a>
+    <div class="course-link-card" style="--lc:var(--organic)">
+      <span class="clc-icon">🌿</span>
+      <div class="clc-label">Harjoitustyöt</div>
+      <div class="clc-title">Käytännön projektit</div>
+      <p class="clc-desc">Juomalasi (Nuutajärvi), salaatinotin (metalli), keraaminen muki ja lautanen. Palauta Google Classroomiin. Kiridashi-veitsi valinnaisena syventävänä harjoitustyönä.</p>
+      <div style="margin-top:1rem"><span class="tag tag-r">15.4 deadline</span><span class="tag tag-f">AHOT käytössä</span></div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:3rem">Tärkeimmät ulkoiset lähteet</h3>
+  <div class="three-col" style="margin-top:1rem">
+    <div class="hbox">
+      <h4>Perustiede</h4>
+      <ul style="padding-left:1rem;font-size:0.8rem;color:var(--text)">
+        <li style="margin-bottom:0.3rem"><a href="https://fi.wikipedia.org/wiki/Kvarkki" target="_blank">Wikipedia: Kvarkki</a></li>
+        <li style="margin-bottom:0.3rem"><a href="https://fi.wikipedia.org/wiki/Atomi" target="_blank">Wikipedia: Atomi & jaksollinen järjestelmä</a></li>
+        <li style="margin-bottom:0.3rem"><a href="https://fi.wikipedia.org/wiki/Faasimuutos" target="_blank">Wikipedia: Faasimuutos</a></li>
+        <li style="margin-bottom:0.3rem"><a href="https://www.materialsproject.org" target="_blank">Materials Project — tietokanta</a></li>
+        <li style="margin-bottom:0.3rem"><a href="https://www.sandvik.coromant.com/fi-fi/knowledge/pages/default.aspx" target="_blank">Sandvik Coromant — lastuavat menetelmät</a></li>
+      </ul>
+    </div>
+    <div class="hbox">
+      <h4>Muovit & polymeerit</h4>
+      <ul style="padding-left:1rem;font-size:0.8rem;color:var(--text)">
+        <li style="margin-bottom:0.3rem"><a href="https://fi.wikipedia.org/wiki/Muovi" target="_blank">Wikipedia: Muovi</a></li>
+        <li style="margin-bottom:0.3rem"><a href="https://www.plastics.fi/opetusmateriaalit/" target="_blank">Muoviteollisuus ry — oppimateriaalit</a></li>
+        <li style="margin-bottom:0.3rem"><a href="https://www.aikolon.fi/muovitietoa/oppaat/" target="_blank">Aikolon: Muovitietoa & valintaoppaat</a></li>
+        <li style="margin-bottom:0.3rem"><a href="https://www.dailymotion.com/video/x3hjied" target="_blank">Dokumentti: How It Works — Plastic</a></li>
+        <li style="margin-bottom:0.3rem"><a href="https://bioplasticseurope.eu/about" target="_blank">Bioplastics Europe</a></li>
+        <li style="margin-bottom:0.3rem"><a href="https://woodly.com/fi/puupohjainen-muovi/" target="_blank">Woodly: Puupohjainen muovi</a></li>
+      </ul>
+    </div>
+    <div class="hbox">
+      <h4>Luonto & orgaaniset</h4>
+      <ul style="padding-left:1rem;font-size:0.8rem;color:var(--text)">
+        <li style="margin-bottom:0.3rem"><a href="https://propuu.fi" target="_blank">ProPuu — suomalainen puu</a></li>
+        <li style="margin-bottom:0.3rem"><a href="https://www.pnas.org/doi/10.1073/pnas.2115329119" target="_blank">PNAS: Puulajit maapallolla</a></li>
+        <li style="margin-bottom:0.3rem"><a href="https://en.wikipedia.org/wiki/Natural_fiber" target="_blank">Wikipedia: Natural fiber</a></li>
+        <li style="margin-bottom:0.3rem"><a href="https://en.wikipedia.org/wiki/Bamboo" target="_blank">Wikipedia: Bamboo</a></li>
+        <li style="margin-bottom:0.3rem"><a href="https://www.ellenmacarthurfoundation.org" target="_blank">Ellen MacArthur Foundation</a></li>
+        <li style="margin-bottom:0.3rem"><a href="https://www.youtube.com/watch?v=q8aqVh-LJYA" target="_blank">YouTube: Lunar Treasures</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div>
+    <div class="footer-logo">MAT<span>ERIA</span></div>
+    <div style="margin-top:0.5rem;font-size:0.75rem">Materiaali- ja valmistustekniikka · 1. vuosikurssi</div>
+    <div style="font-size:0.72rem">Metropolia AMK · Teollinen muotoilu</div>
+  </div>
+  <div class="footer-links">
+    <div style="font-size:0.7rem;color:rgba(255,255,255,0.2);margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.1em">Sivuparit</div>
+    <a href="kiridashi_metallurgia.html" target="_blank">⚒ Kiridashi — Metallit & Metallurgia</a>
+    <a href="muovit_muotoilu.html" target="_blank">⬡ Polymeerit — Muovien maailma</a>
+    <a href="https://fi.wikipedia.org/wiki/Kvarkki" target="_blank">⚛ Wikipedia: Kvarkki</a>
+    <a href="https://www.materialsproject.org" target="_blank">🔬 Materials Project</a>
+    <a href="https://www.plastics.fi" target="_blank">♻ Muoviteollisuus ry</a>
+  </div>
+  <div style="max-width:260px;font-size:0.7rem;color:rgba(255,255,255,0.2);text-align:right;line-height:1.65">
+    Kurssimateriaalit on tuotettu opetuskäyttöön. Tiedot perustuvat julkisiin lähteisiin ja tieteelliseen kirjallisuuteen. Päivitä säännöllisesti — ala kehittyy nopeasti.
+  </div>
+</footer>
+
+<!-- ── STAR CANVAS SCRIPT ── -->
+<script>
+(function(){
+  const c = document.getElementById('stars');
+  const ctx = c.getContext('2d');
+  let w, h, stars = [];
+
+  function resize() {
+    w = c.width = window.innerWidth;
+    h = c.height = window.innerHeight;
+  }
+
+  function mkStars() {
+    stars = [];
+    for (let i = 0; i < 280; i++) {
+      stars.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.2 + 0.2,
+        a: Math.random(),
+        s: (Math.random() - 0.5) * 0.15
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    stars.forEach(s => {
+      s.a += s.s * 0.01;
+      if (s.a < 0) s.a = 0.8;
+      if (s.a > 1) s.a = 0.2;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200,210,240,${s.a})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize(); mkStars(); draw();
+  window.addEventListener('resize', () => { resize(); mkStars(); });
+})();
+</script>
+</body>
+</html>
