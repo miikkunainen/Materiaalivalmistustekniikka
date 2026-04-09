@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lasin Maailma — Metropolia Teollinen Muotoilu</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fire:#E8621A;--amber:#C8880A;--gold:#D4A843;
+  --cream:#F5EED8;--parchment:#EDE4C8;
+  --charcoal:#1A1614;--dark:#110D0B;--mid:#2D2018;
+  --glass-blue:#7FB8C8;--emerald:#2D6B4A;--ruby:#8B1A2A;
+  --metro-red:#E31E26;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--dark);color:var(--cream);font-family:'Source Sans 3',sans-serif;font-weight:300;line-height:1.75;overflow-x:hidden}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:radial-gradient(ellipse at 65% 40%,#3D1A0A 0%,#1A0D05 40%,var(--dark) 80%)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 50%,rgba(232,98,26,.25) 0%,transparent 55%),radial-gradient(circle at 20% 80%,rgba(200,136,10,.12) 0%,transparent 40%)}
+.hero-orb{position:absolute;width:560px;height:560px;border-radius:50%;right:-80px;top:50%;transform:translateY(-50%);background:radial-gradient(circle at 35% 35%,rgba(232,98,26,.9),rgba(180,60,10,.6) 40%,rgba(80,20,5,.3) 70%,transparent);filter:blur(2px);animation:pulse 6s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:translateY(-50%) scale(1);opacity:.7}50%{transform:translateY(-52%) scale(1.04);opacity:.9}}
+.hero-content{position:relative;z-index:2;max-width:720px;padding:0 48px}
+.hero-metro{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.35em;color:var(--metro-red);text-transform:uppercase;margin-bottom:8px;opacity:.9}
+.hero-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.3em;color:var(--amber);text-transform:uppercase;margin-bottom:20px;opacity:.8}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,6.5vw,82px);font-weight:300;line-height:1.05;color:var(--cream);margin-bottom:10px}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:300;font-style:italic;color:rgba(245,238,216,.65);margin-bottom:36px;line-height:1.5}
+.hero-meta{font-size:12px;letter-spacing:.12em;color:rgba(245,238,216,.35);text-transform:uppercase}
+.scroll-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:10px;letter-spacing:.3em;color:rgba(212,168,67,.4);text-transform:uppercase;animation:fadeUpDown 2.5s ease-in-out infinite}
+@keyframes fadeUpDown{0%,100%{opacity:.4;transform:translateX(-50%) translateY(0)}50%{opacity:.7;transform:translateX(-50%) translateY(-6px)}}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(17,13,11,.94);backdrop-filter:blur(12px);border-bottom:1px solid rgba(212,168,67,.18)}
+nav ul{display:flex;gap:0;list-style:none;overflow-x:auto;scrollbar-width:none;padding:0 24px}
+nav ul::-webkit-scrollbar{display:none}
+nav ul li a{display:block;padding:13px 14px;font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.18em;color:rgba(245,238,216,.5);text-decoration:none;text-transform:uppercase;white-space:nowrap;transition:color .3s}
+nav ul li a:hover{color:var(--gold)}
+
+/* TYPOGRAPHY */
+section{padding:88px 48px;max-width:1200px;margin:0 auto}
+.section-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;color:var(--amber);text-transform:uppercase;margin-bottom:14px;opacity:.8}
+h2{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,4vw,50px);font-weight:300;line-height:1.15;color:var(--cream);margin-bottom:36px}
+h2 em{font-style:italic;color:var(--gold)}
+h3{font-family:'Cormorant Garamond',serif;font-size:25px;font-weight:600;color:var(--gold);margin:32px 0 12px}
+h4{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.18em;color:var(--amber);text-transform:uppercase;margin:22px 0 9px}
+p{margin-bottom:16px;color:rgba(245,238,216,.85);font-size:16px}
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(212,168,67,.4),transparent)}
+
+/* BANDS */
+.band{background:var(--mid);max-width:none;padding:0}
+.band-inner{max-width:1200px;margin:0 auto;padding:88px 48px}
+.band-fire{background:linear-gradient(135deg,#2D1208 0%,#1A0D05 50%,#0D0806 100%);border-top:1px solid rgba(232,98,26,.3);border-bottom:1px solid rgba(232,98,26,.3)}
+.band-dark{background:#0D0A08;border-top:1px solid rgba(212,168,67,.12);border-bottom:1px solid rgba(212,168,67,.12)}
+.band-safety{background:linear-gradient(135deg,#0A1A0A 0%,#0D150D 100%);border-top:1px solid rgba(45,107,74,.4);border-bottom:1px solid rgba(45,107,74,.4)}
+
+/* COMPONENTS */
+.highlight{border-left:3px solid var(--fire);padding:18px 22px;margin:28px 0;background:rgba(232,98,26,.06);font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;color:rgba(245,238,216,.8);line-height:1.6}
+.note{background:rgba(200,136,10,.07);border:1px solid rgba(200,136,10,.25);border-radius:2px;padding:14px 18px;margin:18px 0;font-size:14px;color:rgba(245,238,216,.75)}
+.note strong{color:var(--gold)}
+.warn{background:rgba(227,30,38,.08);border:1px solid rgba(227,30,38,.35);border-radius:2px;padding:14px 18px;margin:18px 0;font-size:14px;color:rgba(245,220,220,.85)}
+.warn strong{color:#FF6B6B}
+.pullquote{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,2.8vw,34px);font-weight:300;font-style:italic;color:var(--gold);text-align:center;line-height:1.4;padding:44px 64px;position:relative}
+.pullquote::before,.pullquote::after{content:'';display:block;height:1px;background:linear-gradient(90deg,transparent,rgba(212,168,67,.35),transparent);margin:22px auto;width:60%}
+
+/* LAYOUT */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:36px}
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(212,168,67,.15);padding:24px;border-radius:2px;transition:border-color .3s,background .3s}
+.card:hover{border-color:rgba(212,168,67,.32);background:rgba(255,255,255,.05)}
+.card-icon{font-size:26px;margin-bottom:12px}
+.card h4{margin-top:0}
+.card p{font-size:14px;margin-bottom:0}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:44px}
+.timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--amber) 10%,var(--amber) 90%,transparent);opacity:.4}
+.tl-item{position:relative;margin-bottom:44px}
+.tl-item::before{content:'';position:absolute;left:-38px;top:6px;width:9px;height:9px;border-radius:50%;background:var(--fire);box-shadow:0 0 10px var(--fire)}
+.tl-year{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.22em;color:var(--amber);margin-bottom:5px}
+.tl-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;color:var(--cream);margin-bottom:7px}
+.tl-drama{display:inline-block;background:rgba(232,98,26,.13);border-left:2px solid var(--fire);padding:7px 13px;margin:7px 0;font-style:italic;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(245,238,216,.72)}
+
+/* TECH GRID */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:2px;margin-top:36px;background:rgba(212,168,67,.06)}
+.tech-block{background:var(--dark);padding:32px 28px;border:1px solid rgba(212,168,67,.1)}
+.tech-num{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:300;color:rgba(212,168,67,.1);line-height:1;margin-bottom:-12px}
+.tech-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--cream);margin-bottom:6px}
+.tech-fi{font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.18em;color:var(--amber);text-transform:uppercase;margin-bottom:14px}
+.tech-block p{font-size:14px}
+.tag-list{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px}
+.tag{display:inline-block;border:1px solid rgba(212,168,67,.28);padding:2px 9px;font-size:11px;font-family:'Cinzel',serif;letter-spacing:.08em;color:rgba(212,168,67,.78);border-radius:1px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;margin-top:28px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:rgba(212,168,67,.1);border-bottom:1px solid rgba(212,168,67,.28)}
+thead th{font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.16em;color:var(--gold);text-transform:uppercase;padding:12px 14px;text-align:left;white-space:nowrap}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.05);transition:background .2s}
+tbody tr:hover{background:rgba(212,168,67,.04)}
+tbody td{padding:11px 14px;color:rgba(245,238,216,.8);vertical-align:top;line-height:1.5}
+tbody td:first-child{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--cream);white-space:nowrap}
+.check{color:var(--amber);font-size:15px}
+.cross{color:rgba(255,255,255,.18);font-size:15px}
+.partial{color:#C89040;font-size:15px}
+
+/* PERSONS */
+.person-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;margin-top:28px}
+.person{border:1px solid rgba(212,168,67,.14);padding:22px;background:rgba(255,255,255,.02)}
+.person-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--cream);margin-bottom:4px}
+.person-years{font-size:11px;color:var(--amber);font-family:'Cinzel',serif;letter-spacing:.1em;margin-bottom:9px}
+.person p{font-size:13px;margin-bottom:0}
+
+/* INDUSTRY CARDS */
+.industry-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-top:28px}
+.industry-card{padding:22px;border-top:2px solid;background:rgba(255,255,255,.02)}
+.industry-card.art{border-color:var(--ruby)}
+.industry-card.factory{border-color:var(--amber)}
+.industry-card.flat{border-color:var(--glass-blue)}
+.industry-card.tech{border-color:var(--emerald)}
+.industry-card h4{margin-top:6px;color:var(--cream)}
+.industry-card p{font-size:13px}
+
+/* SAFETY SPECIFIC */
+.safety-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:28px}
+.safety-card{padding:24px;border-left:3px solid;background:rgba(255,255,255,.02)}
+.safety-card.high{border-color:#FF4444}
+.safety-card.medium{border-color:#FFA500}
+.safety-card.info{border-color:var(--glass-blue)}
+.safety-card h4{margin-top:0;color:var(--cream)}
+.safety-card p{font-size:14px}
+
+/* TOOL GRID */
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:28px}
+.tool-card{background:rgba(255,255,255,.03);border:1px solid rgba(212,168,67,.12);padding:20px 18px}
+.tool-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--cream);margin-bottom:4px}
+.tool-fi{font-size:11px;font-family:'Cinzel',serif;letter-spacing:.1em;color:var(--amber);margin-bottom:10px}
+.tool-card p{font-size:13px;margin-bottom:0}
+
+/* GLOSSARY */
+.glossary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0;margin-top:28px}
+.gloss-item{padding:18px 20px;border-bottom:1px solid rgba(212,168,67,.1);border-right:1px solid rgba(212,168,67,.06)}
+.gloss-term{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--gold);margin-bottom:3px}
+.gloss-fi{font-size:11px;color:var(--amber);font-family:'Cinzel',serif;letter-spacing:.1em;margin-bottom:8px}
+.gloss-item p{font-size:13px;margin-bottom:0;color:rgba(245,238,216,.75)}
+
+/* COLOR SWATCHES */
+.color-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-top:28px}
+.color-card{border:1px solid rgba(212,168,67,.15);overflow:hidden}
+.color-swatch{height:70px}
+.color-info{padding:14px}
+.color-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--cream);margin-bottom:3px}
+.color-chemical{font-size:11px;color:var(--amber);font-family:'Cinzel',serif;letter-spacing:.1em;margin-bottom:7px}
+.color-card p{font-size:12px;margin-bottom:0}
+
+/* REFERENCES */
+.ref-list{list-style:none;margin-top:24px}
+.ref-list li{padding:10px 0;border-bottom:1px solid rgba(212,168,67,.1);font-size:14px;color:rgba(245,238,216,.65);line-height:1.55}
+.ref-list li strong{color:rgba(212,168,67,.8);font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600}
+
+/* FOOTER */
+footer{background:#0A0806;border-top:1px solid rgba(212,168,67,.14);padding:44px 48px;text-align:center}
+footer p{font-size:12px;color:rgba(245,238,216,.28);margin-bottom:7px}
+footer .footer-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:rgba(212,168,67,.45);margin-bottom:14px;font-style:italic}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .two-col,.three-col{grid-template-columns:1fr}
+  nav{padding:0 8px}
+  section{padding:60px 18px}
+  .band-inner{padding:60px 18px}
+  .hero-content{padding:0 20px}
+  .timeline{padding-left:28px}
+  .tech-grid{grid-template-columns:1fr}
+  .pullquote{padding:32px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<div class="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-content">
+    <p class="hero-metro">Metropolia Ammattikorkeakoulu · Teollinen Muotoilu</p>
+    <p class="hero-label">Materiaalikäsikirja · Glass Design Reference</p>
+    <h1>Lasin<br><em>Maailma</em></h1>
+    <p class="hero-sub">Täydellinen käsikirja materiaalista, historiasta, valmistustekniikoista, työturvallisuudesta ja lasin merkityksestä muotoilulle — teolliselle muotoilijalle.</p>
+    <p class="hero-meta">Mika Ihanus · Metropolia AMK · Teollinen Muotoilu · 2025</p>
+  </div>
+  <div class="scroll-hint">▾ Vieritä alas</div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <ul>
+    <li><a href="#mita">Mitä on lasi</a></li>
+    <li><a href="#historia">Historia</a></li>
+    <li><a href="#suomi">Suomi</a></li>
+    <li><a href="#teollisuus">Teollisuus</a></li>
+    <li><a href="#sulatus">Sulatus &amp; jäähdytys</a></li>
+    <li><a href="#turvallisuus">Turvallisuus</a></li>
+    <li><a href="#varit">Värit</a></li>
+    <li><a href="#vapaapuhallus">Vapaapuhallus</a></li>
+    <li><a href="#tyokalut">Työkalut</a></li>
+    <li><a href="#tekniikat">Tekniikat</a></li>
+    <li><a href="#taulukko">Muototaulukko</a></li>
+    <li><a href="#laminointi">Laminointi</a></li>
+    <li><a href="#tasolasi">Tasolasi</a></li>
+    <li><a href="#aly">Älylasi</a></li>
+    <li><a href="#liekkityot">Liekkityöt</a></li>
+    <li><a href="#elinkierto">Kestävyys</a></li>
+    <li><a href="#kritiikki">Kritiikki</a></li>
+    <li><a href="#estetiikka">Estetiikka</a></li>
+    <li><a href="#sanasto">Sanasto</a></li>
+    <li><a href="#lahteet">Lähteet</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════════ MITÄ ON LASI ══════════════════ -->
+<section id="mita">
+  <p class="section-label">Perustiede · Glass Science</p>
+  <h2>Mitä lasi <em>oikeastaan</em> on?</h2>
+  <div class="two-col">
+    <div>
+      <p>Lasi on <strong>amorfinen kiinteä aine</strong> — se ei omaa kiteistä rakennetta. Kun sula jäähtyy tarpeeksi nopeasti, atomit eivät ehdi järjestäytyä säännölliseen kiderakenteeseen. Syntyy lasi: kiinteä, mutta rakenteellisesti nestemäinen. Tämä on lasin paradoksi — näkyvä ja pinnoille kova, mutta sisäisesti kaaos.</p>
+      <p>Kaikki lasit pyrkivät kiteytymään. Lasimainen tila on välivaihe — termodynaaminen tasapainotila, joka ei koskaan ole täysin stabiili. Liian hidas jäähtyminen johtaa kiteytymiseen, joka näkyy valkoisina täplinä tai samentuneena massana. Liian nopea jäähtyminen jättää jännityksiä, jotka voivat halkaista esineen päiviä myöhemmin.</p>
+      <div class="highlight">Kaikki lasit pyrkivät kiteytymään. Tämä on juurisyy lähes kaikkiin lasinvalmistuksen haasteisiin — ja samalla lasin tekninen magia.</div>
+    </div>
+    <div>
+      <h3>Lasiperheet</h3>
+      <div class="cards">
+        <div class="card"><div class="card-icon">🫙</div><h4>Sooda-kalkkilasi</h4><p>SiO₂ ~72%, Na₂O ~13%, CaO ~10%. Lähes kaikki astialasi ja ikkunalasi. Edullinen, laaja työskentelyalue.</p></div>
+        <div class="card"><div class="card-icon">🔬</div><h4>Borosilikaatti</h4><p>Pyrex, Simax. Korkea lämmönkestävyys, alhainen lämpölaajeneminen (9,9×10⁻⁶/K). Laboratorio ja keittiö.</p></div>
+        <div class="card"><div class="card-icon">💎</div><h4>Lyijykristalli</h4><p>PbO 24–30%. Pehmeämpi, leveämpi työskentelyalue, kauniimpi kimalle. Korvataan yhä lyijyttömällä kristallilla.</p></div>
+        <div class="card"><div class="card-icon">📱</div><h4>Gorilla Glass</h4><p>Aluminosilikaatti, ioninvaihdettu. Erittäin kova ja joustava. Älypuhelimet, kosketusnäytöt.</p></div>
+        <div class="card"><div class="card-icon">🌡️</div><h4>Kvarttilasi</h4><p>Lähes puhdas SiO₂. Erittäin korkea sulamislämpötila, minimaalinen lämpölaajeneminen (1,77×10⁻⁶/K). Optinen teollisuus.</p></div>
+        <div class="card"><div class="card-icon">⚗️</div><h4>Metalliset lasit</h4><p>Metallilejeeringit ilman kiderakennetta. Erittäin kova, joustava, korroosionkestävä.</p></div>
+      </div>
+    </div>
+  </div>
+  <h3>Lämpötilafysiikka muotoilijan silmin</h3>
+  <p><strong>Lasimuutoslämpötila (Tg)</strong> on raja, jossa lasi muuttuu hauraasta notkeaksi. Sooda-kalkkilasilla Tg ≈ 520–560°C. Lasin työskentelylämpötila on 900–1200°C. Hehkutusuunin lähtölämpötila on juuri Tg:n yläpuolella, josta jäähdytys tapahtuu hitaasti — usein 0,5–3°C/min — jännittysten vapauttamiseksi.</p>
+  <div class="note"><strong>Sooda-kalkkilasin lämpölaajenemiskerroin</strong> on 25,5×10⁻⁶/K — noin 14× suurempi kuin borosilikaattilasin (9,9) ja 25× suurempi kuin kvarttilasilla (1,77). Siksi sooda-kalkkilasin korjaaminen kuumentamalla on mahdotonta — laajeneminen halkaisee esineen.</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════ HISTORIA ══════════════════ -->
+<div class="band band-fire">
+<div class="band-inner" id="historia">
+  <p class="section-label">Historia · Global Glass History</p>
+  <h2>Lasin <em>dramaattinen</em> historia — vallankaappauksista teolliseen vallankumoukseen</h2>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-year">3500–3000 EKR · Mesopotamia &amp; Egypti</div>
+      <div class="tl-title">Ensimmäinen lasi — sivutuotteen löytö</div>
+      <p>Ensimmäiset lasiesineet — helmet ja läpinäkymättömät pienet astiat — syntyvät Mesopotamiassa ja Egyptissä. Lasi ei ole keksintö, se on löytö: keramiikka-lasitteiden tekijät huomaavat, että hiekka ja natron yhdessä sulattaen muodostuu jotain uutta. Luonto on tehnyt lasimaista obsidiaania tulivuorissa jo miljardit vuodet.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">~50 EKR · Syyria</div>
+      <div class="tl-title">Lasinpuhaltamisen keksiminen — sivilisaation muuttaja</div>
+      <p>Syyrialainen käsityöläinen puhaltaa ensimmäistä kertaa pitkän metalliputken läpi sulaan lasimassaan. Kupla muodostuu. Koko maailma muuttuu. Nyt lasi voidaan muokata vapaasti — ei enää vain hioa tai valaa. Muotojen kirjo räjähtää, hinnat romahtavat, lasi demokratisoituu.</p>
+      <div class="tl-drama">Yksi puhallus muuttaa sivilisaation. Roomalaiset omaksuvat tekniikan välittömästi, ja lasi leviää koko imperiumiin.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1291 · Venetsia</div>
+      <div class="tl-title">Suuri siirto Muranoon — poliittinen vankeuslaitos</div>
+      <p>Doge antaa asetuksen: kaikki lasihyttit saarelle Muranoon. Virallinen syy: paloturvallisuus. Todellinen syy: salaisuudet halutaan vankeuteen. Mestarit saavat aatelisarvon ja oikeuden kantaa miekkaa — mutta eivät saa lähteä ilman lupaa. Salaisuuden paljastaminen ulkomaille on kuolemanteko.</p>
+      <div class="tl-drama">Venetsian salainen poliisi lähettää legenden mukaan salamurhaajia niiden perään, jotka pakenevat. Jotkut pakenevat kuitenkin yöllä veneillä — ja perustavat "à la façon de Venise" -hyttejä Ranskaan, Alankomaihin, Saksaan.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1400-luku · Murano</div>
+      <div class="tl-title">Cristallo — maailman puhtain lasi</div>
+      <p>Angelo Barovier kehittää cristallon — lähes täysin läpinäkyvän lasin. Euroopan eliitti haluaa sitä: Henrik VIII, paavi Klemens VII, Ranskan Franciscus I. Murano on maailman lasipääkaupunki. Keksinnöt seuraavat toisiaan: lattimo (maitomainen lasi), filigrana (lasitankolangat), millefiori.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1673–1676 · Englanti</div>
+      <div class="tl-title">Lyijykristalli — George Ravenscroft</div>
+      <p>Englantilainen lasimies George Ravenscroft lisää lyijyoksidia lasimassaan. Syntyy lujempi, kirkkaampi, kauniimmin soiva lasi. Muranon cristallon aikakausi alkaa loppua. Böömiläiset kehittävät samanaikaisesti kalkkikivikristalleja — kovempia ja kaiverrukseen sopivampia.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1797 · Napoleon</div>
+      <div class="tl-title">Venetsian tuho — 700 vuotta tuhotaan 20 vuodessa</div>
+      <p>Napoleon valloittaa Venetsian, sulkee tehtaat, ja Habsburgit asettavat tuhoavat verot. 24 hytistä jää 1820 vain 5 toimivaa. Muranon tarina lähes päättyy. Vasta 1800-luvun puolivälissä Salviati ja myöhemmin Venini elvyttävät perinteen — kutsumalla moderneja taiteilijoita yhteistyöhön.</p>
+      <div class="tl-drama">700 vuotta vaalittu taito tuhotaan kahdessa vuosikymmenessä politiikan ja verojen avulla.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1851 · Lontoo</div>
+      <div class="tl-title">Crystal Palace — teollinen lasi muuttaa arkkitehtuurin</div>
+      <p>Joseph Paxtonin Crystal Palace käyttää 83 000 m² lasia. Se on mahdoton ennen teollista lasituotantoa. Ikkunalasi demokratisoituu — aiemmin pelkkä ylellisyys, nyt kaikille. Teollinen vallankumous ja lasi kulkevat käsi kädessä.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1903 · Ranskassa ja USA</div>
+      <div class="tl-title">Laminoidun lasin keksintö — Édouard Bénédictus</div>
+      <p>Ranskalainen kemisti Édouard Bénédictus pudottaa lasipullon, joka on saanut selluloosanitridipinnoitteen — se ei hajoa sirpaleiksi. Hän patentoi laminoidun lasin 1909. Tekniikka pelastaa autossa istujia sirpaleilta — ensimmäinen turvalasikeksintö.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1952–1959 · Englanti</div>
+      <div class="tl-title">Float-lasi — Alastair Pilkingtonin 7 vuotta pidetty salaisuus</div>
+      <p>Alastair Pilkington kehittää menetelmän, jossa sula lasi kelluu tinalammella ja muodostaa täydellisen tasaisen pinnan. Pilkington pitää keksinnön salassa 7 vuotta, investoi 7 miljoonaa puntaa ennen kannattavuutta. Kylmän sodan aikana hän neuvottelee lisenssin myös Neuvostoliitolle.</p>
+      <div class="tl-drama">Nyt 90% maailman ikkunalasista tehdään tällä menetelmällä. Pilkington muutti ikkunan arkkitehtuurin perustan.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1962 · USA</div>
+      <div class="tl-title">Harvey Littleton ja Studio Glass -liike</div>
+      <p>Taiteilija Harvey Littleton osoittaa, että yksittäinen taiteilija voi omistaa ja operoida lasinpuhaltamisuunin ilman teollisuuden tukea. Studio Glass -liike syntyy. Lasi ei ole enää vain tehdastuote tai käsityöläisammatti — se on taiteilijan media. Liike leviää Eurooppaan, Suomeen, koko maailmaan.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2007–nyt · Maailma</div>
+      <div class="tl-title">Gorilla Glass, OLED-lasi, älylasi</div>
+      <p>Corningin Gorilla Glass mahdollistaa modernin älypuhelimen. OLED-näytöt ovat lasia lasia päällä. Sähköisesti pimentyvä lasi tekee tuloaan arkkitehtuuriin. Lasi ei enää vain läpäise valoa — se muuttaa sitä, tuottaa energiaa, reagoi ympäristöön. Uusi lasin aikakausi on alkanut.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════ SUOMI ══════════════════ -->
+<section id="suomi">
+  <p class="section-label">Finnish &amp; Scandinavian Design</p>
+  <h2>Suomalainen lasimuotoilu — <em>maailman huipulle luonnon kautta</em></h2>
+  <div class="highlight">Suomi nousi 1950-luvulla kansainvälisen lasimuotoilun eturiviin — ei eurooppalaista perintöä kopioimalla, vaan luonnon ymmärtämisellä, materiaalin kunnioittamisella ja uskaliaudella rikkoa säännöt.</div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">1681 · Uusikaupunki</div><div class="tl-title">Suomen ensimmäinen lasitehdas</div><p>Ruotsalaiset käsityöläiset tuovat taitonsa Suomeen. Alkutuotanto on käytännöllistä — pulloja, ikkunalasia, arkilasia.</p></div>
+    <div class="tl-item"><div class="tl-year">1793 · Nuutajärvi</div><div class="tl-title">Nuutajärven lasitehdas — Suomen vanhin</div><p>Toimii aina 2000-luvulle. Siitä tulee myöhemmin tärkeä taidelasikeskus ja yhteisöllinen lasikylä.</p></div>
+    <div class="tl-item"><div class="tl-year">1881 · Iittala</div><div class="tl-title">Iittalan lasitehdas — Suomen tunnetuin</div><p>Ruotsalainen Abrahamson perustaa. Ensimmäiset 17 puhaltajaa tuodaan Ruotsista — Suomessa ei vielä osata. Ensimmäiset esineet 24.11.1881.</p></div>
+    <div class="tl-item"><div class="tl-year">1932–1936 · Aino &amp; Alvar Aalto</div><div class="tl-title">Bölgeblick ja Savoy-maljakko — modernin alku</div><p>Aino Aalton Bölgeblick (1932) asettaa modernin astiasuunnittelun standardin. Alvar Aallon aaltoileva Savoy-maljakko (1936, nyt Aalto-maljakko) esittelee Suomen maailmalle Pariisin maailmannäyttelyssä 1937. Orgaaninen muoto haastaa aikakauden geometrian.</p></div>
+    <div class="tl-item"><div class="tl-year">1946 · Kilpailu</div><div class="tl-title">Wirkkala ja Franck voittavat — uusi aikakausi</div><p>Iittala järjestää "nykytaiteen" kilpailun. Voittaja: Tapio Wirkkala. Kakkonen ja kolmonen: Kaj Franck. Johtaja Antero Järvinen antaa heille vapaat kädet. Tulos: kolme Grand Prix'ta Milanon Triennalessa 1951–57.</p></div>
+    <div class="tl-item"><div class="tl-year">1964 · Finlandia-sarja</div><div class="tl-title">Puumuottitekniikka — Sarpanevan keksintö</div><p>Timo Sarpaneva kehittää tekniikan, jossa lasi puhalletaan palavaan puumuottiin. Hiiltymä jättää ainutlaatuisen tekstuurin — pohjoinen jää, orgaaninen luonto. Jokainen esine on erilainen.</p></div>
+    <div class="tl-item"><div class="tl-year">1968 · Ultima Thule</div><div class="tl-title">Tapio Wirkkala — Lappi lasissa</div><p>Wirkkalan Ultima Thule -sarja esittelee puumuottitekniikalla tehdyn jäätekstuuria imitoivan pinnan. Sarja on yhä tuotannossa — ikiteos.</p></div>
+  </div>
+  <h3>Suomen suuret lasimuotoilijat</h3>
+  <div class="person-grid">
+    <div class="person"><div class="person-name">Aino Aalto</div><div class="person-years">1894–1949</div><p>Bölgeblick/Aalto-lasit (1932). Toiminnallinen minimalismi, rengaskoristeet. Puristettua lasia, joka on yhä tuotannossa.</p></div>
+    <div class="person"><div class="person-name">Alvar Aalto</div><div class="person-years">1898–1976</div><p>Savoy/Aalto-maljakko (1936). Orgaaninen viiva, Suomen järvet muodossa. Ikoninen, yhä valmistuksessa 12-vaiheisena.</p></div>
+    <div class="person"><div class="person-name">Tapio Wirkkala</div><div class="person-years">1915–1985</div><p>Kantarelli (1946), Ultima Thule (1968). Luonnon mikrodetaljit lasissa. Kolme Grand Prix'ta Milanossa.</p></div>
+    <div class="person"><div class="person-name">Timo Sarpaneva</div><div class="person-years">1926–2006</div><p>Orkidea (1953), Finlandia (1964). Puumuottitekniikan kehittäjä. Iittalan i-logo (1956). "Vuoden kaunein esine" — House Beautiful.</p></div>
+    <div class="person"><div class="person-name">Kaj Franck</div><div class="person-years">1911–1989</div><p>Kartio-lasit, minimalismin mestari. "Ei mitään turhaa" -filosofia. Suomalaisen muotoiluidentiteetin rakentaja.</p></div>
+    <div class="person"><div class="person-name">Oiva Toikka</div><div class="person-years">1931–2019</div><p>Birds by Toikka (1972–), yli 500 erilaista lasililintua. Kastehelmi (1964). Suomen rakastetuimpia lasimuotoilijoita.</p></div>
+    <div class="person"><div class="person-name">Helena Tynell</div><div class="person-years">1918–2016</div><p>Riihimäen lasi. Värikäs, leikkisä 1960–70-luku. Moon Walk, Fontana-sarja.</p></div>
+    <div class="person"><div class="person-name">Gunnel Nyman</div><div class="person-years">1909–1948</div><p>Lyhyt ura, valtava vaikutus. Pärlbandet (1947) Nuutajärvellä. 1940-luvun tärkeimpiä suomalaisia lasimuotoilijoita.</p></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════ TEOLLISUUS ══════════════════ -->
+<section id="teollisuus">
+  <p class="section-label">Global Glass Industry</p>
+  <h2>Lasiteollisuuden <em>neljä maailmaa</em></h2>
+  <div class="industry-grid">
+    <div class="industry-card art"><div class="card-icon">🎨</div><h4>Taidelasi</h4><p>Studio Glass, Murano, Kosta Boda, Nuutajärven lasikylä, yksittäiset taiteilijat. Käsityö, ainutlaatuisuus, keräilyarvo. Harvey Littletonin 1962 käynnistämä Studio Glass -liike demokratisoi taidelasituotannon.</p></div>
+    <div class="industry-card factory"><div class="card-icon">🏭</div><h4>Tehdaslasi</h4><p>Iittala, Orrefors, Riedel, Waterford. Muotoilijayhteistyö, sarjatuotanto, designbrändäys. Iittala valmistaa Aalto-maljakkoa 12 vaiheessa, 6–7 puhaltajan tiimillä, 10 tunnissa.</p></div>
+    <div class="industry-card flat"><div class="card-icon">🪟</div><h4>Tasolasi</h4><p>Pilkington (NSG), Guardian, AGC. Float-prosessi. Arkkitehtuuri, autoteollisuus, aurinkopaneelit. 90% maailman ikkunalasista float-lasia. Täysin automatisoitu.</p></div>
+    <div class="industry-card tech"><div class="card-icon">⚗️</div><h4>Tekninen lasi</h4><p>Corning (Gorilla Glass), SCHOTT, Heraeus, Zeiss. Älypuhelimet, optiikka, lasikuitu, lääketiede, ydinjätteet, aurinkokennot. Lasin tekninen tulevaisuus.</p></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════ SULATUS JA JÄÄHDYTYS ══════════════════ -->
+<section id="sulatus">
+  <p class="section-label">Melting &amp; Annealing</p>
+  <h2>Lasin sulattaminen ja <em>jäähdyttäminen</em></h2>
+  <div class="two-col">
+    <div>
+      <h3>Sulattamisprosessi</h3>
+      <p>Lasimassan sulattaminen tapahtuu <strong>sulatusuunissa (pot furnace tai tank furnace)</strong>. Savipata tai teräksinen allas täytetään raaka-aineilla — hiekka (SiO₂), soodatuhka (Na₂CO₃), kalkkikivi (CaCO₃) — sekä kierrätyslasilla (cullet), joka nopeuttaa sulamista ja laskee energiakustannuksia.</p>
+      <h4>Lämpötilat:</h4>
+      <p>Raaka-aineet lisätään huoneenlämpöön. Uuni nostetaan hitaasti 1200–1400°C:een. Sooda-kalkkilasi sulaa noin 1100°C:ssa, mutta puhdistuminen (kuplien poistuminen) vaatii korkeamman lämpötilan ja seisottamisen. Täydestä sulamisesta käyttövalmiiksi kuluu 12–24 tuntia.</p>
+      <h4>Työskentelylämpötila:</h4>
+      <p>Lasinpuhaltajan työskentelylämpötila on 900–1050°C. Tässä lämpötilassa massa on hunajamaisesti virtaava, muovattavissa, mutta ei liian nestemäinen. Puhaltaja arvioi lämpötilan lasin värin ja viskositeetin perusteella — ei mittarista.</p>
+    </div>
+    <div>
+      <h3>Hehkutus — välttämätön vaihe</h3>
+      <p>Kun lasikappaleen muotoilu on valmis, se siirretään välittömästi <strong>hehkutusuuniin (annealing oven/lehr)</strong>. Hehkutusuunin lämpötila on lasimuutoslämpötila Tg — sooda-kalkkilasilla noin 520–560°C.</p>
+      <h4>Miksi hehkutus on pakollinen?</h4>
+      <p>Lasiesine jäähtyy aina epätasaisesti: pinta jäähtyy nopeammin kuin sisäosa. Tämä luo sisäisiä jännityksiä, jotka voivat purkautua halkeamana heti tai päivien kuluttua. Hehkutuksessa lämpötilaerot tasaantuvat ja jännitykset vapautuvat hallitusti.</p>
+      <h4>Jäähdytysaika:</h4>
+      <p>Pienet helmet: 30–60 min. Taidelasiesineet: 8–12 tuntia. Suuret veistokset: 24–72 tuntia tai enemmän. Nyrkkisääntö: mitä paksumpi lasikappale, sitä hitaampi jäähdytys.</p>
+      <div class="note"><strong>Varoitus:</strong> Hehkuttamaton lasiesine näyttää täydelliseltä — kunnes se halkea spontaanisti. Tämä voi tapahtua minuuttien tai viikkojen kuluttua. Hehkutusta ei voi sivuuttaa.</div>
+    </div>
+  </div>
+  <h3>Karkaistu lasi — vastakohta hehkutetulle</h3>
+  <p>Karkaistussa lasissa (tempered glass) jännitykset tehdään tarkoituksella: lasi kuumennetaan 620–680°C:een ja jäähdytetään äkillisesti ilmasuihkulla. Pinta jäähtyy nopeasti, sisäosa hitaasti. Tuloksena pinta on puristuksessa ja sisus vedolla. Tämä tekee lasista 4–5× lujempaa kuin tavallinen lasi — mutta kun se hajoaa, se pirstaloituu pieniksi pyöreiksi muruiksi, ei teräväksi sirpaleiksi. Autoteollisuus, rakentaminen, ovien lasit.</p>
+</section>
+
+<!-- ══════════════════ TURVALLISUUS ══════════════════ -->
+<div class="band band-safety">
+<div class="band-inner" id="turvallisuus">
+  <p class="section-label">Occupational Safety · Työturvallisuus</p>
+  <h2>Lasinvalmistuksen <em>työturvallisuus</em></h2>
+  <div class="warn">⚠️ <strong>Lasihytti on teollisuusympäristö</strong> — lämpötilat ylittävät 1200°C, säteilylämpö on intensiivistä, lasin käsittely vaatii täsmällistä koordinaatiota. Jokainen työvaihe sisältää vakavan riskin, joka voidaan hallita oikealla koulutuksella ja suojavarusteilla.</div>
+
+  <div class="safety-grid">
+    <div class="safety-card high">
+      <h4>🔥 Palovammat ja säteily</h4>
+      <p><strong>Riskit:</strong> Sulaan lasiin koskettaminen aiheuttaa välittömän vakavan palovamman. Infrapunasäteily kuumentaa silmiä — pitkäaikainen altistus ilman suojalaseja johtaa kaihiin (lasinpuhaltajan kaihi, tunnettu ammattitauti).</p>
+      <p><strong>Suojaus:</strong> Lämpösuojakäsineet, pitkähihaiset vaatteet, didymium-suojalasit (IR-suodatus, välttämätön!). Koskaan ei käsitellä kuumaa lasia paljaalla iholla. Työstövälineet on aina lämmitettävä ennen lasikosketusta.</p>
+    </div>
+    <div class="safety-card high">
+      <h4>💨 Kemikaalit ja kaasut</h4>
+      <p><strong>Riskit:</strong> Lasin väreihin käytetyt metallioksideista — lyijy (Pb), kadmium (Cd), kromi (Cr⁶⁺), arseeni — voivat vapautua pölynä tai kaasuna sulattamisen yhteydessä. Kaasumainen uraani on radioaktiivinen. Polttokaasut (maakaasu, propano) aiheuttavat häkämyrkytysriskin riittämättömässä tuuletuksessa.</p>
+      <p><strong>Suojaus:</strong> Riittävä ilmanvaihto (kohdepoisto uunin päällä), käyttöturvallisuustiedotteet (SDS) kaikille kemikaaleille. Lyijyä sisältävän lasin käsittelyssä P3-luokan hengityssuoja. Säännöllinen terveysmittaus altistuneilla.</p>
+    </div>
+    <div class="safety-card medium">
+      <h4>🔪 Lasin terävyys</h4>
+      <p><strong>Riskit:</strong> Hajonnut tai työstetty lasi on äärimmäisen terävää. Sirpaleet lentävät arvaamattomiin suuntiin. Kylmätyöstössä (hionta, poraus, leikkaus) syntyvä lasipöly on hengitettynä vaarallista (silikoosin aiheuttaja).</p>
+      <p><strong>Suojaus:</strong> Kylmätyöstössä vesijäähdytys ja kohdepoistoimuri. Pölynsuojain (FFP2/P2 vähintään). Suljetut kengät, suojalasit. Lasin keräys ja hävitys jätesäkkeihin — ei irtolasia.</p>
+    </div>
+    <div class="safety-card medium">
+      <h4>🌡️ Lämpörasitus</h4>
+      <p><strong>Riskit:</strong> Hyttityöskentely on fyysisesti erittäin raskasta. Hytti on 40–55°C:n ympäristö. Pitkä altistuminen johtaa lämpöuupumukseen, kuivumiseen ja lihasrasitusvammoihin (hartiat, selkä).</p>
+      <p><strong>Suojaus:</strong> Säännölliset tauot, runsas nesteytys (vähintään 0,5–1 L/tunti hyttityöskentelyssä), hyvä fyysinen kunto. Enintään 2 tunnin työskentelyjaksot ilman taukoa.</p>
+    </div>
+    <div class="safety-card info">
+      <h4>🪟 Hehkutusuunin riskit</h4>
+      <p><strong>Riskit:</strong> Hehkutusuuni on jatkuvasti yli 500°C. Esineiden siirto uuniin vaatii pitkiä pihtejä ja tarkkaavaisuutta. Uunin oven avaaminen vapauttaa lämpöpurskahduksen.</p>
+      <p><strong>Suojaus:</strong> Pitkät uunikintaat, kasvonsuoja (face shield). Koskaan ei kurkisteta suoraan avoimeen uuniin. Suojavarusteet säilytetään käden ulottuvilla, ei hyllyllä.</p>
+    </div>
+    <div class="safety-card info">
+      <h4>⚡ Sähkö ja kaasujärjestelmät</h4>
+      <p><strong>Riskit:</strong> Korkeapaineisia kaasuputkia (maakaasu, propano) ei saa korjata itse. Sähköiset hehkutusuunit voivat aiheuttaa sähköiskun vikatilanteessa.</p>
+      <p><strong>Suojaus:</strong> Kaasujärjestelmät tarkistaa aina pätevä asentaja. Paineilmajärjestelmässä turvakytkin. Palovaroittimet ja sammuttimet helposti saatavilla. Hätäkatkaisin selvästi merkitty.</p>
+    </div>
+  </div>
+
+  <h3>Henkilökohtaiset suojavarusteet (PPE) lasihytissä</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Varuste</th><th>Tyyppi</th><th>Käyttötilanne</th><th>Pakollinen?</th></tr></thead>
+      <tbody>
+        <tr><td>Didymium-suojalasit</td><td>IR-suodattavat lasit</td><td>Aina hyttityöskentelyssä</td><td>✓ AINA</td></tr>
+        <tr><td>Kasvonsuoja</td><td>Lämpöä kestävä visieri</td><td>Hehkutusuunin avaus, roiskeriski</td><td>✓ Tilanteen mukaan</td></tr>
+        <tr><td>Lämpökäsineet</td><td>Nomex/nahka, pitkävartiset</td><td>Kuuman lasin käsittely, uuni</td><td>✓ AINA</td></tr>
+        <tr><td>Suljetut kengät</td><td>Nahka tai suojattu materiaali</td><td>Koko ajan hytissä</td><td>✓ AINA</td></tr>
+        <tr><td>Luonnonkuitu-vaatteet</td><td>Puuvilla, pellava (ei synteetti!)</td><td>Koko ajan hytissä</td><td>✓ AINA</td></tr>
+        <tr><td>Kuulonsuojaimet</td><td>SNR ≥20 dB</td><td>Koneellinen hionta, leikkaus</td><td>✓ Kylmätyöstössä</td></tr>
+        <tr><td>Hengityssuojain</td><td>FFP2/P2 tai kemikaalisuoja</td><td>Hionta, lyijylasit, kadmium</td><td>✓ Kemikaalit, pöly</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="warn" style="margin-top:24px">⚠️ <strong>HUOM: Synteettiset vaatteet (polyesteri, nailon) KIELLETTY hytissä.</strong> Ne sulavat ja tarttuvat ihoon kuumuudessa aiheuttaen vakavia palovammoja. Käytä aina luonnonkuituja.</div>
+</div>
+</div>
+
+<!-- ══════════════════ VÄRIT JA PIGMENTIT ══════════════════ -->
+<section id="varit">
+  <p class="section-label">Colour Chemistry · Värikemia</p>
+  <h2>Lasin värit ja <em>pigmentit</em></h2>
+  <p>Lasin väritys on kemiaa. Väri syntyy lisäämällä lasimassaan metallioksideja tai erikoisrakenteisia partikkeleita. Sama väriaine voi antaa eri värin eri lasikoostumuksessa, eri lämpötilassa tai eri hapetusasteessa — lasinvalmistus on taiteen lisäksi kemian taidetta.</p>
+
+  <h3>Värintuottamisen kolme päämekanismia</h3>
+  <div class="three-col">
+    <div class="card"><h4>1. Ionivärjäys</h4><p>Siirtymämetallioksideja lisätään suoraan massaan. Ioni absorboi tiettyjä valon aallonpituuksia. Ennakoitava, vakaa, helpoin hallita. Esim. CoO (kobolttioksidit) = sininen.</p></div>
+    <div class="card"><h4>2. Kolloidaalinen värjäys</h4><p>Erittäin pienet metallipartikkelit (kulta, hopea, kupari, seleeni) muodostavat kolloidaalisen suspension lasissa. Väri riippuu partikkelikoosta. Vaatii tarkan lämpökäsittelyn aktivointiin. Esim. kultakolloidaali = punainen tai violetti.</p></div>
+    <div class="card"><h4>3. Partikkelivärjäys</h4><p>Suurempia partikkeleita lisätään — esim. tinaoksidi (SnO₂) opaalivalkoinen, antimonioksidi. Partikkelit sirottavat valoa ja tekevät lasista läpinäkymätöntä tai opallimaista.</p></div>
+  </div>
+
+  <h3>Yleisimmät lasin väriaineet</h3>
+  <div class="color-grid">
+    <div class="color-card"><div class="color-swatch" style="background:linear-gradient(135deg,#1a4d8f,#2b6cb0)"></div><div class="color-info"><div class="color-name">Sininen</div><div class="color-chemical">CoO · CuO</div><p>Koboltti(II)oksidi: intensiivinen, pysyvä. Kuparioksidi: vihertävä sininen. Koboltti on kallista mutta kestävää.</p></div></div>
+    <div class="color-card"><div class="color-swatch" style="background:linear-gradient(135deg,#1a6633,#2d8a4e)"></div><div class="color-info"><div class="color-name">Vihreä</div><div class="color-chemical">Cr₂O₃ · CuO · Fe₂O₃</div><p>Kromi(III)oksidi: syvä, koristeellinen vihreä. Rautaoksidi: neutraali vaaleanvihreä.</p></div></div>
+    <div class="color-card"><div class="color-swatch" style="background:linear-gradient(135deg,#8B1A2A,#c0392b)"></div><div class="color-info"><div class="color-name">Punainen</div><div class="color-chemical">Au · CdSe · Cu</div><p>Kultakolloidaali (kultarubiini): erikoisvaatimukset, korkea hinta. Kadmiumseleenidi: kirkkaan punainen, myrkyllinen. Kuparikolloidaali: edullisempi vaihtoehto.</p></div></div>
+    <div class="color-card"><div class="color-swatch" style="background:linear-gradient(135deg,#5c3566,#8e44ad)"></div><div class="color-info"><div class="color-name">Violetti</div><div class="color-chemical">MnO₂ · Nd₂O₃ · Au</div><p>Mangaanidioksidi: violetti-ruskea. Neodyymi: vaaleanvioletti, muuttaa väriä valonlähteen mukaan (aleksandriittiefekti).</p></div></div>
+    <div class="color-card"><div class="color-swatch" style="background:linear-gradient(135deg,#7f6000,#d4a843)"></div><div class="color-info"><div class="color-name">Keltainen / Ruskea</div><div class="color-chemical">Fe₂O₃ · FeS · CeO₂</div><p>Rautaoksidi yhdistettynä rikkiin: ambra, keltainen, ruskea. Ceriumoksidi: vaalea keltainen, UV-absorboiva.</p></div></div>
+    <div class="color-card"><div class="color-swatch" style="background:linear-gradient(135deg,#f5eed8,#e8dbb5)"></div><div class="color-info"><div class="color-name">Valkoinen / Opaalinvalkoinen</div><div class="color-chemical">SnO₂ · TiO₂ · P₂O₅</div><p>Tinaoksidi: klassinen maitomainen opaalinvalkoinen. Titaanioksidi: kirkkaampi valkoinen.</p></div></div>
+    <div class="color-card"><div class="color-swatch" style="background:linear-gradient(135deg,#1a1614,#2d2018)"></div><div class="color-info"><div class="color-name">Musta</div><div class="color-chemical">Fe₃O₄ · MnO₂ · Co + Mn</div><p>Koboltin ja mangaanin yhdistelmä: syvä musta. Rautaoksidiyhdistelmät: tumma, hieman läpäisevä musta.</p></div></div>
+    <div class="color-card"><div class="color-swatch" style="background:linear-gradient(135deg,#c85a10,#e87830)"></div><div class="color-info"><div class="color-name">Oranssi</div><div class="color-chemical">CdS + CdSe · FeS</div><p>Kadmiumsulfidi-seleenidiseos: kirkkaan oranssi, kallis. Yleisimmät oranssit ovat keltainen + punainen yhdistelmä.</p></div></div>
+    <div class="color-card"><div class="color-swatch" style="background:linear-gradient(135deg,#c87040,#a0522d)"></div><div class="color-info"><div class="color-name">Kuparirubiini</div><div class="color-chemical">Cu (koll.) + SnO₂</div><p>Kuparin kolloidaaliset nanopartikkelit antavat rubiinikolloidaalin. Vaatii redusoivan hehkutuksen aktivointiin — väri "kehittyy" jäähdytyksen aikana.</p></div></div>
+  </div>
+
+  <h3>Väriaineiden käytön erityispiirteet muotoilijalle</h3>
+  <div class="two-col">
+    <div>
+      <h4>Väri muuttuu lämmössä</h4>
+      <p>Lasi näyttää usein täysin eri väriltä kuumana kuin kylmänä. Oranssi-punainen saattaa näyttää hytissä lähes mustalta. Kobolttinen sininen näyttää kuumana lähes mustalta. Muotoilijan on opittava tunnistamaan värit kuumasta massasta — kokemus ratkaisee.</p>
+      <h4>Yhteensopivuus on kriittinen</h4>
+      <p>Eri värejä yhdisteltäessä on aina tarkistettava lämpölaajenemiskertoimien yhteensopivuus (COE). Esimerkiksi tinaoksidi-pohjainen valkoinen ja kobolttisininen voivat olla epäyhteensopivia riippuen lasinvalmistajasta. Aina testaa pieni pala ensin.</p>
+    </div>
+    <div>
+      <h4>Kolloidaalivärjäys vaatii "kehityksen"</h4>
+      <p>Kultarubiini, hopeasellinen ja kuparikolloidaali eivät ole värillisiä heti sulattamisen jälkeen. Ne vaativat erillisen aktivointihehkutuksen. Kultarubiini voi näyttää hytistä tulevan kirkkaan keltaiselta ja muuttua kauniiksi rubiininpunaiseksi vasta hehkutuksessa.</p>
+      <h4>Myrkylliset väriaineet</h4>
+      <p>Lyijy (lyijykristalli, lyijypigmentit), kadmium (kirkkaat punainen, oranssi, keltainen), arseeni (kirkastavana aineena), uraani (fluoresoiva keltavihreä) ovat kaikki myrkyllisiä. Teollisuus pyrkii korvaamaan ne — mutta osalle väreistä ei ole vielä täysin toimivaa vaihtoehtoa.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════ VAPAAPUHALLUS ══════════════════ -->
+<section id="vapaapuhallus">
+  <p class="section-label">Glassblowing Techniques</p>
+  <h2>Vapaapuhalluksen tekniikat ja <em>lopputulokset</em></h2>
+  <p>Vapaapuhallus on lasinmuotoilun vanhin ja vapain tekniikka. Piipun päähän kerätty sula lasimassa elää ja muuttuu — puhaltajan taidot ja ymmärrys materiaalin luonteesta ratkaisevat tuloksen. Alla keskeisimmät tekniikat ja niiden tyypilliset lopputulokset.</p>
+
+  <div class="tech-grid">
+    <div class="tech-block">
+      <div class="tech-num">A</div>
+      <div class="tech-name">Perusmassa ja kupla</div>
+      <div class="tech-fi">Gather &amp; Bubble</div>
+      <p>Lasimassa kerätään piipulle pyörittäen. Piipun toinen pää suljetaan suulla, puhaltaja puhaltaa varovaisesti. Syntynyttä kuplaa kutsutaan "pariksi". Se on kaiken vapaapuhaltamisen lähtöpiste. Kupla muotoillaan teräslevyllä (marveritabla) ja puhtailla puukyyhkyillä (wooden block) pyöreäksi.</p>
+      <div class="tag-list"><span class="tag">Perustekniikka</span><span class="tag">Kaikki muodot</span><span class="tag">Kupla</span></div>
+    </div>
+    <div class="tech-block">
+      <div class="tech-num">B</div>
+      <div class="tech-name">Pyöristetyt suljetut muodot</div>
+      <div class="tech-fi">Rounded closed forms</div>
+      <p>Kupla kasvatetaan isoksi puhaltamalla ja pyörittämällä. Yläreunan suu suljetaan puristamalla tai lisäämällä lasimassaa päälle. Tuloksena: pallomaisia maljakoita, pulloja, koristepaloja. Tämä on vapaapuhaltamisen peruslomake — symmetrinen, tasainen, elegantti. Seinämäpaksuus vaihtelee jonkin verran.</p>
+      <div class="tag-list"><span class="tag">Pallot</span><span class="tag">Maljakot</span><span class="tag">Koristeet</span></div>
+    </div>
+    <div class="tech-block">
+      <div class="tech-num">C</div>
+      <div class="tech-name">Venytetyt muodot</div>
+      <div class="tech-fi">Elongation &amp; Pulling</div>
+      <p>Paistettua kuplaa vedetään piipun päältä toisella metallivarrella (punty). Lasimassa venyy painovoiman ja vedon vaikutuksesta. Tuloksena: pitkäkaulaiset pullot, korkeamaljakot, teardrop-muodot. Venytyksen nopeus ja suunta kontrolloivat muodon profiilia. Epäsymmetrinen venyttely antaa orgaanisia muotoja.</p>
+      <div class="tag-list"><span class="tag">Korkeat muodot</span><span class="tag">Pullot</span><span class="tag">Orgaaniset viivat</span></div>
+    </div>
+    <div class="tech-block">
+      <div class="tech-num">D</div>
+      <div class="tech-name">Suun avaus ja levitys</div>
+      <div class="tech-fi">Opening &amp; Flaring</div>
+      <p>Suljettu kupla avataan kuumilla lasinpuhaltajanpiikeillä (jacks / lasinleuat). Suun levitys tapahtuu pyörittämällä piipua nopeasti — sentrifugaalivoima levittää suuta laajemmaksi. Kupin, maljakon ja laajan kulhon suun muoto syntyy tällä tavoin. Levitys voi olla hallittu (tasainen huuli) tai vapaa (epäsäännöllinen, orgaaninen).</p>
+      <div class="tag-list"><span class="tag">Kupit</span><span class="tag">Maljakot</span><span class="tag">Kulhot</span><span class="tag">Avoimet muodot</span></div>
+    </div>
+    <div class="tech-block">
+      <div class="tech-num">E</div>
+      <div class="tech-name">Riparit ja koristelu kuumana</div>
+      <div class="tech-fi">Hot decoration — trails &amp; combing</div>
+      <p>Kontrastiväristä lasimassaa lisätään päämassan pintaan ja vedetään piikillä kuvioiksi. Klassinen tekniikka: spiraalit, petkuloviivoitukset, combing (kampa vedetään spiraaliviivojen läpi). Tuloksena: perinteiset venetsialaiskoristelutyylitelmät ja modernit raitalasit. Väri integroituu lasiin — ei pinta maalaus.</p>
+      <div class="tag-list"><span class="tag">Spiraalit</span><span class="tag">Raidat</span><span class="tag">Kammointi</span><span class="tag">Venetsialainen</span></div>
+    </div>
+    <div class="tech-block">
+      <div class="tech-num">F</div>
+      <div class="tech-name">Taittelu ja murros</div>
+      <div class="tech-fi">Folding &amp; Crimping</div>
+      <p>Puolikuumaa lasia painetaan tai taitellaan muottiin tai käsin teräsvälineillä. Suun huulia voidaan tehdä aalloiksi, laitoja taittaa sisään tai ulos. Pohja voidaan nostattaa sisään (indented base). Vaatii nopeat kädet — lasi jäähtyy nopeasti. Tuloksena: epäsäännölliset, teksturoidut muodot, orgaaniset huulet.</p>
+      <div class="tag-list"><span class="tag">Orgaaniset reunat</span><span class="tag">Aallot</span><span class="tag">Taitteet</span></div>
+    </div>
+    <div class="tech-block">
+      <div class="tech-num">G</div>
+      <div class="tech-name">Incalmo — kaksi lasin liitto</div>
+      <div class="tech-fi">Incalmo · Colour joining</div>
+      <p>Kaksi erillistä lasikuplaa puhalletaan samaan halkaisijaan eri väreistä ja liitetään yhteen kuumana. Tuloksena täsmällinen värirajaus — esimerkiksi kirkas pohja ja tumma yläosa täysin puhtaalla rajapinnalla. Skandinaavisen designin rakastama tekniikka. Erittäin taitoa vaativa — molempia kuploja pitää hallita samanaikaisesti.</p>
+      <div class="tag-list"><span class="tag">Värirajaus</span><span class="tag">Kaksi väriä</span><span class="tag">Mestaritaito</span></div>
+    </div>
+    <div class="tech-block">
+      <div class="tech-num">H</div>
+      <div class="tech-name">Casing — kerrostaminen</div>
+      <div class="tech-fi">Casing · Overlay</div>
+      <p>Puhallettua kuplaa upotetaan toiseen, erivärisen lasin massaan (tai toisinpäin). Tuloksena: värikerros värikerroksen sisällä. Tyypillinen vaikutus: kirkas ulkokerros, värikäs ydinkerros — väri loistaa sisältä läpi. Tai värillinen ulkokerros, kirkas sisus — värikerros voi myöhemmin kaivertaa kuviolliseksi (cameo glass).</p>
+      <div class="tag-list"><span class="tag">Kerrosvärjäys</span><span class="tag">Cameo</span><span class="tag">Overlay</span></div>
+    </div>
+    <div class="tech-block">
+      <div class="tech-num">I</div>
+      <div class="tech-name">Lasinauhan upottaminen</div>
+      <div class="tech-fi">Murrina cane work · Filigrana</div>
+      <p>Esivalmistettuja lasinauha- tai cane-tankoja järjestetään putkeen tai lieriömäiseen järjestelyssä. Kuuma lasimassa puhalletaan niiden läpi. Tangot integroituvat lasiin ja muodostavat sisäisiä kuvioita — viivoja, spiraaleja, verkostoja. Venetsialainen filigrana-tekniikka. Vaatii erikoistantoja ja pitkän harjoittelun.</p>
+      <div class="tag-list"><span class="tag">Filigrana</span><span class="tag">Sisäiset viivat</span><span class="tag">Venetsialainen</span></div>
+    </div>
+    <div class="tech-block">
+      <div class="tech-num">J</div>
+      <div class="tech-name">Hiekkapuhallus ja kaiverrus jälkikäteen</div>
+      <div class="tech-fi">Sandblasting &amp; Engraving (cold finishing)</div>
+      <p>Jäähtynyttä lasiesinettä voidaan viimeistellä hiekkapuhaltamalla (sandblasting) — matta-efekti osalle tai koko pinnalle, kuviokaiverrukset pintaan. Kaiverrustyö (wheel engraving, diamond engraving) poistaa lasia mekaanisesti terävillä pyörillä tai timanttikärjillä. Böömiläinen lasikaivennusperinne on maailmankuulu. Tuloksena: kerrosmateriaali, jossa kuvio nousee tai uppoutuu esiin värikerroksista.</p>
+      <div class="tag-list"><span class="tag">Matta</span><span class="tag">Kuviokaiverrukset</span><span class="tag">Böömiläinen</span><span class="tag">Cameo</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════ TYÖKALUT ══════════════════ -->
+<div class="band">
+<div class="band-inner" id="tyokalut">
+  <p class="section-label">Tools of the Trade · Työkalut</p>
+  <h2>Lasinpuhaltajan <em>työkaluarsenaali</em></h2>
+  <p>Lasihytissä työkalut ovat yksinkertaisia — mutta niiden käytön hallinta vaatii vuosia. Alla sekä hyttityön klassiset käsityökalut että kylmätyöstön välineet.</p>
+
+  <h3>Hyttityökalut — kuuma puhallus</h3>
+  <div class="tool-grid">
+    <div class="tool-card"><div class="tool-name">Blowpipe / Piippu</div><div class="tool-fi">Lasinpuhaltajanpiippu</div><p>Ontto teräsputki, pituus 120–180 cm. Puhaltaja kerää lasimassan päähän ja puhaltaa toisesta päästä. Lämpöeristetty päältä.</p></div>
+    <div class="tool-card"><div class="tool-name">Punty / Pontil</div><div class="tool-fi">Puntti</div><p>Umpinainen teräsvarsi. Esineeseen liitetään pohja puntilla — jolloin piippu voidaan irrottaa ja suuaukko avata. Punttijälki näkyy pohjan keskellä.</p></div>
+    <div class="tool-card"><div class="tool-name">Jacks / Lasinleuat</div><div class="tool-fi">Lasinpihdit / Sakset</div><p>Metallinen saksimainen työkalu. Käytetään muodon hiomiseen, suun avaukseen ja kaulan tekemiseen. Tärkein yksittäinen muotoilutyökalu.</p></div>
+    <div class="tool-card"><div class="tool-name">Wooden block / Puu-u</div><div class="tool-fi">Puukuppi</div><p>Puinen kuppi, kastettuna veteen. Käytetään lasimassan pyöristämiseen ja muotoiluun heti keruun jälkeen. Kosteus estää lasin tarttumisen.</p></div>
+    <div class="tool-card"><div class="tool-name">Marver table / Tasauslevy</div><div class="tool-fi">Marveripöytä</div><p>Tasainen graniitti- tai teräspöytä. Käytetään lasimassan rullaamisen ja tasaamiseen. Myös värikangon levittämiseen.</p></div>
+    <div class="tool-card"><div class="tool-name">Tweezers / Piikki</div><div class="tool-fi">Lasipiikki / Pinsetti</div><p>Teräviä metallipiikit, joilla vedetään, nostetaan ja koristelaan lasimassaa. Voidaan piirtää spiraaleja tai vetää raitoja.</p></div>
+    <div class="tool-card"><div class="tool-name">Shears / Lasiskaarit</div><div class="tool-fi">Lasissaarit</div><p>Suuret metallisakset joilla leikataan kuumaa lasimassaa. Erityisesti pitkien tankojen ja ylimääräisen massan poistamiseen.</p></div>
+    <div class="tool-card"><div class="tool-name">Paddle / Lepatuslevy</div><div class="tool-fi">Lapa/Lepatus</div><p>Litteä metallilapanen. Käytetään pohjan tasaamiseen, lasin levyttämiseen ja muodon flätin tekemiseen.</p></div>
+    <div class="tool-card"><div class="tool-name">Graphite pad / Grafiittityyny</div><div class="tool-fi">Grafiittityyny</div><p>Grafiittinen pehmustettu alusta kuuman lasin muotoiluun. Ei tartu lasiin, kestää korkeita lämpöjä. Korvaa puisen blokin lyhyissä töissä.</p></div>
+    <div class="tool-card"><div class="tool-name">Bench / Pyörivä tuoli</div><div class="tool-fi">Lasipuhaltajan penkki</div><p>Piikillinen penkki, jonka käsijaloissa piippu lepää. Puhaltaja pyörittää piipua jalalla tai käsillä pitämällä lasi tasaisena.</p></div>
+    <div class="tool-card"><div class="tool-name">Annealing oven</div><div class="tool-fi">Hehkutusuuni / Annealeri</div><p>Eristetty uuni, jota pidetään 500–560°C:ssa. Kaikki valmiit esineet siirtyvät heti tänne. Ohjelmoitu jäähdytysprofiili.</p></div>
+    <div class="tool-card"><div class="tool-name">Colour cane / Lasitanko</div><div class="tool-fi">Värilasitanko</div><p>Valmiiksi värjätty lasitanko, jota sulatetaan pintaan tai upotetaan massaan. Myydään laserivalmistajilta (Reichenbach, Effetre jne.).</p></div>
+  </div>
+
+  <h3>Kylmätyöstön työkalut</h3>
+  <div class="tool-grid">
+    <div class="tool-card"><div class="tool-name">Diamond blade saw</div><div class="tool-fi">Timanttisaha</div><p>Vesijäähdytteinen timanttiteräinen saha. Leikkaa lasiraakileita ja viimeistelee pohjan. Vaatii jatkuvan vesijäähdytyksen.</p></div>
+    <div class="tool-card"><div class="tool-name">Belt grinder</div><div class="tool-fi">Hiomakonehihna</div><p>Märkähioma, eri karkeusasteet (80–400 grit). Pohjan ja reunan hiominen, muodon korjailu.</p></div>
+    <div class="tool-card"><div class="tool-name">Wheel engraver</div><div class="tool-fi">Pyöräkaiverrin</div><p>Pieni pyörivä metalliset tai korundilla päällystetty pyörä. Kaiverrukset lasin pintaan — Böömiläisen lasikaivennuksen päätyökalu.</p></div>
+    <div class="tool-card"><div class="tool-name">Sandblaster</div><div class="tool-fi">Hiekkapuhallin</div><p>Paineistettua alumiinioksidia tai hiekkaa suihkutetaan pintaan. Mattaefekti tai syvempi kuviokaiverrus suojamaskin kanssa.</p></div>
+    <div class="tool-card"><div class="tool-name">Diamond drill</div><div class="tool-fi">Timanttirasiaporaisin</div><p>Poraa reikiä lasilevyihin tai -esineisiin. Vaatii vesijäähdytyksen ja varovaisuuden — aina murtumariski.</p></div>
+    <div class="tool-card"><div class="tool-name">Polishing wheel</div><div class="tool-fi">Kiillotuspyörä</div><p>Korkean nopeuden filtsipyörä kiillotusmassalla. Palauttaa pohjaan tai reunaan sahatun pinnan kirkkaan.</p></div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════ TEKNIIKAT ══════════════════ -->
+<section id="tekniikat">
+  <p class="section-label">Manufacturing Techniques</p>
+  <h2>Kaikki lasinvalmistustekniikat — <em>kattava katsaus</em></h2>
+  <div class="tech-grid">
+    <div class="tech-block"><div class="tech-num">01</div><div class="tech-name">Vapaa puhallus</div><div class="tech-fi">Free blowing</div><p>Ilman muottia, täysin käden varassa. Orgaaniset muodot, ainutlaatuisuus, korkea taidollinen vaatimus. Soveltuu taidelasille, pienille sarjoille.</p><div class="tag-list"><span class="tag">Orgaaniset</span><span class="tag">Uniikki</span><span class="tag">Käsityö</span></div></div>
+    <div class="tech-block"><div class="tech-num">02</div><div class="tech-name">Puumuotti</div><div class="tech-fi">Wood mould blowing</div><p>Lasi puhalletaan palavaan puumuottiin. Hiiltymistekstuuri, jäämäinen pinta (ks. Sarpaneva Finlandia). Muotti kestää kymmeniä puhalluksia.</p><div class="tag-list"><span class="tag">Tekstuuri</span><span class="tag">Hiiltymä</span><span class="tag">Rajoitettu</span></div></div>
+    <div class="tech-block"><div class="tech-num">03</div><div class="tech-name">Grafiittimuotti</div><div class="tech-fi">Graphite mould</div><p>Grafiitti ei tartu lasiin. Hyvä prototyyppeihin, sileä pinta, toistuva. Käsimuotti tai CNC-jyrsitty.</p><div class="tag-list"><span class="tag">Prototyyppi</span><span class="tag">Sileä pinta</span></div></div>
+    <div class="tech-block"><div class="tech-num">04</div><div class="tech-name">Teräsmuotti</div><div class="tech-fi">Iron / Steel mould</div><p>Kestää tuhansia puhalluksia. Tarkka toistettavuus. Kaiverrus mahdollinen. Iittalan tuotantomenetelmä.</p><div class="tag-list"><span class="tag">Sarjatuotanto</span><span class="tag">Tarkka</span></div></div>
+    <div class="tech-block"><div class="tech-num">05</div><div class="tech-name">Pyörittäminen</div><div class="tech-fi">Spin casting</div><p>Sentrifugaalivoima jakaa lasin tasaisesti. Leveät kulhot, tasaseinäiset muodot. Vaatii pyörivän laitteen.</p><div class="tag-list"><span class="tag">Kulhot</span><span class="tag">Tasainen seinämä</span></div></div>
+    <div class="tech-block"><div class="tech-num">06</div><div class="tech-name">Incalmo / Casing</div><div class="tech-fi">Colour joining / Overlay</div><p>Kaksi kupla liitetään (incalmo) tai värikerros lisätään päälle (casing). Puhtaat värirajauksit tai kerrostukset. Taitoa vaativa.</p><div class="tag-list"><span class="tag">Värirajaus</span><span class="tag">Kerros</span></div></div>
+    <div class="tech-block"><div class="tech-num">07</div><div class="tech-name">Koneellinen puhallus (IS)</div><div class="tech-fi">Machine blowing</div><p>Individual Section -kone. Satoja pulloja minuutissa. Teollisuusstandardi pulloille ja purkeille. Täysin automatisoitu.</p><div class="tag-list"><span class="tag">Massatuotanto</span><span class="tag">Pullot</span></div></div>
+    <div class="tech-block"><div class="tech-num">08</div><div class="tech-name">Puolikoneellinen</div><div class="tech-fi">Semi-automatic</div><p>Käsin keruu + koneellinen puhallus. Iittala käyttää. Parempi laatu kuin täyskoneellinen, soveltuu designtuotteille.</p><div class="tag-list"><span class="tag">Design</span><span class="tag">Laatu</span></div></div>
+    <div class="tech-block"><div class="tech-num">09</div><div class="tech-name">Puristelasi</div><div class="tech-fi">Pressed glass</div><p>Mäntä puristaa lasin muottiin ylhäältä. Massiivimuodot, terävät kulmat, paksu seinämä. Aino Aallon Bölgeblick on puristetta.</p><div class="tag-list"><span class="tag">Massiivimuodot</span><span class="tag">Paksu seinämä</span></div></div>
+    <div class="tech-block"><div class="tech-num">10</div><div class="tech-name">Lasin valanta</div><div class="tech-fi">Casting / Pâte de verre</div><p>Lasi sulatetaan muottiin uunissa. Pâte de verre, kiln casting, lost-wax. Veistoksellinen taide. Pitkä hehkutus.</p><div class="tag-list"><span class="tag">Veistokset</span><span class="tag">Taide</span></div></div>
+    <div class="tech-block"><div class="tech-num">11</div><div class="tech-name">Fuusio ja slumping</div><div class="tech-fi">Fusing &amp; Slumping</div><p>Lasilevyt sulautetaan uunissa yhteen (fuusio) tai painuvat muottiin (slumping). Tasolasitaide, studio-tekniikka. Ei vaadi hyttiä.</p><div class="tag-list"><span class="tag">Tasolasi</span><span class="tag">Studio</span></div></div>
+    <div class="tech-block"><div class="tech-num">12</div><div class="tech-name">Sintrointi</div><div class="tech-fi">Sintering</div><p>Lasijauhe puristetaan ja kuumennetaan osittain sulamispisteeseen. Kontrolloitava huokoisuus. Tekninen ja lääketieteellinen lasi.</p><div class="tag-list"><span class="tag">Tekninen</span><span class="tag">Huokoisuus</span></div></div>
+  </div>
+</section>
+
+<!-- ══════════════════ MUOTOTAULUKKO ══════════════════ -->
+<div class="band band-dark">
+<div class="band-inner" id="taulukko">
+  <p class="section-label">Shape Design Matrix</p>
+  <h2>Muodon valintaa helpottava <em>vertailutaulukko</em></h2>
+  <p>✓ = soveltuu hyvin &nbsp; ◐ = rajoitetusti &nbsp; ✗ = ei sovellu</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Tekniikka</th><th>Pyöreä</th><th>Orgaaninen</th><th>Terävät kulmat</th><th>Ohut seinämä</th><th>Paksu massa</th><th>Tekstuuri</th><th>Sarjatuotanto</th><th>Uniikki</th><th>Avoin muoto</th><th>Suljettu (pullo)</th></tr></thead>
+      <tbody>
+        <tr><td>Vapaa puhallus</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="partial">◐</span></td></tr>
+        <tr><td>Puumuotti</td><td><span class="check">✓</span></td><td><span class="partial">◐</span></td><td><span class="cross">✗</span></td><td><span class="partial">◐</span></td><td><span class="cross">✗</span></td><td><span class="check">✓ hiiltymä</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Grafiittimuotti</td><td><span class="check">✓</span></td><td><span class="partial">◐</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="partial">◐</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="partial">◐</span></td></tr>
+        <tr><td>Teräsmuotti</td><td><span class="check">✓</span></td><td><span class="partial">◐</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="check">✓ kaiverrus</span></td><td><span class="check">✓</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Pyörittäminen</td><td><span class="check">✓ leveät</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="partial">◐</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+        <tr><td>Incalmo / Casing</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="check">✓ värit</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Koneellinen (IS)</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="partial">◐</span></td><td><span class="check">✓ massatuotanto</span></td><td><span class="cross">✗</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Puolikoneellinen</td><td><span class="check">✓</span></td><td><span class="partial">◐</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Puristelasi</td><td><span class="check">✓</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="check">✓ muotti</span></td><td><span class="check">✓</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+        <tr><td>Lasin valanta</td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Fuusio / Slumping</td><td><span class="partial">◐</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="check">✓ levyt</span></td><td><span class="cross">✗</span></td><td><span class="check">✓ mosaiikki</span></td><td><span class="partial">◐</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════ LAMINOINTI ══════════════════ -->
+<section id="laminointi">
+  <p class="section-label">Lamination &amp; Autoclave</p>
+  <h2>Autokurkistusikkuna ja autoklaavilaminointi — <em>tekniikasta taiteeseen</em></h2>
+  <div class="two-col">
+    <div>
+      <h3>Autoikkunan valmistusprosessi</h3>
+      <p>Auton tuulilasin valmistus on monivaiheinen prosessi, joka alkaa float-lasista. Se on yksi teollisuuden tarkimmista lasimuotoiluprosesseista — jokainen tuulilasi on tarkasti mitoitettu ajoneuvon aerodynamiikkaan.</p>
+      <h4>Vaihe 1: Float-lasin leikkaus ja reunakäsittely</h4>
+      <p>Tasolasilevy leikataan ajoneuvomallille sopivaan muotoon. Reunat hiotaan turvallisuussyistä — terävä reuna halkea helpommin. Pinta puhdistetaan tarkasti.</p>
+      <h4>Vaihe 2: Taivuttaminen (Bending)</h4>
+      <p>Kaksi lasilevyä asetetaan keraamisen muotin päälle ja kuumennetaan uunissa 600–700°C:een. Lasi pehmenee ja painuu muottia vasten painovoiman avulla (gravity sag bending) tai paineella. Tuloksena täsmällinen kaksoiskaare ajoneuvon profiiliin. Tämä on tarkin vaihe — eri muotin kulmat voivat erota vain 0,1 mm.</p>
+      <h4>Vaihe 3: PVB-kalvon asettaminen</h4>
+      <p>Lasilevyjen väliin asetetaan polyvinyylibutyraali (PVB) -kalvo — tyypillisesti 0,76 mm paksu. PVB voi olla kirkas, sininenä taitettava ylävyöhyke tai akustisesti optimoitu. PVB on se "tahmea" kerros, joka pitää lasin sirpaleet paikallaan murtumisessa.</p>
+      <h4>Vaihe 4: Ilman poisto (De-airing)</h4>
+      <p>Lasi+PVB-pakkaus laitetaan vakuumipussiin tai vakuumirenkaaseen. Lämpöuunissa 80–100°C, vakuumissa poistetaan ilma laminaatin välistä. Tämä estää kuplien muodostumisen lopulliseen laminaattiin.</p>
+      <h4>Vaihe 5: Autoklaavikäsittely</h4>
+      <p>Laminaatti siirretään autoklaaviuuniin. Olosuhteet: <strong>135–145°C, 8–15 bar painetta, 30 min–4 tuntia</strong>. Paine pakottaa PVB:n kaikki ilmataskut ulos ja luo täydellisen adheesion lasiin. Jäähdytys on tasaista — äkillinen jäähdytys aiheuttaa lasin hajoamisen.</p>
+    </div>
+    <div>
+      <h3>Miksi laminoitu lasi on turvallinen?</h3>
+      <p>Kun laminoitu lasi murtuu, PVB-kerros pitää sirpaleet paikallaan. Lasi muodostaa spinnerwebin (hämähäkinseitti) halkeaman, mutta ei lähde lentämään. Tätä kutsutaan <em>controlled failure</em> -ominaisuudeksi.</p>
+      <div class="note"><strong>Historia:</strong> Laminoidun lasin keksi ranskalainen kemisti Édouard Bénédictus 1903 laboratoriotapaturmassa. Lasikolvi, johon oli jäänyt selluloosanitridipinnoite, ei hajoa pudotessa. Hän patentoi tekniikan 1909 kuultuaan autokolareista, joissa ihmiset loukkaantuivat lasin sirpaleisiin.</div>
+
+      <h3>Sama tekniikka taiteessa</h3>
+      <p>Autoklaavitekniikkaa käytetään suoraan myös taideteoksissa ja arkkitehtuurilasissa. Lasin väliin voidaan laminoida:</p>
+      <ul style="list-style:none;margin:12px 0">
+        <li style="padding:6px 0;border-bottom:1px solid rgba(212,168,67,.12);font-size:14px">🎨 <strong>Painettu PVB-kalvo</strong> — täysväri-CMYK-kuva suoraan laminaattiin, kirkas tai satiinimainen</li>
+        <li style="padding:6px 0;border-bottom:1px solid rgba(212,168,67,.12);font-size:14px">🌿 <strong>Luonnolliset materiaalit</strong> — kuivattuja kasveja, hyönteisiä, paperinpaloja, kangasta PVB-kerrosten väliin</li>
+        <li style="padding:6px 0;border-bottom:1px solid rgba(212,168,67,.12);font-size:14px">🔆 <strong>Metallifolio</strong> — kultafolion tai hopeafolion kuvioita laminaatissa</li>
+        <li style="padding:6px 0;border-bottom:1px solid rgba(212,168,67,.12);font-size:14px">📱 <strong>LED-filmi</strong> — ohut valaistuskalvo laminoituna lasiin — älykäs valaistusikkuna</li>
+        <li style="padding:6px 0;font-size:14px">🎭 <strong>Värifilmit</strong> — polykarbonaattivärifilmit antavat laminoidulle lasille tasaisen värin</li>
+      </ul>
+      <p>Bertil Valliénin hiekkavaluveistokset, EVA-laminoidut taideteokset ja arkkitehtuuriset lasipartitiot ovat kaikki saman periaatteen sovelluksia — kerrosmateriaali, jossa lasi ympäröi sisältöä ja suojaa sitä.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════ TASOLASI ══════════════════ -->
+<div class="band">
+<div class="band-inner" id="tasolasi">
+  <p class="section-label">Flat Glass Types</p>
+  <h2>Tasolasityypit ja <em>erikoisominaisuudet</em></h2>
+  <p>Tasolasi on arkkitehtuurin ja teollisuuden perusta. Float-prosessin myötä lasi on enää pelkkä raaka-aine — pinnoittamalla, laminoimalla, karkaisemalla ja yhdistämällä syntyy älykäs, toiminnallinen rakennuskomponentti.</p>
+
+  <div class="tech-grid">
+    <div class="tech-block"><div class="tech-num">I</div><div class="tech-name">Float-lasi</div><div class="tech-fi">Perustasolasi</div><p>Pilkington-prosessilla valmistettu tasolasi. Täysin tasainen molemmin puolin — tinalammelle kelluva sula lasi asettuu optisesti tasaiseksi. Paksuus 2–25 mm. 90% maailman ikkunalasista. Raaka-aine kaikelle muulle.</p><div class="tag-list"><span class="tag">Perusraaka-aine</span><span class="tag">Optisesti tasainen</span></div></div>
+    <div class="tech-block"><div class="tech-num">II</div><div class="tech-name">Karkaistu lasi</div><div class="tech-fi">Tempered / Toughened glass</div><p>Kuumennettu 620–680°C, äkillisesti jäähdytetty. 4–5× lujempi kuin tavallinen lasi. Hajotessa pyöreät muruset — ei teräviä sirpaleita. Ovenlasit, kylpyhuoneet, autojen sivuikkunat. EI voi enää leikata käsittelyn jälkeen.</p><div class="tag-list"><span class="tag">Turvallisuus</span><span class="tag">4–5× lujempi</span><span class="tag">Ei leikattavissa</span></div></div>
+    <div class="tech-block"><div class="tech-num">III</div><div class="tech-name">Laminoitu turvalasi</div><div class="tech-fi">Laminated safety glass</div><p>Kaksi tai useampia lasilevyjä PVB/EVA/TPU-kerroksella välissä. Sirpaleet pysyvät paikallaan murtumisessa. Tuulilasin standardi. Myös bulletproof-lasi on moninkertaisesti laminoitu. UV-suoja ja ääneneristys mahdollisia PVB:n kautta.</p><div class="tag-list"><span class="tag">Turvallisuus</span><span class="tag">UV-suoja</span><span class="tag">Ääneneristys</span></div></div>
+    <div class="tech-block"><div class="tech-num">IV</div><div class="tech-name">Eristyslasi (IG-lasi)</div><div class="tech-fi">Insulated Glass Unit (IGU)</div><p>Kaksi tai kolme lasilevyä alumiini- tai terässälöllä erotettuna. Välitila täytetty kuivalla ilmalla tai argon-/kryptonkaasulla. U-arvo (lämmönläpäisevyys) on 2–3× parempi kuin yksittäisellä lasilla. Nykyaikaisen ikkunan standardi.</p><div class="tag-list"><span class="tag">Lämpöeristys</span><span class="tag">Argon/Krypton</span><span class="tag">Kolmilasi</span></div></div>
+    <div class="tech-block"><div class="tech-num">V</div><div class="tech-name">Matalaemissioinen lasi</div><div class="tech-fi">Low-E glass · Lämpöä heijaistava</div><p>Ohut metallioksidi- (yleensä hopea) tai metallinen kalvo float-lasin pinnalla. Kalvo heijaistaa infrapunasäteilyä — talvella pitää lämmön sisällä, kesällä heijastaa auringon lämmön ulos. Parantaa U-arvoa merkittävästi. Nykyisin lähes standardi kaikissa IG-laseissa.</p><div class="tag-list"><span class="tag">Low-E</span><span class="tag">Energiatehokkuus</span><span class="tag">Hopea-kalvo</span></div></div>
+    <div class="tech-block"><div class="tech-num">VI</div><div class="tech-name">Akustiikkalasi / Desibeililasi</div><div class="tech-fi">Acoustic / Sound-control glass</div><p>Erityinen PVB-kerros laminoinnissa (tai epäsymmetriset paksuudet lasipinnoissa) vaimentaa ääntä tehokkaammin kuin normaali laminoitu lasi. Rw-arvo (ääneneristysarvo) voidaan nostaa jopa 52 dB:iin. Käytetään lentokenttien ympäristössä, kaupunkirakentamisessa, studioissa.</p><div class="tag-list"><span class="tag">Äänenertys</span><span class="tag">Rw 36–52 dB</span><span class="tag">Epäsymmetrinen</span></div></div>
+    <div class="tech-block"><div class="tech-num">VII</div><div class="tech-name">Aurinkovärjätty lasi</div><div class="tech-fi">Solar control glass · Tinted</div><p>Värjäys lasimassan joukkoon tai ohut pinnoite. Absorboi osa auringon säteilystä (lämpö + valo). Harmaa, sininen, vihreä, pronssi. Vähentää häikäisyä ja jäähdytystarvetta. Autoteollisuudessa yleinen. Näkyvyys vähenee hieman.</p><div class="tag-list"><span class="tag">Auringonsuoja</span><span class="tag">Värjätty</span><span class="tag">Häikäisysuoja</span></div></div>
+    <div class="tech-block"><div class="tech-num">VIII</div><div class="tech-name">Itsepuhdistuva lasi</div><div class="tech-fi">Self-cleaning glass</div><p>Titaanidioksidinanopinnoite (TiO₂) lasin ulkopinnalla. Auringonvalo aktivoi fotokatalyysin, joka hajottaa orgaanisen lian. Sadevesi ei jätä pisaroita vaan valuu alas tasaisena kalvona (hydrofiilininen). Käytetään korkeissa rakennuksissa, kattoikkunoissa.</p><div class="tag-list"><span class="tag">TiO₂</span><span class="tag">Fotokatalayysi</span><span class="tag">Hydrofiilinen</span></div></div>
+    <div class="tech-block"><div class="tech-num">IX</div><div class="tech-name">Tulenkestävä palo-osasto-lasi</div><div class="tech-fi">Fire-rated glass · EI30/EI60/EI90</div><p>Erikoiskoostumuksinen lasi + laminointikerros, joka tummenee/paisuu tulipalon yhteydessä eristäen lämpöä. EI-luokitus tarkoittaa: E = paloa pidättävä, I = lämpöä eristävä. EI30 = 30 minuuttia jne. Käytetään poistumisreiteillä ja osastoinneissa.</p><div class="tag-list"><span class="tag">EI30/EI60/EI90</span><span class="tag">Paloturvallisuus</span></div></div>
+    <div class="tech-block"><div class="tech-num">X</div><div class="tech-name">Bulletproof / Iskunkestävä</div><div class="tech-fi">Ballistic / Anti-attack glass</div><p>Useita laminaattikerroksia polykarbonaatilla tai erikoiskalvoilla. Paksuus 20–100+ mm. BR1–BR7 luokitukset eri uhkatasoille (pistoolist. tykistöön). Pankkitiskit, panssaroidut ajoneuvot, pääministerien toimistoikkunat.</p><div class="tag-list"><span class="tag">BR1–BR7</span><span class="tag">Monikerros</span><span class="tag">Polykarbonaatti</span></div></div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════ ÄLYLASI ══════════════════ -->
+<section id="aly">
+  <p class="section-label">Smart Glass &amp; Electrochromic</p>
+  <h2>Älylasi — <em>sähköisesti pimentyvä ja muuttuva</em></h2>
+  <div class="two-col">
+    <div>
+      <h3>Sähkökromaattinen lasi (Electrochromic)</h3>
+      <p>Sähkökromaattiset lasit muuttavat läpinäkyvyyttä sähkövirran avulla. Lasin pinnalla on ohut elektrokromaattinen oksidikerros (yleensä wolframioksidi WO₃), joka muuttuu värilliseksi, kun sen läpi kulkee pieni jännite (alle 5 V).</p>
+      <h4>Miten se toimii?</h4>
+      <p>Jännitteen vaikutuksesta ionit (yleensä litiumionit) liikkuvat elektrokromaattiseen kerrokseen. Tämä muuttaa materiaalin optisia ominaisuuksia — lasi tummenee asteittain. Prosessi on reversiibelinen: jännitteen poistaminen tai kääntäminen palauttaa lasin kirkkaaksi.</p>
+      <h4>Sovellukset:</h4>
+      <p>Korkeiden rakennusten ikkunat (SageGlass, View Dynamic Glass), autokattoluukut, lentokoneikkunat (Boeing 787 Dreamliner). Asteittaisesti säädettävä 5–90% läpinäkyvyys.</p>
+      <div class="note"><strong>Muistutus:</strong> Sähkökromaattinen lasi on hidas — täydellinen pimentyminen kestää 3–10 minuuttia. Se ei sovellu nopeisiin muutoksiin, vaan pitkäkestoiseen säätöön.</div>
+    </div>
+    <div>
+      <h3>PDLC-lasi (Liquid Crystal)</h3>
+      <p><strong>Polymer Dispersed Liquid Crystal</strong> -lasi sisältää nestemäisiä kiteitä PVB-kerroksessa. Kun lasi on jännitteettömässä tilassa, kiteet ovat satunaisesti orientoituneet — lasi on samea/maitomainen. Kun jännitettä käytetään, kiteet järjestyvät ja lasi kirkastuu.</p>
+      <h4>PDLC vs. Sähkökromaattinen:</h4>
+      <ul style="list-style:none;margin:12px 0">
+        <li style="padding:5px 0;border-bottom:1px solid rgba(212,168,67,.1);font-size:14px">⚡ <strong>Nopeus:</strong> PDLC muuttuu millisekunneissa. Sähkökromaattinen minuuteissa.</li>
+        <li style="padding:5px 0;border-bottom:1px solid rgba(212,168,67,.1);font-size:14px">🔆 <strong>Tila ilman virtaa:</strong> PDLC on samea. Sähkökromaattinen pysyy viimeisessä tilassa.</li>
+        <li style="padding:5px 0;border-bottom:1px solid rgba(212,168,67,.1);font-size:14px">💡 <strong>Läpinäkyvyys ON:</strong> PDLC kirkas. Sähkökromaattinen kirkas tai tummennettavissa.</li>
+        <li style="padding:5px 0;font-size:14px">💰 <strong>Hinta:</strong> PDLC edullisempi, sähkökromaattinen kalliimpi asennuksessa.</li>
+      </ul>
+      <h3>SPD-lasi (Suspended Particle Device)</h3>
+      <p>Erittäin pieniä mustia partikkeleita nesteessä laminaatissa. Ilman jännitettä partikkelit ovat satunnaiset ja absorboivat valoa — lasi on tumma. Jännitteen kanssa partikkelit järjestyvät ja päästävät valon läpi. Käytetään autokattoluukuissa (BMW, Mercedes) ja lentokoneiden ikkunoissa.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════ LIEKKITYÖT ══════════════════ -->
+<section id="liekkityot">
+  <p class="section-label">Flameworking · Lampworking</p>
+  <h2>Liekkitekniikat — <em>tulen sormitaidot</em></h2>
+  <p>Liekkityö (flameworking) tarkoittaa lasin muovaamista kaasuliekin edessä. Se on yksinäisen mestarin tekniikka — minimaaliset laitteistot, maksimaaliset mahdollisuudet.</p>
+  <div class="tech-grid">
+    <div class="tech-block"><div class="tech-num">I</div><div class="tech-name">Lasihelmien valmistus</div><div class="tech-fi">Bead making</div><p>Lasitanko sulatetaan liekin edessä ja pyöritetään tuurnan (mandrel) ympärille. Helmet voidaan koristella millefiori-siivuilla, folioilla, piikillä vedetyillä kuvioilla. Hehkutus pakollinen — vermiculite-jauhe tai minihehkutusuuni.</p><div class="tag-list"><span class="tag">Korut</span><span class="tag">Tuurna</span><span class="tag">Millefiori</span></div></div>
+    <div class="tech-block"><div class="tech-num">II</div><div class="tech-name">Pienesineet</div><div class="tech-fi">Small object work</div><p>Lasitankoja muovataan liekin edessä eläimiksi, kukkiksi, miniatyyreiksi. Grafiitti- ja metallipiikki muotoilutyökaluina. Ei tuurna, ei muottia — täysin käden varassa.</p><div class="tag-list"><span class="tag">Eläimet</span><span class="tag">Miniatyyrit</span><span class="tag">Figuriinit</span></div></div>
+    <div class="tech-block"><div class="tech-num">III</div><div class="tech-name">Borosilikaattiliekkityö</div><div class="tech-fi">Borosilicate flamework</div><p>Happi-maakaasuliekki. Pienempi lämpölaajeneminen — parempi yhteensopivuus osien välillä. Taide-boros, laboratoriolasi, Pyrex-taide. Väriskaala pienempi kuin sooda-kalkkilasilla.</p><div class="tag-list"><span class="tag">Happi-kaasu</span><span class="tag">Pyrex</span><span class="tag">Laboratorio</span></div></div>
+    <div class="tech-block"><div class="tech-num">IV</div><div class="tech-name">Millefiori / Murrina</div><div class="tech-fi">Thousand flowers</div><p>Eri värisiä tangoista kierretty nippu vedetään ohueksi tangoksi (cane). Poikkileikkaus näyttää kuvion. Siivutetaan ja sulautetaan lasiin. Muranon ikiperinne — nyt myös modernissa liekkityössä.</p><div class="tag-list"><span class="tag">Murano</span><span class="tag">Kukkarakenteet</span><span class="tag">Cane</span></div></div>
+    <div class="tech-block"><div class="tech-num">V</div><div class="tech-name">Fuusio ja inkluusiot</div><div class="tech-fi">Flame fusion</div><p>Lasiosia sulautetaan yhteen liekin avulla. Kuplien sulkeminen sisään, kukkaisten cane-tankojen upottaminen kirkkaan lasin sisään. COE-yhteensopivuus välttämätöntä!</p><div class="tag-list"><span class="tag">Kuplat</span><span class="tag">Inkluusiot</span><span class="tag">COE-kriittinen</span></div></div>
+    <div class="tech-block"><div class="tech-num">VI</div><div class="tech-name">Spun glass ja erityistekniikat</div><div class="tech-fi">Special techniques</div><p>Lasi vedetään erittäin ohuiksi langoiksi (spun glass). Avventuriina: metallihiutaleita lasimassan sisässä. Folio-lasi: hopea- tai kulta-folio halkaisee helmessä. Erikoistumisen kenttä.</p><div class="tag-list"><span class="tag">Spun glass</span><span class="tag">Avventuriina</span><span class="tag">Folio</span></div></div>
+  </div>
+  <div class="note" style="margin-top:24px"><strong>COE-yhteensopivuus liekkityössä:</strong> COE 104 (pehmeä sooda-kalkki, esim. Effetre/Moretti), COE 96 (Bullseye), COE 33 (borosilikaatti). <strong>Eri COE:n laseja EI voi sekoittaa</strong> — esine halkea jäähtyessä jännityserojen vuoksi.</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════ ELINKIERTO JA KESTÄVYYS ══════════════════ -->
+<div class="band band-safety">
+<div class="band-inner" id="elinkierto">
+  <p class="section-label">Sustainability &amp; Life Cycle</p>
+  <h2>Lasin elinkierto ja <em>kestävä kehitys</em></h2>
+  <div class="two-col">
+    <div>
+      <h3>Lasin kiertokulku</h3>
+      <p>Lasi on materiaaleista harvinainen: se voidaan kierrättää <strong>100% ilman laadun heikkenemistä</strong>, teoriassa loputtomiin. Kierrätettyä lasia (cullet) lisätään raaka-aineseokseen — se sulaa matalammassa lämpötilassa kuin raaka-aineet, säästää energiaa.</p>
+      <h4>Kierrätyshyödyt:</h4>
+      <p>10% cullet seoksessa = 3% energiasäästö. 50% cullet = 20% energiasäästö. Lisäksi jokainen kierrätetty tonni lasia säästää noin 1,2 tonnia raaka-aineita (hiekkaa, soodatuhkaa, kalkkikiveä).</p>
+      <h4>Realiteetti — kierrätysaste on pettymys:</h4>
+      <p>Vaikka lasi on teknisesti täydellisesti kierrätettävissä, käytännön kierrätysaste vaihtelee 20–80% välillä maasta riippuen. Suomessa ja Skandinaviassa astia-lasin kierrätysaste on korkea (70–85%). Monissa muissa maissa vain 20–30%. Syy: lasi on painava kierrättää, lajittelupisteitä ei ole tarpeeksi, sekajäte pilaannuttaa kierrätyserät.</p>
+    </div>
+    <div>
+      <h3>Onko lasi kestävä materiaali?</h3>
+      <div class="highlight">Lasi on geologisesti inertti, 100% kierrätettävissä, valtavia energiamääriä vaativa valmistuksessa ja raskas kuljettaa. Se on kestävä materiaali — ehdoin.</div>
+      <h4>Plussat kestävyyden kannalta:</h4>
+      <p>✓ Ei myrkyllisiä aineita maaperään käytön jälkeen &nbsp; ✓ Pitkäikäinen (tuhansia vuosia kestävä) &nbsp; ✓ 100% uudelleensulatettavissa &nbsp; ✓ Korvaa muovia pakkauksissa &nbsp; ✓ Mahdollistaa aurinkoenergian keräyksen</p>
+      <h4>Miinukset kestävyyden kannalta:</h4>
+      <p>✗ Korkea sulatuslämpötila (1200–1400°C) = paljon energiaa &nbsp; ✗ Lasi on painava — kuljetus lisää päästöjä &nbsp; ✗ Lasinvalmistus tarvitsee primääriraaka-aineita (hiekkalouhinta) &nbsp; ✗ Osa erikoislaista (laminoidut, pinnoitetut) on vaikea kierrättää</p>
+      <h4>Teollisuuden toimet:</h4>
+      <p>Eurooppalaiset tasolasinvalmistajat (Pilkington, AGC, Guardian) ovat sitoutuneet hiilineutraaliuteen 2030–2050. Sähköiset sulattamouunit korvaavat kaasupolttimia. Vetypolttimien testaus on käynnissä. Biokaasun hyödyntäminen on jo mahdollista.</p>
+    </div>
+  </div>
+  <h3>Taidelasi ja kestävyys — erityinen paradoksi</h3>
+  <p>Taidelasi on elinkaareltaan erittäin kestävä: hyvin tehty taidelasiesine kestää satoja tai tuhansia vuosia. Mutta lasinpuhaltamiseen tarvittava hytti on erittäin energiankuluttava: pieni studiohytti kuluttaa 15–25 kW jatkuvasti. Hytti on lämpimänä 24/7, koska se ei voi jäähtyä ja kuumentua nopeasti. Tämä on pienen taidelasiateljeeen suurin kestävyyshaaste.</p>
+  <div class="note"><strong>Muotoilijan näkökulma:</strong> Lasin valitseminen materiaaliksi ei automaattisesti ole "kestävämpää" kuin muovin — se riippuu esineen elinkaaresta, kuljetusmatkasta, kierrätysasteesta ja valmistusenergian lähteestä. Pitkäikäinen, korjattavissa oleva, kierrätettävissä oleva lasiprodukt on kestävä valinta. Kertakäyttöinen lasipullo toiselle puolelle maailmaa ei välttämättä ole.</div>
+</div>
+</div>
+
+<!-- ══════════════════ KRITIIKKI ══════════════════ -->
+<section id="kritiikki">
+  <p class="section-label">Critical Analysis · Kriittinen tarkastelu</p>
+  <h2>Kriittinen katsaus lasialaan — <em>mahdollisuudet ja realiteetit</em></h2>
+
+  <div class="highlight">Lasi on maailman vanhimpia teollisia materiaaleja. Se on kaunis, pitkäikäinen ja monipuolinen — mutta lasialalla on myös rakenteellisia ongelmia, joista muotoilijan on hyvä olla tietoinen.</div>
+
+  <div class="two-col">
+    <div>
+      <h3>Taidelasitoimijoiden taloudellinen realiteetti</h3>
+      <p>Taidelasitaiteilijan tai -käsityöläisen taloudellinen tilanne on haastava. Hytti maksaa käyttää tuhansia euroja kuukaudessa energiamaksuissa ennen kuin ensimmäistäkään esinettä on valmistettu. Kouluttautuminen vie 5–10 vuotta ennen riittävää tasoa.</p>
+      <h4>Kipupisteet:</h4>
+      <p>⚡ Energiakustannukset: Pienessä studiohytissä 1500–3000 €/kk sähkö ja kaasu &nbsp;·&nbsp; 🏭 Muuttuva vaatimus: Kuluttajat haluavat "autenttista käsityötä" mutta eivät halua maksaa sen todellista hintaa &nbsp;·&nbsp; 🌏 Halpatuonti: Kiinalaiset massatuotetut "käsintehty"-lasiesiineet polkevat hintoja &nbsp;·&nbsp; 👨‍🎓 Kouluttautumisvaje: Uusia lasinpuhaltajia koulutetaan yhä vähemmän — mestareista tulee harvinaisia.</p>
+      <h4>Mahdollisuudet:</h4>
+      <p>Instagram ja verkkokauppa ovat demokratisoineet myyntiä. Residenssit ja yhteisöhytit (kuten Nuutajärven lasikylä) laskevat kynnyskustannuksia. Premium-käsityön markkinat kasvavat hitaasti mutta tasaisesti. Ainutlaatuiset taideteokset ovat arvon säilyttäjiä.</p>
+    </div>
+    <div>
+      <h3>Teollisuuden lasin tila</h3>
+      <p>Suurten lasivalmistajien (Pilkington, AGC, Guardian) maailma on globaali oligopoli — kolme suurinta hallitsee valtaosaa tasolasista. Iittala on Fiskars-konsernin brändi. Muranolasia jäljittelee halvempi massatuotanto.</p>
+      <h4>Teollisuuden haasteet:</h4>
+      <p>Energiasiirtymä on iso haaste: 1200°C vaatii lämpöä, ja sähköistäminen on kallista. CO₂-päästökauppa nostaa kustannuksia. Arkkitehtuurilasi kilpailee muovipaneelien ja komposiittien kanssa.</p>
+      <h4>Muotoilijan asema lasialalla:</h4>
+      <p>Yritykset kuten Iittala, Riedel, Orrefors rakentavat arvonsa muotoilulla. Muotoilija on oleellinen — mutta neuvotteluasema riippuu nimestä ja alustasta. Yhteistyö tehtaan kanssa on edelleen elintärkeää — ilman puhaltajia ei ole lasiesineitä. Paras tilanne: taiteilija-muotoilija, jolla on suora suhde ammattitaitoiseen käsityöläiseen.</p>
+    </div>
+  </div>
+
+  <div class="pullquote">"Lasi ei koskaan valehtele — se näyttää tarkalleen, mitä siihen on laitettu: taidon, huomion ja materiaalin ymmärtämisen."</div>
+
+  <h3>Globaali kuva — missä lasia kehitetään?</h3>
+  <div class="cards">
+    <div class="card"><h4>USA — Corning</h4><p>Gorilla Glass, OLED-alustat, lasikuitu, lääketieteellinen lasi. Maailman teknisimmän lasin kehittäjä. Yli 150 vuotta innovaatioita.</p></div>
+    <div class="card"><h4>Saksa — SCHOTT ja Zeiss</h4><p>Optinen lasi, tiedelasi, lääketieteellinen lasi. Zeissin linssit ovat maailman tarkimpia. SCHOTT tekee lasin ydinjätteiden säilytyskontteja.</p></div>
+    <div class="card"><h4>Tšekki — lasikaiverrukset</h4><p>Böömiläinen kaiverrustraditio elää. Moser, Rückl ja pienet ateljeht pitävät käsityön elossa. Myös modernin lasin design on vahvaa.</p></div>
+    <div class="card"><h4>Italia — Murano</h4><p>Taitelasi elää — mutta kiihtyvä halpajäljittely uhkaa. Muranon alkuperämerkintä (Vetro Artistico Murano) on oikeudelline suoja.</p></div>
+    <div class="card"><h4>Pohjoismaat</h4><p>Iittala, Kosta Boda, Holmegaard — designbrändäys on henkinen kilpailuetu. Perinne + nykyaikaiset muotoilijat = kestävä malli.</p></div>
+    <div class="card"><h4>Japani</h4><p>Edo kiriko -kaiverrus on UNESCO:n aineeton kulttuuriperintö. Nippon Electric Glass tekee ohutta tekniikkalasia puhelimiin ja näyttöihin.</p></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════ ESTETIIKKA ══════════════════ -->
+<div class="band band-fire">
+<div class="band-inner" id="estetiikka">
+  <p class="section-label">Aesthetics &amp; Meaning</p>
+  <h2>Lasin estetiikka ja merkitys — <em>taideesineistä ihmiskunnalle</em></h2>
+  <div class="two-col">
+    <div>
+      <h3>Mikä tekee lasista erityisen esteettisen?</h3>
+      <p>Lasi on ainoa materiaali, joka on samaan aikaan <strong>kiinteä ja nestemäinen</strong> visuaalisessa kokemuksessa. Se läpäisee, heijastaa, taittaa ja hajottaa valoa — kaikki samalla hetkellä. Tämä fyysinen omituisuus tekee lasista esteettisesti ylivoimaisen monissa konteksteissa.</p>
+      <h4>Lasin viisi esteettistä ulottuvuutta:</h4>
+      <p><strong>1. Läpinäkyvyys:</strong> Lasi paljastaa sisällön — sisäisyys on aina näkyvissä. Tämä tekee lasiesineestä rehellisen. &nbsp;<strong>2. Valo:</strong> Lasi ei vain heijasta valoa — se manipuloi sitä. Prismavaikutus, sateenkaaret, kristallikimallus. &nbsp;<strong>3. Väri:</strong> Lasin väri on syvä ja sisäinen — ei pinnoitus vaan ainesosa. Värilaser syvyys on ainutlaatuista. &nbsp;<strong>4. Muoto:</strong> Lasi voidaan tehdä paperinohuen tai tonnipainoiseksi. Muoto voi olla niin hento tai niin massiivinen kuin muotoilija haluaa. &nbsp;<strong>5. Aika:</strong> Vanha lasi on toisin kuin uusi — patina, mineralisoituminen, historia näkyy aineessa.</p>
+    </div>
+    <div>
+      <h3>Lasiesine kulttuurisena artefaktina</h3>
+      <p>Lasiesine on yksi ihmiskunnan vanhimpia ja kestävimpiä artefakteja. Egyptiläinen lasihelmi 3000 vuotta vanhalta löydetty arkeologisessa kaivausesta on yhtä tuore kuin uusi — lasi ei mäde, hapetu tai hajoaa biologisesti.</p>
+      <p>Lasiesiné voi olla: käyttöesine (lasi, pullo, ikkuna), taideteos (veistos, installatio), kulttiesine (kirkon lasimaalaus), tieteellinen instrumentti (linssi, kuitu), suojaelementti (autolasi, panssarilasi) tai viestintäväline (lasikuitu, optinen laite).</p>
+      <h3>Merkitys yksilölle</h3>
+      <p>Aalto-maljakko Suomalaisessa kodissa ei ole pelkästään astia — se on kulttuurinen tunnustus, kansallinen symboli, muisto ensiasunnosta tai perinnöstä. Lasiesine on monesti tunnelatautunut tavalla, jota synteettinen materiaali harvoin saavuttaa.</p>
+      <p>Muuranon lasihelmet hääpukuun kiinnitettynä. Muistolasi kaatuneen sotilaan muistoksi. Katedraalimainen lasi, joka suodattaa jumalanpalveluksen valon. Näissä lasi on enemmän kuin materiaali — se on merkityksen kantaja.</p>
+    </div>
+  </div>
+
+  <h3>Lasi käyttökohteittain — esimerkkejä muotoilun kentältä</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Käyttöalue</th><th>Tyypilliset tuotteet</th><th>Valmistustekniikka</th><th>Esteettinen arvo</th><th>Toiminnallinen arvo</th></tr></thead>
+      <tbody>
+        <tr><td>Astialasi, juoma</td><td>Viinilasit, kupit, kulhot</td><td>Koneellinen puhallus, puolikoneellinen</td><td>Elegantti, keveys, kirkkaus</td><td>Hygieeninen, inertsi, dishwasher-safe</td></tr>
+        <tr><td>Taidelasi</td><td>Maljakot, veistokset, koristeet</td><td>Vapaa puhallus, valanta, fuusio</td><td>Korkea — ainutlaatuisuus, käsityö</td><td>Keräilyarvo, pitkäikäisyys</td></tr>
+        <tr><td>Arkkitehtuurilasi</td><td>Ikkunat, julkisivut, partitiot</td><td>Float, laminointi, erikoispinnoitus</td><td>Arkkitehtuurinen ilme, valoisuus</td><td>Lämpöeristys, ääneneristys, turvallisuus</td></tr>
+        <tr><td>Autoteollisuus</td><td>Tuulilasin, kattoluukut, sivuikkunat</td><td>Taivutus + autoklaavlaminointi</td><td>Aerodynamiikka, selkeys</td><td>Turvallisuus, näkyvyys, HUD-ikkuna</td></tr>
+        <tr><td>Valaistus</td><td>Lamput, LED-suojat, valoputket</td><td>Puhaltaminen, puristaminen, fuusio</td><td>Valon hallinta, tunnelma</td><td>Lämpökestävyys, UV-läpäisy</td></tr>
+        <tr><td>Lasi-instrumentit</td><td>Linssit, prismat, kuidut</td><td>Valu, hionta, pinnoitus</td><td>Esteettinen tarkkuus</td><td>Optinen suorituskyky</td></tr>
+        <tr><td>Pakkaus &amp; viini</td><td>Viinipullot, purkit, ampullit</td><td>IS-koneellinen puhallus</td><td>Tunnistettavuus, brändäys</td><td>Hygiinia, inerttiys, kierrätettävyys</td></tr>
+        <tr><td>Elektroniikka</td><td>Puhelinnäytöt, OLED, sensorilasit</td><td>Float + ioninvaihto (Gorilla)</td><td>Kirkkaus, ohutus, sileys</td><td>Kestävyys, johtavuus, kapasitanssi</td></tr>
+        <tr><td>Lääketiede</td><td>Ampullit, silikka-implantit, biolasi</td><td>Puhaltaminen, sintrointi</td><td>Lääketieteellinen puhtaus</td><td>Biokompatiibiliteetti, inerttiys</td></tr>
+        <tr><td>Lasimaalaus</td><td>Katedraali-ikkunat, taidepaneelit</td><td>Lyijykaavoitus, fuusio, maalaus</td><td>Korkea — värien syvyys, valokontrolli</td><td>Kestää satoja vuosia</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════ SANASTO ══════════════════ -->
+<section id="sanasto">
+  <p class="section-label">Professional Glossary</p>
+  <h2>Ammattisanasto — <em>lasinvalmistuksen termit</em></h2>
+  <div class="glossary-grid">
+    <div class="gloss-item"><div class="gloss-term">Annealing</div><div class="gloss-fi">Hehkutus</div><p>Lasin kontrollitu jäähdytys lasimuutoslämpötilasta (Tg) alkaen jännittysten vapauttamiseksi. Välttämätön kaikille lasiesineille.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Batch</div><div class="gloss-fi">Raaka-aineseos</div><p>Lasiraaka-aineiden seos ennen sulatusta. Koostuu hiekasta, soodatuhkasta, kalkkikivestä ja mahdollisista lisäaineista.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Blowpipe</div><div class="gloss-fi">Piippu / Lasinpuhaltajanpiippu</div><p>Ontto teräsputki (120–180 cm), jonka päähän lasimassan kerätään ja toisesta päästä puhalletaan.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Casing / Overlay</div><div class="gloss-fi">Kerrostus / Lasikuoretus</div><p>Tekniikka, jossa eri värinen lasimassa lisätään puhallettavan lasin päälle tai ulkopinnaksi.</p></div>
+    <div class="gloss-item"><div class="gloss-term">COE (Coefficient of Expansion)</div><div class="gloss-fi">Lämpölaajenemiskerroin</div><p>Ilmaisee, kuinka paljon aine laajenee lämpöasteen noustessa. Eri lasien COE-arvojen on oltava yhteensopivia.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Cristallo</div><div class="gloss-fi">Kristalli-lasi</div><p>Angelo Bariovierin 1400-luvulla kehittämä lähes täysin kirkas soodalasi. Muranon tunnetuin innovaatio.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Cullet</div><div class="gloss-fi">Kierrätyslasimurska</div><p>Murskattua kierrätyslasia, jota lisätään raaka-aineseokseen. Alentaa sulamislämpötilaa ja säästää energiaa.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Electrochromic</div><div class="gloss-fi">Sähkökromaattinen</div><p>Lasi tai materiaali, joka muuttaa läpinäkyvyyttään sähkövirran avulla. Käytetään älyikkunoissa.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Fusing</div><div class="gloss-fi">Fuusio / Yhteensulattaminen</div><p>Lasilevyjen tai -palojen sulattaminen uunissa yhteen. Osa kiln-forming -tekniikkaperheestä.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Gather</div><div class="gloss-fi">Keruu / Lasikeruu</div><p>Lasimassan kerääminen piipulle tai puntille sulatusuunista. Taito ja nopeus ratkaisevat keruun onnistumisen.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Glory hole</div><div class="gloss-fi">Lämpöuuni / Uudelleenkuumennus</div><p>Pieni erillinen uuni, jossa lasiesine pidetään lämpimänä työvaihteiden välillä. Lasi jäähtyy nopeasti ilman sitä.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Incalmo</div><div class="gloss-fi">Värien liitto</div><p>Kaksi erillisin puhallettu lasia liitetään yhteen tarkalleen samassa halkaisijassa — täsmällinen väriraja.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Jacks</div><div class="gloss-fi">Lasinleuat / Sakset</div><p>Metalliset saksimainen työkalu muodon tekemiseen, kaulan tekemiseen ja suun avaukseen.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Kiln</div><div class="gloss-fi">Uuni</div><p>Yleistermi lasinvalmistus-, hehkutus- tai sulautusuuneille. Eri käyttötarkoituksiin eri lämpötilaprofiileja.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Lattimo / Milk glass</div><div class="gloss-fi">Maitomainen lasi</div><p>Läpinäkymätön valkoinen lasi, joka jäljittelee posliinia. Tinaoksidilla (SnO₂) tai titaanilla värjätty.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Low-E</div><div class="gloss-fi">Matalaemissioinen lasi</div><p>Lasi, jonka pinnalla on ohut metallioksidikalvo (hopea). Heijastaa infrapunasäteilyä ja parantaa ikkunan lämpötalousarvoa.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Marver</div><div class="gloss-fi">Marveripöytä / Tasauslevy</div><p>Tasainen pöytä (graniitti tai teräs), jossa lasimassa rullutaan tasaiseksi tai väriaineet painetaan pintaan.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Millefiori</div><div class="gloss-fi">Tuhat kukkaa</div><p>Tekniikka, jossa eri värisiä lasitankoja vedetään kuviolliseksi tangoksi (cane), leikataan siivuiksi ja sulautetaan lasiin.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Murrina / Murrine</div><div class="gloss-fi">Kuviotanko / Cane</div><p>Erivärisistä lasitangoista kierretty nippu, joka vedetään ohueksi kuviolliseksi tangoksi. Millefiori-tekniikan raaka-aine.</p></div>
+    <div class="gloss-item"><div class="gloss-term">PDLC</div><div class="gloss-fi">Nestemäiseen kitee -lasi</div><p>Polymer Dispersed Liquid Crystal. Älylasityyppi, joka muuttuu sameasta kirkkaaksi sähkövirran kytkemisellä.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Pontil / Punty</div><div class="gloss-fi">Puntti</div><p>Umpinainen metallivarsi, johon lasiesine kiinnitetään pohjasta, kun piippu irroitetaan. Punttijälki on tyypillinen käsintehtyjen esineiden tunnusmerkki.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Pot furnace</div><div class="gloss-fi">Patauuni</div><p>Lasihytti, jossa lasi sulatetaan savipatamastoissa. Pienten taidelasipajojen tyypillinen uunityyppi. Vastakohtana tank furnace (jatkuvatoiminen sulatusallas).</p></div>
+    <div class="gloss-item"><div class="gloss-term">PVB</div><div class="gloss-fi">Polyvinyylibutyraali</div><p>Laminoidun lasin välitäyte. Pitää lasin sirpaleet paikallaan murtumisessa, suodattaa UV-säteilyä, eristää ääntä.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Slumping</div><div class="gloss-fi">Painuminen / Muotonlaskets</div><p>Lasilevyn kuumentaminen muotin päällä, jolloin se painuu omasta painostaan muotin muotoon. Osa kiln-forming -perheestä.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Soda-lime glass</div><div class="gloss-fi">Sooda-kalkkilasi</div><p>Yleisin lasikoostumus (SiO₂, Na₂O, CaO). Astialasi, ikkunalasi. Lasin "perusversio".</p></div>
+    <div class="gloss-item"><div class="gloss-term">Striations</div><div class="gloss-fi">Juovaisuus / Raitaisuus</div><p>Lasimassan homogeenisuushäiriöt, jotka näkyvät viivoina tai juovina. Tyypillinen laadunhallintahaaste.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Tg (Glass transition temperature)</div><div class="gloss-fi">Lasimuutoslämpötila</div><p>Lämpötila, jossa lasi muuttuu hauraasta notkeaksi. Sooda-kalkkilasilla ~520–560°C. Hehkutuksen lähtöpiste.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Thermal shock</div><div class="gloss-fi">Lämpösokki</div><p>Äkillinen lämpötilan muutos, joka aiheuttaa lasin halkeamisen eri osien eri laajenemisnopeuden vuoksi.</p></div>
+    <div class="gloss-item"><div class="gloss-term">Viscosity</div><div class="gloss-fi">Viskositeetti</div><p>Lasin sisäinen "sitkeys" tai virtausvastus tietyssä lämpötilassa. Puhaltajan tärkein arvioinnin kohde lasin käyttäytymisessä.</p></div>
+  </div>
+</section>
+
+<!-- ══════════════════ LÄHTEET ══════════════════ -->
+<div class="band band-dark">
+<div class="band-inner" id="lahteet">
+  <p class="section-label">References · Lähteet</p>
+  <h2>Lähde- ja <em>kirjallisuusluettelo</em></h2>
+  <div class="two-col">
+    <div>
+      <h3>Luennot ja opetusmateriaalit</h3>
+      <ul class="ref-list">
+        <li><strong>Aalto-Setälä, L. (2025).</strong> "What Should a Designer Know About Glasses?" Vierailuluento, Aalto-yliopisto, 13.1.2025. [Luentokalvot, PDF]</li>
+        <li><strong>Aalto-Setälä, L.</strong> Lasifaasi, laura@lasifaasi.fi. Suomalainen lasimuotoilija ja kouluttaja.</li>
+      </ul>
+      <h3>Tieteelliset ja historialliset julkaisut</h3>
+      <ul class="ref-list">
+        <li><strong>Aav, M. (toim.) (2007).</strong> Iittala: 125 Years of Finnish Glass — Complete History with All Designers. Wienand Verlag.</li>
+        <li><strong>Dorigato, A. (2002).</strong> L'Arte del vetro a Murano. Arsenale Editrice, Venezia.</li>
+        <li><strong>Morey, G.W. (1954).</strong> The Properties of Glass. Reinhold Publishing, New York.</li>
+        <li><strong>Shelby, J.E. (2005).</strong> Introduction to Glass Science and Technology. Royal Society of Chemistry.</li>
+        <li><strong>Zschimmer, E. &amp; Schwenke, H. (2001).</strong> Glastechnische Fabrikationsfehler. Springer.</li>
+      </ul>
+      <h3>Suomalainen lasimuotoilu</h3>
+      <ul class="ref-list">
+        <li><strong>Koivisto, K. (toim.)</strong> Glass from Finland in the Bischofberger Collection. Suomen Lasimuseo, Riihimäki.</li>
+        <li><strong>Sarpaneva, T. (1964).</strong> Finlandia-sarjan kehitys. Iittala-arkisto.</li>
+        <li><strong>Finland.fi (2024).</strong> How Finnish glass design enchanted the world and keeps evolving. thisisFINLAND. https://finland.fi</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Tekniset standardit ja oppaat</h3>
+      <ul class="ref-list">
+        <li><strong>EN 572.</strong> Glass in Building — Basic Soda Lime Silicate Glass Products. European Standard.</li>
+        <li><strong>EN 12150.</strong> Glass in Building — Thermally Toughened Soda Lime Silicate Safety Glass.</li>
+        <li><strong>EN ISO 12543.</strong> Glass in Building — Laminated Glass and Laminated Safety Glass.</li>
+        <li><strong>REACH-asetus (EC 1907/2006).</strong> Kemikaalien rekisteröinti, arviointi ja luvanmyöntäminen — relevanssi lasiteollisuuden pigmenteille.</li>
+      </ul>
+      <h3>Verkkolähteet ja tietopankit</h3>
+      <ul class="ref-list">
+        <li><strong>Pilkington / NSG Group.</strong> Float Glass Manufacturing Technology. https://www.pilkington.com</li>
+        <li><strong>Corning Inc.</strong> Gorilla Glass Technology Overview. https://www.corning.com/gorillaglass</li>
+        <li><strong>Glass of Venice.</strong> History of Murano Glass. https://www.glassofvenice.com</li>
+        <li><strong>visitmuranoglassfactory.com.</strong> The History of Murano Glass. 2025.</li>
+        <li><strong>CompoundChem.</strong> The Chemistry of Glass Colours. https://www.compoundchem.com</li>
+        <li><strong>Glassonweb.com.</strong> Automotive Glass — Autoclaving &amp; Inspection. Luc Moeyersons.</li>
+        <li><strong>Wikipedia.</strong> Venetian glass, Laminated glass, Float glass process. Viitattu 2025.</li>
+        <li><strong>Iittala / Fiskars Group.</strong> Iittala — Historia ja tuotanto. https://www.iittala.com</li>
+      </ul>
+      <h3>Muut lähteet</h3>
+      <ul class="ref-list">
+        <li><strong>Harvey K. Littleton (1962).</strong> Studio Glass Movement — Alkuperäinen esittely Toledo Museumissa, Ohio.</li>
+        <li><strong>Vetro.dk (2025).</strong> Murano Glass: 700 Years of History. https://vetro.dk</li>
+        <li><strong>ASC Process Systems.</strong> Glass Laminating Autoclave Systems. https://www.aschome.com</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="footer-title">Lasin Maailma — Metropolia AMK Teollinen Muotoilu</div>
+  <p>Tekijä: Mika Ihanus · Metropolia Ammattikorkeakoulu · Teollinen muotoilu · 2025</p>
+  <p>Materiaalikäsikirja on laadittu opetus- ja tutkimuskäyttöön. Sisältö perustuu julkisiin lähteisiin, tieteellisiin julkaisuihin ja alan asiantuntijaluennoihin.</p>
+  <p style="margin-top:20px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(212,168,67,.3)">Lasi on tuli talteen pantuna — näkymätön ja ikuinen</p>
+</footer>
+
+</body>
+</html>
