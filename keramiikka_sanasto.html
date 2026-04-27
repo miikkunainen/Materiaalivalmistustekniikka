@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keramiikan Suursanasto v2</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root{
+  --clay:#b5603a;--terra:#c97b4b;--sand:#e8d5b7;--cream:#f5ede0;
+  --ash:#6b6157;--char:#2c2218;--celadon:#7aab96;--cobalt:#3a5a8c;
+  --glaze:#d4c5ae;--smoke:#9e9085;--fog:#f0e8db;--white:#fff;
+  --green:#4a8a5a;--gold:#b8952a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--char);min-height:100vh}
+
+/* ── HEADER ── */
+header{background:var(--char);color:var(--sand);padding:1.4rem 2rem 0;position:sticky;top:0;z-index:200;border-bottom:3px solid var(--clay)}
+.hrow1{display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;margin-bottom:.7rem}
+header h1{font-family:'Cormorant Garamond',serif;font-size:1.85rem;font-weight:600;color:var(--sand);letter-spacing:.04em}
+header .sub{font-size:.65rem;color:var(--smoke);letter-spacing:.14em;text-transform:uppercase}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:none;margin-top:.3rem}
+.tab{padding:.5rem 1.2rem;border:none;background:transparent;color:var(--smoke);font-family:'DM Sans',sans-serif;font-size:.78rem;cursor:pointer;border-radius:6px 6px 0 0;border:1px solid transparent;border-bottom:none;transition:all .18s;letter-spacing:.04em;text-transform:uppercase}
+.tab:hover{color:var(--sand)}
+.tab.on{background:var(--cream);color:var(--clay);border-color:#5a4030;font-weight:500}
+
+/* ── CONTROL BAR ── */
+.cbar{background:#221a13;padding:.55rem 2rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;border-bottom:1px solid #3a2c20}
+#search{flex:1;min-width:200px;padding:.45rem .9rem;border:1px solid var(--ash);border-radius:4px;background:#1a1410;color:var(--sand);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none}
+#search::placeholder{color:var(--smoke)}
+#search:focus{border-color:var(--clay)}
+#stats{font-size:.72rem;color:var(--smoke);white-space:nowrap}
+
+/* ── FILTER ROWS ── */
+.frow{background:#1e1610;padding:.5rem 2rem;display:flex;flex-wrap:wrap;gap:.32rem;align-items:center;border-bottom:1px solid #3a2c20}
+.fl{font-size:.62rem;color:var(--smoke);text-transform:uppercase;letter-spacing:.1em;margin-right:.3rem;white-space:nowrap}
+.btn{padding:.22rem .62rem;border-radius:18px;border:1px solid #4a3828;background:transparent;color:var(--smoke);font-size:.67rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;white-space:nowrap}
+.btn:hover{border-color:var(--terra);color:var(--sand)}
+.btn.on{background:var(--clay);border-color:var(--clay);color:#fff}
+.btn.all.on{background:var(--sand);color:var(--char);border-color:var(--sand)}
+/* sector colours */
+.btn[data-s="kaivos"].on{background:#5a3a20}
+.btn[data-s="jalostus"].on{background:#3a5a3a}
+.btn[data-s="teoll"].on{background:#3a3a5a}
+.btn[data-s="studio"].on{background:#6a3a6a}
+.btn[data-s="ark"].on{background:#3a5a4a}
+.btn[data-s="kou"].on{background:#4a4a2a}
+.btn[data-s="eco"].on{background:#2a5a3a}
+
+/* description lang row */
+.drow{background:#181210;padding:.45rem 2rem;display:flex;flex-wrap:wrap;gap:.3rem;align-items:center;border-bottom:1px solid #3a2c20}
+.dl{font-size:.62rem;color:var(--smoke);text-transform:uppercase;letter-spacing:.1em;margin-right:.3rem}
+.dbtn{padding:.18rem .5rem;border-radius:3px;border:1px solid #3a2c20;background:transparent;color:var(--smoke);font-size:.66rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.dbtn.on{background:#2e2218;color:var(--sand);border-color:#5a4030}
+.dall{padding:.18rem .6rem;border-radius:3px;border:1px solid var(--smoke);background:transparent;color:var(--smoke);font-size:.66rem;cursor:pointer;font-family:'DM Sans',sans-serif;margin-left:.5rem}
+.dall:hover{border-color:var(--terra);color:var(--sand)}
+
+/* ── ALPHA NAV ── */
+.anav{background:var(--char);padding:.4rem 2rem;display:flex;flex-wrap:wrap;gap:.22rem;border-bottom:2px solid var(--clay)}
+.ab{width:23px;height:23px;display:flex;align-items:center;justify-content:center;border-radius:3px;border:none;background:transparent;color:var(--smoke);font-size:.72rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.ab:hover{background:var(--clay);color:#fff}
+.ab.has{color:var(--sand)}
+
+/* ── MAIN ── */
+main{max-width:1280px;margin:0 auto;padding:1.5rem 2rem}
+.asec{margin-bottom:2rem}
+.ah{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:300;color:var(--clay);border-bottom:1px solid var(--glaze);margin-bottom:.9rem;padding-bottom:.2rem;letter-spacing:.05em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:.9rem}
+
+/* ── CARD ── */
+.card{background:var(--white);border:1px solid var(--glaze);border-radius:7px;overflow:hidden;transition:box-shadow .2s,transform .15s}
+.card:hover{box-shadow:0 5px 22px rgba(181,96,58,.13);transform:translateY(-2px)}
+.card-head{background:var(--char);padding:.65rem .9rem;display:flex;align-items:flex-start;gap:.5rem;flex-wrap:wrap}
+.tfi{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--sand);flex:1;letter-spacing:.02em;line-height:1.2}
+.badges{display:flex;flex-wrap:wrap;gap:.22rem;margin-left:auto}
+.badge{font-size:.56rem;padding:.07rem .32rem;border-radius:2px;text-transform:uppercase;letter-spacing:.04em;color:#fff}
+.badge.cat{background:#3a5a3a}
+.badge.sec{background:#6a3a20}
+
+/* translations */
+.trans{padding:.6rem .9rem;border-bottom:1px solid var(--glaze);display:flex;flex-direction:column;gap:.14rem;background:#faf6f0}
+.tr{display:flex;gap:.4rem;align-items:baseline}
+.tf{font-size:.78rem;min-width:18px}
+.tl{font-size:.55rem;color:var(--smoke);min-width:24px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
+.tt{font-size:.79rem;color:var(--ash);font-style:italic}
+.tt.main{color:var(--cobalt);font-style:normal;font-weight:500}
+
+/* description blocks */
+.descs{padding:0 .9rem .65rem}
+.desc-block{margin-top:.5rem;padding:.38rem .55rem;border-radius:4px;border-left:3px solid var(--glaze)}
+.desc-block.fi{border-color:var(--clay);background:#fdf7f2}
+.desc-block.en{border-color:#4a7a4a;background:#f4f9f4}
+.desc-block.sv{border-color:#6a7a8a;background:#f4f6f9}
+.desc-block.de{border-color:#8a6a2a;background:#faf7f0}
+.desc-block.ja{border-color:#8a4a6a;background:#fdf4f7}
+.desc-block.zh{border-color:#ca4a1a;background:#fef6f2}
+.desc-block.ko{border-color:#4a4a8a;background:#f4f4fd}
+.desc-block.es{border-color:#ca9a1a;background:#fef9f0}
+.desc-lang{font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--smoke);margin-bottom:.15rem}
+.desc-text{font-size:.8rem;line-height:1.55;color:var(--char)}
+.formula{font-family:'Courier New',monospace;font-size:.74rem;background:var(--fog);padding:.1rem .35rem;border-radius:3px;color:var(--cobalt);display:inline-block;margin-top:.3rem;border:1px solid var(--glaze)}
+.cult{font-size:.72rem;color:#2a5a6a;line-height:1.5;padding:.35rem .5rem;background:linear-gradient(135deg,#eaf4f8,#f2fafd);border-left:2px solid var(--celadon);border-radius:0 3px 3px 0;margin-top:.4rem}
+.slang{font-size:.69rem;color:var(--green);font-style:italic;margin-top:.3rem}
+
+/* ── TOIMIJAT TAB ── */
+#tab-toimijat{display:none;max-width:1280px;margin:0 auto;padding:1.5rem 2rem}
+#tab-toimijat.on{display:block}
+.dir-filters{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.5rem;padding:.6rem .9rem;background:var(--fog);border-radius:6px;border:1px solid var(--glaze)}
+.dir-section{margin-bottom:2.5rem}
+.dir-head{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--clay);border-bottom:1px solid var(--glaze);margin-bottom:1rem;padding-bottom:.3rem;display:flex;align-items:center;gap:.5rem}
+.actor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.8rem}
+.actor-card{background:var(--white);border:1px solid var(--glaze);border-radius:6px;padding:.9rem 1rem;transition:box-shadow .2s}
+.actor-card:hover{box-shadow:0 4px 16px rgba(181,96,58,.1)}
+.actor-name{font-weight:500;font-size:.9rem;color:var(--char);margin-bottom:.22rem}
+.actor-sub{font-size:.75rem;color:var(--cobalt);margin-bottom:.3rem}
+.actor-loc{font-size:.7rem;color:var(--smoke);margin-bottom:.15rem}
+.actor-desc{font-size:.73rem;line-height:1.48;color:var(--ash);margin-bottom:.3rem}
+.actor-web{font-size:.68rem;color:var(--celadon)}
+.actor-tags{display:flex;flex-wrap:wrap;gap:.22rem;margin-top:.4rem}
+.actor-tag{font-size:.58rem;padding:.06rem .3rem;border-radius:2px;background:var(--fog);color:var(--ash);border:1px solid var(--glaze)}
+.dir-intro{font-size:.8rem;color:var(--ash);margin-bottom:1rem;line-height:1.55;padding:.5rem .8rem;background:var(--fog);border-radius:5px;border-left:3px solid var(--clay)}
+
+/* no results */
+.nores{text-align:center;padding:4rem 2rem;color:var(--smoke);font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-style:italic}
+
+footer{text-align:center;padding:1.5rem 2rem;color:var(--smoke);font-size:.7rem;border-top:1px solid var(--glaze);margin-top:2rem}
+mark{background:#ffe066;color:var(--char);border-radius:2px;padding:0 1px}
+
+/* hide tabs content by default */
+#tab-sanasto{display:block}
+.tab-pane{display:none}
+.tab-pane.on{display:block}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hrow1">
+    <h1>🏺 Keramiikan Suursanasto</h1>
+    <span class="sub">Savi · Kipsi · Keramiikka · Posliini · 147 termiä · 8 kieltä · Toimijaluettelo</span>
+  </div>
+  <div class="tabs">
+    <button class="tab on" data-tab="sanasto">📚 Sanasto</button>
+    <button class="tab" data-tab="toimijat">🏭 Suomalaiset toimijat</button>
+  </div>
+</header>
+
+<!-- ── SANASTO TAB CONTROLS ── -->
+<div id="sanasto-ctrl">
+<div class="cbar">
+  <input type="text" id="search" placeholder="Hae termillä millä tahansa kielellä…" autocomplete="off">
+  <span id="stats"></span>
+</div>
+
+<!-- Category filter -->
+<div class="frow" id="catRow">
+  <span class="fl">Aihepiiri:</span>
+</div>
+
+<!-- Sector filter -->
+<div class="frow" id="secRow">
+  <span class="fl">Toimiala:</span>
+</div>
+
+<!-- Language / description toggles -->
+<div class="frow" id="langRow">
+  <span class="fl">Käännöskielet:</span>
+</div>
+<div class="drow" id="descRow">
+  <span class="dl">📖 Näytä selitykset:</span>
+  <button class="dall" id="descAll">Kaikki päällä</button>
+  <button class="dall" id="descNone">Kaikki pois</button>
+</div>
+
+<div class="anav" id="anav"></div>
+</div>
+
+<!-- ── SANASTO CONTENT ── -->
+<div id="tab-sanasto" class="tab-pane on">
+  <main id="main"></main>
+</div>
+
+<!-- ── TOIMIJAT CONTENT ── -->
+<div id="tab-toimijat" class="tab-pane">
+  <div style="max-width:1280px;margin:0 auto;padding:1.5rem 2rem">
+    <div class="dir-intro">
+      Tämä luettelo kattaa suomalaisen savi-, kipsi- ja keramiikka-alan päätoimijat kaivannaisteollisuudesta yksityisiin studioihin. Tiedot perustuvat julkisiin lähteisiin — tarkista aina ajantasaiset yhteystiedot toimijoiden omilta sivuilta.
+    </div>
+    <div class="dir-filters" id="dirFilters"></div>
+    <div id="dirContent"></div>
+  </div>
+</div>
+
+<footer>Metropolia University of Applied Sciences · Muotoilun Pajat · Keramiikan Suursanasto 2025<br>
+Metropolia AMK · Arabia-kampus · Helsinki · Keramiikka, lasi, kipsi, posliini</footer>
+
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+const LANGS=[
+  {c:'fi',f:'🇫🇮',l:'FI',name:'Suomi'},{c:'en',f:'🇬🇧',l:'EN',name:'English'},
+  {c:'es',f:'🇪🇸',l:'ES',name:'Español'},{c:'de',f:'🇩🇪',l:'DE',name:'Deutsch'},
+  {c:'sv',f:'🇸🇪',l:'SV',name:'Svenska'},{c:'ja',f:'🇯🇵',l:'JP',name:'日本語'},
+  {c:'zh',f:'🇨🇳',l:'ZH',name:'中文'},{c:'ko',f:'🇰🇷',l:'KR',name:'한국어'},
+];
+let visLangs=new Set(LANGS.map(l=>l.c));
+let visDescs=new Set(['fi','en']); // start with FI+EN descriptions visible
+
+const CATS={
+  geo:{n:'🪨 Geologia',c:'#6a5a3a'},clay:{n:'🧱 Savilajit',c:'#8a4a2a'},
+  chem:{n:'🧪 Kemia',c:'#4a6a5a'},form:{n:'✋ Muovaus',c:'#5a4a2a'},
+  plast:{n:'🏺 Kipsi/Muotit',c:'#7a5a3a'},fire:{n:'🔥 Poltto',c:'#8a3a1a'},
+  glaze:{n:'🎨 Lasitteet',c:'#3a5a7a'},deco:{n:'🖌️ Koristelu',c:'#5a3a7a'},
+  tools:{n:'🛠️ Työkalut',c:'#4a4a4a'},ind:{n:'🏭 Teollisuus',c:'#3a4a5a'},
+  eco:{n:'♻️ Kestävyys',c:'#3a6a3a'},asia:{n:'🌏 Aasia',c:'#6a3a4a'},
+  phil:{n:'🧠 Filosofia',c:'#3a3a6a'},hist:{n:'📜 Historia',c:'#6a4a2a'},
+  meas:{n:'📐 Mittaus',c:'#4a5a4a'},
+};
+
+const SECTS={
+  kaivos:{n:'⛏️ Kaivannaisteollisuus'},
+  jalostus:{n:'🔄 Jalostus'},
+  teoll:{n:'🏭 Valmistus'},
+  studio:{n:'🎨 Taidestudio'},
+  ark:{n:'🏗️ Arkkitehtuuri'},
+  kou:{n:'🎓 Koulutus'},
+  eco:{n:'♻️ Kierrätys & Ympäristö'},
+};
+// ============================================================
+// TERMS DATA (147 terms, with multilingual descriptions)
+// ============================================================
+const T=[
+{fi:'Aineen suuri kiertokulku',en:'Rock cycle',es:'Ciclo de las rocas',de:'Gesteinskreislauf',sv:'Bergartscykel',ja:'岩石循環',zh:'岩石循环',ko:'암석 순환',
+ cats:['geo'],sects:['kaivos','kou'],
+ def_fi:'Prosessi jossa kivi kiertää magmakivestä sedimenttikiveksi, metamorfiseksi kivilajiksi ja takaisin sulaksi. Kestää satoja miljoonia vuosia. Saviesiintymät ovat osa tätä kiertokulkua.',
+ def_en:'The geological cycle in which rock transforms from magma through sediment and metamorphic stages back to molten rock. Clay deposits form as a product of this weathering cycle.',
+ def_sv:'Det geologiska kretsloppet där bergarter omvandlas från magma via sediment till metamorfa bergarter och tillbaka. Leravlagringar bildas som ett resultat av vittring.',
+ def_de:'Geologischer Kreislauf: Magma → Sedimentgestein → Metamorphit → Schmelze. Tonminerale entstehen durch Verwitterung im Rahmen dieses Kreislaufs.',
+ cult:'🌍 Universaali geologinen konsepti. Kiinassa materiaalien lähde ymmärrettiin käytännön tarpeista, Euroopassa tieteellinen malli kehittyi 1700-luvulla.'},
+
+{fi:'Alilasiteväri',en:'Underglaze',es:'Color bajo cubierta',de:'Unterglasurfarbe',sv:'Underglasfärg',ja:'下絵具 (shitaegu)',zh:'釉下彩',ko:'유하채',
+ cats:['deco','glaze'],sects:['studio','teoll'],
+ def_fi:'Väri, jota käytetään raakapoltetun tai nahkakuivan esineen pinnalle ennen lasittamista. Vaatii päälle läpinäkyvän lasitteen suojaksi. Pysyy poltossa vakaana.',
+ def_en:'Pigment applied to bisque-fired or leather-hard clay before glazing. Requires a transparent overglaze to seal and protect. Stable at high temperatures.',
+ def_sv:'Färg som appliceras på ett biskuitbränt eller läderhart föremål innan glasering. Kräver ett transparent toppglasyr som skydd.',
+ def_ja:'施釉前の素焼きや半乾燥の作品に使用する顔料。透明釉薬でコーティングが必要。高温でも安定した発色。',
+ cult:'🇨🇳 Sininen alilasite (qinghua): kobolttia siveltiin posliinille ennen lasittamista. 🇳🇱 Delft-keramiikassa jäljitelty kiinalaista tyyliä.',
+ slang:'"underglaze painting"'},
+
+{fi:'Alkalinen',en:'Alkaline',es:'Alcalino',de:'Alkalisch',sv:'Alkalisk',ja:'アルカリ性',zh:'碱性',ko:'알칼리성',
+ cats:['chem','glaze'],sects:['jalostus','studio'],
+ def_fi:'Emäksinen yhdiste tai ympäristö. Keramiikassa alkalimetallioksideja (Na₂O, K₂O, Li₂O) käytetään lasitteen sulattajina. Alkalisilla lasitteilla saadaan kirkkaita värejä.',
+ def_en:'Base (opposite of acid). In ceramics, alkali metal oxides (Na₂O, K₂O, Li₂O) act as fluxes that lower glaze melting temperature. Alkaline glazes produce brilliant colours.',
+ def_sv:'Basisk miljö eller förening. I keramik används alkaliemetalloxider (Na₂O, K₂O, Li₂O) som flussmedel i glasyr.',
+ formula:'Na₂O + K₂O + Li₂O',
+ cult:'🇯🇵 Alkalisuus syntyy usein puutuhkan kautta. 🇨🇳 Kontrolloitu reseptiikka on ollut standardoitua.',
+ slang:'"flux-heavy glaze"'},
+
+{fi:'Alumiinioksidi',en:'Alumina',es:'Alúmina',de:'Aluminiumoxid',sv:'Aluminiumoxid',ja:'アルミナ',zh:'氧化铝',ko:'알루미나',
+ cats:['chem','glaze','clay'],sects:['jalostus','teoll','studio'],
+ def_fi:'Al₂O₃. Keskeinen komponentti savessa ja lasitteissa. Lisää kovuutta, nostaa sulamislämpötilaa ja vähentää lasitteen valumista. Käytetään uunilevyn pinnoitteessa.',
+ def_en:'Al₂O₃. Key component in clays and glazes. Increases hardness, raises melting point, and reduces glaze running. Used in kiln wash (50% alumina + 50% kaolin).',
+ def_sv:'Al₂O₃. Viktig komponent i leror och glasyr. Ökar hårdhet, höjer smältpunkt och minskar glasyrdroppning.',
+ formula:'Al₂O₃',
+ slang:'"stiffener"'},
+
+{fi:'Amorfinen',en:'Amorphous',es:'Amorfo',de:'Amorph',sv:'Amorf',ja:'非晶質',zh:'非晶态',ko:'비정질',
+ cats:['chem','glaze'],sects:['kou'],
+ def_fi:'Kiteetön rakenne. Lasite on amorfinen aine — kiinteä mutta vailla järjestynyttä kiderakennetta. Mahdollistaa lasimaisuuden ja läpikuultavuuden.',
+ def_en:'Non-crystalline structure. Glaze is amorphous — solid without a regular atomic arrangement. This structure enables transparency and glass-like properties.',
+ def_sv:'Icke-kristallin struktur. Glasyr är amorft material — fast men utan regelbunden atomstruktur, vilket möjliggör transparens.',
+ cult:'🇪🇺 Ymmärretään materiaalitieteen kautta. 🇯🇵 "Pehmeä syvyys" lasitteen sisällä.'},
+
+{fi:'Anagama',en:'Anagama kiln',es:'Horno anagama',de:'Anagama-Ofen',sv:'Anagamaugn',ja:'穴窯 (anagama)',zh:'穴窑',ko:'아나가마',
+ cats:['fire','asia'],sects:['studio'],
+ def_fi:'Yksikammioinen, rinteeseen rakennettu perinteinen japanilainen puu-uuni. Poltto kestää useita päiviä. Lentotuhka muodostaa esineisiin luonnollisen tuhkalasitteen.',
+ def_en:'A single-chamber wood-fired kiln built into a hillside — the oldest kiln type in Japan. Firing lasts several days. Flying ash creates natural ash glaze on surfaces.',
+ def_sv:'Enkammarsved ugn byggd i en sluttning — Japans äldsta ugnstyp. Bränning tar flera dagar. Flygande aska skapar naturlig askglasyr.',
+ def_ja:'日本最古の窯型。丘に掘られた単室の薪窯。数日間の焼成中、飛び灰が自然の灰釉を作る。共同作業と儀式的な意味を持つ。',
+ cult:'🇯🇵 Rituaali, yhteisöllinen tapahtuma. 🇺🇸/🇪🇺 Länsimaissa enemmän efektipohjainen.',
+ slang:'"kiln gods decide"'},
+
+{fi:'Anortiitti',en:'Anorthite',es:'Anortita',de:'Anorthit',sv:'Anortit',ja:'灰長石',zh:'钙长石',ko:'회장석',
+ cats:['geo','glaze'],sects:['jalostus','kou'],
+ def_fi:'Kalkkimaasälpä CaO·Al₂O₃·2SiO₂. Sulaa noin 1553 °C. Vaikuttaa lasitteen rakenteeseen ja sulamiseen.',
+ def_en:'Calcium feldspar (CaO·Al₂O₃·2SiO₂), melting ~1553°C. A glaze raw material providing calcium and aluminium. Historically part of Chinese porcelain recipes.',
+ formula:'CaO·Al₂O₃·2SiO₂'},
+
+{fi:'Aventuriinilasite',en:'Aventurine glaze',es:'Esmalte aventurina',de:'Aventurin-Glasur',sv:'Aventuringlasyr',ja:'砂金釉',zh:'砂金釉',ko:'아벤츄린 유약',
+ cats:['glaze'],sects:['studio'],
+ def_fi:'Kiteytyvä lasite, jossa metallikiteet luovat kimaltelevan pinnan. Rautaoksidi muodostaa suurilla määrillä (8-15%) kultaisia kiteitä.',
+ def_en:'A crystallising glaze in which iron oxide crystals create a sparkling metallic surface. Requires 8-15% iron oxide and precise cooling to form gold-coloured crystals.',
+ def_sv:'En kristalliserande glasyr med järnoxidkristaller som skapar glittrande metallytor.',
+ slang:'"sparkle glaze", "goldstone glaze"'},
+
+{fi:'Bentoniitti',en:'Bentonite',es:'Bentonita',de:'Bentonit',sv:'Bentonit',ja:'ベントナイト',zh:'膨润土',ko:'벤토나이트',
+ cats:['clay','chem'],sects:['jalostus','studio'],
+ def_fi:'Vulkaanisen tuhkan rapautumisesta muodostunut superplastinen savi. Koostuu pääosin montmorilloniitista. Käytetään 1–3% plastisuuden lisäämiseen.',
+ def_en:'Highly plastic clay formed from volcanic ash weathering. Primarily montmorillonite. Used in 1–3% amounts to boost workability. Huge water absorption capacity.',
+ def_sv:'Superplastisk lera bildad av vulkanisk aska. Används i 1–3% mängder för att öka plasticitet och vattenbindning.',
+ cult:'Louhitaan mm. USA:ssa ja Kreikassa.',
+ slang:'"magic dust"'},
+
+{fi:'Biskuipoltto / Raakapoltto',en:'Bisque firing',es:'Bizcochado',de:'Schrühbrand',sv:'Skröjbränning',ja:'素焼き (suyaki)',zh:'素烧',ko:'초벌구이',
+ cats:['fire'],sects:['studio','teoll'],
+ def_fi:'Ensimmäinen poltto noin 800–950 °C. Muuttaa saven kemiallisesti pysyväksi mutta jättää huokoiseksi. Kidevesi ja orgaaniset aineet poistuvat.',
+ def_en:'First firing at ~800–950°C. Chemically transforms clay into permanent ceramic while remaining porous. Chemical water and organic matter are driven off.',
+ def_sv:'Första bränning vid 800–950°C. Omvandlar leran permanent men lämnar den porös. Kristallvatten och organiskt material avlägsnas.',
+ def_de:'Erste Brennung bei 800–950°C. Verwandelt Ton dauerhaft in Keramik. Der Scherben bleibt porös für die Glasuraufnahme.',
+ cult:'🇯🇵 Voidaan ohittaa joissain tekniikoissa. 🇩🇪 Tarkasti kontrolloitu teollinen vaihe.',
+ slang:'"bisque it", "biscuit firing"'},
+
+{fi:'Biologinen rapautuminen',en:'Biological weathering',es:'Meteorización biológica',de:'Biologische Verwitterung',sv:'Biologisk vittring',ja:'生物的風化',zh:'生物风化',ko:'생물 풍화',
+ cats:['geo'],sects:['kaivos','kou'],
+ def_fi:'Mikrobien, jäkälien ja kasvien juurien aiheuttama kiven hajoaminen happojen avulla.',
+ def_en:'Rock breakdown caused by microbes, lichens, and plant roots through acid secretion. One of three weathering types alongside mechanical and chemical weathering.',
+ def_sv:'Vittring orsakad av mikroorganismer, lavar och växtrötter via syrasekretioner.'},
+
+{fi:'Celadon / Seladonlasite',en:'Celadon',es:'Celadón',de:'Seladon',sv:'Celadon',ja:'青磁 (seiji)',zh:'青瓷 (qīngcí)',ko:'청자 (cheongja)',
+ cats:['glaze','asia','hist'],sects:['studio'],
+ def_fi:'Rautapohjainen lasite, joka tuottaa vihertävän, sinertävän tai harmahtavan värin pelkistävässä poltossa. Fe³⁺ → Fe²⁺.',
+ def_en:'Iron-based glaze producing green, blue-grey tones in reduction firing. Iron shifts from Fe³⁺ to Fe²⁺, creating the characteristic jade-like colour.',
+ def_sv:'Järnbaserad glasyr som ger gröna och blå-grå toner vid reduktionsbränning. Järnet reduceras från Fe³⁺ till Fe²⁺.',
+ def_ja:'還元焼成で青磁・青灰色を呈する鉄系釉薬。Fe³⁺からFe²⁺への還元が特徴的な翡翠色を生む。',
+ def_zh:'还原气氛中烧成的铁质釉药，呈青绿色或灰蓝色。铁元素由Fe³⁺还原为Fe²⁺产生特有颜色。',
+ def_ko:'환원 소성에서 철분이 Fe³⁺에서 Fe²⁺로 환원되어 청록색이나 청회색을 띠는 철유.',
+ cult:'🇨🇳 Song-dynastia: tekninen täydellisyys. 🇰🇷 Goryeo: hienostuneempi sinivihreä. 🇯🇵 Arvostaa epätäydellisyyttä.',
+ slang:'"true celadon", "jade glaze"'},
+
+{fi:'Deflokkulantti',en:'Deflocculant',es:'Defloculante',de:'Dispergiermittel',sv:'Deflokkulant',ja:'分散剤',zh:'分散剂',ko:'분산제',
+ cats:['chem','ind'],sects:['teoll','studio'],
+ def_fi:'Aine, joka tekee valusavesta juoksevaa pienemmällä vesimäärällä. Yleisin on natriumpyrofosfaatti (Dispex).',
+ def_en:'Chemical that creates fluid casting slip with less water by dispersing clay particles electrically. Sodium silicate or Dispex most common. Critical for slip casting.',
+ def_sv:'Kemikalie som gör gjutmassa flytande med mindre vatten. Natriumsilikat eller Dispex vanligast.',
+ cult:'🇨🇳 Keskeinen teollisessa tuotannossa.',
+ slang:'"magic water"'},
+
+{fi:'Dolomiitti',en:'Dolomite',es:'Dolomita',de:'Dolomit',sv:'Dolomit',ja:'ドロマイト',zh:'白云石',ko:'돌로마이트',
+ cats:['geo','glaze'],sects:['kaivos','jalostus'],
+ def_fi:'Kaksoismineraali CaCO₃·MgCO₃. Tuo sekä magnesiumia että kalsiumia lasitteeseen. Alentaa lämpölaajenemista.',
+ def_en:'Double carbonate CaMg(CO₃)₂. Provides both magnesium and calcium to glazes. Forms eutectic mixtures, lowers thermal expansion.',
+ def_sv:'Dubbelkarbonat CaMg(CO₃)₂. Tillför magnesium och kalcium till glasyr.',
+ formula:'CaMg(CO₃)₂'},
+
+{fi:'Dreijaus',en:'Wheel throwing',es:'Torneado',de:'Drehen (Töpferscheibe)',sv:'Drejning',ja:'ろくろ引き',zh:'拉坯 (lāpī)',ko:'물레성형',
+ cats:['form'],sects:['studio','kou'],
+ def_fi:'Esineen muotoilu pyörivällä dreijalla käsillä. Vaatii saven hyvää keskittämistä.',
+ def_en:'Shaping clay on a rotating wheel using centrifugal force and hand pressure. Requires centring the clay first. One of the oldest pottery techniques.',
+ def_sv:'Formning av lera på en roterande drejskiva. Kräver centrering av leran och kombinerar centrifugalkraft med handtryck.',
+ def_ja:'ろくろを使った成形技法。遠心力と手の圧力で形を作る。まずセンタリングが必要。古代から続く技術。',
+ cult:'🇯🇵 Rokuro: meditatiivinen dialogi mestarin ja materiaalin välillä. 🇨🇳 Nopea teollinen tuotantotekniikka.',
+ slang:'"centering hell", "throwing"'},
+
+{fi:'Engobe',en:'Engobe / Slip',es:'Engobe',de:'Engobe',sv:'Engobe',ja:'化粧土 (keshōdo)',zh:'化妆土',ko:'화장토',
+ cats:['deco','glaze'],sects:['studio','teoll'],
+ def_fi:'Vedellä ohennettu saviliete, johon voidaan lisätä metallioksideja väriksi. Maalataan nahkakuivalle pinnalle. Ei sula kuten lasite.',
+ def_en:'Liquid clay slip, often coloured with metal oxides, applied to leather-hard clay for decorative effect. Unlike glaze, it does not melt but fuses to the surface.',
+ def_sv:'Flytande lera, ofta färgad med metalloxider, applicerad på läderhart gods. Skiljer sig från glasyr genom att inte smälta.',
+ def_ja:'金属酸化物で着色した泥漿を半乾燥品に施す装飾技法。釉薬とは異なり、溶融しない。',
+ cult:'🇯🇵 Hienovarainen ohut kerros. 🇬🇧 Englantilainen slip ware -traditio.',
+ slang:'"slip paint"'},
+
+{fi:'Erotusaine (kipsi)',en:'Mold release agent',es:'Agente desmoldante',de:'Trennmittel',sv:'Separationsmedel',ja:'離型剤',zh:'脱模剂',ko:'이형제',
+ cats:['plast'],sects:['studio','teoll'],
+ def_fi:'Aine, joka estää kipsin tarttumisen mallineeseen. Valmistetaan saippuasta, vedestä ja öljystä.',
+ def_en:'Substance applied to models before pouring plaster to prevent adhesion. Made from soap, water and oil, or purchased ready-made.',
+ def_sv:'Ämne som förhindrar gips från att fastna på modellen. Görs av tvål, vatten och olja.',
+ slang:'"soap solution"'},
+
+{fi:'Fajanssi',en:'Earthenware / Faience',es:'Loza / Fayenza',de:'Irdenware / Fayence',sv:'Lergods / Fajans',ja:'陶器 (tōki)',zh:'陶器',ko:'도기',
+ cats:['clay'],sects:['studio','teoll','ark'],
+ def_fi:'Matalan polton savimassa (900–1150 °C). Jää huokoiseksi ilman lasitetta. Kehitetty Faenzan kaupungissa Italiassa. Peitetään usein valkoisella tinalasitteella.',
+ def_en:'Low-fire clay body (900–1150°C) that remains porous without glaze. Developed in Faenza, Italy. Often covered with white tin glaze to hide red body colour.',
+ def_sv:'Lågbränd lermassa (900–1150°C) som förblir porös utan glasyr. Täcks ofta med vit tennglasyr.',
+ def_de:'Niedriggebrannter Ton (900–1150°C). Ohne Glasur porös. Entwickelt in Faenza, Italien. Oft mit weißer Zinnglasur überzogen.',
+ cult:'🇮🇹 Faenza: historinen tuotantokeskus. 🇳🇱 Delft: kiinalaisen posliinin jäljittely. 🇫🇮 Yleistermi huokoiselle keramiikalle.',
+ slang:'"terra"'},
+
+{fi:'Fritti / Sulatteet',en:'Frit',es:'Frita',de:'Fritte',sv:'Fritt',ja:'フリット',zh:'熔块',ko:'프릿',
+ cats:['glaze','ind'],sects:['jalostus','teoll'],
+ def_fi:'Esisulatettu lasiteraaka-aine. Tekee vaarallisista tai veteen liukenevista aineista turvallisempia.',
+ def_en:'Pre-melted glaze raw material. Toxic or soluble raw materials are fused together, then quenched and ground to powder. Safer and more consistent than raw materials.',
+ def_sv:'Försmält glasyrråvara. Giftiga eller vattenlösliga material smälts samman och mals till pulver. Säkrare och mer konsekvent.',
+ cult:'🇪🇺 Standardi matalanpolton teollisuudessa. 🇯🇵 Perinteisessä keramiikassa vältetään.',
+ slang:'"pre-fired frit"'},
+
+{fi:'Samotti (Grog)',en:'Grog',es:'Chamota',de:'Schamotte',sv:'Chamotte',ja:'シャモット',zh:'熟料',ko:'샤모트',
+ cats:['clay','ind'],sects:['jalostus','studio','teoll'],
+ def_fi:'Poltettu ja murskattu savi eri raekoossa (0–4 mm). Vähentää kutistumista, estää vääntymistä, parantaa lämmönkestoa.',
+ def_en:'Fired and crushed clay in various grain sizes (0–4mm). Added to fresh clay to reduce shrinkage, prevent warping, and improve thermal shock resistance.',
+ def_sv:'Bränd och krossad lera i olika kornstorlekar. Minskar krympning, förhindrar vridning och förbättrar termisk chocktålighet.',
+ def_de:'Gebrannte und gemahlene Schamotte in verschiedenen Korngrößen. Vermindert Schwindung, verhindert Verzug, verbessert Temperaturwechselbeständigkeit.',
+ cult:'🇯🇵 Karkea tekstuuri esteettisesti arvostettu. 🇪🇺 Tekninen lisäaine.',
+ slang:'"toothy clay"'},
+
+{fi:'Halloysiitti',en:'Halloysite',es:'Haloisita',de:'Halloysit',sv:'Halloysite',ja:'ハロイサイト',zh:'埃洛石',ko:'할로이사이트',
+ cats:['geo','clay'],sects:['kaivos','kou'],
+ def_fi:'Kaoliiniryhmän savimineraali. Putkimainen kiderakenne erottaa sen tasomaisesta kaoliniitista.',
+ def_en:'Kaolinite-group clay mineral distinguished by its tubular crystal structure. Used in porcelain manufacture, especially in East Asia.',
+ def_sv:'Lermineraler från kaolinitgruppen med rörformig kristallstruktur.'},
+
+{fi:'Hapettava poltto',en:'Oxidation firing',es:'Cocción oxidante',de:'Oxidationsbrand',sv:'Oxidationsbränning',ja:'酸化焼成',zh:'氧化烧成',ko:'산화 소성',
+ cats:['fire'],sects:['studio','teoll'],
+ def_fi:'Poltto-olosuhde jossa uunissa on runsaasti happea. Sähköuunit polttavat aina hapettavasti. Pitää värit kirkkaina.',
+ def_en:'Firing atmosphere with abundant oxygen. Electric kilns always fire oxidation. Metal oxides retain their oxidised colours — copper green, iron red/brown.',
+ def_sv:'Bränningsmiljö med riklig syretillgång. Elektriska ugnar bränner alltid oxidation. Metalloxider behåller sina oxiderade färger.',
+ cult:'🇪🇺 Yleisin studiometodi. 🇯🇵 Monet perinteiset tekniikat vaativat pelkistyksen.',
+ slang:'"clean fire"'},
+
+{fi:'Haudutus',en:'Soaking',es:'Remojo / Soak',de:'Haltephase',sv:'Insoakningsperiod',ja:'保温 (hoon)',zh:'保温',ko:'보온',
+ cats:['fire'],sects:['studio','teoll'],
+ def_fi:'Polttolämpötilan ylläpitäminen asetetun ajan. Antaa lämpötilan tasaantua ja lasitteelle sulaa tasaisesti.',
+ def_en:'Maintaining kiln temperature at a set level for a period. Allows heat to equalise throughout the load and gives glaze time to flow and mature.',
+ def_sv:'Att hålla ugnstemperaturen konstant under en period. Ger värmen tid att jämna ut sig och glasyr att mogna.'},
+
+{fi:'Humus (savissa)',en:'Humus',es:'Humus',de:'Humus',sv:'Humus',ja:'腐植土',zh:'腐殖质',ko:'부식토',
+ cats:['geo','clay'],sects:['kaivos'],
+ def_fi:'Orgaaninen aine savessa. Parantaa iästymistä. Palaa pois poltossa 300–500 °C.',
+ def_en:'Organic matter in clay. Improves aging/workability through bacterial action. Burns off during firing at 300–500°C. Excess can cause firing defects.',
+ def_sv:'Organiskt material i lera. Förbättrar plasticitet via bakteriell aktivitet. Bränner av vid 300–500°C.'},
+
+{fi:'Iästäminen (saven)',en:'Clay aging / Weathering',es:'Maduración de arcilla',de:'Tonalterung',sv:'Lerlagring',ja:'土の熟成',zh:'陈腐',ko:'점토 숙성',
+ cats:['clay'],sects:['studio'],
+ def_fi:'Saven varastointi ennen käyttöä kuukaudesta vuoteen. Bakteeritoiminta parantaa plastisuutta. Vanhempi savi on paremmin muovailtavaa.',
+ def_en:'Storing clay for months to years before use. Bacterial action breaks down clay particles and improves plasticity. Older clay is generally more workable.',
+ def_sv:'Lagring av lera i månader till år. Bakteriell aktivitet förbättrar plasticitet och formbarhet.',
+ def_ja:'使用前に数ヶ月から数年間保存する。細菌の働きで可塑性が向上。熟成した土ほど成形しやすい。',
+ cult:'🇯🇵 Mestarit käyttävät vuosikymmeniä vanhaa savea.',
+ slang:'"aged clay", "rot the clay"'},
+
+{fi:'Isostaattinen puristus',en:'Isostatic pressing',es:'Prensado isostático',de:'Isostatisches Pressen',sv:'Isostatisk pressning',ja:'等方圧プレス',zh:'等静压成形',ko:'등방압 성형',
+ cats:['ind','form'],sects:['teoll'],
+ def_fi:'Teollinen puristustekniikka — tasa-paine kaikilta suunnilta. Tuottaa tasaisen tiheän rakenteen. Käytetään laatoissa, tiilissä.',
+ def_en:'Industrial pressing technique applying equal pressure from all directions. Produces uniform density and strength. Used for tiles, technical ceramics.',
+ def_sv:'Industriellt pressteknik med lika tryck från alla håll. Ger jämn densitet. Används för kakel och teknisk keramik.'},
+
+{fi:'Jingdezhen',en:'Jingdezhen',es:'Jingdezhen',de:'Jingdezhen',sv:'Jingdezhen',ja:'景徳鎮',zh:'景德镇',ko:'징더전',
+ cats:['asia','hist','ind'],sects:['teoll','kou'],
+ def_fi:'Kiinan posliinipääkaupunki. Yli tuhannen vuoden historia. Yhdistää kaoliinisaven ja petuntse-kiven (maasälpä).',
+ def_en:'China\'s porcelain capital in Jiangxi province. Over 1000 years of production history. Combines kaolinite clay with petuntse (feldspar). World\'s largest ceramics production centre.',
+ def_zh:'中国江西省的瓷都，拥有千年制瓷历史。高岭土与白墩子（长石）的结合创造了世界著名的景德镇瓷器。',
+ cult:'🇨🇳 Keisarilliset posliinitehtaat toimivat täällä. Jingdezhen = tekninen täydellisyys.'},
+
+{fi:'Kalimaasälpä',en:'Potassium feldspar',es:'Feldespato potásico',de:'Kaliumpegmatit',sv:'Kaliumfältspat',ja:'カリ長石',zh:'钾长石',ko:'칼리장석',
+ cats:['geo','glaze'],sects:['kaivos','jalostus'],
+ def_fi:'K₂O·Al₂O₃·6SiO₂. Yleisin lasitteiden sulattaja. Sulaa 1050–1200 °C.',
+ def_en:'K₂O·Al₂O₃·6SiO₂. Most common flux in glazes. Melts 1050–1200°C. Contains potassium, aluminium and silica oxides — all important glaze components.',
+ def_sv:'K₂O·Al₂O₃·6SiO₂. Vanligaste flussmedlet i glasyr. Smälter 1050–1200°C.',
+ formula:'K₂O·Al₂O₃·6SiO₂'},
+
+{fi:'Kaoliini',en:'Kaolin / China clay',es:'Caolín',de:'Kaolin',sv:'Kaolin',ja:'カオリン',zh:'高岭土 (gāolǐng tǔ)',ko:'고령토',
+ cats:['clay','geo'],sects:['kaivos','jalostus','teoll'],
+ def_fi:'Puhdas valkoinen savimineraali Al₂O₃·2SiO₂·2H₂O. Posliinin tärkein raaka-aine. Alhainen plastisuus. Sulaa 1750–1770 °C.',
+ def_en:'Pure white clay mineral Al₂O₃·2SiO₂·2H₂O. Primary raw material for porcelain. Low plasticity. Melts at 1750–1770°C. Named after Gaoling Mountain, China.',
+ def_sv:'Vitt lermineralen Al₂O₃·2SiO₂·2H₂O. Porslins primära råvara. Låg plasticitet. Smälter vid 1750–1770°C.',
+ def_de:'Reines weißes Tonmineral. Wichtigster Rohstoff für Porzellan. Geringe Plastizität. Schmelzpunkt 1750–1770°C. Name von Gaoling-Berg in China.',
+ def_ja:'純白の粘土鉱物Al₂O₃·2SiO₂·2H₂O。磁器の主要原料。可塑性低い。中国・景徳鎮近郊の高嶺山が発祥地。',
+ def_zh:'纯白色粘土矿物。是瓷器最重要的原料，可塑性较低，熔点1750-1770°C。名称来源于中国江西的高岭山。',
+ def_ko:'순백색 점토 광물. 도자기의 주원료. 가소성 낮음. 중국 고령산(高嶺山)에서 이름 유래.',
+ formula:'Al₂O₃·2SiO₂·2H₂O',
+ cult:'🇨🇳 Tunnettu jo 200 eaa. 🇬🇧 Löydettiin Cornwallista 1700-luvulla. 🇫🇮 Esiintymät Enossa, Puolangalla, Virtasalmella.'},
+
+{fi:'Kaoliniitti',en:'Kaolinite',es:'Caolinita',de:'Kaolinit',sv:'Kaolinit',ja:'カオリナイト',zh:'高岭石',ko:'카올리나이트',
+ cats:['geo','clay','chem'],sects:['kaivos','kou'],
+ def_fi:'Kaoliinin päämineraali. 6-kulmainen litteä levy. Puhtain savimineraalimuoto.',
+ def_en:'Primary mineral in kaolin. Hexagonal flat plate crystal structure. Purest form of clay mineral. Found in almost all natural clays.',
+ def_sv:'Kaolinets primära mineral. Hexagonal platt kristallstruktur. Renaste formen av lerminerale.',
+ formula:'Al₂O₃·2SiO₂·2H₂O'},
+
+{fi:'Kertapoltto',en:'Single firing / Once-fire',es:'Monococción',de:'Einmalbrand',sv:'Engångsbränning',ja:'一本焼き',zh:'一次烧成',ko:'1회 소성',
+ cats:['fire','ind'],sects:['teoll'],
+ def_fi:'Raaka- ja lasituspoltto yhdistetysti kerran. Taloudellinen teollisuusmenetelmä laatoille ja lautasille.',
+ def_en:'Raw glaze applied to unfired dry clay, then fired only once. Economical industrial method used for tiles, sanitaryware. Requires careful glaze formulation.',
+ def_sv:'Engångsbränning: råglasyr appliceras på torrt gods som sedan bränns bara en gång. Ekonomisk industrimetod för kakel och tallrikar.'},
+
+{fi:'Kemiallinen rapautuminen',en:'Chemical weathering',es:'Meteorización química',de:'Chemische Verwitterung',sv:'Kemisk vittring',ja:'化学的風化',zh:'化学风化',ko:'화학 풍화',
+ cats:['geo'],sects:['kaivos','kou'],
+ def_fi:'Sadevedessä olevat hapot vaikuttavat kiveen. Myös magmaattiset kaasut rapauttavat maasälpää.',
+ def_en:'Rock breakdown through chemical reactions with acidic rainwater, CO₂, and hydrothermal fluids. Feldspars weather to kaolinite — the origin of clay.',
+ def_sv:'Kemisk nedbrytning av bergarter via sura regnvatten, CO₂ och hydrotermala vätskor. Fältspat vittrar till kaolinit.'},
+
+{fi:'Kidelasite',en:'Crystalline glaze',es:'Esmalte cristalino',de:'Kristallglasur',sv:'Kristallglasyr',ja:'結晶釉',zh:'结晶釉',ko:'결정유',
+ cats:['glaze'],sects:['studio'],
+ def_fi:'Lasite, johon muodostuu polton aikana suuria näkyviä kiteitä. Vaatii tarkan lämpötilaohjelman ja pitkän haudutuksen.',
+ def_en:'Glaze with large visible crystals formed during firing. Requires precise temperature schedule: hold at crystallisation temperature for hours. Crystals can grow centimetres wide.',
+ def_sv:'Glasyr med stora synliga kristaller bildade under bränning. Kräver exakt temperaturkontroll och lång haltningstid.',
+ slang:'"crystal growing", "zen glaze"'},
+
+{fi:'Kipsi',en:'Plaster of Paris / Gypsum',es:'Yeso',de:'Gips',sv:'Gips',ja:'石膏 (sekkō)',zh:'石膏',ko:'석고',
+ cats:['plast'],sects:['jalostus','studio','teoll'],
+ def_fi:'Kalsiumsulfaatti CaSO₄·½H₂O. Kovettuu vedestä lämpöä vapauttaen. Huokoinen rakenne imee vettä savesta. Tärkein muottimateriaali.',
+ def_en:'Calcium sulphate hemihydrate CaSO₄·½H₂O. Sets by absorbing water, releasing heat. Porous structure absorbs water from clay in mould-making. Most important mould material.',
+ def_sv:'Kalciumsulfat CaSO₄·½H₂O. Stelnar genom att absorbera vatten och avge värme. Porös struktur suger vatten från lera.',
+ def_de:'Calciumsulfat CaSO₄·½H₂O. Erhärtet durch Wasseraufnahme mit Wärmeentwicklung. Poröse Struktur saugt Wasser aus dem Ton. Wichtigstes Formmaterial.',
+ formula:'CaSO₄·½H₂O',
+ cult:'🇩🇪 Teollisuusstandardina 1800-luvulta. 🇨🇳 Massatuotanto perustuu kipsimuotteihin.',
+ slang:'"white stuff"'},
+
+{fi:'Kipsimuotti',en:'Plaster mold',es:'Molde de yeso',de:'Gipsform',sv:'Gipsform',ja:'石膏型',zh:'石膏模具',ko:'석고틀',
+ cats:['plast'],sects:['studio','teoll','jalostus'],
+ def_fi:'Huokoisesta kipsistä valmistettu muotti. Imee vettä savilietteestä. Seinämänvahvuus 3–4 cm.',
+ def_en:'Porous plaster mould that absorbs water from slip, causing clay to solidify against mould walls. Wall thickness 3–4cm. Calcium sulphate released into slip acts as flocculant.',
+ def_sv:'Porös gipsform som absorberar vatten från gjutmassa och gör att leran stelnar mot formväggarna.',
+ cult:'🇨🇳 Teollisuudessa käyttöikä jopa 30 000 kertaa (painevalu). 🇯🇵 Käsityöperinteessä vältetään liiallista muottiriippuvuutta.',
+ slang:'"mold line hell"'},
+
+{fi:'Kintsugi',en:'Kintsugi',es:'Kintsugi',de:'Kintsugi',sv:'Kintsugi',ja:'金継ぎ (kintsugi)',zh:'金缮 (jīn shàn)',ko:'킨츠기',
+ cats:['asia','phil','deco'],sects:['studio'],
+ def_fi:'Japanilainen korjaustekniikka — rikkoutunut keramiikka korjataan urushi-lakalla ja kultajauholla.',
+ def_en:'Japanese repair technique using urushi lacquer mixed with gold, silver, or platinum powder. Philosophy: breakage and repair are part of the object\'s history, not flaws to hide.',
+ def_sv:'Japansk reparationsteknik med urushilack och guldpulver. Filosofi: sprickor och reparationer är en del av föremålets historia.',
+ def_ja:'漆に金粉を混ぜて割れた陶器を修繕する日本の伝統技法。傷は隠すべき欠点ではなく、歴史の一部という哲学。',
+ cult:'🇯🇵 Wabi-sabin ruumiillistuma. 🌍 Länsimaissa nykyisin visuaalinen trendi — alkuperäinen filosofia usein katoaa.'},
+
+{fi:'Kivilajit',en:'Rock types',es:'Tipos de roca',de:'Gesteinstypen',sv:'Bergarter',ja:'岩石の種類',zh:'岩石类型',ko:'암석 종류',
+ cats:['geo'],sects:['kaivos','kou'],
+ def_fi:'Magmakivet (sulasta), sedimenttikivet (kerrostunut aines) ja metamorfiset kivet (lämpö+paine). Savimineraalien lähtökohta.',
+ def_en:'Three types: igneous (formed from magma), sedimentary (deposited layers), metamorphic (transformed by heat and pressure). All are sources for clay minerals through weathering.',
+ def_sv:'Tre typer: magmatiska, sedimentära och metamorfa bergarter. Alla är källan för lermineraler genom vittringsprocesser.'},
+
+{fi:'Kivitavara',en:'Stoneware',es:'Gres',de:'Steinzeug',sv:'Stengods',ja:'炻器 (shaki)',zh:'炻器',ko:'석기',
+ cats:['clay'],sects:['studio','teoll'],
+ def_fi:'Korkean polton savimassa (1200–1350 °C). Sintraantuu tiiviiksi ja vettä läpäisemättömäksi.',
+ def_en:'High-fire clay body (1200–1350°C) that vitrifies to dense, strong, water-impermeable ware without glaze. Colour ranges from white to grey, brown or speckled.',
+ def_sv:'Högbränd lermassa (1200–1350°C) som sintrar till tät, stark och vattenogenomtränglig skärva.',
+ def_de:'Hochgebrannter Ton (1200–1350°C). Sintert zu dichtem, wasserundurchlässigem Scherben auch ohne Glasur.',
+ cult:'🇪🇺 Tekninen kategoria — käyttökeramiikan perusta. 🇯🇵 Esteettinen kategoria — epätasaisuus arvostettua.',
+ slang:'"stoneware"'},
+
+{fi:'Kobolttioksidi',en:'Cobalt oxide',es:'Óxido de cobalto',de:'Kobaltoxid',sv:'Koboltoxid',ja:'酸化コバルト',zh:'氧化钴',ko:'산화코발트',
+ cats:['glaze','chem'],sects:['jalostus','studio'],
+ def_fi:'CoO / Co₃O₄. Voimakas sininen väriaine. Jo 0,25–1% tuottaa voimakkaan sinisen.',
+ def_en:'CoO / Co₃O₄. Powerful blue colorant. Even 0.25–1% produces deep blue. Stable at high temperatures. Used in qinghua (blue-and-white) porcelain.',
+ def_sv:'CoO / Co₃O₄. Kraftfull blå färgämne. 0,25–1% ger djupblå färg. Stabilt vid höga temperaturer.',
+ formula:'CoO / Co₃O₄',
+ cult:'🇨🇳 Qinghua: koboltti tuotiin Persiasta.'},
+
+{fi:'Kolloidinen käyttäytyminen',en:'Colloidal behavior',es:'Comportamiento coloidal',de:'Kolloidales Verhalten',sv:'Kolloidalt beteende',ja:'コロイド挙動',zh:'胶体行为',ko:'콜로이드 거동',
+ cats:['chem','clay'],sects:['kou'],
+ def_fi:'Savihiukkasten sähköinen vuorovaikutus vedessä. Selittää plastisuuden ja tiksotropian.',
+ def_en:'Electrical interaction of clay particles in water. Flat clay platelets carry negative surface charges that create plasticity and thixotropic behaviour.',
+ def_sv:'Elektrisk växelverkan av lerflagor i vatten. Förklarar plasticitet och tixotropi.'},
+
+{fi:'Koristelasite / Päällystelasite',en:'Overglaze',es:'Sobrecubierta',de:'Aufglasurdekor',sv:'Överglasdekoration',ja:'上絵具 (uwae-gu)',zh:'釉上彩',ko:'유상채',
+ cats:['deco','glaze'],sects:['studio','teoll'],
+ def_fi:'Värit ja koristeet jo poltetun lasitteen päälle. Poltetaan 700–900 °C. Sisältää kultaa, hopeaa, platinaa.',
+ def_en:'Colours and decorations applied over already-fired glaze. Fired at 700–900°C. Includes gold, silver and platinum lusters. Allows precision detail not possible underglaze.',
+ def_sv:'Färger och dekor applicerade på bränd glasyr. Bränns vid 700–900°C.'},
+
+{fi:'Kuparioksidi',en:'Copper oxide',es:'Óxido de cobre',de:'Kupferoxid',sv:'Kopparoxid',ja:'酸化銅',zh:'氧化铜',ko:'산화구리',
+ cats:['glaze','chem'],sects:['studio'],
+ def_fi:'CuO / Cu₂O. Hapettavassa: vihreä. Pelkistävässä: kuparirubiini (verenpunainen).',
+ def_en:'CuO oxidation: turquoise/green. Cu₂O reduction: copper ruby (blood red). One of the most sensitive oxides to atmosphere. "Jun red" and "oxblood" glazes use copper reduction.',
+ def_sv:'CuO oxidation: turkos/grön. Cu₂O reduktion: kopparrubin (blodrött).',
+ formula:'CuO / Cu₂O',
+ cult:'🇨🇳 Kuparirubiini (langyao hong) oli keisarillinen väri.',
+ slang:'"oxblood"'},
+
+{fi:'Kutistuminen',en:'Shrinkage',es:'Contracción',de:'Schwinden',sv:'Krympning',ja:'収縮',zh:'收缩',ko:'수축',
+ cats:['chem','clay','fire'],sects:['studio','teoll','kou'],
+ def_fi:'Savi kutistuu kuivuessaan ja poltossa. Posliini ~14–16%, kivitavara ~13–18%.',
+ def_en:'Clay shrinks during drying (mechanical shrinkage) and firing (firing shrinkage). Porcelain ~14–16%, stoneware ~13–18%. Must be calculated when designing moulds.',
+ def_sv:'Lera krymper vid torkning och bränning. Porslin ~14–16%, stengods ~13–18%.',
+ slang:'"the shrink factor"'},
+
+{fi:'Kvartsi',en:'Quartz',es:'Cuarzo',de:'Quarz',sv:'Kvarts',ja:'石英 (sekiei)',zh:'石英',ko:'석영',
+ cats:['geo','chem','clay'],sects:['kaivos','jalostus'],
+ def_fi:'SiO₂. 12% maankuoresta. Lasinmuodostaja lasitteissa. Laihduttaa plastista savea. Kovuus 7 Mohs.',
+ def_en:'SiO₂. Makes up 12% of the earth\'s crust. Forms glass in glazes. Reduces plasticity of fat clays. Hardness 7 Mohs. Critical for thermal expansion control.',
+ def_sv:'SiO₂. Utgör 12% av jordskorpan. Bildar glas i glasyr. Minskar plasticitet.',
+ formula:'SiO₂'},
+
+{fi:'Kvartsi-inversio',en:'Quartz inversion',es:'Inversión del cuarzo',de:'Quarzumwandlung',sv:'Kvartsomvandling',ja:'石英転移',zh:'石英转变',ko:'석영 전이',
+ cats:['chem','fire'],sects:['studio','kou'],
+ def_fi:'573°C — nopea tilavuuden muutos (α→β, +2%). Kriittisin kohta poltossa ja jäähdytyksessä. Uuni auki vasta alle 200°C.',
+ def_en:'At 573°C quartz undergoes rapid volume change (alpha to beta, +2%). Most critical point in firing and cooling. Never open kiln above 200°C. Causes cracking if rate is too fast.',
+ def_sv:'Vid 573°C sker snabb volymändring (+2%). Kritiskaste punkten i bränning och kylning. Öppna aldrig ugnen ovan 200°C.',
+ slang:'"danger zone", "573 crisis"'},
+
+{fi:'Laiha savi',en:'Lean clay / Short clay',es:'Arcilla magra',de:'Magerer Ton',sv:'Mager lera',ja:'非可塑性粘土',zh:'低塑性粘土',ko:'저가소성 점토',
+ cats:['clay'],sects:['studio'],
+ def_fi:'Vähemmän plastinen savi. Helpompi hallita. Kutistuu vähemmän.',
+ def_en:'Low-plasticity clay with high non-plastic content. Easier to control but less workable. Shrinks less than fat clay. Often made by adding quartz or feldspar.',
+ def_sv:'Lermassa med låg plasticitet. Lättare att kontrollera, krymper mindre.'},
+
+{fi:'Lasituspoltto',en:'Glaze firing',es:'Cocción de esmaltado',de:'Glasurbrand',sv:'Glasyrsbränning',ja:'本焼き (honyaki)',zh:'釉烧',ko:'유약 소성',
+ cats:['fire','glaze'],sects:['studio','teoll'],
+ def_fi:'Toinen poltto. Lasite sulaa lasiksi, savi sintraantuu lopulliseen kovuuteensa.',
+ def_en:'Second firing at higher temperature. Glaze melts to glass, clay vitrifies to final hardness. Glazed pieces must not touch each other or kiln furniture.',
+ def_sv:'Andra bränning. Glasyr smälter till glas, lera sintrar till slutlig hårdhet.'},
+
+{fi:'Levytekniikka',en:'Slab building',es:'Técnica de placas',de:'Plattenaufbau',sv:'Platteknik',ja:'タタラ作り',zh:'泥板成形',ko:'판 쌓기',
+ cats:['form'],sects:['studio','kou'],
+ def_fi:'Esineiden rakentaminen kaulituista savilevyistä. Sopii kulmikkaisiin muotoihin.',
+ def_en:'Hand-building technique using flat slabs of clay rolled or cut to shape. Ideal for angular, geometric forms. Slabs joined with scored surfaces and slip.',
+ def_sv:'Handbyggnadsteknik med platta lerplattor. Idealisk för kantiga, geometriska former.',
+ cult:'🇯🇵 Tatara-zukuri: perinteinen japanilainen levymenetelmä.'},
+
+{fi:'Liitu / Kalsiumkarbonaatti',en:'Chalk / Calcium carbonate',es:'Tiza / Carbonato de calcio',de:'Kreide / Kalk',sv:'Krita / Kalciumkarbonat',ja:'石灰石',zh:'碳酸钙',ko:'탄산칼슘',
+ cats:['geo','glaze'],sects:['kaivos','jalostus'],
+ def_fi:'CaCO₃. Celadon-lasitteen pääsulattaja. Suurina määrinä edistää himmeää pintaa.',
+ def_en:'CaCO₃. Primary flux in celadon glazes. In large amounts promotes matt surface. Main stabiliser in most high-fire glazes. Promotes crystal growth.',
+ def_sv:'CaCO₃. Huvudflussmedlet i celadonglasuyer. I stora mängder ger matt yta.',
+ formula:'CaCO₃'},
+
+{fi:'Lihava savi',en:'Plastic clay / Fat clay',es:'Arcilla grasa',de:'Fetter Ton',sv:'Fet lera',ja:'可塑性粘土',zh:'高塑性粘土',ko:'고가소성 점토',
+ cats:['clay'],sects:['studio'],
+ def_fi:'Paljon vettä sitova, erittäin muovailtava savi. Kutistuu paljon kuivuessaan.',
+ def_en:'Highly plastic clay that absorbs a lot of water. Very workable but shrinks significantly on drying. Risk of cracking from uneven drying. Must be "leaned" for production.',
+ def_sv:'Mycket plastisk lera med hög vattenbindning. Bra formbarhet men krymper mycket vid torkning.',
+ slang:'"sticky clay", "buttery clay"'},
+
+{fi:'Liivittyminen (saven)',en:'Slipping / Slaking',es:'Desintegración',de:'Aufschlämmen',sv:'Slamma upp',ja:'水簸',zh:'泥化',ko:'수비',
+ cats:['clay'],sects:['studio','eco'],
+ def_fi:'Kuivan saven liuottaminen veteen. Siivilöidään hiekan ja orgaanisen aineen poistamiseksi.',
+ def_en:'Dissolving dry clay in water. Clay breaks down to slurry. Sieve to remove sand and organics. First step in processing wild clay.',
+ def_sv:'Att lösa upp torr lera i vatten. Leran slås sönder till lera. Siktas för att avlägsna sand.'},
+
+{fi:'Luonnollinen tuhkalasite',en:'Natural ash glaze',es:'Vidriado de ceniza natural',de:'Naturascheglasur',sv:'Naturaskeglasyr',ja:'自然釉 (shizenyu)',zh:'自然灰釉',ko:'자연재유',
+ cats:['glaze','fire','asia'],sects:['studio'],
+ def_fi:'Puupoltossa lentävä tuhka sulaa lasitteeksi esineiden pintaan. Ainutlaatuinen, epätoistettava.',
+ def_en:'Ash from wood firing that settles on surfaces and melts to form a natural glaze at high temperatures. Unique, unrepeatable results. Primary technique in anagama firing.',
+ def_sv:'Aska från vedeldning som fäster och smälter till naturglasyr på ytor vid hög temperatur.',
+ def_ja:'薪窯で飛ぶ灰が高温で表面に付着し天然の灰釉を形成。偶然性と自然の美の具現化。',
+ cult:'🇯🇵 "Taivaan lahja". 🇰🇷 Vanhimmat tuhkalasite-esimerkit ovat Korean niemimaan löydöissä.'},
+
+{fi:'Luuposliini',en:'Bone china',es:'Porcelana de hueso',de:'Knochenporzellan',sv:'Benporslin',ja:'ボーンチャイナ',zh:'骨瓷 (gǔcí)',ko:'본 차이나',
+ cats:['clay','hist'],sects:['teoll'],
+ def_fi:'Pehmeäposliini, jossa luujauho toimii sulattajana. Erittäin valkoinen, läpikuultava. Kehitetty Englannissa.',
+ def_en:'Soft-paste porcelain with bone ash (calcium phosphate) as flux. Extremely white, translucent, lightweight. Developed in England to replicate Chinese porcelain cheaply.',
+ def_sv:'Mjukporslin med benaska (kalciumfosfat) som flussmedel. Extremt vitt, genomskinligt. Utvecklat i England.',
+ cult:'🇬🇧 Kehitetty 1700-luvulla. Edullisempi kuin kovaposliini. 🇨🇳 Kiinassa ei perinteisesti arvostettu.'},
+
+{fi:'Maasälpä',en:'Feldspar',es:'Feldespato',de:'Feldspat',sv:'Fältspat',ja:'長石 (chōseki)',zh:'长石',ko:'장석',
+ cats:['geo','glaze','clay'],sects:['kaivos','jalostus'],
+ def_fi:'Erittäin yleinen mineraaliryhmä. Tärkein sulattaja massoissa ja lasitteissa.',
+ def_en:'Most abundant mineral group (60% of igneous rocks). Primary flux in clay bodies and glazes. Forms glass when melting. Key component with quartz and kaolin in the "classic trio".',
+ def_sv:'Vanligaste mineralgruppen (60% av magmaberg). Primärt flussmedel i leror och glasyr.',
+ cult:'🇫🇮 Suomessa kauppanimike FFF (Finnish Flotation Feldspar) — louhitaan pegmatiitista.'},
+
+{fi:'Magmakivi',en:'Igneous rock',es:'Roca ígnea',de:'Magmagestein',sv:'Magmasten',ja:'火成岩',zh:'岩浆岩',ko:'화성암',
+ cats:['geo'],sects:['kaivos','kou'],
+ def_fi:'Sulan magman jähmettymisestä syntynyt kivilaji. Graniitti, basaltti, gabro.',
+ def_en:'Rock formed by solidification of magma — either at depth (intrusive: granite) or at surface (extrusive: basalt). Primary source material for clay through weathering.',
+ def_sv:'Bergarter bildade av stelnad magma — djupbergarter (granit) eller ytbergarter (basalt).'},
+
+{fi:'Makkaratekniikka',en:'Coiling',es:'Técnica del rollo',de:'Wulstaufbau',sv:'Rollteknik',ja:'紐作り (himo-zukuri)',zh:'盘筑法',ko:'코일링',
+ cats:['form'],sects:['studio','kou'],
+ def_fi:'Muinaisin käsinrakennusmenetelmä — päällekkäin asetettuja savimakkaroita.',
+ def_en:'Oldest hand-building technique. Ropes of clay are built up in coils and joined. Ideal for large sculptural and asymmetric forms. Found in all pre-wheel ceramics worldwide.',
+ def_sv:'Äldsta handbyggnadsteknik. Lerslangar staplas och fogas. Idealisk för stora skulpturala former.',
+ def_ja:'最古の手びねり技法。ひも状の土を積み重ねる。世界中のろくろ以前の陶器に使われた。',
+ cult:'🌍 Universaali tekniikka kaikissa kulttuureissa.'},
+
+{fi:'Malline',en:'Model / Master',es:'Modelo / Máster',de:'Modell',sv:'Modell',ja:'原型 (genkei)',zh:'模型',ko:'원형',
+ cats:['plast'],sects:['studio','teoll'],
+ def_fi:'Alkuperäinen kappale kipsimuottia varten. Tehtävä 10–15% polttokutistuman verran suuremmaksi.',
+ def_en:'Original model from which a plaster mould is made. Must be made 10–15% larger than final size to account for clay shrinkage. Any material: clay, 3D print, wood.',
+ def_sv:'Originalmodell från vilken en gipsform görs. Måste vara 10–15% större för att kompensera lerksrympning.'},
+
+{fi:'Mangaanioksidi',en:'Manganese oxide',es:'Óxido de manganeso',de:'Manganoxid',sv:'Manganoxid',ja:'酸化マンガン',zh:'氧化锰',ko:'산화망간',
+ cats:['glaze','chem'],sects:['studio'],
+ def_fi:'MnO₂. Ruskea, musta, violetti. Usein seoksena rautaoksidiin.',
+ def_en:'MnO₂. Produces brown, black, violet in glazes. Often combined with iron oxide. Can produce metallic lusters in high amounts.',
+ formula:'MnO₂'},
+
+{fi:'Mekaaninen rapautuminen',en:'Mechanical weathering',es:'Meteorización mecánica',de:'Mechanische Verwitterung',sv:'Mekanisk vittring',ja:'機械的風化',zh:'机械风化',ko:'기계적 풍화',
+ cats:['geo'],sects:['kaivos','kou'],
+ def_fi:'Veden, lämpötilan vaihteluiden ja jään aiheuttama kiven fyysinen hajoaminen.',
+ def_en:'Physical breakdown of rock by water, temperature changes, and ice. Freeze-thaw action is especially powerful — water expands 9% on freezing, shattering rock.',
+ def_sv:'Fysisk nedbrytning av berg via vatten, temperaturgrowthgrowing och is. Frostsprängning är särskilt kraftfull.'},
+
+{fi:'Metamorfinen kivi',en:'Metamorphic rock',es:'Roca metamórfica',de:'Metamorphes Gestein',sv:'Metamorft berg',ja:'変成岩',zh:'变质岩',ko:'변성암',
+ cats:['geo'],sects:['kaivos','kou'],
+ def_fi:'Korkean paineen ja lämpötilan muuttama kivilaji. Liuskeet, marmori, kvartsiitti.',
+ def_en:'Rock transformed by extreme heat and pressure deep in the Earth. Includes schist, marble, quartzite. Forms mountain belts. Source for some clay minerals.',
+ def_sv:'Bergart omvandlad av högt tryck och temperatur. Inkluderar skiffer, marmor, kvartsit.'},
+
+{fi:'Montmorilloniitti',en:'Montmorillonite',es:'Montmorillonita',de:'Montmorillonit',sv:'Montmorillonit',ja:'モンモリロナイト',zh:'蒙脱石',ko:'몬모릴로나이트',
+ cats:['geo','clay','chem'],sects:['kaivos','kou'],
+ def_fi:'Bentoniitin pääsavimineraali. Kerrosmineraali, joka turpoaa vettä imeessä.',
+ def_en:'Primary mineral in bentonite. 2:1 layer clay mineral that swells enormously when absorbing water. Gives bentonite its superplastic properties.',
+ def_sv:'Bentonitets primära mineral. Lagermineralen som sväller kraftigt vid vattenabsorption.'},
+
+{fi:'Muovaus',en:'Jiggering / Jolleying',es:'Moldeado por torno',de:'Rotoformung',sv:'Drejformning',ja:'型打ち成形',zh:'机压成形',ko:'거터링',
+ cats:['form','ind'],sects:['teoll'],
+ def_fi:'Pyörähdyskappaleiden sarjavalmistus — muovausterä painetaan pyörivään kipsimuottiin.',
+ def_en:'Industrial forming for round ware. Clay placed in rotating plaster mould and profile tool pressed against it. Used for cups, plates, flower pots. Jiggering: outside formed by mould. Jolleying: inside formed by mould.',
+ def_sv:'Industriell seriebränning för runda föremål. Lerprofil pressas mot en roterande gipsform.',
+ cult:'🏭 Teollisuudessa monipaikkaisia koneita. 🖐️ Studiossa käsikäyttöinen.'},
+
+{fi:'Nahkakuiva',en:'Leather-hard',es:'Cuero seco',de:'Lederharter Zustand',sv:'Läderhård',ja:'半乾燥状態',zh:'皮干状态',ko:'반건조',
+ cats:['clay','form'],sects:['studio'],
+ def_fi:'Saven kuivumisaste: jäykkä mutta ei täysin kuiva. Engobe ja kuviointi tehdään tässä vaiheessa.',
+ def_en:'Clay drying stage: stiff but not fully dry (like firm leather). Ideal for trimming, attaching handles, and applying engobe. Can still be carved or stamped.',
+ def_sv:'Lerstadie: stel men inte helt torr (som fast läder). Idealisk för trimning och engobeapplicering.',
+ slang:'"green state", "semi-dry"'},
+
+{fi:'Natronmaasälpä',en:'Sodium feldspar / Albite',es:'Feldespato sódico / Albita',de:'Natriumfeldspat',sv:'Natriumfältspat',ja:'灰長石',zh:'钠长石',ko:'나트륨장석',
+ cats:['geo','glaze'],sects:['kaivos','jalostus'],
+ def_fi:'Na₂O·Al₂O₃·6SiO₂. Sulaa ~1100 °C. Alentaa sulamislämpötilaa alhaisemmissa lämpötiloissa kuin kalimaasälpä.',
+ def_en:'Na₂O·Al₂O₃·6SiO₂, melting ~1100°C. More active flux at lower temperatures than potassium feldspar. Provides sodium oxide to glazes.',
+ formula:'Na₂O·Al₂O₃·6SiO₂'},
+
+{fi:'Nefeliinisyeniitti',en:'Nepheline syenite',es:'Nefelina sienita',de:'Nephelinsyenit',sv:'Nefelin-syenit',ja:'霞石閃長岩',zh:'霞石正长岩',ko:'비취석 섬장암',
+ cats:['geo','glaze'],sects:['kaivos','jalostus'],
+ def_fi:'Maasälpätyyppinen mineraali ilman kvartsia. Aggressiivisempi sulattaja kuin tavallinen maasälpä.',
+ def_en:'Feldspar-type mineral without free quartz. More aggressive flux than regular feldspar at lower temperatures. Used in low-fire bodies and glazes.',
+ def_sv:'Fältspatliknande mineral utan fri kvarts. Aggressivare flussmedel vid lägre temperaturer.'},
+
+{fi:'Orton-keilat',en:'Orton cones',es:'Conos Orton',de:'Orton-Kegel',sv:'Ortkonkoner',ja:'オルトンコーン',zh:'奥顿测温锥',ko:'오르톤 콘',
+ cats:['fire','meas'],sects:['studio','teoll'],
+ def_fi:'Itsestään seisovat pyrometriset keilat — sulautuvat tietyissä lämpötiloissa.',
+ def_en:'Self-supporting pyrometric cones that bend and melt at specific temperatures. American standard. Used inside kiln to monitor actual heat work, not just temperature.',
+ def_sv:'Självstående pyrometriska käglor som smälter vid specifika temperaturer. Amerikanskt standard.',
+ cult:'🇺🇸 Kehitetty Yhdysvalloissa. Vertaa Segerin keiloihin (eurooppalainen).'},
+
+{fi:'Painevalu',en:'Pressure casting',es:'Colada a presión',de:'Druckguss',sv:'Tryckning',ja:'圧力鋳込み',zh:'压力注浆',ko:'압력 주입',
+ cats:['ind','form'],sects:['teoll'],
+ def_fi:'Teollinen valumenetelmä kovaan huokoiseen muottiin. Käyttöikä 30 000 kertaa. Käytetään saniteettiporsliiniin.',
+ def_en:'Industrial casting using hard porous polymer moulds under pressure. Mould life up to 30,000 pours. Used for sanitaryware (WC pans, wash basins).',
+ def_sv:'Industriell gjutning med hård porös polymerform under tryck. Formlivslängd upp till 30 000 gjutningar.',
+ slang:'"industrial casting"'},
+
+{fi:'Pallosavet',en:'Ball clay',es:'Arcilla de bola',de:'Ballton',sv:'Bollera',ja:'ボールクレー',zh:'球粘土',ko:'볼 클레이',
+ cats:['clay'],sects:['jalostus','teoll'],
+ def_fi:'Sekundäärisavia — erittäin plastisia pienen kidekoon takia. Suuri kuivumiskutistuma.',
+ def_en:'Sedimentary secondary clays — highly plastic due to fine particle size. Great kuivalujuus. Large drying shrinkage. Used in small amounts to boost plasticity of blends.',
+ def_sv:'Sedimentära sekundärleror — mycket plastiska pga fin partikelstorlek. Stor torkkrympning.',
+ cult:'Nimi: 1800-luvun englantilainen kuljetustapa — jalkapallon kokoisina kuutioina.'},
+
+{fi:'Paperisavi',en:'Paper clay',es:'Arcilla de papel',de:'Papierton',sv:'Papperslera',ja:'紙粘土',zh:'纸黏土',ko:'종이점토',
+ cats:['clay'],sects:['studio'],
+ def_fi:'Savea, johon on lisätty paperikuitua. Suuri raakalujuus. Paperi palaa poltossa pois.',
+ def_en:'Clay with added cellulose paper fibres. Dramatic increase in green strength. Paper burns away in firing, leaving lightweight porous body. Good for large sculptures.',
+ def_sv:'Lera med tillsatt pappersfiber. Dramatiskt ökad råstyrka. Papperet bränner av i ugnen.',
+ slang:'"paper porcelain"'},
+
+{fi:'Pegmatiitti',en:'Pegmatite',es:'Pegmatita',de:'Pegmatit',sv:'Pegmatit',ja:'ペグマタイト',zh:'伟晶岩',ko:'페그마타이트',
+ cats:['geo'],sects:['kaivos'],
+ def_fi:'Erittäin karkearakeinen magmakivi. Tärkeä keramiikkateollisuuden raaka-ainelähde.',
+ def_en:'Very coarse-grained igneous rock with crystals of quartz, feldspar and mica. Key raw material source for ceramics industry. Feldspar and quartz separated by flotation.',
+ def_sv:'Grovkornig magmabergart med kvarts, fältspat och glimmer. Viktig råvarukälla för keramikindustrin.'},
+
+{fi:'Pehmeäposliini',en:'Soft-paste porcelain',es:'Porcelana de pasta blanda',de:'Weichporzellan',sv:'Mjukporslin',ja:'軟質磁器',zh:'软质瓷',ko:'연질 자기',
+ cats:['clay','hist'],sects:['teoll','hist'],
+ def_fi:'Posliini sulattavilla raaka-aineilla polttolämpötilan alentamiseksi. Kehitetty Euroopassa.',
+ def_en:'Porcelain with added fluxing materials to lower firing temperature. Developed in Europe before kaolin was found. Lower translucency and hardness than hard-paste.',
+ def_sv:'Porslin med flussmedel för att sänka bränntemperaturen. Utvecklat i Europa.',
+ cult:'🇫🇷 Sèvres kehitti pehmeäposliinia taiteeksi.'},
+
+{fi:'Pelkistävä poltto',en:'Reduction firing',es:'Cocción reductora',de:'Reduktionsbrand',sv:'Reduktionsbränning',ja:'還元焼成',zh:'还原烧成',ko:'환원 소성',
+ cats:['fire'],sects:['studio'],
+ def_fi:'Happiköyhä polttopäristö. Metallioksidien värit muuttuvat dramaattisesti — kupari vihreästä punaiseksi.',
+ def_en:'Oxygen-starved firing atmosphere. Flame "steals" oxygen from metal oxides — copper turns red, iron turns grey-green (celadon), creates complex unpredictable effects.',
+ def_sv:'Syrefattig bränningsmiljö. Flamman "stjäl" syre från metalloxider — koppar blir röd, järn ger celadongrön.',
+ def_ja:'酸素が少ない焼成雰囲気。金属酸化物の色が劇的に変化—銅が赤（辰砂）に、鉄が青磁色に。',
+ cult:'🇨🇳 Celadon, jun, kuparirubiini kaikki vaativat pelkistyksen.',
+ slang:'"smoke magic", "carbon trap"'},
+
+{fi:'Piidioksidi / Silikaatti',en:'Silicon dioxide / Silica',es:'Dióxido de silicio / Sílice',de:'Siliziumdioxid / Silika',sv:'Kiseldioxid / Kiselsyra',ja:'二酸化ケイ素',zh:'二氧化硅',ko:'이산화규소',
+ cats:['geo','chem','glaze'],sects:['kaivos','jalostus','kou'],
+ def_fi:'SiO₂. Lasinmuodostaja. 95% maankuoresta on silikaattimineraaleja.',
+ def_en:'SiO₂. Glass former — the backbone of all glazes. 95% of the Earth\'s crust is silicate minerals. The ratio of silica to alumina to flux determines glaze character.',
+ formula:'SiO₂'},
+
+{fi:'Pinnan viimeistely',en:'Surface finishing',es:'Acabado superficial',de:'Oberflächenveredelung',sv:'Ytbehandling',ja:'仕上げ',zh:'表面处理',ko:'표면 처리',
+ cats:['form','deco'],sects:['studio'],
+ def_fi:'Kosteaan saveen: sienellä pyöristäminen, veitsellä leikkaaminen, siklillä siistiminen. Kuivaa savea hioessa: käytä hengityssuojainta.',
+ def_en:'Finishing operations: sponging, knife cutting, rib smoothing on damp clay; sanding/filing on dry clay. ALWAYS wear respiratory protection when sanding dry clay — silica dust.',
+ def_sv:'Ytbehandlingsoperationer: svampning, snikning, skraprensning på fuktig lera. Alltid andningsskydd vid slipning av torr lera.'},
+
+{fi:'Plastisuus',en:'Plasticity',es:'Plasticidad',de:'Plastizität',sv:'Plasticitet',ja:'可塑性 (kasōsei)',zh:'可塑性',ko:'가소성',
+ cats:['clay','chem'],sects:['jalostus','studio','kou'],
+ def_fi:'Saven kyky muuttua muotoaan ilman murtumista. Riippuu hiukkaskoosta, vesimäärästä, mineraalikoostumuksesta ja sähkövarauksesta.',
+ def_en:'Clay\'s ability to deform without cracking and retain the new shape. Determined by particle size, water content, mineral composition and electrical charge. The defining property of clay.',
+ def_sv:'Lerans förmåga att deformeras utan att spricka. Bestäms av partikelstorlek, vattenhalt och mineralsammansättning.',
+ def_de:'Die Fähigkeit des Tons, sich zu verformen ohne zu reißen. Hängt von Partikelgröße, Wassergehalt und Mineralzusammensetzung ab.',
+ cult:'🇯🇵 Plastisuus = saven vastaus käsien paineeseen. 🏭 Teollisuudessa mitataan ja standardoidaan.'},
+
+{fi:'Posliini',en:'Porcelain',es:'Porcelana',de:'Porzellan',sv:'Porslin',ja:'磁器 (jiki)',zh:'瓷器 (cíqì)',ko:'자기',
+ cats:['clay'],sects:['teoll','studio'],
+ def_fi:'Korkean polton massa (1250–1450 °C). Valkoinen, läpikuultava, soiva. Kehitetty Kiinassa Tang-dynastian aikana.',
+ def_en:'High-fire clay body (1250–1450°C) containing high kaolin. White, translucent when thin, rings when struck. Developed in China during Tang dynasty (618–907 AD).',
+ def_sv:'Högbränd lermassa (1250–1450°C). Vit, genomskinlig, klangfull. Utvecklad i Kina under Tang-dynastin.',
+ def_de:'Hochgebrannte Masse (1250–1450°C). Weiß, transluzent, klingend. In China während der Tang-Dynastie entwickelt.',
+ def_ja:'1250-1450°C焼成の磁器。白く薄くすると透光性があり、叩くと金属音がする。中国・唐代に開発。',
+ def_zh:'高温（1250-1450°C）烧制的白色、半透明、有金属音响的陶瓷，唐代中国首先研制成功。',
+ def_ko:'1250-1450°C에서 소성한 고화도 도자기. 백색이며 얇으면 투광성, 두드리면 금속음. 중국 당나라 시대 발명.',
+ formula:'Kaoliini + Kvartsi + Maasälpä',
+ cult:'🇨🇳 Keisarillinen symboli. 🇩🇪 Eurooppalainen posliini keksittiin Meissenissä 1709. 🇯🇵 Myös epätäydellisyys arvostettua.',
+ slang:'"china"'},
+
+{fi:'Primäärisavi',en:'Primary clay / Residual clay',es:'Arcilla primaria',de:'Primärer Ton',sv:'Primär lera',ja:'一次粘土',zh:'原生粘土',ko:'1차 점토',
+ cats:['geo','clay'],sects:['kaivos'],
+ def_fi:'Syntysijoilleen jäänyt savi. Puhtaampi mutta vähemmän plastinen kuin sekundäärisavet.',
+ def_en:'Clay remaining at its formation site. More pure but less plastic than secondary clays. Kaolin group is the most important primary clay. Coarser particle size from lack of transport sorting.',
+ def_sv:'Lera kvar på sin bildningsplats. Renare men mindre plastisk än sekundärleror.'},
+
+{fi:'Prässäys',en:'Press molding / RAM pressing',es:'Prensado',de:'Pressformung',sv:'Pressformning',ja:'押し型',zh:'压模成形',ko:'압형 성형',
+ cats:['form','ind'],sects:['teoll','studio'],
+ def_fi:'Savilevyn painaminen kipsimuottia vasten. Käytetään sekä käsityössä että teollisuudessa.',
+ def_en:'Pressing clay slab into a plaster mould. Handwork: roll clay, cut to shape, press into open mould. Industrial: RAM pressing, dry pressing, isostatic pressing.',
+ def_sv:'Att pressa en lerplatta i en gipsform. I hantverk: kavel, skär och pressa. Industriellt: RAM-pressning.'},
+
+{fi:'Punasavi',en:'Red earthenware / Terracotta clay',es:'Arcilla roja / Terracota',de:'Roter Ton',sv:'Röd lera',ja:'赤土 (akatsuchi)',zh:'红陶土',ko:'붉은 점토',
+ cats:['clay'],sects:['kaivos','studio','ark'],
+ def_fi:'Matalan polton luonnonsavi (1020–1080 °C). Runsaasti rautaoksidia — punainen väri.',
+ def_en:'Low-fire natural clay (1020–1080°C). High iron oxide content creates red/terracotta colour. Melts rapidly above 1100°C. Commonest clay type globally.',
+ def_sv:'Lågbränd naturlera (1020–1080°C). Hög järnoxidhalt ger röd/terrakottafärg. Vanligaste lertypen i världen.',
+ cult:'🇫🇮 Somero: I-laadun punasaviesiintymä. 🌍 Universaali — terrakotta kaikissa kulttuureissa.'},
+
+{fi:'Pyrometrinen keila',en:'Pyrometric cone',es:'Cono pirométrico',de:'Pyrometrischer Kegel',sv:'Pyrometrisk kegel',ja:'測温錐',zh:'测温锥',ko:'측온추',
+ cats:['fire','meas'],sects:['studio','teoll'],
+ def_fi:'Keraaminen lämmönmittauskeila. Käyttäytyy kuten savi poltossa.',
+ def_en:'Ceramic cone that bends and melts at specific temperatures. More accurate than thermocouple as it measures "heat work" (temperature × time). Placed inside kiln visible through spy hole.',
+ def_sv:'Keramisk käglä som böjer och smälter vid specifika temperaturer. Mer exakt än termoelement.',
+ cult:'Segerin keilat (EU-standardi) ja Ortonin keilat (USA-standardi).'},
+
+{fi:'Raakapoltto',en:'Bisque / Biscuit firing',es:'Primera cocción',de:'Rohbrand',sv:'Råbränning',ja:'素焼き (suyaki)',zh:'素烧',ko:'초벌구이',
+ cats:['fire'],sects:['studio','teoll'],
+ def_fi:'Ensimmäinen poltto 800–950 °C. Poistaa kideveden (450–600 °C) ja orgaanisen aineen. Hidas aloitus kriittinen.',
+ def_en:'First firing at 800–950°C. Drives off chemical water (450–600°C) and organic matter. Slow ramp critical — rapid steam generation cracks pieces. Leaves porous bisque that absorbs glaze.',
+ def_sv:'Första bränning vid 800–950°C. Avlägsnar kristallvatten och organiskt material. Långsamt temperatursteg kritiskt.'},
+
+{fi:'Raku',en:'Raku',es:'Raku',de:'Raku',sv:'Raku',ja:'楽焼き (raku-yaki)',zh:'乐烧',ko:'라쿠',
+ cats:['fire','asia','phil'],sects:['studio'],
+ def_fi:'Nopea poltto ja jäähdytys — esineet nostetaan uunista ~1000°C ja savustetaan.',
+ def_en:'Fast firing and cooling technique. Pieces removed from kiln glowing at ~1000°C and placed in reduction chamber (sawdust). Creates crackled glaze, blackened clay, metallic effects.',
+ def_sv:'Snabb bränning och kylning. Föremål tas ur ugnen glödande vid ~1000°C och placeras i reduktionskammare.',
+ def_ja:'急速な焼成と冷却。~1000°Cで窯から取り出し、還元(おがくず等)に入れる。貫入、炭化、金属光沢のある効果。',
+ cult:'🇯🇵 1500-luvulla kehitetty teepöytäkulttuuria varten. Wabi-sabin ruumiillistuma. 🇺🇸 Paul Soldner "amerikanraku" 1960-luvulla.',
+ slang:'"smoke magic", "naked raku"'},
+
+{fi:'Rautaoksidi',en:'Iron oxide',es:'Óxido de hierro',de:'Eisenoxid',sv:'Järnoxid',ja:'酸化鉄',zh:'氧化铁',ko:'산화철',
+ cats:['chem','glaze'],sects:['jalostus','studio'],
+ def_fi:'Fe₂O₃ hapettavassa → keltainen–ruskea–punainen. FeO pelkistävässä → harmaa–vihreä (celadon).',
+ def_en:'Fe₂O₃ in oxidation: yellow, brown, red. FeO in reduction: grey, celadon green. Most common ceramic colorant. Even 0.1% creates visible green tint in transparent glazes.',
+ def_sv:'Fe₂O₃ oxidation: gul-brun-röd. FeO reduktion: grå-celadonggrön. Vanligaste keramikfärgen.',
+ formula:'Fe₂O₃ / FeO',
+ slang:'"rust red", "iron red"'},
+
+{fi:'Rapautuminen',en:'Weathering',es:'Meteorización',de:'Verwitterung',sv:'Vittring',ja:'風化 (fūka)',zh:'风化',ko:'풍화',
+ cats:['geo'],sects:['kaivos','kou'],
+ def_fi:'Kiven hajoaminen mekaanisesti, kemiallisesti tai biologisesti. Savimineraalit syntyvät rapautumalla.',
+ def_en:'Breakdown of rocks into smaller particles by mechanical, chemical and biological processes. Feldspar weathering to kaolinite (clay) is the essential process for ceramics.',
+ def_sv:'Nedbrytning av bergarter via mekaniska, kemiska och biologiska processer. Källan till alla lermineraler.'},
+
+{fi:'Savi',en:'Clay',es:'Arcilla',de:'Ton',sv:'Lera',ja:'粘土 (nendo)',zh:'粘土',ko:'점토',
+ cats:['clay','geo'],sects:['kaivos','studio','kou'],
+ def_fi:'Kivennäismaalaji, joka on plastista kosteana. Muovailtavuus häviää polton aikana pysyvästi (yli 450 °C).',
+ def_en:'Fine-grained mineral earth that is plastic when moist. Plasticity is permanently destroyed by firing above 450°C. The oldest ceramic raw material — used by all human cultures.',
+ def_sv:'Finkorning mineral som är plastisk vid fukttillstånd. Plasticitet förstörs permanent vid bränning over 450°C.',
+ def_de:'Feinkörniges Mineral, das feucht plastisch ist. Plastizität wird dauerhaft ab 450°C beim Brennen zerstört.',
+ cult:'🌍 Kaikki ihmiskulttuurit ovat käyttäneet savea.'},
+
+{fi:'Savimankeeli',en:'Clay roller / Slab roller',es:'Laminadora de arcilla',de:'Lehmwalze',sv:'Lervalse',ja:'ローラー',zh:'压泥机',ko:'점토 롤러',
+ cats:['tools'],sects:['studio'],
+ def_fi:'Vaakasylinteri, joka puristaa savea tasaiseksi levyksi kahden kangasarkin väliin.',
+ def_en:'Table-mounted roller that presses clay between two fabric sheets to produce even slabs. More accurate and consistent than hand rolling. Essential for slab building production.',
+ def_sv:'Bordsvalse som pressar lera till jämna plattor mellan tyg. Mer exakt än handkavel.',
+ slang:'"the roller", "slab machine"'},
+
+{fi:'Savimassa',en:'Clay body',es:'Pasta cerámica',de:'Tonmasse',sv:'Lerämne',ja:'陶土 (tōdo)',zh:'陶土',ko:'도토',
+ cats:['clay'],sects:['jalostus','studio','teoll'],
+ def_fi:'Savimineraalien ja muiden raaka-aineiden seos. Koostumus optimoidaan tekniikan mukaan.',
+ def_en:'A blend of clay minerals and non-plastic materials formulated for specific purposes. Commercial bodies optimised for throwing, casting, or hand-building. Divided into low-fire and high-fire.',
+ def_sv:'Blandning av lermineraler och ej-plastiska material för specifika ändamål.'},
+
+{fi:'Savipöly (terveyshaitta)',en:'Silica dust / Clay dust hazard',es:'Polvo de sílice',de:'Quarzstaub',sv:'Kiseldioxiddamm',ja:'珪肺 (keihei)',zh:'硅尘',ko:'실리카 분진',
+ cats:['eco','meas'],sects:['studio','teoll','kou'],
+ def_fi:'Kuivaa savea hioessa syntyy hienojakoista silikaattipölyä — riski silikoosin kehittymiselle. Käytä aina hengityssuojainta.',
+ def_en:'Fine silica particles <10μm created when sanding dry clay. Long-term inhalation causes silicosis — irreversible lung scarring. Always wear P2 respirator. Wet-work where possible.',
+ def_sv:'Fina silikapartiklar vid slipning av torr lera. Långvarig inandning orsakar silikos. Använd alltid P2-andningsskydd.',
+ cult:'🇫🇮 Työturvallisuuslaki (738/2002) velvoittaa ehkäisemään pölyaltistuksen.'},
+
+{fi:'Saviveitsi',en:'Clay knife / Fettling knife',es:'Cuchillo para arcilla',de:'Tonmesser',sv:'Lerkniv',ja:'陶芸用ナイフ',zh:'陶艺刀',ko:'도예 칼',
+ cats:['tools'],sects:['studio'],
+ def_fi:'Kapea, joustava veitsi esineiden leikkaamiseen ja viimeistelyyn.',
+ def_en:'Narrow flexible knife for cutting, trimming and cleaning mould seams. "Fettling knife" specifically for cleaning seam lines on cast ware.',
+ def_sv:'Smal flexibel kniv för skärning och putsning av gjutgodssömmar.'},
+
+{fi:'Segerin keilat',en:'Seger cones',es:'Conos Seger',de:'Seger-Kegel',sv:'Seger-koner',ja:'ゼーゲルコーン',zh:'塞格尔锥',ko:'세거 콘',
+ cats:['fire','meas'],sects:['studio','teoll'],
+ def_fi:'Tukea tarvitsevat pyrometriset keilat. Eurooppalainen standardi. Asetetaan 8 asteen kulmaan savipedissä.',
+ def_en:'Support-requiring pyrometric cones. European standard. Placed at 8° angle in clay bed. Three cones used: warning, target, and overfire. Developed by Hermann August Seger in Germany.',
+ def_sv:'Europaeiskt standard för pyrometriska käglor. Placeras i 8° vinkel i lerabädd.',
+ cult:'🇩🇪 Kehitetty Saksassa 1800-luvulla.'},
+
+{fi:'Sekundäärisavi',en:'Secondary clay / Transported clay',es:'Arcilla secundaria',de:'Sekundärer Ton',sv:'Sekundär lera',ja:'二次粘土',zh:'次生粘土',ko:'2차 점토',
+ cats:['geo','clay'],sects:['kaivos'],
+ def_fi:'Syntypaikaltaan kulkeutunut savi. Saa matkalla epäpuhtauksia. Plastisempia kuin primäärisavet.',
+ def_en:'Clay transported from its formation site by water, ice or wind. Picks up impurities (iron, lime, mica) during transport. More plastic than primary clays due to particle sorting.',
+ def_sv:'Lera transporterad från sin bildningsplats. Förorenar sig under transport. Mer plastisk pga partikelsortering.'},
+
+{fi:'Sikli',en:'Rib / Kidney tool',es:'Espátula / Costilla',de:'Rippe',sv:'Formspade',ja:'かき板',zh:'刮刀',ko:'리브',
+ cats:['tools'],sects:['studio'],
+ def_fi:'Metallinen, muovinen tai puinen kaavain dreijauksen ja viimeistelyn apuvälineenä.',
+ def_en:'Shaped scraper (metal, rubber, or wood) used to refine clay walls while throwing, smooth surfaces, and trim excess clay. Kidney-shaped rubber ribs especially versatile.',
+ def_sv:'Formad skrapa (metall, gummi eller trä) för att förfina väggar vid drejning och slätning.',
+ slang:'"rib", "kidney rib"'},
+
+{fi:'Sintrautuminen',en:'Sintering',es:'Sinterización',de:'Sintern',sv:'Sintring',ja:'焼結 (shōketsu)',zh:'烧结',ko:'소결',
+ cats:['chem','fire'],sects:['teoll','studio','kou'],
+ def_fi:'Lämpöprosessi — saven hiukkaset sulavat reunoiltaan yhteen. Massa tiivistyy, tulee vedenpitäväksi. Ero sulamislämpötilaan noin 100°C.',
+ def_en:'Thermal process where clay particles fuse at their edges without fully melting. Mass densifies and becomes watertight. Only ~100°C separates sintering from complete melting — critical margin.',
+ def_sv:'Termisk process där lerpartiklar smälter ihop vid sina kanter. Massan förtätas och blir vattentät.',
+ slang:'"vitrification" (täydellinen sintraantuminen)'},
+
+{fi:'Siirtokuva',en:'Decal / Transfer print',es:'Calcomanía',de:'Abziehbild',sv:'Dekalmarkering',ja:'転写紙',zh:'转贴纸',ko:'데칼',
+ cats:['deco','ind'],sects:['teoll'],
+ def_fi:'Teollinen koristelupaperikerros, poltetaan lasitepintaan ~800°C.',
+ def_en:'Industrial printed paper transfer fired onto glaze surface at ~800°C. Enables complex precise patterns in series production. Screen-printed or digitally printed onto tissue paper.',
+ def_sv:'Industriellt tryckt pappersdekaler brännd på glasyryta vid ~800°C.'},
+
+{fi:'Slip casting / Valaminen',en:'Slip casting',es:'Colado de barbotina',de:'Schlickergießen',sv:'Gjutning',ja:'鋳込み成形',zh:'注浆成型',ko:'슬립 캐스팅',
+ cats:['form','ind'],sects:['teoll','studio'],
+ def_fi:'Nestemäisen valusaven kaataminen kipsimuottiin. Avovalu (ontto) tai umpivalu (täyteläinen).',
+ def_en:'Pouring liquid slip into plaster mould. Plaster absorbs water, slip solidifies against walls. Drain excess slip (hollow casting) or fill completely (solid casting). Ideal for complex shapes.',
+ def_sv:'Hälla flytande gjutmassa i gipsform. Gipset absorberar vatten, massan stelnar mot väggarna.',
+ cult:'🇨🇳 Keskeinen teollisessa massatuotannossa. 🎨 Taidekäsityössä epäsäännöllisille muodoille.',
+ slang:'"casting", "pouring"'},
+
+{fi:'Sorvaaminen',en:'Trimming / Turning',es:'Torneado / Afeitado',de:'Abdrehen',sv:'Svarvning',ja:'削り (kezuri)',zh:'修坯',ko:'굽 깎기',
+ cats:['form'],sects:['studio'],
+ def_fi:'Nahkakuivan esineen pohjan viimeistely dreijalla — muodostetaan jalka (foot ring).',
+ def_en:'Refining the foot of leather-hard thrown ware using loop tools on the wheel. Creates foot ring (foot ring), thins the base, removes excess clay. Allows creating recessed base.',
+ def_sv:'Förfining av botten på läderhart drejeföremål med löjkverktyg. Skapar fotring.'},
+
+{fi:'Sulamiuslämpötila',en:'Melting point / Firing temperature',es:'Temperatura de fusión',de:'Schmelztemperatur',sv:'Smälttemperatur',ja:'熔融温度',zh:'熔化温度',ko:'용융 온도',
+ cats:['chem','fire'],sects:['teoll','kou'],
+ def_fi:'Sintraantumispisteen ja sulamispisteen ero noin 100°C. Liian korkea lämpötila sulattaa esineen.',
+ def_en:'Only ~100°C separates sintering point from complete melting in most clay bodies. Exceeding sintering point causes deformation. Temperature measured by pyrometric cones.',
+ def_sv:'Bara ~100°C skiljer sintringspunkt från fullständig smältning.'},
+
+{fi:'Suulakepuristin',en:'Extruder',es:'Extrusora',de:'Strangpresse',sv:'Extruder',ja:'押し出し機',zh:'挤泥机',ko:'압출기',
+ cats:['tools','form'],sects:['studio'],
+ def_fi:'Työkalu, joka puristaa saven metalliputken läpi eri profiileina.',
+ def_en:'Tool that forces clay through shaped die plate to produce continuous profiles — hollow tubes, solid rods, handles, tiles. Wall-mounted metal tube with interchangeable dies.',
+ def_sv:'Verktyg som pressar lera genom formade munstycken för att producera profiler.',
+ slang:'"extruder die", "clay gun"'},
+
+{fi:'Särölasite',en:'Crackle glaze',es:'Esmalte craquelado',de:'Krakelee-Glasur',sv:'Krackelerad glasyr',ja:'貫入釉',zh:'开片釉',ko:'균열유',
+ cats:['glaze'],sects:['studio'],
+ def_fi:'Hallittu lasitteen halkeilu — lasite supistuu voimakkaammin kuin massa. Säröt voidaan tummentaa.',
+ def_en:'Intentional glaze cracking due to different thermal expansion of glaze vs. body. Glaze contracts more. Cracks can be darkened with ink or tea for decorative effect.',
+ def_sv:'Avsiktlig glasyrsprickning pga differentiell termisk expansion. Sprickor kan mörkas med bläck.',
+ cult:'🇨🇳 Guan/Ge-keramiikka: hieno säröily = laadun merkki. 🇯🇵 Wabi-sabin mukainen kauneus.',
+ slang:'"crackle", "crazed glaze"'},
+
+{fi:'Talkki',en:'Talc',es:'Talco',de:'Talk',sv:'Talk',ja:'タルク',zh:'滑石',ko:'활석',
+ cats:['geo','clay','glaze'],sects:['kaivos','jalostus'],
+ def_fi:'3MgO·4SiO₂·H₂O. Mohsin kovuus 1. Lisää lämpötilan vaihteluiden kestoa.',
+ def_en:'3MgO·4SiO₂·H₂O. Softest mineral (1 Mohs). Improves thermal shock resistance. Used in ovenproof cookware and steatite bodies. Reduces plasticity.',
+ def_sv:'3MgO·4SiO₂·H₂O. Mjukaste mineral (1 Mohs). Förbättrar termisk chocktålighet.',
+ formula:'3MgO·4SiO₂·H₂O'},
+
+{fi:'Terra Sigillata',en:'Terra sigillata',es:'Terra sigillata',de:'Terra Sigillata',sv:'Terra sigillata',ja:'テラシギラータ',zh:'精细泥浆涂层',ko:'테라 시길라타',
+ cats:['deco','hist'],sects:['studio'],
+ def_fi:'Erittäin hienojakoisesta savilietteestä tehty pintakäsittely. Kiillotetaan ennen polttoa.',
+ def_en:'Ultra-fine slip made from levigated clay. Burnished onto leather-hard surface before firing. Creates silk-smooth, slightly water-resistant surface without glaze. Used in ancient Greek/Roman ceramics.',
+ def_sv:'Ultrafin lerslip applicerad och polerad på halvtorrt gods. Ger silkeslen yta utan glasyr.',
+ cult:'🏛️ Antiikin Kreikan ja Rooman punaiset astiat.'},
+
+{fi:'Terrakotta',en:'Terracotta',es:'Terracota',de:'Terrakotta',sv:'Terrakotta',ja:'テラコッタ',zh:'赤陶',ko:'테라코타',
+ cats:['clay','hist'],sects:['studio','ark','teoll'],
+ def_fi:'Poltettu huokoinen punasavi ilman lasitetta. Italiaksi "poltettu maa".',
+ def_en:'Fired unglazed red earthenware. Italian for "baked earth". One of humanity\'s oldest materials. Used for pots, tiles, bricks, sculpture globally.',
+ def_sv:'Bränd ogenomglasyrerad röd lera. Italienska för "bränd jord". Mänsklighetens äldsta material.',
+ cult:'🇨🇳 Qin-dynastian terrakottasotilaat (210 eaa.). 🌍 Universaali rakennusmateriaali.'},
+
+{fi:'Tiksotropia',en:'Thixotropy',es:'Tixotropía',de:'Thixotropie',sv:'Tixotropi',ja:'チキソトロピー',zh:'触变性',ko:'틱소트로피',
+ cats:['chem','form'],sects:['studio','teoll','kou'],
+ def_fi:'Levossa jäykistyvä neste, joka virtaa taas sekoitettaessa. Tärkeä valusavessa.',
+ def_en:'Gel-like stiffening at rest that reverses with agitation. Critical in casting slip — slip thickens when left in mould, aiding wall formation. Also affects glaze application.',
+ def_sv:'Geliknande stelning vid vila som återgår vid omrörning. Viktigt i gjutmassa och glasyrapplikation.'},
+
+{fi:'Tina-lasite',en:'Tin glaze',es:'Esmalte de estaño',de:'Zinnglasur',sv:'Tennglasyr',ja:'錫釉',zh:'锡釉',ko:'주석유',
+ cats:['glaze','hist'],sects:['teoll','studio'],
+ def_fi:'Tina (SnO₂) tekee lasitteesta läpinäkymättömän valkoisen. Eurooppalaisen fajanssiperinteen perusta.',
+ def_en:'Addition of tin oxide (SnO₂) to lead glaze creates opaque white. Foundation of European majolica/faience tradition. Masks red earthenware body colour.',
+ def_sv:'Tillsats av tennoxid (SnO₂) skapar ogenomskinlig vit glasyr. Grunden för europeisk majolika/fajansstraditionen.',
+ cult:'🇮🇹 Majolica, 🇳🇱 Delftware, 🇩🇪 Fajanssi — kaikki tinalasitteen varaan.'},
+
+{fi:'Tulenkestävä savi',en:'Fireclay / Refractory clay',es:'Arcilla refractaria',de:'Schamotteton',sv:'Eldfast lera',ja:'耐火粘土',zh:'耐火粘土',ko:'내화 점토',
+ cats:['clay','fire','ind'],sects:['kaivos','teoll'],
+ def_fi:'Kestää 1300–1700 °C sintraantumatta. Käytetään tulitiilessä ja polttouunikaustossa.',
+ def_en:'Refractory clay withstanding 1300–1700°C without sintering. Used in firebricks, kiln furniture, and industrial kiln linings. High alumina content.',
+ def_sv:'Eldfastlera som motstår 1300–1700°C utan sintring. Används i eldfast tegel och ugnsutrusning.',
+ cult:'🏭 Staffordshiren (Englanti) tulenkestävät savet olivat keramiikkateollisuuden perusta.'},
+
+{fi:'Tuhkalasite',en:'Wood ash glaze',es:'Esmalte de ceniza de madera',de:'Holzascheglasur',sv:'Vedaskglasyr',ja:'灰釉 (haiyū)',zh:'灰釉',ko:'재유',
+ cats:['glaze','asia','fire'],sects:['studio'],
+ def_fi:'Puun, oljen tai heinän tuhkasta valmistettu lasite. Luonnonvärinen, uniikki.',
+ def_en:'Glaze made from wood, straw or grass ash. Contains calcium, potassium, sodium and silica. Natural earthy colours that vary with raw material source. Cannot be replicated exactly.',
+ def_sv:'Glasyr av ved-, halm- eller gräsaska. Innehåller kalcium, kalium, natrium och kisel. Naturliga jordiga färger.',
+ def_ja:'薪・藁・草の灰から作る釉薬。カルシウム、カリウム、ナトリウム、珪素を含む。原材料により色が変わる自然な釉薬。',
+ cult:'🇯🇵 中心的な伝統釉薬型。 🇰🇷 Korea used ash glazes from the 10th century.'},
+
+{fi:'Uuni',en:'Kiln',es:'Horno',de:'Ofen',sv:'Ugn',ja:'窯 (kama)',zh:'窑 (yáo)',ko:'가마',
+ cats:['fire'],sects:['studio','teoll'],
+ def_fi:'Korkean lämpötilan uuni. Sähköuuni (hapettava), kaasuuuni (säädettävä), puu-uuni (pelkistävä).',
+ def_en:'High-temperature furnace for firing ceramics. Electric: oxidation, 800–1300°C. Gas: adjustable atmosphere, higher temperatures. Wood: reduction and fly-ash effects.',
+ def_sv:'Högtemperaturugn. Elektrisk: oxidation, 800–1300°C. Gas: justerbar atmosfär. Ved: reduktion och flygaska.',
+ cult:'🇯🇵 Kama (窯) pyhä paikka — tulihenki asuu siellä. 🏭 Moderni teollisuusuuni on täysin automatisoitu.'},
+
+{fi:'Uunikalusto',en:'Kiln furniture',es:'Accesorios de horno',de:'Brennhilfsmittel',sv:'Ugnsinredning',ja:'棚板 (tanadana)',zh:'窑具',ko:'요도구',
+ cats:['fire'],sects:['studio','teoll'],
+ def_fi:'Tulenkestävät levyt ja pilarit, joille esineet ladotaan uunissa.',
+ def_en:'Refractory shelves and props that support ceramics in the kiln. Must withstand kiln temperatures without deforming. Coated with kiln wash (kaolin+alumina) to prevent glaze adhesion.',
+ def_sv:'Eldfasta hyllor och stöd för keramik i ugnen. Beläggs med ugnsavskiljning för att förhindra glasyrfastning.',
+ slang:'"kiln shelves", "props and pins"'},
+
+{fi:'Uunipesu',en:'Kiln wash',es:'Lavado de horno',de:'Trennmittel (Ofen)',sv:'Ugnssvabb',ja:'棚板離形剤',zh:'棚板涂料',ko:'선반 이형제',
+ cats:['fire','tools'],sects:['studio'],
+ def_fi:'Kaoliini (50%) + alumiinioksidi (50%) + vesi. Sivellään uunilevyille — estää lasitteen tarttumisen.',
+ def_en:'50% kaolin + 50% alumina + water. Painted on kiln shelves to prevent glaze adhesion. Renew when worn. Never apply to underside of shelves (falls onto work below).',
+ def_sv:'50% kaolin + 50% alumina + vatten. Penslas på ugnspallar för att förhindra glasyrfastning.',
+ slang:'"bat wash"'},
+
+{fi:'Vaivaaminen',en:'Wedging',es:'Amasado de arcilla',de:'Kneten',sv:'Knådning',ja:'菊もみ (kiku-momi)',zh:'揉泥',ko:'반죽',
+ cats:['form'],sects:['studio','kou'],
+ def_fi:'Saven käsikäyttöinen sekoittaminen ilmakuplien poistamiseksi.',
+ def_en:'Hand-kneading clay to homogenise it and remove air pockets. Japanese chrysanthemum technique (kiku-momi) creates rotating motion that draws air out efficiently.',
+ def_sv:'Handknådning av lera för att homogenisera och avlägsna luftbubblor.',
+ def_ja:'菊もみは時計回りに押しながら練る日本の技法。空気を効率的に抜く。気泡があると焼成中に破裂する。',
+ slang:'"pounding clay"'},
+
+{fi:'Vakuumipuristin',en:'Pugmill / Vacuum extruder',es:'Amasadora al vacío',de:'Vakuumstrangpresse',sv:'Vakuumextruder',ja:'土練機',zh:'真空练泥机',ko:'진공 토련기',
+ cats:['tools','form','eco'],sects:['studio','teoll'],
+ def_fi:'Kone, jossa sekoituspää sekoittaa saven ja poistaa ilmakuplat. Tehokas saven kierrätykseen.',
+ def_en:'Machine with rotating mixing head that homogenises clay and removes air pockets under vacuum. Highly effective for recycling dry or stiff clay. Produces ready-to-use pugs.',
+ def_sv:'Maskin med roterande blandningshuvud som homogeniserar lera och avlägsnar luftbubblor under vakuum.',
+ slang:'"the pug", "pug mill"'},
+
+{fi:'Valaminen (kipsimuotilla)',en:'Slip casting',es:'Vaciado en molde',de:'Gießen',sv:'Gjutning',ja:'鋳込み',zh:'注浆成型',ko:'주입성형',
+ cats:['form'],sects:['studio','teoll'],
+ def_fi:'Nestemäisen valusaven kaataminen kipsimuottiin. Avovalu (ontto) tai umpivalu (täyteläinen).',
+ def_en:'Pouring deflocculated liquid slip into plaster mould. Open casting: hollow forms. Solid casting: completely filled. Plaster absorbs water, clay solidifies. Ideal for complex forms.',
+ def_sv:'Hälla flytande gjutmassa i gipsform. Öppen gjutning: ihåliga former. Hel gjutning: massiva former.'},
+
+{fi:'Valusavi / Liete',en:'Slip / Casting slip',es:'Barbotina',de:'Schlicker',sv:'Gjutmassa',ja:'スリップ / 泥漿',zh:'泥浆',ko:'슬립',
+ cats:['clay','form'],sects:['studio','teoll'],
+ def_fi:'Nestemäinen savi. Valuun käytetty deflokkulanteilla tehty valusavi.',
+ def_en:'Liquid clay suspension. Casting slip is deflocculated to flow with minimum water. Decorative slip (engobe) for surface coloring. Key material in industrial ceramics production.',
+ def_sv:'Flytande lersuspension. Gjutmassa är deflockulerad för att flöda med minimalt vatten.',
+ cult:'🇨🇳 Keskeinen massatuotannossa. 🇯🇵 Myös esteettiseen koristeluun.',
+ slang:'"mud"'},
+
+{fi:'Vitrifikaatio / Lasittuminen',en:'Vitrification',es:'Vitrificación',de:'Vitrifikation',sv:'Vitrifikation',ja:'ガラス化',zh:'玻璃化',ko:'유리화',
+ cats:['chem','fire'],sects:['teoll','studio','kou'],
+ def_fi:'Savi muuttuu tiiviiksi, vedenpitäväksi ja lasimaaiseksi. Täydellinen vitrifikaatio = vedenpitävä.',
+ def_en:'Clay particles fuse completely to form dense, watertight, glass-like material. Full vitrification = no water absorption. Chinese porcelain ideal = complete vitrification.',
+ def_sv:'Lerpartiklar smälter ihop till tät, vattentät, glasliknande material.',
+ cult:'🇨🇳 Täydellinen vitrifikaatio = kiinalainen standardi. 🇯🇵 Arvostaa osittaista — "elävä" pinta.',
+ slang:'"fully tight"'},
+
+{fi:'Vuolukivi',en:'Soapstone / Steatite',es:'Esteatita / Piedra jabón',de:'Speckstein',sv:'Täljsten',ja:'滑石 (kasseki)',zh:'皂石',ko:'활석',
+ cats:['geo','clay'],sects:['kaivos','ark'],
+ def_fi:'Talkkipohjainen kivilaji. Pehmeää ja helposti muotoiltavaa.',
+ def_en:'Talc-rich rock (40–90% talc). Very soft and easy to carve. Iron-rich varieties stain bodies brown. Excellent thermal properties — used in stoves and cookware.',
+ def_sv:'Talkrik bergart (40–90% talk). Mycket mjuk, lätt att tälja. Utmärka termiska egenskaper.',
+ cult:'🇫🇮 Nunnalahden vuolukivi pitkä historia — käytetty tulisijoihin.'},
+
+{fi:'Wabi-sabi',en:'Wabi-sabi',es:'Wabi-sabi',de:'Wabi-Sabi',sv:'Wabi-sabi',ja:'侘寂 (wabi-sabi)',zh:'侘寂',ko:'와비사비',
+ cats:['phil','asia'],sects:['studio'],
+ def_fi:'Japanilainen estetiikka — epätäydellisyyden, epäjatkuvuuden ja keskeneräisyyden hyväksyntä.',
+ def_en:'Japanese world-view and aesthetic philosophy accepting imperfection, impermanence and incompleteness. In ceramics: asymmetry, roughness, natural kiln marks are valued above technical perfection.',
+ def_sv:'Japansk estetisk filosofi som accepterar ofullkomlighet och förgänglighet. I keramik: asymmetri och naturliga ugnsmarker värderas.',
+ def_ja:'不完全・無常・未完成を受け入れる日本の美意識。茶道文化を中心に発展。工業的完璧さより自然な不完全さを重視。',
+ def_zh:'接受不完美、无常和未完成的日本美学。在陶瓷中，不规则性、粗糙感和自然窑痕被高度赞扬。',
+ cult:'🇯🇵 Zen-buddhismin vaikuttama. Teepöytäkulttuuri (chanoyu) tärkein konteksti. 🌍 Länsimaissa usein ymmärretään pintapuolisesti "rustic"-tyyliksi.'},
+
+{fi:'Wollastoniitti',en:'Wollastonite',es:'Wollastonita',de:'Wollastonit',sv:'Wollastonit',ja:'ウォラストナイト',zh:'硅灰石',ko:'월라스토나이트',
+ cats:['geo','clay','glaze'],sects:['kaivos','jalostus'],
+ def_fi:'CaSiO₃. Vähentää kutistumaa. Lisää lujuutta ja lämpösokkikestävyyttä.',
+ def_en:'CaSiO₃. Reduces drying and firing shrinkage. Increases strength and thermal shock resistance. Improves glaze gloss at high fire. Mined in Lappeenranta, Finland.',
+ def_sv:'CaSiO₃. Minskar krympning. Ökar hållfasthet och termisk chocktålighet.',
+ formula:'CaSiO₃',
+ cult:'🇫🇮 Louhitaan Lappeenrannasta.'},
+
+{fi:'Yixing-savi',en:'Yixing clay / Zisha',es:'Arcilla de Yixing',de:'Yixing-Ton',sv:'Yixing-lera',ja:'宜興陶土',zh:'宜兴紫砂 (zǐshā)',ko:'이싱 점토',
+ cats:['clay','asia','hist'],sects:['studio'],
+ def_fi:'Kiinalaisesta Yixingistä. Rautapitoinen — väri punaisesta purpuraan. Kuuluisa teepannuistaan.',
+ def_en:'High-iron clay from Yixing, China. Colour ranges from red to purple to grey (zisha). Famous for unglazed teapots — clay absorbs tea essence over time.',
+ def_sv:'Järnrik lera från Yixing, Kina. Färg från röd till lila. Berömd för oglasyrerade tekannor.',
+ def_zh:'产自中国宜兴的富铁粘土。颜色从红到紫到灰不等（紫砂）。以不上釉茶壶闻名——长期使用后壶壁会吸收茶香。',
+ cult:'🇨🇳 Zisha-teepannujen 500-vuotinen traditio. "Hyvää pannua ei pestä."'},
+
+{fi:'3D-tulostus (keramiikka)',en:'3D printing (ceramics)',es:'Impresión 3D (cerámica)',de:'3D-Druck (Keramik)',sv:'3D-utskrift (keramik)',ja:'3Dプリンティング (セラミック)',zh:'陶瓷3D打印',ko:'세라믹 3D 프린팅',
+ cats:['form','ind','eco'],sects:['teoll','studio','kou'],
+ def_fi:'Pursotusmenetelmässä savi pursotetaan suuttimen läpi kerros kerrokselta digitaalisesti.',
+ def_en:'Clay extruded through nozzle layer by layer under digital control. Enables complex geometries impossible by hand. Paste viscosity critical. Fired normally after printing.',
+ def_sv:'Lera extruderas lager för lager under digital styrning. Möjliggör komplexa geometrier.',
+ cult:'🔬 Kehittyvä ala — Metropolia AMK:ssa käytössä.'},
+
+{fi:'Ääriarvopoltto / Suolapoltto',en:'Salt firing',es:'Cocción con sal',de:'Salzbrand',sv:'Saltglasering',ja:'塩焼き (shio-yaki)',zh:'盐烧',ko:'소금 소성',
+ cats:['fire','glaze'],sects:['studio'],
+ def_fi:'Suolaa heitetään kuumaan uuniin — natrium reagoi saven piin kanssa muodostaen oranssinkuorimaisen lasitteen.',
+ def_en:'Salt thrown into kiln at high temperature. Sodium volatilises and reacts with silica in clay surface to form natural orange-peel texture glaze. Kiln gradually "seasons" with sodium.',
+ def_sv:'Salt kastas i ugnen vid hög temperatur. Natrium reagerar med kiseldioxid i lerytan.',
+ cult:'🇩🇪 Kehitetty Saksassa 1300-luvulla.',
+ slang:'"orange peel glaze", "salt kiln"'},
+
+{fi:'Saven kierrätys',en:'Clay recycling',es:'Reciclaje de arcilla',de:'Tonrecycling',sv:'Lerrecyclering',ja:'粘土のリサイクル',zh:'粘土回收',ko:'점토 재활용',
+ cats:['eco'],sects:['eco','studio'],
+ def_fi:'Kuivunutta savea voidaan aina kierrättää. Hajotetaan veteen, siivilöidään, kuivatetaan kipsilevyllä, vaivataan.',
+ def_en:'Dried clay can always be reclaimed. Break into pieces, slake in water, sieve, dry on plaster bats, wedge. Max 50% reclaimed in casting slip batch. Reduces waste and cost.',
+ def_sv:'Torr lera kan alltid återvinnas. Slå sönder, blötlägg, sikta, torka på gipsskiva, knåda.',
+ slang:'"reclaim clay", "slake down"'},
+
+{fi:'Veden säästäminen',en:'Water conservation (ceramics)',es:'Ahorro de agua',de:'Wasserersparnis',sv:'Vattenbesparing',ja:'節水',zh:'节水',ko:'절수',
+ cats:['eco'],sects:['eco','studio'],
+ def_fi:'Savipitoinen vesi laskeutetaan, selkeytetään ja käytetään uudelleen. Savijäte ei saa mennä viemäriin.',
+ def_en:'Clay-laden water must be settled in clay trap (never drain to sewer — clogs pipes). Settled water can be reused. Workshops use recirculating water systems for wheel and handbuilding.',
+ def_sv:'Lerig vatten måste sedimenteras i slamfälla (aldrig i avlopp). Klarnat vatten kan återanvändas.'},
+
+{fi:'Energiatehokkuus (poltto)',en:'Energy efficiency (firing)',es:'Eficiencia energética',de:'Energieeffizienz',sv:'Energieffektivitet',ja:'エネルギー効率',zh:'能源效率',ko:'에너지 효율',
+ cats:['eco','fire'],sects:['eco','teoll'],
+ def_fi:'Täydellä kapasiteetilla ladattu uuni kuluttaa vähemmän energiaa esinettä kohden.',
+ def_en:'Full kiln load uses less energy per piece. Digital controllers optimise firing curves. Modern electric kilns with good insulation are significantly more efficient than older designs.',
+ def_sv:'Full ugnsbelastning förbrukar mindre energi per föremål. Digitala styrenheter optimerar bränningskurvor.'},
+
+{fi:'Kierrätetty keramiikka',en:'Recycled ceramics / Grog from waste',es:'Cerámica reciclada',de:'Recycelte Keramik',sv:'Återvunnen keramik',ja:'廃陶器の再利用',zh:'回收陶瓷',ko:'재활용 도자기',
+ cats:['eco'],sects:['eco','teoll'],
+ def_fi:'Hylättyjä esineitä voidaan murskata samotiksi. Tuotantojätteen hyödyntäminen massaan.',
+ def_en:'Broken or rejected ceramics can be crushed to create grog. Industrial practice: crushers process production rejects. Reduces raw material consumption and landfill.',
+ def_sv:'Trasiga föremål kan krossas till chamotte. Industriell praxis minskar råmaterialförbrukning.'},
+
+{fi:'Kaivannaisteollisuus (savi)',en:'Mining (clay)',es:'Minería (arcilla)',de:'Bergbau (Ton)',sv:'Gruvdrift (lera)',ja:'採掘',zh:'采矿 (黏土)',ko:'광업 (점토)',
+ cats:['geo','ind','eco'],sects:['kaivos'],
+ def_fi:'Savea kaivetaan avolouhoksina tai rinteistä. Suomessa punasavea mm. Somerolta.',
+ def_en:'Clay extracted by open-cast mining or slope cutting. In Finland: red earthenware from Somero, kaolin in Eno/Puolanka/Virtasalmi, wollastonite from Lappeenranta.',
+ def_sv:'Lera utvinns i öppna dagbrott. I Finland: röd lera från Somero, kaolin i Eno/Puolanka.'},
+
+{fi:'Koelaatta',en:'Test tile',es:'Plaqueta de prueba',de:'Testplatte',sv:'Testplatta',ja:'テストピース',zh:'测试片',ko:'테스트 타일',
+ cats:['meas'],sects:['studio','kou'],
+ def_fi:'Pieni savilaatta koelasitteita varten. Poltetaan samassa uunissa kuin varsinaiset esineet.',
+ def_en:'Small clay tile for testing glazes before production use. Should be same clay and fired in same kiln load. Notch at top for hanging/labelling.',
+ def_sv:'Liten lerplatta för provtagning av glasyr. Bränns i samma ugnsbelastning.'},
+
+{fi:'Litrapaino',en:'Specific gravity / Litre weight',es:'Peso específico',de:'Litergewicht',sv:'Litervikt',ja:'比重',zh:'比重',ko:'비중',
+ cats:['meas','form'],sects:['teoll','studio'],
+ def_fi:'Valusaven tai lasitemassan laadunvarmistusmittaus. Normaali valusavi ~1,7–1,8 kg/litra.',
+ def_en:'Quality control measurement for casting slip or glaze. Normal casting slip ~1.75kg/litre. Glaze suspension ~1.4–1.7kg/litre. Measured by weighing one litre on accurate scales.',
+ def_sv:'Kvalitetskontrollmätning för gjutmassa eller glasyr. Normal gjutmassa ~1,75kg/liter.'},
+
+{fi:'Viskositeetti',en:'Viscosity',es:'Viscosidad',de:'Viskosität',sv:'Viskositet',ja:'粘度 (nendo)',zh:'粘度',ko:'점도',
+ cats:['chem','form','meas'],sects:['teoll','studio'],
+ def_fi:'Nesteen virtausvastus. Lasitteen viskositeetti on kriittinen sovellustuloksen kannalta.',
+ def_en:'Resistance to flow. Critical for glazes: too thin drips off, too thick doesn\'t flow. Measured with Ford cup viscometer. Controlled by water content and deflocculants.',
+ def_sv:'Motstånd mot flöde. Kritiskt för glasyr: för tunn rinner av, för tjock flöder ej.'},
+
+{fi:'Lämpölaajeneminen',en:'Thermal expansion',es:'Dilatación térmica',de:'Wärmeausdehnung',sv:'Termisk expansion',ja:'熱膨張',zh:'热膨胀',ko:'열팽창',
+ cats:['chem','fire','meas'],sects:['teoll','kou'],
+ def_fi:'Massan ja lasitteen lämpölaajenemiskertoimien tulee olla yhteensopivat.',
+ def_en:'Material expansion with temperature rise. Glaze and body coefficients must be compatible. Glaze coefficient slightly lower than body is ideal — compressive stress prevents crazing.',
+ def_sv:'Material expansion vid temperaturökning. Glasyr och gods koefficienter måste vara kompatibla.'},
+
+{fi:'Polttokäyrä',en:'Firing schedule / Firing curve',es:'Curva de cocción',de:'Brennkurve',sv:'Bränningskurva',ja:'焼成スケジュール',zh:'烧成曲线',ko:'소성 스케줄',
+ cats:['fire','meas'],sects:['studio','teoll'],
+ def_fi:'Aikataulu polttolämpötilan nostamiselle ja laskemiselle. Räätälöidään massan ja lasitteen mukaan.',
+ def_en:'Timed schedule for raising and lowering kiln temperature. Includes ramp rates (°C/hr), soaks, and cooling rate. Programmed into digital controller or done manually.',
+ def_sv:'Schema för att höja och sänka ugnstemperaturen. Inkluderar ramphastigheter och haltningstider.'},
+
+{fi:'Sähköuuni',en:'Electric kiln',es:'Horno eléctrico',de:'Elektroofen',sv:'Elektrisk ugn',ja:'電気窯 (denki-gama)',zh:'电窑',ko:'전기 가마',
+ cats:['fire','tools'],sects:['studio','kou'],
+ def_fi:'Vastuksilla lämpiävä uuni. Hapettava polttoympäristö. Helppo ohjata digitaalisesti.',
+ def_en:'Kiln heated by resistance elements. Always oxidation atmosphere. Easy digital control. Most common in studios and schools. No smoke or combustion gases. Cannot fire reduction.',
+ def_sv:'Ugn uppvärmd av resistanselement. Alltid oxidationsmiljö. Enkel digital styrning.',
+ slang:'"electric kiln" vs "gas kiln" — iso debatti studioissa'},
+
+{fi:'Kaasuuuni',en:'Gas kiln',es:'Horno de gas',de:'Gasofen',sv:'Gasugn',ja:'ガス窯 (gasu-gama)',zh:'气窑',ko:'가스 가마',
+ cats:['fire','tools'],sects:['studio'],
+ def_fi:'Maakaasulla tai propaanilla lämpiävä uuni. Voidaan ajaa hapettavasti tai pelkistävästi.',
+ def_en:'Kiln fired by natural gas or propane. Can fire oxidation or reduction by adjusting air/gas ratio. Gives different character to glazes than electric. Used for traditional stoneware and porcelain.',
+ def_sv:'Ugn eldat med naturgas eller propan. Kan bränna oxidation eller reduktion.',
+ slang:'"gas kiln secrets"'},
+
+{fi:'Puu-uuni',en:'Wood kiln',es:'Horno de leña',de:'Holzbrandofen',sv:'Vedugn',ja:'薪窯 (maki-gama)',zh:'柴窑',ko:'장작 가마',
+ cats:['fire','asia'],sects:['studio'],
+ def_fi:'Puulla lämmitettävä uuni. Lentotuhka luo luonnollisen lasitteen.',
+ def_en:'Kiln fired by wood. Flying ash deposits and melts on surfaces to form natural glaze. Requires a team to maintain fire for several days. Creates unique, unrepeatable results.',
+ def_sv:'Vedeldad ugn. Flygande aska smälter på ytor för naturglasyr. Kräver team för att underhålla elden.',
+ cult:'🇯🇵 Sosiaalinen ja rituaalinen tapahtuma — yhteisöllinen voima.'},
+
+{fi:'Noborigama',en:'Noborigama (climbing kiln)',es:'Noborigama',de:'Noborigama',sv:'Noborigama',ja:'登り窯 (noborigama)',zh:'爬坡窑',ko:'오름가마',
+ cats:['fire','asia'],sects:['studio'],
+ def_fi:'Perinteinen monitasoinen japanilainen puu-uuni, joka rakentuu rinnettä nousevaksi.',
+ def_en:'Traditional multi-chambered Japanese wood kiln built up a slope. Heat passes through successive chambers, each slightly cooler. Different wares fired at different temperatures.',
+ def_sv:'Traditionell japansk flerkamarved ugn byggd i en sluttning.',
+ cult:'🇯🇵 Eri tuottajat polttivat omissa kammioissa yhdessä.'},
+
+{fi:'Posliinimaali',en:'Porcelain paint / China paint',es:'Pintura de porcelana',de:'Porzellanfarbe',sv:'Porslinsfärg',ja:'上絵具 (uwaenogu)',zh:'瓷器颜料',ko:'도자기 물감',
+ cats:['deco'],sects:['studio','teoll'],
+ def_fi:'Matalan polton metallioksidipigmentit poltetun lasitteen päälle 700–900 °C.',
+ def_en:'Low-fire metal oxide pigments applied over fired glaze, then fired at 700–900°C to bond. Enables very precise fine detail painting. Gold and platinum lusters are in this group.',
+ def_sv:'Lågbrandda metalloxidpigment applicerade på bränd glasyr vid 700–900°C.'},
+
+{fi:'Kobalttisininen',en:'Cobalt blue',es:'Azul cobalto',de:'Kobaltblau',sv:'Koboltblå',ja:'コバルトブルー',zh:'钴蓝',ko:'코발트 블루',
+ cats:['deco','glaze','hist'],sects:['studio'],
+ def_fi:'Kobolttipigmentin tuottama sininen. Vakaa korkeissa lämpötiloissa. Qinghua-posliini.',
+ def_en:'Deep blue produced by cobalt pigment. Extremely stable at all kiln temperatures. Used in qinghua (blue and white) porcelain since Yuan dynasty. Most reliable blue colorant.',
+ def_sv:'Djupblå från koboltpigment. Extremt stabil vid alla ugnstemperaturer.',
+ cult:'🇨🇳 Qinghua: maailman eniten kopioitu tyyli. 🇳🇱 Delft jäljitteli kiinalaista sinistä.'},
+
+{fi:'Hakeme',en:'Hakeme',es:'Hakeme',de:'Hakeme',sv:'Hakeme',ja:'刷毛目 (hakeme)',zh:'刷毛目',ko:'하케메',
+ cats:['deco','asia'],sects:['studio'],
+ def_fi:'Korealainen/japanilainen koristelumetodi: leveä harjausliike valkoisessa engobessa.',
+ def_en:'Korean/Japanese decorative technique: wide brush strokes in white slip leave visible brush marks. Rustic, spontaneous texture. Originally Goryeo Korean technique.',
+ def_ja:'韓国・日本の伝統装飾技法。幅広の刷毛で白化粧土を塗り、刷毛目を残す。高麗の白磁に起源。',
+ def_ko:'고려 청자에서 유래한 한국·일본 전통 장식 기법. 넓은 붓으로 백토를 발라 붓자국을 살린다.',
+ cult:'🇰🇷 Goryeo-keramiikan tärkeä dekorointimenetelmä.'},
+
+{fi:'Jun-keramiikka',en:'Jun ware',es:'Cerámica Jun',de:'Jun-Ware',sv:'Jun-keramik',ja:'均窯 (jun yao)',zh:'钧瓷',ko:'균자기',
+ cats:['asia','hist','glaze'],sects:['studio'],
+ def_fi:'Kiinalainen Song-dynastian keramiikka. Opalesentin sininen lasite, kuparioksidi purppuranpunaisena.',
+ def_en:'Chinese Song dynasty ware with opalescent blue glaze, often with copper oxide purple splashes. One of the "Five Great Song Wares". Thick, slightly opaque glaze.',
+ def_zh:'宋代钧瓷，以乳浊蓝釉著称，常有铜红紫斑。是宋代五大名窑之一，釉色深厚，略带乳浊感。',
+ cult:'🇨🇳 "Viisi suurta Song-keramiikkaa". Erittäin vaativa valmistaa.'},
+
+{fi:'Kakiemon',en:'Kakiemon',es:'Kakiemon',de:'Kakiemon',sv:'Kakiemon',ja:'柿右衛門 (kakiemon)',zh:'柿右卫门',ko:'가키에몬',
+ cats:['asia','hist','deco'],sects:['studio'],
+ def_fi:'Japanilainen posliinityyli Aritasta. Valkoinen posliinipohja, kirkkaat värit, asimmetrinen koristelu.',
+ def_en:'Japanese porcelain style from Arita. Milky white (nigoshide) body, clear over- and underglaze colours. Asymmetric decoration with empty space. Developed 17th century.',
+ def_ja:'有田焼の様式。乳白色（濁手）の磁胎に鮮やかな上絵付。空間を生かした非対称な絵付けが特徴。',
+ cult:'🇯🇵 Kopioitiin Meissenissä, Chelseasssa ja Delftissä.'},
+
+{fi:'Imari-posliini',en:'Imari porcelain',es:'Porcelana Imari',de:'Imari-Porzellan',sv:'Imari-porslin',ja:'伊万里焼 (Imari-yaki)',zh:'伊万里瓷',ko:'이마리 자기',
+ cats:['asia','hist'],sects:['studio'],
+ def_fi:'Japanilainen posliinityyli — sininen, punainen ja kulta. Vietiin Eurooppaan Imarin sataman kautta.',
+ def_en:'Japanese porcelain style from Arita, exported through Imari port. Blue, red, and gold palette with dense decoration. VOC shipped it to Europe 1600s–1700s.',
+ def_ja:'有田焼の輸出磁器。伊万里港から欧州へ輸出された。青・赤・金の濃密な絵付けが特徴。',
+ cult:'🇯🇵 VOC toi Eurooppaan 1600–1700-luvuilla — vaikutti eurooppalaiseen keramiikkaan suuresti.'},
+
+{fi:'Liukoinen suola / Alkalisuola',en:'Soluble salt',es:'Sal soluble',de:'Lösliches Salz',sv:'Lösligt salt',ja:'可溶性塩',zh:'可溶性盐',ko:'가용성 염',
+ cats:['chem','clay'],sects:['kaivos','kou'],
+ def_fi:'Sekundäärisaviin tarttunut epäpuhtaus. Kiteytyy esineen pintaan kuivuessa — "efflorescence".',
+ def_en:'Impurity in secondary clays. Crystallises on surface during drying as white effloresce. Causes surface defects and potential cracking. Can be treated with barium carbonate.',
+ def_sv:'Förorening i sekundärlera som kristalliserar på ytan vid torkning som vit utblomning.'},
+
+{fi:'Kiille',en:'Mica',es:'Mica',de:'Glimmer',sv:'Glimmer',ja:'雲母 (unmo)',zh:'云母',ko:'운모',
+ cats:['geo','clay'],sects:['kaivos'],
+ def_fi:'Levymäinen silikaattimineraali savessa. Heikentää lujuutta ja lämmönkestoa.',
+ def_en:'Plate-like silicate mineral impurity in secondary clays. Weakens mechanical strength and thermal shock resistance. Common in transported clays.',
+ def_sv:'Platteliknande kiselmineralförorening i sekundärleror. Försvagar mekanisk styrka.'},
+
+{fi:'Hallinta-alue',en:'Firing range',es:'Rango de cocción',de:'Brennbereich',sv:'Bränningsintervall',ja:'焼成温度範囲',zh:'烧成温度范围',ko:'소성 온도 범위',
+ cats:['fire','meas'],sects:['studio','teoll'],
+ def_fi:'Lämpötila-alue jossa massa sintraantuu muttei sula. Noin 30–100°C ennen sulamispistettä.',
+ def_en:'Temperature range where clay body sinters well without melting — typically 30–100°C before melting point. Wider range = more forgiving. Narrow range = precise temperature control needed.',
+ def_sv:'Temperaturintervall där lermassa sintrar bra utan att smälta.'},
+
+{fi:'Luonnonsavi (kaivaminen)',en:'Wild clay / Natural clay digging',es:'Arcilla silvestre',de:'Wilder Ton',sv:'Vild lera',ja:'野掘り粘土',zh:'天然黏土采集',ko:'야생 점토 채취',
+ cats:['clay','eco'],sects:['eco','kaivos'],
+ def_fi:'Luonnosta itse kaivettu savi. Vaatii testauksen, siivilöinnin, iästämisen. Suomessa punasavi on pääasiallinen.',
+ def_en:'Clay collected directly from natural deposits. Requires testing, sieving, drying and aging. In Finland red earthenware clay is the main accessible type. Responsible digging essential.',
+ def_sv:'Lera insamlad direkt från naturliga fyndigheter. Kräver testning, siktning och åldrande.'},
+
+{fi:'Harjauskoristelu',en:'Brushwork decoration',es:'Decoración con pincel',de:'Pinseldekor',sv:'Penseldekor',ja:'絵付け (ekitsuke)',zh:'手绘装饰',ko:'붓 장식',
+ cats:['deco'],sects:['studio'],
+ def_fi:'Värien, engobeen tai lasitteen levittäminen siveltimellä esineen pintaan.',
+ def_en:'Applying slips, stains or glazes with brushes. Can be done on raw clay, bisque or glaze. Requires practiced brush control. Wide range of brushes for different effects.',
+ def_sv:'Applicera lerslips, färger eller glasyr med penslar.'},
+
+{fi:'Kaoliini (teollisuus)',en:'Kaolin (industrial)',es:'Caolín (industrial)',de:'Kaolin (industrie)',sv:'Kaolin (industri)',ja:'工業用カオリン',zh:'工业高岭土',ko:'산업용 고령토',
+ cats:['ind','clay'],sects:['teoll','kaivos'],
+ def_fi:'Puhdistettu kaoliini paperi-, lääke-, kosmetiikka- ja keramiikkateollisuudessa.',
+ def_en:'Purified kaolin for paper (filler/coating), pharmaceuticals, cosmetics, plastics and ceramics. Paper industry is the biggest consumer globally. Requires processing and particle size grading.',
+ def_sv:'Renat kaolin för pappers-, läkemedels-, kosmetik- och keramikindustrin.'},
+
+{fi:'Graniitti (keramiikka)',en:'Granite (ceramics)',es:'Granito (cerámica)',de:'Granit (Keramik)',sv:'Granit (keramik)',ja:'花崗岩',zh:'花岗岩',ko:'화강암',
+ cats:['geo'],sects:['kaivos','kou'],
+ def_fi:'Happorikasta magmakiveä — kvartsia, maasälpiä ja kiillettä. Savimineraalien alkuperäinen lähde.',
+ def_en:'Acid igneous rock primarily of quartz, feldspar and mica. Primary source material for clay through weathering. Finnish bedrock is predominantly granite and gneiss.',
+ def_sv:'Sur magmabergart av kvarts, fältspat och glimmer. Primär källa för lermineraler.'},
+];
+
+// ============================================================
+// FINNISH ACTORS DIRECTORY
+// ============================================================
+const ACTORS=[
+{name:'GTK – Geologian tutkimuskeskus',sector:'kaivos',sub:'Kaivannaistutkimus & kartoitus',loc:'Espoo (pääkonttori), valtakunnallinen',desc:'Valtionlaitos, joka kartoittaa Suomen mineraali- ja saviesiintymät. Tuottaa geologiset peruskartat ja raaka-ainetiedot kaivosteollisuudelle ja keramiikkatoimialalle.',web:'www.gtk.fi',tags:['kaoliini','punasavi','wollastoniitti','kvartsi']},
+
+{name:'Nordkalk Oy Ab',sector:'kaivos',sub:'Kalkkikivi, marmori, mineraalit',loc:'Parainen, Lohja, Lappeenranta',desc:'Suomen suurin kalkkikiven louhija. Tarjoaa CaCO₃-tuotteita teollisuuteen, rakentamiseen ja keramiikan raaka-aineiksi. Lappeenrannan louhokselta myös wollastoniittia.',web:'www.nordkalk.com',tags:['kalkkikivi','wollastoniitti','dolomiitti']},
+
+{name:'Yara Suomi Oy / Siilinjärven kaivos',sector:'kaivos',sub:'Fosfaatti, apatiitti',loc:'Siilinjärvi',desc:'Suomen ainoa toimiva kaivos apatiittimalmille. Sivukivistä erotellaan myös muita mineraaleja. Fosforia käytetään lannoitteissa; sivumineraalit keramiikan raaka-aineiksi.',web:'www.yara.fi',tags:['apatiitti','mineraalit']},
+
+{name:'Imerys Talc (Suomi)',sector:'kaivos',sub:'Talkki, vuolukivi',loc:'Sotkamo',desc:'Euroopan suurimman talkkilouhijan Suomen toiminnot Sotkamossa. Talkki menee mm. paperin, muovin ja keramiikan raaka-aineeksi. Suomen vuolukiviesiintymien hyödyntäminen.',web:'www.imerys.com',tags:['talkki','vuolukivi','mineraalit']},
+
+{name:'Paroc Group Oy',sector:'jalostus',sub:'Mineraalivilla, lasiuute, eristeet',loc:'Parainen (päätuotanto), Helsinki',desc:'Pohjoismainen mineraalivilla- ja eristevalmistaja. Valmistaa savimineraaleista ja lasiuutteesta rakennuseristeitä. Kierrättää omia sivutuotteita takaisin tuotantoon.',web:'www.paroc.fi',tags:['mineraalivilla','eristeet']},
+
+{name:'Saint-Gobain Finland',sector:'jalostus',sub:'Tasolasi, rakennusmateriaalit',loc:'Helsinki, useita toimipisteitä',desc:'Globaalin Saint-Gobain -konsernin Suomen toiminnot. Rakennuslasi, eristeet, keramiikkalevyt (Weber-tuotteet). Maahantuonti ja jakelu teknisille raaka-aineille.',web:'www.saint-gobain.fi',tags:['tasolasi','kipsi','rakennuskeramiikka']},
+
+{name:'Gyproc (Saint-Gobain)',sector:'jalostus',sub:'Kipsilevyt, rakennuskipsi',loc:'Helsinki',desc:'Valmistaa rakennuskipsilevyjä ja teknisiä kipsituotteita. Kipsijauhetta saatavilla myös keramiikkastudiojen ja muottituotannon tarpeisiin.',web:'www.gyproc.fi',tags:['kipsi','rakentaminen']},
+
+{name:'Iittala Group / Arabia',sector:'teoll',sub:'Posliini, keramiikka, taidelasi',loc:'Helsinki (Arabia-kampus), Iittala',desc:'Suomen merkittävin keramiikka- ja lasivalmistaja. Arabia valmistaa posliiniastioita; Iittala taidelasia. Arabia-kampus toimii myös taidekeskuksena ja ammattilaisstudiona.',web:'www.iittalagroup.com',tags:['posliini','tasolasi','design']},
+
+{name:'Pentik Oy',sector:'teoll',sub:'Keramiikka, sisustuskeramiikka',loc:'Posio (Lappi), Helsinki',desc:'Pohjoissuomalainen design-yritys, joka valmistaa ja myy keramiikkatuotteita. Tuotanto Posiolla Lapissa. Käyttää osittain suomalaisia raaka-aineita.',web:'www.pentik.com',tags:['keramiikka','design','astiat']},
+
+{name:'Nuutajärven lasitehdas',sector:'teoll',sub:'Taidelasi, handmade-lasi',loc:'Urjala (Pirkanmaa)',desc:'Suomen vanhin toimiva lasitehdas (perustettu 1793). Erikoistunut käsintehtyyn taidelasiin. Nuutajärven kyläyhteisö on käsityöläisten ja taiteilijoiden keskus.',web:'www.nuutajarvi.fi',tags:['taidelasi','lasipuhallus','design']},
+
+{name:'Keramiikkatarvike Oy',sector:'jalleen',sub:'Savet, lasitteet, tarvikkeet ammattilaisille',loc:'Helsinki',desc:'Erikoistunut keramiikkatarvikkeiden maahantuontiin ja jälleenmyyntiin ammattilaisille ja studioille. Savet, lasitteet, uunit, välineet. Tärkeä linkki eurooppalaisten raaka-ainetoimittajien ja suomalaisten käyttäjien välillä.',web:'www.keramiikkatarvike.fi',tags:['savi','lasitteet','uunit','kipsi']},
+
+{name:'Artisaani Oy',sector:'jalleen',sub:'Käsityötarvikkeet, savi, kipsi',loc:'Helsinki (Kamppi)',desc:'Monipuolinen käsityötarvikeliike. Tarjoaa savea, kipsiä, lasitteita, posliinivärejä ja muita keramiikantekijän perusmateriaaleja kuluttajille ja harrastajille.',web:'www.artisaani.fi',tags:['savi','kipsi','välineet','harrastajat']},
+
+{name:'Panduro Hobby',sector:'jalleen',sub:'Käsityötarvikkeet, harrastuskeramiikka',loc:'Helsinki, Tampere, verkkokauppa',desc:'Pohjoismainen käsityötarvikeketju. Tarjoaa harrastuskeramiikan perusmateriaaleja, uutissavia, lasitteita ja välineitä. Sopii aloitteleville keraamikoille.',web:'www.panduro.fi',tags:['harrastajat','savi','peruslasitteet']},
+
+{name:'Metropolia AMK – Muotoilun Pajat',sector:'kou',sub:'Keramiikka, lasi, kipsi, 3D-tulostus',loc:'Helsinki, Arabia-kampus',desc:'Metropolian muotoilun opetuksen pajatilat Arabia-kampuksella. Kattaa keramiikan, lasin, metallin, 3D-tulostuksen. Julkinen oppimisympäristö — opiskelijoiden ja ammattilaisten käytössä.',web:'www.metropolia.fi',tags:['koulutus','keramiikka','lasi','3D-tulostus','kipsi']},
+
+{name:'Aalto-yliopisto – Taiteiden ja suunnittelun korkeakoulu',sector:'kou',sub:'Keramiikka- ja lasi-taide, tutkimus',loc:'Helsinki (Otaniemi/Arabia)',desc:'Keramiikka- ja lasimuotoilu on osa Taiteiden ja suunnittelun maisteriohjelmaa. Tutkimusperustainen lähestymistapa, kansainvälinen verkosto.',web:'www.aalto.fi',tags:['koulutus','tutkimus','keramiikka','lasi','muotoilu']},
+
+{name:'LAB-ammattikorkeakoulu',sector:'kou',sub:'Muotoilu, keramiikka',loc:'Lahti',desc:'Lahden muotoiluperinteen jatkaja. Keramiikka ja materiaalikäsityö osana muotoilukoulutusta. Lahden historiallinen design-perinne näkyy opetuksessa.',web:'www.lab.fi',tags:['koulutus','muotoilu','keramiikka']},
+
+{name:'Savonia AMK – Kuopion Muotoiluakatemia',sector:'kou',sub:'Muotoilu, keramiikka',loc:'Kuopio',desc:'Kuopion Muotoiluakatemia on osa Savonia AMK:ta. Keramiikka- ja sisustusmuotoilun koulutusta. Vahva yhteys paikalliseen teollisuuteen.',web:'www.savonia.fi',tags:['koulutus','muotoilu','keramiikka']},
+
+{name:'HAMK – Wetterhoff',sector:'kou',sub:'Käsityö, muotoilu',loc:'Hämeenlinna',desc:'Hämeen ammattikorkeakoulun käsityön ja muotoilun yksikkö. Perinteinen käsityöpainotus — keramiikka, tekstiili, puu. Pitkä koulu-ja teollisuusyhteistyötraditio.',web:'www.hamk.fi',tags:['koulutus','käsityö','keramiikka']},
+
+{name:'Seinäjoen AMK',sector:'kou',sub:'Muotoilu',loc:'Seinäjoki',desc:'Muotoilukoulutus keramiikan ja materiaalien opiskeluun. Läntisen Suomen muotoilukoulutuksen tärkeä toimija.',web:'www.seamk.fi',tags:['koulutus','muotoilu']},
+
+{name:'Suomen Käsityön Museo',sector:'kou',sub:'Dokumentointi, koulutus, näyttelyt',loc:'Jyväskylä',desc:'Suomalaisen käsityökulttuurin museokeskus. Dokumentoi keramiikka-, lasi- ja kipsialan historiaa. Tarjoaa koulutustilaisuuksia ja asiantuntijapalveluja.',web:'www.craftmuseum.fi',tags:['museo','dokumentointi','historia']},
+
+{name:'Arabia Ceramic Centre',sector:'studio',sub:'Ammattilaisstudiot, galleriat',loc:'Helsinki, Arabia-kampus',desc:'Arabia-kampuksella toimivat ammattilaisstudiot ovat avoimia taiteilijoille. Yhteys Iittala Groupin tehdastiloihin. Kansainvälinen vuorovaikutus.',web:'www.arabiacenter.fi',tags:['studio','ammattilaiset','galleriat']},
+
+{name:'Fiskars Village',sector:'studio',sub:'Käsityöläisyhteisö, studiot',loc:'Fiskars, Raasepori',desc:'Historiallinen teollisuuskyläyhteisö Länsi-Uudellamaalla. Keraamiikka-, lasi-, metalli- ja puutyöpajojen koti. Kansainvälinen residenssiohjelma taiteilijoille.',web:'www.fiskarsvillage.fi',tags:['studio','käsityö','residenssi']},
+
+{name:'Nuutajärvi Village',sector:'studio',sub:'Lasiartisaanit, studiot',loc:'Nuutajärvi, Urjala',desc:'Lasitehtaan ympärille muodostunut käsityöläiskylä Pirkanmaalla. Lasinpuhaltajien, -hiojien ja muiden lasiartisaanien studiot ja myymälät.',web:'www.nuutajarvi.fi',tags:['lasi','artisaanit','studio']},
+
+{name:'Keramiikkataiteilijat ry',sector:'studio',sub:'Ammattijärjestö',loc:'Helsinki (toimisto)',desc:'Suomalaisten ammattikontailijien edunvalvontajärjestö. Järjestää näyttelyitä, kursseja ja koulutusta. Ylläpitää jäsenhakemistoa.',web:'www.keramiikkataiteilijat.fi',tags:['järjestö','ammattilaiset']},
+
+{name:'Suomen Lasimuseo',sector:'kou',sub:'Museo, koulutus, taidelasi',loc:'Riihimäki',desc:'Suomalaisen lasitaiteen ja -teollisuuden historiaa esittelevä museo. Näyttelyitä, koulutusta, tapahtumaohjelma. Lasintekemistä ja lasihistoriaa kaikille.',web:'www.suomenlasimuseo.fi',tags:['museo','lasi','historia','koulutus']},
+
+{name:'Rohde Kilns (Suomen edustaja)',sector:'ali',sub:'Keramiikka- ja lasiuunit',loc:'via jälleenmyyjät',desc:'Saksalainen Rohde on yksi johtavista keramiikka- ja lasiuunien valmistajista Euroopassa. Suomessa uuneja myydään erikoisliikkeiden ja maahantuojien kautta.',web:'www.rohde-gmbh.de',tags:['uunit','sähköuuni','keramiikka']},
+
+{name:'Effective Heat Oy',sector:'ali',sub:'Uunit, laitteet, huolto',loc:'Helsinki',desc:'Erikoistunut keramiikka- ja lasiuuneihin sekä lämpökäsittelylaitteihin. Myy, huoltaa ja asentaa uuneja studioille ja teollisuudelle. Tarjoaa teknistä tukea.',tags:['uunit','huolto','laitteet']},
+
+{name:'Potclays Ltd (UK) – Suomen ostot',sector:'ali',sub:'Savet, lasitteet, kemikaalit',loc:'Tilaukset Britanniasta',desc:'Yksi Euroopan suurimmista keramiikkamateriaalien toimittajista. Suomalaiset studiot tilaavat usein Potclaysilta pallosavet, kaoliinit, metallioksidit ja erikoislasitteet.',web:'www.potclays.co.uk',tags:['savi','lasitteet','metallioksidit']},
+
+{name:'Valentines Clays (UK) – Suomen ostot',sector:'ali',sub:'Stoneware, posliinisavet',loc:'Tilaukset Britanniasta',desc:'Brittiläinen ammattilaislaadun savinvalmistaja. Suomalaiset studiot ja koulut käyttävät Valentines-massoja kivitavara- ja posliinityöskentelyyn.',web:'www.valentinesclays.co.uk',tags:['savi','stoneware','posliini']},
+
+{name:'Deffner & Johann (DE) – Suomen ostot',sector:'ali',sub:'Lasiuunit, fuusing-tarvikkeet',loc:'Tilaukset Saksasta',desc:'Saksalainen lasialan erikoistoimittaja. Fuusing-uunit, fuusing-lasit, teippaukset ja muut lasialan materiaalit. Suomalaiset lasiartisaanit tilaavat suoraan.',web:'www.deffner-johann.de',tags:['lasi','fuusing','uunit']},
+
+{name:'Format Oy',sector:'ali',sub:'Prototyyppi, piensarjatuotanto, muotoilupalvelut',loc:'Helsinki',desc:'Muotoilu- ja prototyyppistudio, joka tarjoaa piensarjatuotantopalveluja keramiikka- ja lasialalle. Yhdistää digitaalisen suunnittelun (CAD, 3D-tulostus) perinteisiin valmistusmenetelmiin.',tags:['prototyyppi','muotoilu','palvelut']},
+];
+
+// ============================================================
+// APP STATE
+// ============================================================
+let activeC=new Set();
+let activeS=new Set();
+let activeDir='all';
+let query='';
+let curTab='sanasto';
+
+// ============================================================
+// BUILD UI
+// ============================================================
+function init(){
+  buildTabs();
+  buildCatRow();
+  buildSecRow();
+  buildLangRow();
+  buildDescRow();
+  buildAnav();
+  buildDirFilters();
+  renderGlossary();
+  renderDirectory();
+}
+
+function buildTabs(){
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.onclick=()=>{
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+      document.querySelectorAll('.tab-pane').forEach(x=>x.classList.remove('on'));
+      t.classList.add('on');
+      const id='tab-'+t.dataset.tab;
+      document.getElementById(id).classList.add('on');
+      curTab=t.dataset.tab;
+      const ctrl=document.getElementById('sanasto-ctrl');
+      ctrl.style.display=(curTab==='sanasto')?'block':'none';
+    };
+  });
+}
+
+function buildCatRow(){
+  const el=document.getElementById('catRow');
+  const ab=document.createElement('button');
+  ab.className='btn all on';ab.textContent='✦ Kaikki aihepiirit';
+  ab.onclick=()=>{activeC.clear();updateBtns();renderGlossary()};
+  el.appendChild(ab);
+  Object.entries(CATS).forEach(([k,v])=>{
+    const b=document.createElement('button');
+    b.className='btn';b.textContent=v.n;b.dataset.k=k;
+    b.onclick=()=>{activeC.has(k)?activeC.delete(k):activeC.add(k);updateBtns();renderGlossary()};
+    el.appendChild(b);
+  });
+}
+
+function buildSecRow(){
+  const el=document.getElementById('secRow');
+  const ab=document.createElement('button');
+  ab.className='btn all on';ab.textContent='✦ Kaikki toimialat';
+  ab.onclick=()=>{activeS.clear();updateBtns();renderGlossary()};
+  el.appendChild(ab);
+  Object.entries(SECTS).forEach(([k,v])=>{
+    const b=document.createElement('button');
+    b.className='btn';b.textContent=v.n;b.dataset.s=k;
+    b.onclick=()=>{activeS.has(k)?activeS.delete(k):activeS.add(k);updateBtns();renderGlossary()};
+    el.appendChild(b);
+  });
+}
+
+function buildLangRow(){
+  const el=document.getElementById('langRow');
+  el.innerHTML='<span class="fl">Käännöskielet:</span>';
+  LANGS.forEach(l=>{
+    const b=document.createElement('button');
+    b.className='btn on';b.textContent=l.f+' '+l.l;b.dataset.c=l.c;
+    b.onclick=()=>{visLangs.has(l.c)?visLangs.delete(l.c):visLangs.add(l.c);b.classList.toggle('on',visLangs.has(l.c));renderGlossary()};
+    el.appendChild(b);
+  });
+}
+
+function buildDescRow(){
+  const el=document.getElementById('descRow');
+  LANGS.forEach(l=>{
+    const b=document.createElement('button');
+    b.className='dbtn '+(visDescs.has(l.c)?'on':'');
+    b.textContent=l.f+' '+l.name;b.dataset.c=l.c;
+    b.onclick=()=>{visDescs.has(l.c)?visDescs.delete(l.c):visDescs.add(l.c);b.classList.toggle('on',visDescs.has(l.c));renderGlossary()};
+    el.appendChild(b);
+  });
+  document.getElementById('descAll').onclick=()=>{
+    LANGS.forEach(l=>visDescs.add(l.c));
+    document.querySelectorAll('.dbtn').forEach(b=>b.classList.add('on'));
+    renderGlossary();
+  };
+  document.getElementById('descNone').onclick=()=>{
+    visDescs.clear();
+    document.querySelectorAll('.dbtn').forEach(b=>b.classList.remove('on'));
+    renderGlossary();
+  };
+}
+
+function buildAnav(){
+  const el=document.getElementById('anav');
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÅ3'.split('').forEach(l=>{
+    const b=document.createElement('button');
+    b.className='ab';b.textContent=l;b.id='ab-'+l;
+    b.onclick=()=>document.getElementById('s-'+l)?.scrollIntoView({behavior:'smooth',block:'start'});
+    el.appendChild(b);
+  });
+}
+
+function buildDirFilters(){
+  const el=document.getElementById('dirFilters');
+  el.innerHTML='<span class="fl" style="color:var(--ash)">Sektori:</span>';
+  const sectors={all:'✦ Kaikki',kaivos:'⛏️ Kaivannaisteollisuus',jalostus:'🔄 Jalostus',teoll:'🏭 Valmistus',jalleen:'🏪 Jälleenmyynti',kou:'🎓 Koulutus',studio:'🎨 Studiot & Taide',ali:'🤝 Alihankinta & Tarvikkeet',eco:'♻️ Ympäristö'};
+  Object.entries(sectors).forEach(([k,v])=>{
+    const b=document.createElement('button');
+    b.className='btn '+(k==='all'?'all on':'');b.textContent=v;b.dataset.s=k;
+    b.onclick=()=>{
+      activeDir=k;
+      document.querySelectorAll('.dir-filters .btn').forEach(x=>{x.classList.remove('on');if(x.dataset.s==='all') x.classList.toggle('on',k==='all')});
+      b.classList.add('on');
+      renderDirectory();
+    };
+    el.appendChild(b);
+  });
+}
+
+function updateBtns(){
+  document.querySelectorAll('#catRow .btn').forEach(b=>{
+    if(b.classList.contains('all')) b.classList.toggle('on',activeC.size===0);
+    else b.classList.toggle('on',activeC.has(b.dataset.k));
+  });
+  document.querySelectorAll('#secRow .btn').forEach(b=>{
+    if(b.classList.contains('all')) b.classList.toggle('on',activeS.size===0);
+    else b.classList.toggle('on',activeS.has(b.dataset.s));
+  });
+}
+
+// ============================================================
+// GLOSSARY RENDER
+// ============================================================
+function matchT(t,q2){
+  if(!q2) return true;
+  return Object.values(t).some(v=>typeof v==='string'&&v.toLowerCase().includes(q2));
+}
+
+function renderGlossary(){
+  const q2=query.toLowerCase();
+  const filtered=T.filter(t=>{
+    if(!matchT(t,q2)) return false;
+    if(activeC.size>0 && !t.cats.some(c=>activeC.has(c))) return false;
+    if(activeS.size>0 && !t.sects.some(s=>activeS.has(s))) return false;
+    return true;
+  });
+  const groups={};
+  filtered.forEach(t=>{
+    const l=t.fi.charAt(0).toUpperCase().replace(/[0-9]/,'0');
+    if(!groups[l]) groups[l]=[];
+    groups[l].push(t);
+  });
+  const main=document.getElementById('main');
+  const lc=LANGS.filter(l=>visLangs.has(l.c)).length;
+  document.getElementById('stats').textContent=`${filtered.length} termiä · ${filtered.length*lc} käännöstä`;
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÅ3'.split('').forEach(l=>{
+    const b=document.getElementById('ab-'+l);
+    if(b) b.classList.toggle('has',!!groups[l]);
+  });
+  if(!filtered.length){main.innerHTML='<div class="nores">Ei hakutuloksia</div>';return;}
+  let html='';
+  Object.keys(groups).sort().forEach(letter=>{
+    html+=`<div class="asec" id="s-${letter}"><div class="ah">${letter}</div><div class="grid">`;
+    groups[letter].forEach(t=>{html+=termCard(t,q2);});
+    html+='</div></div>';
+  });
+  main.innerHTML=html;
+}
+
+function hl(s,q){
+  if(!q||typeof s!=='string') return s||'';
+  const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+  return s.replace(re,'<mark>$1</mark>');
+}
+
+function termCard(t,q){
+  const catBadges=t.cats.map(c=>`<span class="badge cat" style="background:${CATS[c]?.c||'#5a5a5a'}">${CATS[c]?.n.replace(/^[^ ]+ /,'')||c}</span>`).join('');
+  const secBadges=t.sects.map(s=>`<span class="badge sec">${SECTS[s]?.n.replace(/^[^ ]+ /,'')||s}</span>`).join('');
+  const transRows=LANGS.filter(l=>visLangs.has(l.c)).map(l=>`<div class="tr"><span class="tf">${l.f}</span><span class="tl">${l.l}</span><span class="tt ${l.c==='fi'?'main':''}">${hl(t[l.c]||'',q)}</span></div>`).join('');
+  let descBlocks='';
+  LANGS.forEach(l=>{
+    if(!visDescs.has(l.c)) return;
+    const dk='def_'+l.c;
+    if(!t[dk]) return;
+    descBlocks+=`<div class="desc-block ${l.c}"><div class="desc-lang">${l.f} ${l.name}</div><div class="desc-text">${hl(t[dk],q)}</div></div>`;
+  });
+  const formula=t.formula?`<div class="formula">${t.formula}</div>`:'';
+  const cult=t.cult?`<div class="cult">${hl(t.cult,q)}</div>`:'';
+  const slang=t.slang?`<div class="slang">💬 ${hl(t.slang,q)}</div>`:'';
+  return `<div class="card">
+    <div class="card-head">
+      <span class="tfi">${hl(t.fi,q)}</span>
+      <div class="badges">${secBadges}${catBadges}</div>
+    </div>
+    <div class="trans">${transRows}</div>
+    <div class="descs">${descBlocks}${formula}${cult}${slang}</div>
+  </div>`;
+}
+
+// ============================================================
+// DIRECTORY RENDER
+// ============================================================
+const SECTOR_LABELS={
+  kaivos:'⛏️ Kaivannaisteollisuus',
+  jalostus:'🔄 Jalostus & Valmistus',
+  teoll:'🏭 Teollinen valmistus',
+  jalleen:'🏪 Jälleenmyynti & Jakelu',
+  kou:'🎓 Koulutus & Tutkimus',
+  studio:'🎨 Taidekeraamiikka & Studiot',
+  ali:'🤝 Alihankinta, Tarvikkeet & Laitteet',
+  eco:'♻️ Ympäristö & Kierrätys',
+};
+const SECTOR_DESC={
+  kaivos:'Raaka-aineiden louhinta ja geologinen tutkimus Suomessa. Nämä toimijat tuottavat tai kartoittavat saven, kipsin, kaoliinin ja muiden mineraalien esiintymiä.',
+  jalostus:'Raaka-aineiden jalostaminen keramiikan, lasin ja rakennustuotteiden valmistukseen. Tuottavat esimerkiksi mineraalivilla-, kipsi- ja lasituotteita.',
+  teoll:'Suomalaiset teolliset keramiikka- ja lasinvalmistajat. Tuottavat astioita, taidelasia, rakennuskeramiikkaa tai erikoistuotteita.',
+  jalleen:'Keramiikan raaka-aineiden, tarvikkeiden ja laitteiden jälleenmyyjät ja maahantuojat Suomessa.',
+  kou:'Keramiikkaa ja lasia opettavat korkeakoulut, ammattikoulut, museot ja tutkimuslaitokset.',
+  studio:'Yksityiset keramiikkataiteilijat, studiot, kyläyhteisöt ja ammatilliset järjestöt.',
+  ali:'Maahantuojat, laitetoimittajat ja palveluyritykset, jotka tukevat alan ammattilaisia.',
+};
+
+function renderDirectory(){
+  const el=document.getElementById('dirContent');
+  const sectors=activeDir==='all'?Object.keys(SECTOR_LABELS):[activeDir];
+  let html='';
+  sectors.forEach(s=>{
+    const items=ACTORS.filter(a=>a.sector===s);
+    if(!items.length) return;
+    html+=`<div class="dir-section"><div class="dir-head"><span>${SECTOR_LABELS[s]}</span></div>`;
+    if(SECTOR_DESC[s]) html+=`<div class="dir-intro">${SECTOR_DESC[s]}</div>`;
+    html+='<div class="actor-grid">';
+    items.forEach(a=>{
+      const tags=a.tags?a.tags.map(t=>`<span class="actor-tag">${t}</span>`).join(''):'';
+      html+=`<div class="actor-card">
+        <div class="actor-name">${a.name}</div>
+        <div class="actor-sub">${a.sub}</div>
+        <div class="actor-loc">📍 ${a.loc}</div>
+        <div class="actor-desc">${a.desc}</div>
+        ${a.web?`<div class="actor-web">🌐 ${a.web}</div>`:''}
+        ${tags?`<div class="actor-tags">${tags}</div>`:''}
+      </div>`;
+    });
+    html+='</div></div>';
+  });
+  el.innerHTML=html||'<div class="nores">Ei tuloksia tässä kategoriassa</div>';
+}
+
+// search
+document.getElementById('search').addEventListener('input',e=>{query=e.target.value;renderGlossary()});
+init();
+</script>
+</body>
+</html>
