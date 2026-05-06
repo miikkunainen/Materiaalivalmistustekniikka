@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valusavi & Slipcasting — Materiaalitekniikan täydellinen opas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   ROOT TOKENS
+   ═══════════════════════════════════════════ */
+:root {
+  --clay:      #8B4513;
+  --clay2:     #A0522D;
+  --terracotta:#C1440E;
+  --ochre:     #C8860A;
+  --cream:     #F5EDD6;
+  --parchment: #EDE0C4;
+  --sand:      #D9C49E;
+  --mud:       #6B4423;
+  --earth:     #3D2B1F;
+  --charcoal:  #1C1209;
+  --sage:      #7A8C5E;
+  --blue-clay: #5B7FA6;
+  --white:     #FAF5EC;
+
+  --serif:   'Libre Baskerville', Georgia, serif;
+  --sans:    'Source Sans 3', system-ui, sans-serif;
+  --mono:    'DM Mono', monospace;
+
+  --r: 6px;
+  --tr: .22s ease;
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--charcoal);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-weight: 400;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+::selection { background: var(--terracotta); color: #fff; }
+
+a { color: var(--ochre); transition: color var(--tr); }
+a:hover { color: var(--terracotta); }
+b, strong { font-weight: 700; color: var(--white); }
+em { color: var(--ochre); font-style: italic; }
+code { font-family: var(--mono); font-size:.85em; background:rgba(139,69,19,.25); padding:.1em .35em; border-radius:3px; color:var(--sand); }
+img { max-width:100%; display:block; }
+
+/* ═══════════════════════════════════════════
+   HERO — tekstuurinen maa-tausta
+   ═══════════════════════════════════════════ */
+.hero {
+  min-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 5rem 2rem;
+  position: relative;
+  background:
+    radial-gradient(ellipse 120% 80% at 50% 120%, rgba(139,69,19,.55) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(200,134,10,.18) 0%, transparent 60%),
+    linear-gradient(175deg, #1C1209 0%, #2C1A0E 40%, #1C1209 100%);
+  overflow: hidden;
+}
+.hero::before {
+  content:'';
+  position:absolute;inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E");
+  pointer-events:none;
+  opacity:.5;
+}
+.hero-tag {
+  font-family: var(--mono);
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ochre);margin-bottom:1rem;
+  display:flex;align-items:center;gap:.75rem;
+}
+.hero-tag::before,.hero-tag::after{content:'';display:block;height:1px;width:40px;background:var(--ochre);}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem,6vw,5rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.08;
+  letter-spacing: -.02em;
+  margin-bottom: 1rem;
+  max-width: 820px;
+}
+.hero h1 span { color: var(--terracotta); }
+.hero-sub {
+  font-size: 1.1rem;
+  color: var(--sand);
+  max-width: 640px;
+  line-height: 1.68;
+  margin-bottom: 2rem;
+}
+.hero-stats {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.hero-stat { text-align:center; }
+.hero-stat .num {
+  font-family:var(--serif);font-size:1.9rem;font-weight:700;
+  color:var(--ochre);display:block;line-height:1.1;
+}
+.hero-stat .lbl {
+  font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sand);
+}
+
+/* ═══════════════════════════════════════════
+   NAV
+   ═══════════════════════════════════════════ */
+.nav {
+  position:sticky;top:0;z-index:100;
+  background:rgba(28,18,9,.92);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(139,69,19,.3);
+  padding:0 1.5rem;
+  display:flex;align-items:center;gap:.5rem;
+  overflow-x:auto;height:52px;
+  scrollbar-width:none;
+}
+.nav::-webkit-scrollbar{display:none}
+.nav a {
+  white-space:nowrap;padding:.3rem .75rem;border-radius:var(--r);
+  font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(200,134,10,.7);text-decoration:none;
+  transition:background var(--tr),color var(--tr);
+}
+.nav a:hover{background:rgba(139,69,19,.3);color:var(--ochre)}
+.nav a.active{background:var(--clay);color:var(--cream)}
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════ */
+.page { max-width:1100px;margin:0 auto;padding:0 1.5rem; }
+.sec {
+  padding: 5rem 0 4rem;
+  border-top: 1px solid rgba(139,69,19,.2);
+  scroll-margin-top: 60px;
+}
+.sec:first-child { border-top:none; }
+
+/* ═══════════════════════════════════════════
+   TYPOGRAFIA
+   ═══════════════════════════════════════════ */
+.sec-tag {
+  font-family:var(--mono);font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--clay2);margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;
+}
+.sec-tag::before{content:'';display:block;width:16px;height:1px;background:var(--clay2);}
+h2.sec-title {
+  font-family:var(--serif);
+  font-size:clamp(1.6rem,4vw,2.5rem);
+  font-weight:700;color:var(--white);
+  letter-spacing:-.02em;line-height:1.15;
+  margin-bottom:1.5rem;
+}
+h2.sec-title em{color:var(--terracotta);font-style:normal;}
+h3 {
+  font-family:var(--serif);font-size:1.2rem;font-weight:700;
+  color:var(--ochre);margin:2rem 0 .6rem;
+}
+p { margin-bottom:.9rem;color:var(--cream); }
+ul,ol{padding-left:1.4rem;margin-bottom:.9rem;}
+li{margin-bottom:.35rem;}
+ul{list-style:none;padding-left:0;}
+ul li{padding-left:1.2rem;position:relative;}
+ul li::before{content:'◆';position:absolute;left:0;color:var(--clay);font-size:.6em;top:.25em;}
+
+/* ═══════════════════════════════════════════
+   KOMPONENTIT
+   ═══════════════════════════════════════════ */
+.grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:1.5rem; }
+.grid-3 { display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem; }
+
+.card {
+  background:rgba(61,43,31,.5);
+  border:1px solid rgba(139,69,19,.3);
+  border-radius:10px;padding:1.4rem;
+  transition:border-color var(--tr),transform var(--tr);
+}
+.card:hover{border-color:var(--clay);transform:translateY(-2px);}
+.card-ico{font-size:1.8rem;margin-bottom:.5rem;}
+.card-title{font-family:var(--serif);font-size:1rem;font-weight:700;color:var(--white);margin-bottom:.4rem;}
+.card-body{font-size:.875rem;color:var(--sand);line-height:1.55;}
+
+.box {
+  background:rgba(61,43,31,.5);border:1px solid rgba(139,69,19,.3);
+  border-left:3px solid var(--clay);border-radius:var(--r);
+  padding:1rem 1.2rem;margin:1.2rem 0;font-size:.9rem;
+}
+.box.ochre{border-left-color:var(--ochre);}
+.box.sage{border-left-color:var(--sage);}
+.box.blue{border-left-color:var(--blue-clay);}
+.box-title{font-size:.65rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--clay2);margin-bottom:.35rem;}
+.box.ochre .box-title{color:var(--ochre);}
+.box.sage .box-title{color:var(--sage);}
+.box.blue .box-title{color:var(--blue-clay);}
+
+.warn {
+  background:rgba(193,68,14,.1);border:1px solid rgba(193,68,14,.35);
+  border-left:3px solid var(--terracotta);border-radius:var(--r);
+  padding:.9rem 1.1rem;margin:1rem 0;font-size:.88rem;
+}
+.warn-title{font-size:.62rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--terracotta);margin-bottom:.25rem;}
+
+/* Taulukot */
+.tbl-wrap{overflow-x:auto;margin:1.2rem 0;border-radius:8px;border:1px solid rgba(139,69,19,.3);}
+table{width:100%;border-collapse:collapse;font-size:.84rem;}
+thead{background:rgba(61,43,31,.8);}
+th{padding:.55rem .85rem;text-align:left;font-size:.62rem;font-weight:700;letter-spacing:.11em;
+   text-transform:uppercase;color:var(--clay2);border-bottom:1px solid rgba(139,69,19,.35);white-space:nowrap;}
+td{padding:.55rem .85rem;color:var(--cream);border-bottom:1px solid rgba(139,69,19,.15);vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+tbody tr:nth-child(even){background:rgba(255,255,255,.02);}
+tbody tr:hover{background:rgba(139,69,19,.1);}
+td strong{color:var(--white);}
+
+/* Funny box */
+.funny {
+  background:linear-gradient(135deg,rgba(61,43,31,.6),rgba(44,26,14,.8));
+  border:1px dashed rgba(200,134,10,.4);border-radius:10px;
+  padding:1.4rem;margin:1.5rem 0;position:relative;overflow:hidden;
+}
+.funny::before{content:'😄';position:absolute;top:.75rem;right:1rem;font-size:1.5rem;opacity:.4;}
+.funny-title{font-family:var(--serif);font-size:.85rem;font-weight:700;color:var(--ochre);margin-bottom:.5rem;}
+.funny p{font-size:.875rem;color:var(--sand);margin:0;}
+
+/* Aikajana */
+.timeline{position:relative;padding-left:1.5rem;}
+.timeline::before{content:'';position:absolute;left:4px;top:0;bottom:0;width:2px;background:rgba(139,69,19,.4);}
+.tl-item{position:relative;padding:0 0 1.5rem 1.25rem;}
+.tl-item::before{content:'';position:absolute;left:-1.5rem;top:.5rem;width:10px;height:10px;
+  border-radius:50%;background:var(--clay);border:2px solid var(--charcoal);}
+.tl-year{font-family:var(--mono);font-size:.72rem;color:var(--ochre);letter-spacing:.08em;}
+.tl-title{font-weight:700;color:var(--white);margin:.15rem 0;}
+.tl-text{font-size:.875rem;color:var(--sand);}
+
+/* ═══════════════════════════════════════════
+   LASKURI — Interaktiivinen
+   ═══════════════════════════════════════════ */
+.calc {
+  background:rgba(44,26,14,.7);
+  border:1px solid rgba(139,69,19,.4);
+  border-radius:12px;padding:1.75rem;margin:1.5rem 0;
+}
+.calc-head{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:1.5rem;}
+.calc-ico{font-size:1.5rem;}
+.calc-ttl{font-family:var(--serif);font-size:1.05rem;font-weight:700;color:var(--white);}
+.calc-sub{font-size:.78rem;color:var(--sand);margin-top:.15rem;}
+
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem;margin-bottom:1rem;}
+.fg{display:flex;flex-direction:column;gap:.3rem;}
+.fg label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--clay2);}
+.fg input,.fg select{
+  background:rgba(61,43,31,.7);border:1px solid rgba(139,69,19,.4);border-radius:var(--r);
+  padding:.5rem .7rem;color:var(--white);font-family:var(--mono);font-size:.88rem;
+  width:100%;transition:border-color var(--tr);-webkit-appearance:none;
+}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--ochre);}
+.fg input[readonly]{opacity:.55;cursor:default;}
+
+.results-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:.75rem;background:rgba(28,18,9,.6);border-radius:8px;padding:1rem;margin-top:1rem;
+}
+.res{display:flex;flex-direction:column;gap:.12rem;}
+.res-lbl{font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,134,10,.6);}
+.res-val{font-family:var(--mono);font-size:1.15rem;font-weight:700;color:var(--ochre);}
+.res-val sup{font-size:.55em;color:var(--sand);font-weight:400;}
+.res.hi .res-val{color:var(--terracotta);font-size:1.35rem;}
+
+.status-bar{
+  display:flex;align-items:center;gap:.75rem;
+  background:rgba(28,18,9,.5);border-radius:var(--r);
+  padding:.65rem .9rem;margin-top:.75rem;
+  font-size:.82rem;border:1px solid rgba(139,69,19,.2);
+}
+.status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.status-dot.ok{background:#4caf50;}
+.status-dot.warn-d{background:#ff9800;}
+.status-dot.err{background:var(--terracotta);}
+
+/* Slider */
+.slid-wrap{margin:.6rem 0;}
+.slid-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;}
+.slid-top span{font-size:.63rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--clay2);}
+.slid-v{font-family:var(--mono);font-size:.85rem;color:var(--ochre);font-weight:700;}
+input[type=range]{-webkit-appearance:none;width:100%;height:5px;background:rgba(61,43,31,.8);border-radius:3px;outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:var(--clay);border-radius:50%;cursor:pointer;box-shadow:0 0 0 3px rgba(139,69,19,.25);}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;background:var(--clay);border-radius:50%;border:none;}
+
+/* Tunnistustyökalu */
+.test-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin:1.2rem 0;}
+.test-card{
+  background:rgba(44,26,14,.6);border:1px solid rgba(139,69,19,.3);
+  border-radius:10px;padding:1.2rem;cursor:pointer;
+  transition:border-color var(--tr),background var(--tr);
+}
+.test-card:hover{border-color:var(--ochre);}
+.test-card.selected{border-color:var(--terracotta);background:rgba(193,68,14,.1);}
+.test-ico{font-size:1.3rem;margin-bottom:.4rem;}
+.test-name{font-weight:700;color:var(--white);font-size:.9rem;margin-bottom:.3rem;}
+.test-desc{font-size:.78rem;color:var(--sand);line-height:1.5;}
+
+.result-box{
+  background:linear-gradient(135deg,rgba(61,43,31,.7),rgba(44,26,14,.9));
+  border:1px solid rgba(139,69,19,.5);border-radius:10px;
+  padding:1.4rem;margin-top:1rem;display:none;
+}
+.result-box.show{display:block;animation:fadeIn .4s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* Progress-palkki */
+.prog-row{display:flex;align-items:center;gap:.75rem;margin:.4rem 0;}
+.prog-lbl{font-size:.75rem;color:var(--sand);width:140px;flex-shrink:0;}
+.prog-bar{flex:1;height:6px;background:rgba(61,43,31,.8);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--clay);border-radius:3px;transition:width .6s ease;}
+.prog-fill.terracotta{background:var(--terracotta);}
+.prog-fill.ochre{background:var(--ochre);}
+.prog-fill.sage{background:var(--sage);}
+.prog-val{font-size:.7rem;font-family:var(--mono);color:var(--ochre);width:35px;text-align:right;}
+
+/* Tabs */
+.tabs{display:flex;gap:3px;background:rgba(28,18,9,.5);padding:3px;border-radius:8px;width:fit-content;margin-bottom:1.25rem;flex-wrap:wrap;}
+.tab{padding:5px 14px;border-radius:5px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--sand);background:transparent;border:none;cursor:pointer;transition:background var(--tr),color var(--tr);}
+.tab:hover{color:var(--ochre);}
+.tab.on{background:var(--clay);color:var(--white);}
+.tab-pane{display:none;}
+.tab-pane.on{display:block;animation:fadeIn .3s ease;}
+
+/* Accordion */
+.acc-item{border-bottom:1px solid rgba(139,69,19,.2);}
+.acc-btn{
+  display:flex;justify-content:space-between;align-items:center;
+  width:100%;padding:.85rem 0;cursor:pointer;background:none;border:none;
+  text-align:left;font-family:var(--sans);font-size:.9rem;font-weight:600;
+  color:var(--cream);gap:1rem;
+}
+.acc-btn:hover{color:var(--ochre);}
+.acc-btn::after{content:'+';font-size:1.1rem;color:var(--clay);flex-shrink:0;transition:transform var(--tr);}
+.acc-item.open .acc-btn::after{transform:rotate(45deg);}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+.acc-item.open .acc-body{max-height:800px;}
+.acc-inner{padding-bottom:.9rem;font-size:.875rem;color:var(--sand);}
+
+/* SDS links */
+.sds-list{list-style:none;padding:0;}
+.sds-list li{display:flex;align-items:flex-start;gap:.75rem;padding:.6rem 0;border-bottom:1px solid rgba(139,69,19,.15);}
+.sds-list li::before{display:none;}
+.sds-ico{font-size:1.1rem;flex-shrink:0;margin-top:.05rem;}
+.sds-info h4{font-size:.88rem;font-weight:700;color:var(--white);margin-bottom:.15rem;}
+.sds-info p{font-size:.78rem;color:var(--sand);margin:0;}
+
+/* ═══════════════════════════════════════════
+   KARTOGRAMMI
+   ═══════════════════════════════════════════ */
+.world-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin:1.2rem 0;}
+.region{background:rgba(44,26,14,.5);border:1px solid rgba(139,69,19,.25);border-radius:8px;padding:1rem;}
+.region-name{font-weight:700;color:var(--ochre);font-size:.88rem;margin-bottom:.35rem;display:flex;align-items:center;gap:.4rem;}
+.region-items{font-size:.78rem;color:var(--sand);line-height:1.65;}
+
+/* ═══════════════════════════════════════════
+   EQUIPMENT CARDS
+   ═══════════════════════════════════════════ */
+.equip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin:1.2rem 0;}
+.equip{background:rgba(44,26,14,.5);border:1px solid rgba(139,69,19,.25);border-radius:10px;padding:1.1rem;}
+.equip-ico{font-size:1.5rem;margin-bottom:.4rem;}
+.equip-name{font-weight:700;color:var(--white);font-size:.9rem;margin-bottom:.25rem;}
+.equip-desc{font-size:.78rem;color:var(--sand);line-height:1.5;}
+.equip-tip{font-size:.72rem;color:var(--ochre);margin-top:.4rem;font-style:italic;}
+
+/* DIY steps */
+.diy-step{display:flex;gap:1rem;padding:.9rem 0;border-bottom:1px solid rgba(139,69,19,.15);}
+.diy-step:last-child{border-bottom:none;}
+.diy-n{width:32px;height:32px;border-radius:50%;background:var(--clay);color:#fff;font-weight:700;font-size:.85rem;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem;}
+.diy-body{}
+.diy-t{font-weight:700;color:var(--white);font-size:.9rem;margin-bottom:.2rem;}
+.diy-d{font-size:.83rem;color:var(--sand);line-height:1.55;}
+
+/* Alternatiivit */
+.alt-card{background:rgba(44,26,14,.5);border:1px solid rgba(91,127,166,.25);border-radius:10px;padding:1.2rem;margin-bottom:.9rem;}
+.alt-name{font-family:var(--serif);font-size:1rem;font-weight:700;color:var(--blue-clay);margin-bottom:.4rem;display:flex;align-items:center;gap:.5rem;}
+.alt-body{font-size:.87rem;color:var(--sand);line-height:1.6;}
+.alt-pros{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.6rem;}
+.alt-tag{font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 8px;border-radius:3px;}
+.alt-tag.pro{background:rgba(122,140,94,.2);color:var(--sage);}
+.alt-tag.con{background:rgba(193,68,14,.15);color:var(--terracotta);}
+
+/* Footer */
+footer{background:rgba(28,18,9,.9);border-top:1px solid rgba(139,69,19,.2);padding:2rem;text-align:center;
+  font-size:.78rem;color:var(--sand);}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media(max-width:768px){
+  .grid-2,.grid-3{grid-template-columns:1fr;}
+  .hero h1{font-size:1.9rem;}
+  .hero-stats{gap:1.25rem;}
+  .fgrid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════════════════╗
+     ║ HERO                                     ║
+     ╚══════════════════════════════════════════╝ -->
+<header class="hero" id="top">
+  <div class="hero-tag">Metropolia AMK · Muotoilun Pajat · Keramiikka</div>
+  <h1>Valusavi & <span>Slipcasting</span><br>Materiaalitekniikan täydellinen opas</h1>
+  <p class="hero-sub">Savimineraaleista teolliseen tuotantoon, litrapainomittauksesta DIY-lietyskoneen rakentamiseen — kaikki mitä tarvitset GS209-valusaven hallintaan.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="num">~1530</span><span class="lbl">g/l tavoitelitrapaino</span></div>
+    <div class="hero-stat"><span class="num">57,5%</span><span class="lbl">saven osuus massasta</span></div>
+    <div class="hero-stat"><span class="num">1300°C</span><span class="lbl">GS209 max. polttolämpö</span></div>
+    <div class="hero-stat"><span class="num">~12–16%</span><span class="lbl">kokonaiskutistuma</span></div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#geologia" class="active">Geologia</a>
+  <a href="#kemia">Kemia</a>
+  <a href="#tunnistus">Tunnistustyökalu</a>
+  <a href="#laskuri">Slipcalc™</a>
+  <a href="#prosessi">Valmistusprosessi</a>
+  <a href="#maailma">Maailmankäyttö</a>
+  <a href="#kalusto">Kalusto</a>
+  <a href="#diy">DIY-lietyskone</a>
+  <a href="#turvallisuus">Turvallisuus</a>
+  <a href="#vaihtoehdot">Vaihtoehdot</a>
+  <a href="#hassu">Hauskaa historiaa</a>
+</nav>
+
+<div class="page">
+
+<!-- ╔══════════════════════════════════════════╗
+     ║ 1. GEOLOGIA                              ║
+     ╚══════════════════════════════════════════╝ -->
+<section class="sec" id="geologia">
+  <div class="sec-tag">01 — Geologia</div>
+  <h2 class="sec-title">Mistä savi on <em>syntynyt</em>?</h2>
+  <div class="grid-2">
+    <div>
+      <p>Savi on maapallon vanhimpia materiaaleja — se on syntynyt pitkän rapautumisprosessin tuloksena jopa satojen miljoonien vuosien aikana. Lähes kaikki savi on peräisin <strong>maasälvästä</strong> (feldspar), joka on yksi maan kuoren yleisimmistä mineraaleista.</p>
+      <p>Prosessi alkaa, kun happe­pitoinen vesi, hiilihappo ja biologinen toiminta haurastuttavat kivi­peräisiä mineraaleja. Maasälpä muuttuu kaoliniitiksi — kutsutaan <em>kemialliseksi rapautumiseksi</em> eli hydrolyysiksi.</p>
+      <p>Savi voi olla <strong>primääristä</strong> (syntynyt paikallaan, esim. kaoliini) tai <strong>sekundääristä</strong> (kulkeutunut veden, tuulen tai jäätikön kuljettamana pois alkuperäiseltä paikaltaan). Sekundäärinen savi on yleensä epäpuhtaampaa mutta plastisempaa.</p>
+
+      <h3>Savimineraalien pääluokat</h3>
+      <div class="box">
+        <div class="box-title">Mineraalit ja käyttökohteet</div>
+        <p><strong>Kaoliini (Al₂Si₂O₅(OH)₄)</strong> — valkea, epäplastinen. Posliini, paperi, farmasia.</p>
+        <p><strong>Montmorilloniitti</strong> — erittäin plastinen, turpoaa vedessä. Teollisuustiivisteet, kosmetiikka.</p>
+        <p><strong>Illiitti</strong> — kohtalainen plastisuus, yleinen keramiikassa. Tiili, kuivausaine.</p>
+        <p><strong>Kloriitti</strong> — vihertävä, matalalämpöinen savi. Yleinen kivitavarasavissa.</p>
+        <p><strong>Halloisiitti</strong> — nanotubulaarinen rakenne, erikoissavituotteet, nanomateriaalit.</p>
+      </div>
+    </div>
+    <div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-year">~4,5 miljardia vuotta sitten</div>
+          <div class="tl-title">Maapallon muodostuminen</div>
+          <div class="tl-text">Maankuori jäähtyy, ensimmäiset silikaattirakenteet muodostuvat. Maasälpä on kuoren yleisin mineraali (~60%).</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">Jatkuva prosessi</div>
+          <div class="tl-title">Kemiallinen rapautuminen</div>
+          <div class="tl-text">Vesi + CO₂ → hiilihappo → reagoi maasälvän kanssa → kaoliini + kvartsi + liuenneet ionit. Reaktio: 2KAlSi₃O₈ + 2H⁺ + H₂O → Al₂Si₂O₅(OH)₄ + 4SiO₂ + 2K⁺</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">Jääkaudet (~2,5 Myr–10 000 v)</div>
+          <div class="tl-title">Glasiaali­kuljetukset</div>
+          <div class="tl-text">Jäätikkö jauhoivat kiveä ja siirtelivät savea. Suomen ja Skandinavian savimaat ovat suureksi osaksi jääkauden tuottamia savilaakeristo ja moreenia.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">Nykypäivä</div>
+          <div class="tl-title">Teollinen louhinta ja jalostus</div>
+          <div class="tl-text">Kaoliini ja kivitavarasavet louhitaan avokaivoksista. Maailman suurimmat kaoliinivarannot: Georgia/USA, Brasilia, UK, Kiina, Saksa.</div>
+        </div>
+      </div>
+      <div class="funny">
+        <div class="funny-title">🪨 Savifakta: 70 000 vuoden perinne</div>
+        <p>Vanhin tunnettu keraamiineen kuuluu esine on noin 70 000 vuotta vanha pieni veneenmuotoinen kivitavarasaviesine Etelä-Afrikasta. Se on valmistettu, hajotettu ja koostettu uudelleen — kenties tunteellinen esine joka kulki isältä pojalle. Savi on ollut "kiinnittyneenä" ihmiskuntaan jo ennen Homo sapiensin varsinaista kulttuurillista läpimurtoa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════╗
+     ║ 2. KEMIA                                 ║
+     ╚══════════════════════════════════════════╝ -->
+<section class="sec" id="kemia">
+  <div class="sec-tag">02 — Materiaalikemia</div>
+  <h2 class="sec-title">Saven <em>kemia</em> ja deflokkulaatio</h2>
+
+  <div class="grid-2">
+    <div>
+      <h3>Savihiukkasen rakenne</h3>
+      <p>Savimineraali on <strong>filosilikaat</strong> — kerroksellinen alumiinisilikaattirakenne. Perusyksikkö on tetraedrikerros (Si-O) ja oktaedrikerros (Al-OH), jotka vuorottelevat.</p>
+      <p>Savihiukkaset ovat tyypillisesti <strong>levymäisiä</strong>, 0,001–10 mikrometriä halkaisijaltaan. Tämä epäsymmetria tekee niistä plastisuutta ja samalla selittää pinta­varauksen käyttäytymisen.</p>
+
+      <div class="box ochre">
+        <div class="box-title">⚡ Pintavaraus ja deflokkulaatio</div>
+        <p>Savihiukkasen levypinnoilla on <strong>negatiivinen varaus</strong> ja reunoilla positiivinen — tästä syntyy ns. "house of cards"-aggregaatio. Kun hiukkaset kiinnittyvät toisiinsa, seos paksunee.</p>
+        <p style="margin-top:.5rem"><strong>Deflokkulantti (Dolapix PC 67, Dispex)</strong> neutralisoi reuna­varaukset → hiukkaset hylkivät toisiaan → seos virtaa ilman lisävettä!</p>
+      </div>
+
+      <h3>GS209 Light Stoneware — koostumus</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Komponentti</th><th>Osuus %</th><th>Tehtävä</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Kivitavarasavi</strong></td><td>~55–65%</td><td>Plastisuus, rakenne, väri</td></tr>
+            <tr><td><strong>Kaoliini</strong></td><td>~15–25%</td><td>Valkoisuus, kuumuudenkestävyys</td></tr>
+            <tr><td><strong>Maasälpä</strong></td><td>~10–15%</td><td>Sintraus, sulake, tiiviys</td></tr>
+            <tr><td><strong>Kvartsi/Hiesukvartsi</strong></td><td>~10–20%</td><td>Rakenne, kidemuutos 573°C</td></tr>
+            <tr><td><strong>Lisäaineet</strong></td><td>&lt;5%</td><td>Väri, plastisuus, kuivumisnopeus</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <h3>Saven sekoitussuhteet — viitearvot</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Konsistenssi</th><th>Savi %</th><th>Vesi %</th><th>Litrapaino</th><th>Käyttö</th></tr></thead>
+          <tbody>
+            <tr><td>Paksu</td><td>62%</td><td>38%</td><td>~1865 g/l</td><td>Teollisuus, tukirakenteet</td></tr>
+            <tr><td>Normaali</td><td>59%</td><td>41%</td><td>~1650 g/l</td><td>Paksuseinämäiset muodot</td></tr>
+            <tr><td><strong>Puolinotkea</strong></td><td><strong>57,5%</strong></td><td><strong>42,5%</strong></td><td><strong>~1531 g/l</strong></td><td><strong>Yleisin, ohuet muodot</strong></td></tr>
+            <tr><td>Notkea</td><td>55%</td><td>45%</td><td>~1420 g/l</td><td>Erittäin ohutseinäiset</td></tr>
+            <tr><td>Juokseva</td><td>52%</td><td>48%</td><td>~1310 g/l</td><td>Erikoissovellukset</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Deflokkulantin toimintakaavio</h3>
+      <div class="box sage">
+        <div class="box-title">🧪 Kemialliset reaktiot</div>
+        <p><strong>Dolapix PC 67</strong> (polyelektrolyytti) dissosioituu vesiliuoksessa → vapauttaa negatiivisia ioneja → adsorboituu savihiukkasten positiivisiin reuna­kohtiin → estää aggregaation.</p>
+        <p style="margin-top:.5rem"><strong>Annos:</strong> 0,1–0,5% saven kuivapainosta. Aloita AINA 70% arvioidusta maksimista — yliannostus flokkaa saven takaisin!</p>
+        <p style="margin-top:.5rem"><strong>Dispex N40</strong> toimii samoin, sodiumpoly­akrylaatti-pohjaisena. Sopii erityisesti sähköä johtaviin savijauheisiin.</p>
+      </div>
+
+      <div class="warn">
+        <div class="warn-title">⚠️ Veden kovuus vaikuttaa!</div>
+        <p>Kova vesi (Ca²⁺, Mg²⁺ -ionit) kilpailee deflokkulantin kanssa. Jos vedessä on yli 250 mg/l kovuutta, lisää deflokkulanttiannosta 20–30%. Käytä tarvittaessa demiveroa tai suodatettua vettä.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════╗
+     ║ 3. TUNNISTUSTYÖKALU                      ║
+     ╚══════════════════════════════════════════╝ -->
+<section class="sec" id="tunnistus">
+  <div class="sec-tag">03 — Laboratoriotyökalu</div>
+  <h2 class="sec-title">Savimateriaalin <em>tunnistustyökalu</em></h2>
+  <p>Käytä tätä työkalua tuntemattoman savimateriaalin tunnistamiseen ja laadun arvioimiseen. Valitse alla olevista testeistä ne, jotka olet suorittanut.</p>
+
+  <div class="tabs" id="testTabs">
+    <button class="tab on" onclick="showTest('visuaalinen',this)">Visuaalinen</button>
+    <button class="tab" onclick="showTest('plastinen',this)">Plastisuus</button>
+    <button class="tab" onclick="showTest('kemiallinen',this)">Kemiallinen</button>
+    <button class="tab" onclick="showTest('poltto',this)">Poltto</button>
+    <button class="tab" onclick="showTest('litrapaino',this)">Litrapaino</button>
+  </div>
+
+  <!-- Visuaalinen -->
+  <div class="tab-pane on" id="test-visuaalinen">
+    <h3>Visuaalinen tunnistus — väri ja rakenne</h3>
+    <p>Pura savi käsin tai laita se veteen. Tarkkaile seuraavia ominaisuuksia:</p>
+    <div class="test-grid" id="colorTest">
+      <div class="test-card" onclick="selectTest(this,'valkoinen')">
+        <div class="test-ico">⬜</div><div class="test-name">Valkoinen / Vaalea</div>
+        <div class="test-desc">Viittaa kaoliiniin tai talkkipitoiseen saveen. Vähän rautaa.</div>
+      </div>
+      <div class="test-card" onclick="selectTest(this,'punainen')">
+        <div class="test-ico">🟥</div><div class="test-name">Punertava / Oranssi</div>
+        <div class="test-desc">Korkea rautaoksidipitoisuus (Fe₂O₃). Polttuu punaiseksi, matala Tmax.</div>
+      </div>
+      <div class="test-card" onclick="selectTest(this,'harmaa')">
+        <div class="test-ico">⬛</div><div class="test-name">Harmaa / Musta</div>
+        <div class="test-desc">Orgaaninen aines tai rautasulfidi. Palaa poltossa — vaatii hitaan lämmityksen.</div>
+      </div>
+      <div class="test-card" onclick="selectTest(this,'beige')">
+        <div class="test-ico">🟫</div><div class="test-name">Beige / Keltainen</div>
+        <div class="test-desc">Raudan hydroksidi (Fe(OH)₃), kohtuullinen rauta. Tyypillinen kivitavarasavi.</div>
+      </div>
+      <div class="test-card" onclick="selectTest(this,'vihrea')">
+        <div class="test-ico">🟩</div><div class="test-name">Vihertävä</div>
+        <div class="test-desc">Kloriittia tai glaukoniittia. Keski-korkea polttolämpötila.</div>
+      </div>
+      <div class="test-card" onclick="selectTest(this,'sininen')">
+        <div class="test-ico">🟦</div><div class="test-name">Sinertävä / Tummansinen</div>
+        <div class="test-desc">Rautasulfidi pelkistyneessä tilassa. Harvinainen, joen tai meren pohjasavi.</div>
+      </div>
+    </div>
+    <div class="result-box" id="colorResult">
+      <div class="box-title">Tunnistustulos</div>
+      <p id="colorResultText"></p>
+      <div id="colorProps"></div>
+    </div>
+    <div class="box" style="margin-top:1rem">
+      <div class="box-title">🔬 Lisätestit visuaaliseen tunnistukseen</div>
+      <p><strong>Haplotesti:</strong> Vedä kostea savi valkoista paperia vasten — jos jäljestä tulee väri, se on saven oma väri. Valkoinen jälki = kaoliniini tai talkki. Ruskea/keltainen = rautaa.</p>
+      <p><strong>HCl-testi:</strong> Lisää tippa 10% suolahappoa saveen — jos kuplii, sisältää karbonaattia (kalkkikiveä). Karbonaatti polttaa "pokseja" valmiiseen keraamiikaan jos ei esikäsitellä!</p>
+    </div>
+  </div>
+
+  <!-- Plastisuus -->
+  <div class="tab-pane" id="test-plastinen">
+    <h3>Plastisuustestit</h3>
+    <div class="grid-2">
+      <div>
+        <div class="box">
+          <div class="box-title">🎯 Atterbergin raja-arvot</div>
+          <p><strong>Nestemäisyysraja (LL):</strong> Se kosteus, jossa savi alkaa käyttäytyä nesteenä. Mitataan Casagranden kuppilaitteella: 25 iskua sulkee 13 mm uranura. GS209-tyyppisellä savella LL ≈ 35–55%.</p>
+          <p style="margin-top:.5rem"><strong>Plastistumisraja (PL):</strong> Kosteus, jossa savi alkaa murentua 3 mm rullauksessa. GS209-tyyppi: PL ≈ 18–28%.</p>
+          <p style="margin-top:.5rem"><strong>Plastisuusindeksi (PI) = LL – PL.</strong> Hyvä valuslippi: PI 15–30. Alle 10 = huono muovattavuus.</p>
+        </div>
+        <div class="box ochre">
+          <div class="box-title">🏠 "House-of-cards"-testi</div>
+          <p>Lisää vähitellen vettä kuivaan savijauheeseen. Merkitse pisteet: (1) alkaa sitoutua, (2) optimiplastisuus, (3) alkaa liukua. Nämä pisteet antavat vesipitoisuusasteikon valuslipille.</p>
+        </div>
+      </div>
+      <div>
+        <h3>Plastisuusasteikko eri savityypeille</h3>
+        <div class="prog-row"><div class="prog-lbl">GS209 Stoneware</div><div class="prog-bar"><div class="prog-fill ochre" style="width:72%"></div></div><div class="prog-val">72%</div></div>
+        <div class="prog-row"><div class="prog-lbl">Kaoliini (puhdas)</div><div class="prog-bar"><div class="prog-fill" style="width:30%"></div></div><div class="prog-val">30%</div></div>
+        <div class="prog-row"><div class="prog-lbl">Savitiili (red earthenware)</div><div class="prog-bar"><div class="prog-fill terracotta" style="width:85%"></div></div><div class="prog-val">85%</div></div>
+        <div class="prog-row"><div class="prog-lbl">Tulenkestävä savi</div><div class="prog-bar"><div class="prog-fill sage" style="width:55%"></div></div><div class="prog-val">55%</div></div>
+        <div class="prog-row"><div class="prog-lbl">Posliinisavi</div><div class="prog-bar"><div class="prog-fill" style="width:40%"></div></div><div class="prog-val">40%</div></div>
+        <div class="prog-row"><div class="prog-lbl">Bentonitti</div><div class="prog-bar"><div class="prog-fill ochre" style="width:95%"></div></div><div class="prog-val">95%</div></div>
+        <p style="font-size:.75rem;color:var(--sand);margin-top:.75rem">Korkea luku = enemmän plastinen = parempi muovattavuus, mutta myös suurempi kutistuma.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kemiallinen -->
+  <div class="tab-pane" id="test-kemiallinen">
+    <h3>Kemialliset tunnistustestit</h3>
+    <div class="grid-2">
+      <div>
+        <div class="box">
+          <div class="box-title">🧪 Röntgendiffraktio (XRD) — kultastandardi</div>
+          <p>XRD on tarkin tapa tunnistaa savimineraalit. Laite tunnistaa mineraalit niiden ominaisen diffraktiokuvion perusteella. Saatavilla yliopistolaboratorioissa. Anna näyte tutkimukselle: 5–10 g kuivattua savijauhetta.</p>
+        </div>
+        <div class="box sage">
+          <div class="box-title">🔥 LOI-testi (Loss on Ignition)</div>
+          <p>Punnitse savi kuivana → polta 1000°C 1h → punnitse uudelleen. Paino­häviö = LOI (%).</p>
+          <ul style="margin-top:.5rem">
+            <li>LOI &lt;5% = vähän orgaanista ainesta, kuivasta kaoliinista</li>
+            <li>LOI 5–12% = normaali kivitavarasavi, orgaanista ainesta</li>
+            <li>LOI &gt;12% = paljon orgaanista tai karbonaattia — huomioitava prosessissa</li>
+          </ul>
+        </div>
+        <div class="box blue">
+          <div class="box-title">💧 Metyleenisininen (MB-arvo)</div>
+          <p>MB-testi mittaa montmorilloniitin ja orgaanisen aineksen pitoisuuden. Titraa 1% MB-liuosta suspensio­näytteeseen kunnes suodatinpaperi näyttää sinisen halonrengas-pisteen. MB-arvo &lt;1 = matala aktiivisuus, &gt;4 = korkea aktiivisuus (liikaa turpoavaa savea — huono valuslipille).</p>
+        </div>
+      </div>
+      <div>
+        <div class="box">
+          <div class="box-title">🧬 XRF-analyysi (röntgenfluoresenssi)</div>
+          <p>XRF kertoo savin kemiallisen koostumuksen oksidesina. Tärkeimmät arvot valuslipille:</p>
+          <div class="tbl-wrap" style="margin:.5rem 0">
+            <table>
+              <thead><tr><th>Oksidi</th><th>Tavoite GS209</th><th>Merkitys</th></tr></thead>
+              <tbody>
+                <tr><td>SiO₂</td><td>60–70%</td><td>Kvartsipitoisuus, rakenne</td></tr>
+                <tr><td>Al₂O₃</td><td>18–25%</td><td>Alumiini, kuumuudenkestävyys</td></tr>
+                <tr><td>Fe₂O₃</td><td>1–4%</td><td>Väri, sulamislämpö (↑Fe = alempi Tmax)</td></tr>
+                <tr><td>K₂O + Na₂O</td><td>2–5%</td><td>Sulakkeet, sintrauslämpötila</td></tr>
+                <tr><td>CaO + MgO</td><td>&lt;3%</td><td>Karbonaatit (tarkista!)</td></tr>
+                <tr><td>TiO₂</td><td>&lt;1,5%</td><td>Keltaisuus, väri</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="warn">
+          <div class="warn-title">⚠️ Silikapöly — pakolliset suojaimet</div>
+          <p>Kaikessa kuivassa savimateriaalin käsittelyssä: <strong>FFP2/P3-hengityssuojain</strong> pakollinen. SiO₂-pöly aiheuttaa silikoosin — parantumattoman keuhkosairauden.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Poltto -->
+  <div class="tab-pane" id="test-poltto">
+    <h3>Polttokäyttäytymistesti — saven soveltuvuuden arviointi</h3>
+    <p>Valmista 5 identtistä koekiekkoa (50 mm halkaisija, 5 mm paksuus). Polta eri lämpötiloissa.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>T°C</th><th>Kutistuma</th><th>Väri</th><th>Absorptio</th><th>Tulos</th></tr></thead>
+        <tbody>
+          <tr><td>900–1000</td><td>~6–8%</td><td>Lähes raakaväri</td><td>&gt;15%</td><td>Biskuitti — ei tiivistynyt</td></tr>
+          <tr><td>1050–1150</td><td>~8–11%</td><td>Muuttuu</td><td>5–15%</td><td>Osittain sintrautunut</td></tr>
+          <tr><td>1200–1260</td><td>~11–14%</td><td>Tyypillinen kivitavara</td><td>1–5%</td><td><strong>GS209-optimialue</strong></td></tr>
+          <tr><td>1280–1300</td><td>~13–16%</td><td>Tummuu, vitrifikaatio</td><td>&lt;1%</td><td>Lähellä Tmax — tarkkana!</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid-2" style="margin-top:1rem">
+      <div class="box">
+        <div class="box-title">📏 Kutistumamittaus</div>
+        <p>Paina raakakoekiekkoon 100 mm viiva. Mittaa polton jälkeen — kutistuma = (100 - mitattu) / 100 × 100%. Dokumentoi jokainen lämpötila erikseen.</p>
+      </div>
+      <div class="box ochre">
+        <div class="box-title">💧 Absorptiotesti</div>
+        <p>Punnitse poltettu koekiekko kuivana (A). Keitä vedessä 2h, anna jäähtyä 24h, punnitse märkänä (B). Absorptio% = (B–A)/A × 100. Alle 3% = hyvä tiiveys.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Litrapaino -->
+  <div class="tab-pane" id="test-litrapaino">
+    <h3>Litrapainon mittausohjeet — GS209</h3>
+    <div class="grid-2">
+      <div>
+        <div class="diy-step" style="border-bottom:1px solid rgba(139,69,19,.15);padding:.9rem 0">
+          <div class="diy-n">1</div>
+          <div class="diy-body">
+            <div class="diy-t">Valmistele laitteisto</div>
+            <div class="diy-d">Tarvitset: tarkka digitaalivaaka (±0,1 g), 100 ml mittasylinterit (lasiset, tarkat), siivousliinat, kirjanpitovälineet.</div>
+          </div>
+        </div>
+        <div class="diy-step" style="border-bottom:1px solid rgba(139,69,19,.15);padding:.9rem 0">
+          <div class="diy-n">2</div>
+          <div class="diy-body">
+            <div class="diy-t">Punnitse tyhjä mittalasi</div>
+            <div class="diy-d">Punnitse huolellisesti puhdas, kuiva 100 ml mittalasi. Merkitse paino (esim. A = 42,3 g).</div>
+          </div>
+        </div>
+        <div class="diy-step" style="border-bottom:1px solid rgba(139,69,19,.15);padding:.9rem 0">
+          <div class="diy-n">3</div>
+          <div class="diy-body">
+            <div class="diy-t">Täytä valusavella</div>
+            <div class="diy-d">Sekoita valuslippi ensin kevyesti. Kaada tasaisesti mittaviivaan 100 ml asti. Naputtele kevyesti pohjaa ilmakuplien poistamiseksi.</div>
+          </div>
+        </div>
+        <div class="diy-step" style="padding:.9rem 0">
+          <div class="diy-n">4</div>
+          <div class="diy-body">
+            <div class="diy-t">Laske litrapaino</div>
+            <div class="diy-d">Punnitse täytetty lasi (esim. B = 195,1 g). Litrapaino = (B – A) × 10 = (195,1 – 42,3) × 10 = <strong>1528 g/l</strong></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="calc" style="margin:0">
+          <div class="calc-head"><span class="calc-ico">⚗️</span><div><div class="calc-ttl">Litrapainolaskuri</div><div class="calc-sub">Syötä punnitsemasi arvot</div></div></div>
+          <div class="fgrid">
+            <div class="fg"><label>Tyhjä lasi (g)</label><input type="number" id="lp-empty" value="42.3" step="0.1" oninput="calcLP()"></div>
+            <div class="fg"><label>Täytetty lasi (g)</label><input type="number" id="lp-full" value="195.1" step="0.1" oninput="calcLP()"></div>
+          </div>
+          <div class="results-grid" style="grid-template-columns:1fr 1fr">
+            <div class="res hi"><div class="res-lbl">Litrapaino</div><div class="res-val" id="lp-result">1528<sup>g/l</sup></div></div>
+            <div class="res"><div class="res-lbl">Poikkeama tavoite</div><div class="res-val" id="lp-diff">−3<sup>g/l</sup></div></div>
+          </div>
+          <div class="status-bar" id="lp-status">
+            <div class="status-dot ok" id="lp-dot"></div>
+            <span id="lp-msg">Erinomainen! Litrapaino on lähes täydellinen.</span>
+          </div>
+        </div>
+        <div class="box" style="margin-top:1rem">
+          <div class="box-title">🔧 Säätöohjeet mittauksen jälkeen</div>
+          <p><strong>Liian paksua (litrapaino korkea) mutta oikea rakenne:</strong> ÄLÄÄ lisää vettä! Lisää deflokkulantia 2–3 g kerrallaan. Sekoita, odota 15 min, mittaa.</p>
+          <p><strong>Litrapaino liian korkea (>1600):</strong> Lisää hivenen vettä (50–100 ml kerralla), sekoita.</p>
+          <p><strong>Litrapaino liian alhainen (&lt;1450):</strong> Lisää savijauhetta ja hieman deflokkulantia.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════╗
+     ║ 4. INTERAKTIIVINEN LASKURI               ║
+     ╚══════════════════════════════════════════╝ -->
+<section class="sec" id="laskuri">
+  <div class="sec-tag">04 — Interaktiivinen laskuri</div>
+  <h2 class="sec-title"><em>SlipCalc™</em> — Valusaven reseptilaskuri</h2>
+  <p>Laske tarkka resepti haluamallesi eräkoolle. Valitse savityyppi, säädä konsistenssia ja tarkista deflokkulanttimäärä.</p>
+
+  <div class="calc">
+    <div class="calc-head">
+      <span class="calc-ico">🏺</span>
+      <div>
+        <div class="calc-ttl">Valusaven reseptilaskuri</div>
+        <div class="calc-sub">GS209 · Stoneware · Posliini · Earthenware · Bone China · Raku</div>
+      </div>
+    </div>
+
+    <div class="fgrid">
+      <div class="fg">
+        <label>Savijauhetyyppi</label>
+        <select id="sc-type" onchange="calcSlip()">
+          <option value="gs209">GS209 Light Stoneware (Metropolia)</option>
+          <option value="stoneware">Kivitavarasavi (yleinen)</option>
+          <option value="posliini">Posliinisavi (valkoinen)</option>
+          <option value="earthenware">Savitiili / Earthenware</option>
+          <option value="bonechina">Bone China</option>
+          <option value="raku">Raku-savi</option>
+          <option value="custom">Oma resepti (muokkaa)</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Eräkoko</label>
+        <select id="sc-unit" onchange="calcSlip()">
+          <option value="1000">1 kg (testi)</option>
+          <option value="5000">5 kg (pieni)</option>
+          <option value="10000" selected>10 kg (yleisin)</option>
+          <option value="25000">25 kg (täysi säkki)</option>
+          <option value="50000">50 kg</option>
+          <option value="100000">100 kg (iso erä)</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Deflokkulanttityyppi</label>
+        <select id="sc-defloc" onchange="calcSlip()">
+          <option value="dolapix">Dolapix PC 67</option>
+          <option value="dispex">Dispex N40</option>
+          <option value="soda_ash">Soodatuhka (Na₂CO₃)</option>
+          <option value="waterglass">Vesilasi (Na₂SiO₃)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="slid-wrap">
+      <div class="slid-top">
+        <span>Konsistenssi / Litrapaino-tavoite</span>
+        <span class="slid-v" id="sc-dens-lbl">Puolinotkea — 1531 g/l</span>
+      </div>
+      <input type="range" id="sc-dens" min="1310" max="1865" step="10" value="1531" oninput="calcSlip()">
+    </div>
+
+    <div class="slid-wrap">
+      <div class="slid-top">
+        <span>Deflokkulanttimäärä (% saven kuivapainosta)</span>
+        <span class="slid-v" id="sc-def-pct-lbl">0.35%</span>
+      </div>
+      <input type="range" id="sc-def-pct" min="0.10" max="0.60" step="0.05" value="0.35" oninput="calcSlip()">
+    </div>
+
+    <div class="results-grid" id="sc-results">
+      <div class="res hi"><div class="res-lbl">Savijauhe</div><div class="res-val" id="sc-clay">5750<sup>g</sup></div></div>
+      <div class="res hi"><div class="res-lbl">Vesi</div><div class="res-val" id="sc-water">4250<sup>g</sup></div></div>
+      <div class="res"><div class="res-lbl">Deflokkulantti</div><div class="res-val" id="sc-def">20.1<sup>g</sup></div></div>
+      <div class="res"><div class="res-lbl">Savi/vesi-suhde</div><div class="res-val" id="sc-ratio">57.5/42.5<sup>%</sup></div></div>
+      <div class="res"><div class="res-lbl">Litrapaino</div><div class="res-val" id="sc-lp">1531<sup>g/l</sup></div></div>
+      <div class="res"><div class="res-lbl">Valmista savea</div><div class="res-val" id="sc-total">10.0<sup>kg</sup></div></div>
+    </div>
+
+    <!-- Laajennettu taulukko -->
+    <div style="margin-top:1.5rem;">
+      <h3 style="font-size:.9rem;margin-top:0;color:var(--sand);">Valmistettujen erien vertailu — nopeaa viitettä varten</h3>
+      <div class="tbl-wrap">
+        <table id="sc-table">
+          <thead><tr>
+            <th>Eräkoko</th>
+            <th>Savijauhe (g)</th>
+            <th>Vesi (g)</th>
+            <th>Deflokk. (g)</th>
+            <th>Tavoite LP</th>
+            <th>Suhde</th>
+          </tr></thead>
+          <tbody id="sc-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="status-bar" id="sc-status" style="margin-top:.75rem">
+      <div class="status-dot ok" id="sc-dot"></div>
+      <span id="sc-msg">Resepti on OK. Muista sekoittaa juoksete ensin veteen!</span>
+    </div>
+
+    <!-- Deflokkulaatioanalyysi -->
+    <div class="box ochre" style="margin-top:1rem">
+      <div class="box-title">🔬 Deflokkulaation riittävyysanalyysi</div>
+      <div id="sc-defloc-analysis">
+        <p>Arvioidut rajat valitulle savityypille ja deflokkulantille.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════╗
+     ║ 5. VALMISTUSPROSESSI                     ║
+     ╚══════════════════════════════════════════╝ -->
+<section class="sec" id="prosessi">
+  <div class="sec-tag">05 — Prosessiopas</div>
+  <h2 class="sec-title">Valusaven <em>valmistusprosessi</em></h2>
+
+  <div class="grid-2">
+    <div>
+      <h3>Teollinen tuotantoketju</h3>
+      <div class="diy-step">
+        <div class="diy-n">1</div>
+        <div class="diy-body">
+          <div class="diy-t">Louhinta ja karkeakäsittely</div>
+          <div class="diy-d">Savi louhitaan avokaivoksesta tai kaivostunnelista. Paakaakko- tai leukamusersin avulla kivi murskataan halkaisijaltaan &lt;30 mm:n kokoisiksi paloiksi. Tässä vaiheessa poistetaan suurimmat epäpuhtaudet käsin tai magneettisen erottelun avulla.</div>
+        </div>
+      </div>
+      <div class="diy-step">
+        <div class="diy-n">2</div>
+        <div class="diy-body">
+          <div class="diy-t">Kuivaus ja hienojauho</div>
+          <div class="diy-d">Savi kuivataan pyöriväsulatusuunissa (rotary dryer) 80–120°C:ssa. Tämän jälkeen murskaimesta palat menevät pallomyllyyn (ball mill) tai vasaramyllyyn. GS209-jauheessa raekoko &lt;75 µm (200 mesh).</div>
+        </div>
+      </div>
+      <div class="diy-step">
+        <div class="diy-n">3</div>
+        <div class="diy-body">
+          <div class="diy-t">Blending — seosseosteita</div>
+          <div class="diy-d">Eri lähteistä tulleet savierät sekoitetaan (blending) homogeeniseksi. Lisätään kaoliini, maasälpä, kvartsi tarkan XRF-analyysin perusteella. Tässä vaiheessa seos on jauhemainen.</div>
+        </div>
+      </div>
+      <div class="diy-step">
+        <div class="diy-n">4</div>
+        <div class="diy-body">
+          <div class="diy-t">Laadun valvonta ja pakkaus</div>
+          <div class="diy-d">Jokaisesta erästä otetaan näyte: raekoko, kemiallinen analyysi (XRF), polttokäyttäytymistesti. Pakkauskoko 25 kg säkki ilmatiiviissä polyetyleeni+paperisäkissä. Säilyvyys kuivassa tilassa: käytännössä rajaton.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3>Pajaprosessi — vaihe vaiheelta</h3>
+      <div class="diy-step">
+        <div class="diy-n">A</div>
+        <div class="diy-body">
+          <div class="diy-t">🥽 Suojavarusteet ENSIN</div>
+          <div class="diy-d">FFP2-hengityssuojain, suojalasit (CE EN 166). Varmista kohdepoisto tai hyvä tuuletus. Käsineet käsittelyn helpottamiseksi.</div>
+        </div>
+      </div>
+      <div class="diy-step">
+        <div class="diy-n">B</div>
+        <div class="diy-body">
+          <div class="diy-t">Nesteet ensin — sekoitusjärjestys</div>
+          <div class="diy-d"><strong>Aina:</strong> (1) Vesi saaviin → (2) Deflokkulantti veteen, sekoita 1 min → (3) Lisää savijauhe HITAASTI sekoittaen. EI KOSKAAN jauhetta ensin!</div>
+        </div>
+      </div>
+      <div class="diy-step">
+        <div class="diy-n">C</div>
+        <div class="diy-body">
+          <div class="diy-t">Sekoitusaika</div>
+          <div class="diy-d">Käsiporakonekoneella: min. 45–60 min. Pajakoneella (lietystin): 2 tuntia. Teollisuudessa: 12–24 h. Älä ylipuhu savea — liian pitkä sekoitusaika voi muuttaa viskositeetin!</div>
+        </div>
+      </div>
+      <div class="diy-step">
+        <div class="diy-n">D</div>
+        <div class="diy-body">
+          <div class="diy-t">🕐 Tekeytyminen — kriittisin vaihe</div>
+          <div class="diy-d">Peitä tiiviisti, anna seistä 12–24 h. Savihiukkaset tasaantuvat, kemiallinen reaktio stabiloituu. Jos valat heti, seos on epätasainen ja kutistuu eri tavoin eri kohdissa.</div>
+        </div>
+      </div>
+      <div class="diy-step">
+        <div class="diy-n">E</div>
+        <div class="diy-body">
+          <div class="diy-t">Litrapainomittaus ja hienosäätö</div>
+          <div class="diy-d">Mittaa litrapaino (ohjeet osiossa 3). Säädä tarvittaessa. Lopullinen sekoitus kevyesti pyörivin liikkein ilman ilmakuplien vatkaamista.</div>
+        </div>
+      </div>
+
+      <div class="funny">
+        <div class="funny-title">😂 Pajan klassikko</div>
+        <p>Erään keraamikon raportti: "Pyysin opiskelijaa lisäämään vettä lipistä — hän kaatoi koko kanisterillisen siihen mitä hän luuli olevan veden kaatoastiaksi. Kyseessä oli valmiiksi mitattu valusavisaavi. Seuraavan kuuden kuukauden parhaimpaan valuslippiemme litrapaino oli 1201 g/l." Vesipitoisuus tuplana.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════╗
+     ║ 6. MAAILMA                               ║
+     ╚══════════════════════════════════════════╝ -->
+<section class="sec" id="maailma">
+  <div class="sec-tag">06 — Globaali käyttö</div>
+  <h2 class="sec-title">Savimateriaali <em>maailmalla</em></h2>
+  <p>Savi on yksi maailman eniten käytetyistä materiaaleista. Vuosittain louhitaan yli 200 miljoonaa tonnia eri savi­lajeja teolliseen käyttöön.</p>
+
+  <div class="world-grid">
+    <div class="region">
+      <div class="region-name">🇨🇳 Kiina</div>
+      <div class="region-items">
+        Maailman suurin keramiikkatuottaja. Jingdezhen — "posliinin pääkaupunki" — 1000+ vuoden perinne. Saniteettiposliini (n. 60% maailmantuotannosta), tiilet, lattialaattat. Kaoliniinituotanto: 200+ Mt/v.
+      </div>
+    </div>
+    <div class="region">
+      <div class="region-name">🇩🇪 Saksa</div>
+      <div class="region-items">
+        Meissen-posliini (1710) — Euroopan ensimmäinen kovaporsilaani. Westerwald-savi, Frechen-savi. Laadukas tekninen keramiikka, sähköeristelaattat, tulenkestävät rakenteet.
+      </div>
+    </div>
+    <div class="region">
+      <div class="region-name">🇬🇧 Britannia</div>
+      <div class="region-items">
+        Stoke-on-Trent — "The Potteries". Wedgwood, Royal Doulton, Spode. Bone china -perinne (poltettu luu = kalsiumphosfaatti). Devon kaoliiini, Dorset pipeclays.
+      </div>
+    </div>
+    <div class="region">
+      <div class="region-name">🇯🇵 Japani</div>
+      <div class="region-items">
+        Imari, Seto, Arita -porsilaanit. Raku-tekniikka (shogun-perinne, rikky-tee). Kaoliniini Aizussa. Tekninen keramiikka — elektroniikka, piirikortit, autoteollisuus.
+      </div>
+    </div>
+    <div class="region">
+      <div class="region-name">🇧🇷 Brasilia</div>
+      <div class="region-items">
+        Maailman 2. suurin kaoliinivaranto (Amazon-alue). Saniteettiposliini, päällystetty paperi. Alkuperäiskansojen saviperinne — marajó-keraamiikka ~3000 v. historia.
+      </div>
+    </div>
+    <div class="region">
+      <div class="region-name">🇺🇸 USA (Georgia)</div>
+      <div class="region-items">
+        Georgiassa yksin 80% maailman paperikaoliinista. Kaolinen, WPG (White PigmentGrade), ECCA-kaoliini. Delttasavikerrostumat Mississippi-joen alangolla.
+      </div>
+    </div>
+    <div class="region">
+      <div class="region-name">🌍 Afrikka</div>
+      <div class="region-items">
+        Saviveistosperinteet kaikkialla. Nok-kulttuuri (Nigeria, 2500 v.) — Afrikan vanhimmat savipatsaat. Zimbabwe, Madagaskar — perinteinen saviastiatuotanto käytössä edelleen.
+      </div>
+    </div>
+    <div class="region">
+      <div class="region-name">🇫🇮 Suomi & Skandinavia</div>
+      <div class="region-items">
+        Arabia Helsinki (1873) — designklassikot. Iittala. Jääkauden kerrostama sinisavi (Helsinkisavi) — rakentamisessa. Varkauden kaoliiniesiintymät. Iso muros ja Saarisenmäki — tutkitut esiintymät.
+      </div>
+    </div>
+  </div>
+
+  <h3>Savimateriaalin teolliset käyttökohteet</h3>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-ico">🏗️</div>
+      <div class="card-title">Rakentaminen</div>
+      <div class="card-body">Tiilet (n. 50% kaikesta savikäytöstä), kattotiilet, lattia- ja seinälaattat, viemäriputket, savupiipputiilet. Kevytsaviharkot lämmöneristeenä.</div>
+    </div>
+    <div class="card">
+      <div class="card-ico">📄</div>
+      <div class="card-title">Paperiteollisuus</div>
+      <div class="card-body">Kaoliini päällystää 80 % päällystetystä paperista ja kartongista. Antaa paperin kiillon, opasiteetin ja painojäljen tarkkuuden.</div>
+    </div>
+    <div class="card">
+      <div class="card-ico">💊</div>
+      <div class="card-title">Farmasia & kosmetiikka</div>
+      <div class="card-body">Kaoliini on FDA-hyväksytty antidiarroicum. Savimask kasvohoidoissa. Bentonitti luonnonlääketieteessä (sisäinen käyttö kontroversiaalinen).</div>
+    </div>
+    <div class="card">
+      <div class="card-ico">⚡</div>
+      <div class="card-title">Tekninen keramiikka</div>
+      <div class="card-body">Sähköeristelaattat, iskunkestävät suojakeraamiikka (Kevlar+keramiikka), piirikorttisubstraatit, kipinäntulpat, lentokoneturbiinien siipekkeet (ZrO₂).</div>
+    </div>
+    <div class="card">
+      <div class="card-ico">🌱</div>
+      <div class="card-title">Maatalous</div>
+      <div class="card-body">Kaoliini kasvisuojeluna (Surround) — estää hyönteisiä. Bentoniitti vedensäilyttäjänä hiekkaisissa maissa. Savimaan parantaminen.</div>
+    </div>
+    <div class="card">
+      <div class="card-ico">🏭</div>
+      <div class="card-title">Kemianteollisuus</div>
+      <div class="card-body">Katalyyttipohja (fluid catalytic cracking — bensiinin jalostus). Paperimusteissa täyte. Muovien ja kumien täyteaine. Lääkegeeli.</div>
+    </div>
+  </div>
+
+  <div class="funny">
+    <div class="funny-title">😄 Savi historiassa: Elävä ihminen savikellarissa</div>
+    <p>Vuonna 1980 Cornwallin (UK) kaoliinikaivoksessa kaivostyöntekijä liukastui valkoiseen kaoliinilietealtaaseen. Hän kellui! Kaoliiilisuspensio on niin tiheää, että se kantaa ihmisen kuin meri. Pelastajat joutuivat käyttämään erikoisveneitä. Mies selvisi, eikä vastannut lehdistön puheluihin myöhemmin. Kerrottiin vastanneen: "Pahin asia oli saada kampa kulkemaan tukan läpi jälkeen."</p>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════╗
+     ║ 7. KALUSTO                               ║
+     ╚══════════════════════════════════════════╝ -->
+<section class="sec" id="kalusto">
+  <div class="sec-tag">07 — Kalusto</div>
+  <h2 class="sec-title">Savityön <em>kalusto</em></h2>
+
+  <div class="tabs" id="equipTabs">
+    <button class="tab on" onclick="showEquip('sekoitus',this)">Sekoituslaitteet</button>
+    <button class="tab" onclick="showEquip('valanta',this)">Valantalaitteet</button>
+    <button class="tab" onclick="showEquip('mittaus',this)">Mittauslaitteet</button>
+    <button class="tab" onclick="showEquip('muotti',this)">Muottivalmistus</button>
+  </div>
+
+  <div class="tab-pane on" id="equip-sekoitus">
+    <div class="equip-grid">
+      <div class="equip">
+        <div class="equip-ico">⚙️</div>
+        <div class="equip-name">Blunger / Lietyskone</div>
+        <div class="equip-desc">Pystyakselinen potkurisekoitin ruostumattomasta teräksestä. Kapasiteetti 50–2000 L. Suositellaan pajan käyttöön: Bainbridge, Thomas Stuart, Peter Pugger -merkit.</div>
+        <div class="equip-tip">💡 Metropolian pajaan: 100–200 L malli riittää. Budjetoitu hankinta ~4000–9000 €.</div>
+      </div>
+      <div class="equip">
+        <div class="equip-ico">🔧</div>
+        <div class="equip-name">Teollisuusvispilä + telinesekoitin</div>
+        <div class="equip-desc">Laastisekoitinporaus (1200–1600W) telineessä. Nopeus säädettävä 100–400 RPM. RST-vispilä. Käytännöllinen 10–50 kg eriin.</div>
+        <div class="equip-tip">💡 Kotipajan ratkaisu, ~200–400 € + teline ~50 €.</div>
+      </div>
+      <div class="equip">
+        <div class="equip-ico">🏭</div>
+        <div class="equip-name">Vaihdesekoitin (gear mixer)</div>
+        <div class="equip-desc">Matala-kierroksinen (60–200 RPM) vaihdemoottorikäyttöinen sekoitin. Ei vatkaa ilmaa. Ihanteellinen pitkille sekoitusajoille. Hinta 800–3000 €.</div>
+        <div class="equip-tip">💡 Paras vaihtoehto jos aiot tehdä toistuvasti suuria eriä.</div>
+      </div>
+      <div class="equip">
+        <div class="equip-ico">🌊</div>
+        <div class="equip-name">Ultraäänihomogenoija</div>
+        <div class="equip-desc">Hajottaa savihiukkasten aggregaatit ultraääniaalloilla. Laboratoriolaite 100–1000 W. Soveltuu pienille erille (alle 5 L) erittäin homogeenisen saven valmistukseen.</div>
+        <div class="equip-tip">💡 Paras paperiposliinille ja nanokeramiikalle.</div>
+      </div>
+      <div class="equip">
+        <div class="equip-ico">💨</div>
+        <div class="equip-name">Tyhjiödeaeraattori</div>
+        <div class="equip-desc">Poistaa ilmakuplat valmiista slipistä alipaineessa. Kriittinen teollisuudessa. DIY-versio: rotatiopumppu + ruostumaton astia. Hinta 500–2000 €.</div>
+        <div class="equip-tip">💡 Ei pakollinen pienissä pajoissa, mutta parantaa valulaatua merkittävästi.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-pane" id="equip-valanta">
+    <div class="equip-grid">
+      <div class="equip">
+        <div class="equip-ico">🫙</div>
+        <div class="equip-name">Valuastia / kaatokauha</div>
+        <div class="equip-desc">Pitkäkaulaisella nokkasella varustettu RST- tai muoviastia. Tilavuus 1–10 L. Ergonominen ote pitkissä valuistunnoissa. Mittaasteikko kyljessä.</div>
+        <div class="equip-tip">💡 DIY: leikkaa tavalliseen ämpäriin nokkanen.</div>
+      </div>
+      <div class="equip">
+        <div class="equip-ico">⏱️</div>
+        <div class="equip-name">Automaattinen valurobotti</div>
+        <div class="equip-desc">Teollisuudessa CNC-ohjattu valuntasarjalaite täyttää kipsimuotteja täsmällisesti. Pienet tehtaat 5–50 muottia/min. Kustannus 20 000–200 000 €.</div>
+        <div class="equip-tip">💡 Mielenkiintoisena projektina: yksinkertainen valoventtiiliohjaus Arduino-pohjainen.</div>
+      </div>
+      <div class="equip">
+        <div class="equip-ico">🔄</div>
+        <div class="equip-name">Valukaruselli</div>
+        <div class="equip-desc">Pyörivä alusta useille kipsimuoteille. Mahdollistaa suuremman työtahdin. DIY-versio: pyörivä lautanen (lazy susan) kiinnitettynä puualustaan.</div>
+        <div class="equip-tip">💡 Metropolian pajaan suositellaan: 60–80 cm halkaisijaltaan.</div>
+      </div>
+      <div class="equip">
+        <div class="equip-ico">🚿</div>
+        <div class="equip-name">Painevalu­laite (pressure casting)</div>
+        <div class="equip-desc">Pumppaa savea 2–6 bar paineella muottiin. Nopeus 5–10× nopeampi kuin normaali valu. Muottimateriaali: korkeatiheyksinen polyuretaani tai akryyli. Hinta 5 000–20 000 €.</div>
+        <div class="equip-tip">💡 Saniteetti­posliinin teollisuusstandardi 1980-luvulta.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-pane" id="equip-mittaus">
+    <div class="equip-grid">
+      <div class="equip">
+        <div class="equip-ico">⚖️</div>
+        <div class="equip-name">Digitaalivaaka</div>
+        <div class="equip-desc">Laboratoriovaaka: kantavuus 1–5 kg, tarkkuus ±0,1 g. Pajawaaka: 20–150 kg, tarkkuus ±5 g. Suositellaan: AND, Adam, Ohaus.</div>
+        <div class="equip-tip">💡 Molemmat välttämättömiä. Älä yritä arvioida silmämääräisesti!</div>
+      </div>
+      <div class="equip">
+        <div class="equip-ico">🌡️</div>
+        <div class="equip-name">Viskoosimittari (Zahn-kuppi)</div>
+        <div class="equip-desc">Yksinkertainen suppilo, jolla mitataan valusaven juoksevuus sekunneissa. Zahn #4 kuppi: tavoitearvo GS209-slipille 18–25 s. Hinta ~50 €.</div>
+        <div class="equip-tip">💡 Nopein tapa tarkistaa konsistenssi kenttäolosuhteissa.</div>
+      </div>
+      <div class="equip">
+        <div class="equip-ico">📊</div>
+        <div class="equip-name">pH-mittari</div>
+        <div class="equip-desc">Seurataan saven pH:ta (tavoite: 7,5–9,5). pH vaikuttaa deflokkulaatiotehoon. Kalibroitava ennen käyttöä. Hinta ~30–150 €.</div>
+        <div class="equip-tip">💡 Jos pH alle 7, lisää deflokulanttiannosta tai vähän soodaa.</div>
+      </div>
+      <div class="equip">
+        <div class="equip-ico">💧</div>
+        <div class="equip-name">Areometri / Hydrometri</div>
+        <div class="equip-desc">Kelluu nesteessä ja näyttää tiheyden suoraan asteikolta. Edullinen (5–30 €) vaihtoehto litrapainomittaukseen, mutta epätarkempi kuin punnitus.</div>
+        <div class="equip-tip">💡 Punnitusmenetelmä on tarkempi — areometri vain pikakatsaukseen.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-pane" id="equip-muotti">
+    <div class="equip-grid">
+      <div class="equip">
+        <div class="equip-ico">🏺</div>
+        <div class="equip-name">Kipsimuotti (perinteinen)</div>
+        <div class="equip-desc">Keramiikkatyön universaali muottimateriaali. Alpha-kipsi (1:1,4 suhde) muoteille. Huokoinen — imee veden savesta. Kestää 100–500 valukertaa ennen uusimista.</div>
+        <div class="equip-tip">💡 Kuivata huolellisesti käyttökertojen välillä — märkä muotti imee huonosti.</div>
+      </div>
+      <div class="equip">
+        <div class="equip-ico">🔵</div>
+        <div class="equip-name">Kumimuotti (silicone)</div>
+        <div class="equip-desc">Joustavuus helpottaa irrotusta. Ei imi vettä → valanta-aika pidempi. Sopii koristeellisiin muotoihin. Hinta 50–500 € riippuen koosta.</div>
+        <div class="equip-tip">💡 Tarvitsee erittäin notkean slipin ja pitemmän valuajan.</div>
+      </div>
+      <div class="equip">
+        <div class="equip-ico">🟨</div>
+        <div class="equip-name">3D-tulostettu muotti (PLA/PETG)</div>
+        <div class="equip-desc">Nopea prototyyppimuotti. Ei ime vettä — tarvitaan imevä sisäpäällyste (kipsilasti) tai käytetään painevalannassa. Edullinen uusille muodoille.</div>
+        <div class="equip-tip">💡 Tulevaisuuden tekniikka: pappoosinen tulostus (porous printing) kipsin kaltaiseksi.</div>
+      </div>
+      <div class="equip">
+        <div class="equip-ico">⚙️</div>
+        <div class="equip-name">Kipsivalin laitteet</div>
+        <div class="equip-desc">Sekoituskannu (RST), erotusaineet (soopavesi, saippua, vaseline), muottivanteet, gypsum spreader. Täristyspöytä (vibration table) ilmakuplien poistoon.</div>
+        <div class="equip-tip">💡 Täristyspöytä DIY: vanha pesukone + vanerilevyalusta.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════╗
+     ║ 8. DIY LIETYSKONE                        ║
+     ╚══════════════════════════════════════════╝ -->
+<section class="sec" id="diy">
+  <div class="sec-tag">08 — DIY-projekti</div>
+  <h2 class="sec-title">Rakenna oma <em>lietyskone</em></h2>
+  <p>Alle 50–100 litran pajan käyttöön voit rakentaa toimivan lietyskoneen (~300–700 € materiaalikustannukset). Tämä on Metropolian pajaan sopiva konsepti, joka noudattaa työturvallisuusnormeja.</p>
+
+  <div class="warn">
+    <div class="warn-title">⚠️ Sähköturvallisuus — pakollinen ennen rakentamista</div>
+    <p>Kaikki sähkökytkennät tehtävä ammattisähköasentajan toimesta. Laite on kytkettävä vikavirtasuojaan (30 mA). RST-metallirakenteet maadoitettava. Metropoliassa: hyväksytettävä pajamestarilla ennen käyttöönottoa.</p>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h3>Tarvittavat komponentit</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Komponentti</th><th>Spesifikaatio</th><th>Hinta</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Astia</strong></td><td>100 L PE-muovitynnyri, paksu­seinäinen, elintarvikelaatuinen</td><td>~60 €</td></tr>
+            <tr><td><strong>Moottori</strong></td><td>Pylväsporakone 1200W (vanha) TAI vaihdemoottorit 0,75 kW + taajuusmuuttaja</td><td>~100–600 €</td></tr>
+            <tr><td><strong>Akseli</strong></td><td>RST316 akseli Ø20 mm, pituus 800 mm</td><td>~40 €</td></tr>
+            <tr><td><strong>Potkuri</strong></td><td>RST-laastivispilä Ø140 mm TAI 3-siipinen RST-potkuri</td><td>~30–80 €</td></tr>
+            <tr><td><strong>Runko</strong></td><td>25×25 mm teräsputki, 4 jalkaa + yläristikko (hitsattu)</td><td>~80 €</td></tr>
+            <tr><td><strong>Virtatyhjennys</strong></td><td>RST-palloventtiili Ø40 mm tynnyriin porattu</td><td>~35 €</td></tr>
+            <tr><td><strong>Bafflet</strong></td><td>4× RST-levy 60×400 mm kiinnitetty ruuveilla tynnyrin sisälle</td><td>~25 €</td></tr>
+            <tr><td><strong>Hätäseis</strong></td><td>Punainen hätäseis-painike kytkentäkoteloon</td><td>~20 €</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <h3>Rakennusohjeet</h3>
+      <div class="diy-step">
+        <div class="diy-n">1</div>
+        <div class="diy-body">
+          <div class="diy-t">Tynnyrin valmistelu</div>
+          <div class="diy-d">Poraa tynnyriin 40 mm reikä 5 cm korkeudelle pohjasta. Asenna palloventtiili läpivientitiivistein. Poraa kanteen 25 mm reikä akselille. Asenna 4 pystysuoraa RST-listaa (bafflet) tynnyrin sisäseinille ruuveilla noin 90° välein.</div>
+        </div>
+      </div>
+      <div class="diy-step">
+        <div class="diy-n">2</div>
+        <div class="diy-body">
+          <div class="diy-t">Teräsrungon hitsaus</div>
+          <div class="diy-d">Hitsaa 25×25 teräsputkesta U-muotoinen runko johon tynnyri asettuu vakaasti. Jaloissa kumijalat värinän vähentämiseksi. Moottori kiinnitetään rungon yläpalkistoon — tarkista kohdistus akselin kanssa ennen hitsausta.</div>
+        </div>
+      </div>
+      <div class="diy-step">
+        <div class="diy-n">3</div>
+        <div class="diy-body">
+          <div class="diy-t">Akseli ja potkuri</div>
+          <div class="diy-d">Hio akselin pää sopivaksi istukan halkaisijaan. Kiinnitä potkuri tai vispilä RST-akseliin kiinnitysruuvilla M8 + lukitusmutteri. Tarkista tasapaino: liian epätasapainoinen aiheuttaa tärinää ja laakerin kulumista.</div>
+        </div>
+      </div>
+      <div class="diy-step">
+        <div class="diy-n">4</div>
+        <div class="diy-body">
+          <div class="diy-t">Sähkökytkennät (ammattilainen)</div>
+          <div class="diy-d">Sähköasentaja kytkee: moottori → taajuusmuuttaja → hätäseis → vikavirtasuoja → pistoke. Nopeudenasetus taajuusmuuttajalla: 150–300 RPM. Testaa tyhjäkäynnissä 15 min ennen ensimmäistä savierää.</div>
+        </div>
+      </div>
+      <div class="diy-step">
+        <div class="diy-n">5</div>
+        <div class="diy-body">
+          <div class="diy-t">Testaus ja hyväksytys</div>
+          <div class="diy-d">Täytä tynnyri vedellä, testaa vuodot ja käyntiääni. Näytä Metropolian pajamestarille hyväksyntää varten. Kiinnitä käyttöohje ja hätäpysäytysohje laitteen kylkeen.</div>
+        </div>
+      </div>
+
+      <div class="funny">
+        <div class="funny-title">🔧 Tositarina Keski-Euroopasta</div>
+        <p>Eräs saksalainen keraamikko rakensi 200 L lietyskoneen vanhan pesukoneen moottorin ja maitosäiliön avulla. Kone toimi 11 vuotta loistavasti. Yhden sunnuntain iltana komponentti petti — pumppausmoottorin roottorin laippa repesi. Koko 200 L savierä (arviolta 380 kg) lipesi hitaasti lattian läpi viereiseen kellarivarastoon. Kerrotaan, että naapurin kellarista löytyi seuraavana aamuna 10 sentin paksu savikerros. Kiidashihan kaikki lähteet sanovat: "Muista tukirakenne ja hätäseis."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════╗
+     ║ 9. TURVALLISUUS                          ║
+     ╚══════════════════════════════════════════╝ -->
+<section class="sec" id="turvallisuus">
+  <div class="sec-tag">09 — Turvallisuus</div>
+  <h2 class="sec-title">Työ­turvallisuus ja <em>käyttöturvatiedotteet</em></h2>
+
+  <div class="warn" style="font-size:.95rem;padding:1.1rem 1.4rem">
+    <div class="warn-title">⛔ ENSISIJAINEN VAARA — SILIKAPÖLY</div>
+    <p>Kaikki kuiva savimateriaali sisältää vapaata piidioksidia (SiO₂). Inhaloituna tämä aiheuttaa <strong>silikoosi-keuhkosairauden</strong> — parantumaton, progressiivinen, keuhkofibr­oosin johtava ammattisairaus. Ei saa vähätellä.<br><strong>FFP2/P3-hengityssuojain PAKOLLINEN kaikessa kuivassa savikäsittelyssä.</strong></p>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h3>Suojainvaatimukset eri tilanteissa</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Tilanne</th><th>Hengitys</th><th>Silmät</th><th>Kädet</th></tr></thead>
+          <tbody>
+            <tr><td>Savijauheen käsittely</td><td>FFP2/P3</td><td>Suojalasit</td><td>Nitriilikäsineet</td></tr>
+            <tr><td>Märkä savi / valuslippi</td><td>Riittävä tuuletus</td><td>—</td><td>Suosituollaan käsineet</td></tr>
+            <tr><td>Deflokkulantin käsittely</td><td>Hyvä tuuletus</td><td>Suojalasit</td><td>Nitriilikäsineet</td></tr>
+            <tr><td>HCl-testi (savitunnistus)</td><td>Vetokaappi</td><td>Suojalasit</td><td>Nitriili/kumikäsineet</td></tr>
+            <tr><td>Kuivatuotteiden hionta</td><td>FFP3 tai P3</td><td>Suojalasit</td><td>—</td></tr>
+            <tr><td>Uuniläheisyys</td><td>Hyvä tuuletus</td><td>—</td><td>Kuumuudenkestävät</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin-top:1.5rem">Yleiset pajaturvallisuusohjeet</h3>
+      <ul>
+        <li>Pidä paja siistinä — kuiva savi lattialla on hengitysvaara</li>
+        <li>Märkäpyyhintä mieluummin kuin lakaiseminen</li>
+        <li>Kohdepoisto tai HEPA-imuri savijauheen käsittelypisteessä</li>
+        <li>Savisuspensiota ei saa kaataa viemäriin — sammio tai viemärikuppi!</li>
+        <li>SDS-tiedostot saatavilla, luettavissa ennen käyttöä</li>
+        <li>Laminoitu SDS-listaus käyttöpisteiden lähellä</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Käyttöturvatiedotteet — suorat linkit</h3>
+      <ul class="sds-list">
+        <li>
+          <span class="sds-ico">📄</span>
+          <div class="sds-info">
+            <h4>GS209 Light Stoneware Clay</h4>
+            <p>Silikaattikeraamiikkajauheen SDS. Sisältää kide­maista piidioksidia → silikoosiriski.</p>
+            <a href="https://www.scarva.com/Safety-Data-Sheets.htm" target="_blank" rel="noopener">→ Scarva Education SDS-hakemisto (scarva.com)</a><br>
+            <a href="https://www.potterycrafts.co.uk/sds" target="_blank" rel="noopener">→ Pottery Crafts SDS (potterycrafts.co.uk)</a>
+          </div>
+        </li>
+        <li>
+          <span class="sds-ico">🧪</span>
+          <div class="sds-info">
+            <h4>Dolapix PC 67 — deflokkulantti</h4>
+            <p>Polyelektrolyytti. Ärsyttää silmiä. Pidä poissa lasten ulottuvilta.</p>
+            <a href="https://www.zschimmer-schwarz.com/dolapix" target="_blank" rel="noopener">→ Zschimmer & Schwarz SDS (zschimmer-schwarz.com)</a><br>
+            <a href="https://www.imerys.com/our-solutions/dolapix" target="_blank" rel="noopener">→ Imerys SDS-hakemisto (imerys.com)</a>
+          </div>
+        </li>
+        <li>
+          <span class="sds-ico">🧪</span>
+          <div class="sds-info">
+            <h4>Dispex N40 — deflokkulantti</h4>
+            <p>Natriumpolyakrylaatti. Iholle sopiva pH. Vesistöille haitallinen — ei viemäriin.</p>
+            <a href="https://www.basf.com/dispex" target="_blank" rel="noopener">→ BASF Dispex SDS (basf.com)</a><br>
+            <a href="https://www.bathpottery.co.uk/acatalog/Dispex-N40.html" target="_blank" rel="noopener">→ Bath Pottery Supplies (bathpottery.co.uk)</a>
+          </div>
+        </li>
+        <li>
+          <span class="sds-ico">⚗️</span>
+          <div class="sds-info">
+            <h4>Alpha-kipsi (muottikipsi)</h4>
+            <p>Kalsiumsulfaatti. Pöly ärsyttää hengitysteitä. Silmävaara. FFP1-suojain käsittelyssä.</p>
+            <a href="https://www.saint-gobain.com/gypsum-sds" target="_blank" rel="noopener">→ Saint-Gobain Gypsum SDS (saint-gobain.com)</a>
+          </div>
+        </li>
+        <li>
+          <span class="sds-ico">🔗</span>
+          <div class="sds-info">
+            <h4>EU:n ECHA tietokanta — yleiset SDS:t</h4>
+            <p>Euroopan kemikaaliviraston virallinen tietokanta kaikille rekisteröidyille kemikaaleille.</p>
+            <a href="https://echa.europa.eu/fi/information-on-chemicals" target="_blank" rel="noopener">→ ECHA tietokanta (echa.europa.eu)</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════╗
+     ║ 10. VAIHTOEHDOT                          ║
+     ╚══════════════════════════════════════════╝ -->
+<section class="sec" id="vaihtoehdot">
+  <div class="sec-tag">10 — Vaihtoehtoiset materiaalit</div>
+  <h2 class="sec-title">Perinteisen keramiikan <em>vaihtoehdot</em></h2>
+  <p>Perinteinen keramiikkaprosessi vaatii suuria energiamääriä (1200–1300°C). Vaihtoehtoisia materiaaleja ja prosesseja kehitetään jatkuvasti — osa jo kaupallisesti saatavilla.</p>
+
+  <div class="alt-card">
+    <div class="alt-name">🏗️ Geopolymeerit — "kylmäkeramiikka"</div>
+    <div class="alt-body">
+      Geopolymeerit ovat epäorgaanisia polymeerejä, jotka kovettuvat huoneenlämpötilassa ilman polttoa. Ne valmistetaan reagoimalla alumiinisilikaattijauhe (esim. metakaoliini, lentotuhka, masuunikuona) alkalisen aktivaattorin (NaOH + Na₂SiO₃) kanssa.
+      <br><br>
+      <strong>Prosessi:</strong> Aktivaattorin pH ≈ 13–14 → alumiinisilikaatin depolymerointi → uudelleenpolymerointi 3D-verkkorakenteeksi → kovettuminen 24–72 h 20–80°C. Lopputuote muistuttaa keramiikkaa tai betonia.
+      <br><br>
+      <strong>Ominaisuudet:</strong> Puristuslujuus 30–80 MPa, hyvä palonkestävyys (1200°C saakka), alhainen CO₂-jalanjälki (50–80% vähemmän kuin portland-sementti), kestää happoja.
+    </div>
+    <div class="alt-pros">
+      <span class="alt-tag pro">Ei polttoa tarvita</span>
+      <span class="alt-tag pro">Alhainen energiankulutus</span>
+      <span class="alt-tag pro">Käyttää teollisuuden sivuvirtoja</span>
+      <span class="alt-tag con">pH 13–14 — syövyttävä!</span>
+      <span class="alt-tag con">Rajoitettu värivalikoima</span>
+      <span class="alt-tag con">Ei niin viimeistelty kuin keramiikka</span>
+    </div>
+  </div>
+
+  <div class="alt-card">
+    <div class="alt-name">🌱 Myseeli ja biomateriaali­komposiitit</div>
+    <div class="alt-body">
+      Sienirihmaston (myseelium) + maatalous-/puujätteen yhdistelmä. Muovataan muottiin, kasvaa itsestään yhtenäiseksi materiaaliksi ~7 päivässä, kuivataan. Täysin biohajoava. Ecovative Design (USA) on kaupallistanut tämän pakkausmateriaaliksi.
+      <br><br>
+      Yhdistetään kaoliniinin tai savien kanssa → "bionanokomposiitti" — parempi mekaaninen lujuus. Metropolian pajassa <strong>mahdollinen kokeellinen projekti</strong>!
+    </div>
+    <div class="alt-pros">
+      <span class="alt-tag pro">100% biohajoava</span>
+      <span class="alt-tag pro">Ei energiaa kovettumiseen</span>
+      <span class="alt-tag pro">Muovautuu monimutkaisiin muotoihin</span>
+      <span class="alt-tag con">Ei kestä kosteutta pitkään</span>
+      <span class="alt-tag con">Matala lämmönkestävyys</span>
+    </div>
+  </div>
+
+  <div class="alt-card">
+    <div class="alt-name">🪨 Hydroterminen kovettuminen</div>
+    <div class="alt-body">
+      Savi + kalkki (CaO) + kvartsi + vesi → autoklaavissa 180–200°C, 10 bar → calcium silikaattihydraatti (CSH)-sideaine sitoo rakenteen yhteen. Tämä on <strong>höyrykarkaistu betoni (AAC)</strong> eli Siporex-periaate.
+      <br><br>
+      Modifioitu versio: savipohjainen materiaali + kalkki, kuivataan ilman autoklaavin painetta → hydrotermiset savituotteet. Lujuus jää alhaisemmaksi mutta prosessi erittäin edullinen.
+    </div>
+    <div class="alt-pros">
+      <span class="alt-tag pro">Matala lämpötila vs. polttaminen</span>
+      <span class="alt-tag pro">Hyvä lämmöneristys</span>
+      <span class="alt-tag con">Vaatii autoklaavin (paineastia)</span>
+      <span class="alt-tag con">Ei sovi hienoa saviastioihin</span>
+    </div>
+  </div>
+
+  <div class="alt-card">
+    <div class="alt-name">💧 Kylmäkovettuvat saviseokset (air-dry clay)</div>
+    <div class="alt-body">
+      Savi + selluloosa + polymeerisideaine → kuivuu ilmassa ilman polttoa. Ei sintraudu, pysyy huokoisena. Käytetään käsi­töissä, prototyyppien valmistuksessa, animaatiossa (claymation).
+      <br><br>
+      Papersavi (paperclay): savi + pitkäkuitu selluloosa → kuivaa erittäin kevyeksi, halkeiluherkkyys pienempi, voidaan polttaa normaalisti myös uunissa.
+    </div>
+    <div class="alt-pros">
+      <span class="alt-tag pro">Ei uunia tarvita</span>
+      <span class="alt-tag pro">Koulu- ja harrastustarkoitukseen</span>
+      <span class="alt-tag con">Ei vedenkestävä</span>
+      <span class="alt-tag con">Matala lujuus</span>
+    </div>
+  </div>
+
+  <div class="alt-card">
+    <div class="alt-name">⚡ Spark Plasma Sintering (SPS) / Flash Sintering</div>
+    <div class="alt-body">
+      Kehittynyt teollinen tekniikka: sähköinen kipinäplasmapulssi + paine → sinteröi keramiikan minuuteissa eikä tunneissa. Energiankulutus 10× pienempi kuin perinteinen poltto. Toistaiseksi laboratoriokäyttöön — ei pajan mittakaavaan.
+      <br><br>
+      Flash sintering: korkeavirtapulssi suoraan keraamiikkajauheeseen → 1000°C sintraus sekunneissa. Laboratorioissa toimii — skaalaushaasteita.
+    </div>
+    <div class="alt-pros">
+      <span class="alt-tag pro">Erittäin energiatehokas</span>
+      <span class="alt-tag pro">Nopea prosessi</span>
+      <span class="alt-tag con">Vain teolliseen/tutkimuskäyttöön nyt</span>
+      <span class="alt-tag con">Pienet kappaleet</span>
+    </div>
+  </div>
+
+  <div class="alt-card">
+    <div class="alt-name">🌊 Alkaliaktivoitu savi (low-carbon ceramics)</div>
+    <div class="alt-body">
+      Tuore tutkimusalue: savi + alkalinen aktivaattori (NaOH) + geopolymeerisovellus savikappaleisiin. Kuivataan 40–80°C lämpökaapissa. Lujuus 20–35 MPa. Ei sovellu kaikkiin savityyppeihin — kaoliniinipitoiset savit parhaita.
+      <br><br>
+      Hybridiapproach: Alkaliaktivoitu kerros + sisältä normaali savirakenne — kuori kovettuu matalatavalla, sisäosa kutistuu normaalisti. Kokeelliset tulokset lupaavia mm. Australiassa (RMIT).
+    </div>
+    <div class="alt-pros">
+      <span class="alt-tag pro">40–80°C riittää</span>
+      <span class="alt-tag pro">Soveltuu savivalannan tuotteisiin</span>
+      <span class="alt-tag con">Tutkimusvaiheessa — ei valmista tuotetta</span>
+      <span class="alt-tag con">pH >12 — suojaimet tarpeen</span>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════╗
+     ║ 11. HASSU HISTORIA                       ║
+     ╚══════════════════════════════════════════╝ -->
+<section class="sec" id="hassu">
+  <div class="sec-tag">11 — Kevennyksiä</div>
+  <h2 class="sec-title">Hauskaa <em>savihistoriaa</em></h2>
+  <p style="margin-bottom:1.5rem">Savi ja keraamikot — täydellinen yhdistelmä erikoistilanteille.</p>
+
+  <div class="grid-2">
+    <div>
+      <div class="funny">
+        <div class="funny-title">🏛️ Rooman verosavet (n. 100 eKr.)</div>
+        <p>Roomalaiset merkitsivät valmistamansa tiilien pohjaan savileimansa. Arkeologit ovat löytäneet tiilejä, joihin on leimattu koiran tassujen jäljet — koira juoksee savitiilin päältä juuri kun se oli kuivumassa. Roonan tiilitehdas ei voinut tuhota tuotetta veron välttämiseksi, joten tiili meni markkinoille koiran jälkien kanssa.</p>
+      </div>
+      <div class="funny">
+        <div class="funny-title">🎭 Minoan savikarhun katastrofi (n. 1600 eKr.)</div>
+        <p>Kreetan Knossoksen palatsin arkeologisissa kaivauksissa löydettiin huone, jossa oli säilytetty satoja keramiikka-astioita. Huoneen pohja oli notkuinen keramiikkapinoa täynnä — keramiikka oli lähes yhdestä kerroksesta kolmeen metriin. Arkeologit selittivät: hyllyt romahdutti yläkertaan säilytetty suurempi keramiikka. Tapahtumaa on kutsuttu maailman vanhimmaksi dokumentoiduksi varastokaaokseksi.</p>
+      </div>
+      <div class="funny">
+        <div class="funny-title">☕ Wedgwoodin kahvitauon palaute (1780-luku)</div>
+        <p>Josiah Wedgwood, Englannin merkittävin posliinin valmistaja, kirjoitti muistilapun tehtaalleen: "Minulla on huonontunut jalka, joten kiertelen tehdasta keppiä apuna käyttäen tänä aamuna. Kappale #47 — tuhoa se. Kappale #53 — tuhoa sekin. Kuka on tekijä? Se on surkeata työtä." Myöhemmin selvisi, että kappale #47 oli Wedgwoodin oman pojan valmistama. Sukupeliä ei dokumentoida historiaan.</p>
+      </div>
+    </div>
+    <div>
+      <div class="funny">
+        <div class="funny-title">🌊 Merenlasku­astiat (1600-luku Japani)</div>
+        <p>Japanilaisessa Aritatissa keramiikanvalmistaja paistoi huomattavan erän erikoislaatuista Imari-posliinia Euroopan markkinoille. Laivaus ylitti Indian valtameren, mutta kauppa-alus upposi myrskyssä. 250 vuotta myöhemmin sukellusveneen tutkijat löysivät astioiden vrakista, kaikki kokonaisina merenpohjasta. Posliini oli täydellisessä kunnossa — suolaisuus ja paine olivat säilyttäneet ne paremmin kuin mikään museo.</p>
+      </div>
+      <div class="funny">
+        <div class="funny-title">🔬 Modernin keramiikan tutkija (2010)</div>
+        <p>Yhdysvaltalainen keramiikkatutkija raportoi julkaisussaan vahingosta: hän sekoitti vahingossa 500 ml erää hopeasavea (silver clay) tavalliseen valuslippiin luullen sen olevan kaoliinia. Syntynyt sekoitus valutti ulos muottiin — ja kun se poltettiin, siitä tuli kauneimmista esineistä joita hän oli koskaan nähnyt. Nykyisin hän myy "happy accident" -keramiikkaa gallerioissa 300 dollarin kappalehintaan.</p>
+      </div>
+      <div class="funny">
+        <div class="funny-title">🤖 Tekoäly ja savenpolvetus (2023)</div>
+        <p>MIT:n tutkijat yrittivät opettaa robottikäden dreijaamaan saviastian katselemalla YouTube-videoita. Robotti oppi pyörittelemään savea tunnin jälkeen. Kolmen viikon harjoittelun jälkeen robotti tuotti esineensä jotka muistuttivat astioita — mutta pystyi tekemään vain yhden muodon: lähes täydellisen pallon. Tutkijat raportoivat: "Robotti on oppinut tekemään muodon joka kestää parhaiten mekaanista stressiä. Se on ymmärtänyt materiaalin logiikan, mutta ei muotoilun intentaa." Keraamikot ympäri maailmaa hengittivät helpotuksesta.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="box blue" style="margin-top:1.5rem">
+    <div class="box-title">📚 Lisälukemista ja kurssimateriaalia</div>
+    <ul style="margin:0">
+      <li>Singer & Singer: "Industrial Ceramics" — klassikko jokaiseen pajaan</li>
+      <li>Robin Hopper: "Functional Pottery" — slipcastingin käytännöt</li>
+      <li>Digitalfire.com — Tony Hansen: paras verkkoresurssi teknisestä keramiikasta</li>
+      <li>The Ceramic Arts Network — videoita ja artikkeleita</li>
+      <li>Imerys Ceramics tekninen tukimateriaali: imerys.com/ceramics</li>
+    </ul>
+  </div>
+</section>
+
+</div><!-- /.page -->
+
+<footer>
+  <p>© 2025 Metropolia AMK · Teollinen Muotoilu · Muotoilun Pajat · Arabia-kampus, Helsinki</p>
+  <p style="margin-top:.35rem;font-size:.72rem;color:rgba(200,160,100,.5)">Valusavi &amp; Slipcasting — Materiaalitekniikan opas · Mika Ihanus · Tekniset arvot viitteellisiä — tarkista aina valmistajan spesifikaatiot</p>
+</footer>
+
+<script>
+/* ════════════════════════════════════════════════
+   NAV ACTIVE STATE
+   ════════════════════════════════════════════════ */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = document.querySelectorAll('.sec');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-80)cur=s.id;});
+  navLinks.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+cur);});
+});
+
+/* ════════════════════════════════════════════════
+   TABS
+   ════════════════════════════════════════════════ */
+function showTest(id,btn){
+  document.querySelectorAll('[id^="test-"]').forEach(p=>p.classList.remove('on'));
+  document.getElementById('test-'+id).classList.add('on');
+  document.querySelectorAll('#testTabs .tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+function showEquip(id,btn){
+  document.querySelectorAll('[id^="equip-"]').forEach(p=>p.classList.remove('on'));
+  document.getElementById('equip-'+id).classList.add('on');
+  document.querySelectorAll('#equipTabs .tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+/* ════════════════════════════════════════════════
+   CLAY COLOUR TEST
+   ════════════════════════════════════════════════ */
+const colorData = {
+  valkoinen:{text:'Todennäköisesti <strong>kaoliini</strong> tai talkki­pitoinen savi. Matala rautapitoisuus. Sopii posliiniin, paperiin, farmaseuttisiin sovelluksiin.',tmax:'1300–1400°C',wc:'Alhainen (kaoliini epäplastinen)',use:'Posliini, paperi, farmasia'},
+  punainen:{text:'Korkea <strong>rautaoksidipitoisuus</strong> (Fe₂O₃ 5–10%). Polttuu punaiseksi tai oranssiksi. Suosittu tiilen ja ruukun valmistuksessa.',tmax:'1000–1150°C',wc:'Korkea',use:'Tiili, ruukku, earthenware'},
+  harmaa:{text:'Sisältää <strong>orgaanista ainesta</strong> tai rautasulfidia. Poltossa orgaaninen palaa pois — tarvitaan hidas lämmitys.',tmax:'1100–1280°C',wc:'Kohtalainen–korkea',use:'Kivitavara, saviastiat'},
+  beige:{text:'Raudan hydroksidi (Fe(OH)₃), <strong>kohtuullinen rautapitoisuus</strong>. Tyypillinen kivitavarasavi. Soveltuu yleiseen valuvalantaan kuten GS209.',tmax:'1200–1300°C',wc:'Korkea',use:'Kivitavara, valuslippi, astiat'},
+  vihrea:{text:'Sisältää <strong>kloriittia</strong> tai glaukoniittia. Usein sekundäärinen savi. Keski-korkea polttolämpö.',tmax:'1200–1280°C',wc:'Kohtalainen',use:'Arkkitehtuurikeramiikka, laatta'},
+  sininen:{text:'<strong>Rautasulfidi pelkistyneessä tilassa</strong> (mustasavi, meren/joen pohja). Harvinainen. Poltossa muuttuu punaiseksi tai harmaaksi.',tmax:'1050–1200°C',wc:'Erittäin korkea',use:'Erikoissaviastiat, rakentaminen'},
+};
+function selectTest(card,key){
+  document.querySelectorAll('#colorTest .test-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');
+  const d=colorData[key];
+  const r=document.getElementById('colorResult');
+  document.getElementById('colorResultText').innerHTML=d.text;
+  document.getElementById('colorProps').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-top:.75rem">
+      <div><div style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--clay2)">MAX POLTTOLÄMPÖ</div><div style="font-family:var(--mono);color:var(--ochre)">${d.tmax}</div></div>
+      <div><div style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--clay2)">VESIPITOISUUS</div><div style="font-family:var(--mono);color:var(--ochre)">${d.wc}</div></div>
+      <div><div style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--clay2)">KÄYTTÖKOHTEET</div><div style="font-family:var(--mono);color:var(--ochre)">${d.use}</div></div>
+    </div>`;
+  r.classList.add('show');
+}
+
+/* ════════════════════════════════════════════════
+   LITRAPAINOLASKURI
+   ════════════════════════════════════════════════ */
+function calcLP(){
+  const e=parseFloat(document.getElementById('lp-empty').value)||0;
+  const f=parseFloat(document.getElementById('lp-full').value)||0;
+  const lp=(f-e)*10;
+  const target=1531;
+  const diff=Math.round(lp-target);
+  document.getElementById('lp-result').innerHTML=Math.round(lp)+'<sup>g/l</sup>';
+  document.getElementById('lp-diff').innerHTML=(diff>=0?'+':'')+diff+'<sup>g/l</sup>';
+  const dot=document.getElementById('lp-dot');
+  const msg=document.getElementById('lp-msg');
+  if(lp>=1480&&lp<=1580){dot.className='status-dot ok';msg.textContent='Erinomainen! Litrapaino on täydellinen valuslipille.';}
+  else if(lp>=1420&&lp<=1650){dot.className='status-dot warn-d';msg.textContent='Hyväksyttävä — pieni säätö suositellaan. '+(lp>1531?'Lisää deflokkulantia tai hieman vettä.':'Lisää savijauhetta tai vähennä vettä.');}
+  else{dot.className='status-dot err';msg.textContent='Korjausta tarvitaan! '+(lp>1531?'Liian paksu — lisää vettä tai deflokkulantia.':'Liian ohut — lisää savijauhetta.');}
+}
+calcLP();
+
+/* ════════════════════════════════════════════════
+   SLIP CALCULATOR
+   ════════════════════════════════════════════════ */
+const CLAY_DATA = {
+  gs209:     {name:'GS209 Light Stoneware',clayFrac:.575,targetLP:1531,deflMin:.1,deflOpt:.35,deflMax:.55,note:'Metropolian pajan standardi. Aloita 70% deflokkulanttiannoksesta.'},
+  stoneware: {name:'Kivitavarasavi (yleinen)',clayFrac:.58,targetLP:1550,deflMin:.15,deflOpt:.40,deflMax:.60,note:'Voi tarvita enemmän deflokkulantia orgaanisen aineksen vuoksi.'},
+  posliini:  {name:'Posliinisavi',clayFrac:.55,targetLP:1500,deflMin:.10,deflOpt:.30,deflMax:.50,note:'Erittäin tarkka — vähemmän deflokkulantia koska kaoliini vähemmän aktiivinen.'},
+  earthenware:{name:'Savitiili / Earthenware',clayFrac:.60,targetLP:1600,deflMin:.20,deflOpt:.45,deflMax:.65,note:'Korkea Fe → enemmän deflokkulantia. Jopa .5% saattaa tarvita.'},
+  bonechina: {name:'Bone China',clayFrac:.53,targetLP:1480,deflMin:.08,deflOpt:.25,deflMax:.40,note:'Fosfaattirikkainen — herkkä deflokkulaatiolle. Aloita vain .15%.'},
+  raku:      {name:'Raku-savi',clayFrac:.565,targetLP:1520,deflMin:.15,deflOpt:.38,deflMax:.55,note:'Karkea rakenne, hyvä shokkikestävyys. Normaali deflokkulaatio.'},
+  custom:    {name:'Oma resepti',clayFrac:.575,targetLP:1531,deflMin:.10,deflOpt:.35,deflMax:.55,note:'Syötä omat arvosi. Aloita maltillisesti.'},
+};
+const DEFLOC_DATA = {
+  dolapix:  {name:'Dolapix PC 67',factor:1.0,note:'Polyelektrolyytti. Erittäin riittoisaa — pienin tehokas annos.'},
+  dispex:   {name:'Dispex N40',  factor:1.15,note:'Polyakrylaatti. Hieman enemmän tarvitaan kuin Dolapixia.'},
+  soda_ash: {name:'Soodatuhka',  factor:2.5, note:'Perinteinen. Käytä yhdessä vesiklasin kanssa parhaaseen tulokseen.'},
+  waterglass:{name:'Vesilasi',   factor:3.0, note:'Perinteinen. Usein yhdistettynä soodan kanssa 1:1 suhteessa.'},
+};
+
+function calcSlip(){
+  const type=document.getElementById('sc-type').value;
+  const unit=parseInt(document.getElementById('sc-unit').value);
+  const densTgt=parseInt(document.getElementById('sc-dens').value);
+  const deflPct=parseFloat(document.getElementById('sc-def-pct').value);
+  const defType=document.getElementById('sc-defloc').value;
+
+  const d=CLAY_DATA[type]||CLAY_DATA.gs209;
+  const dd=DEFLOC_DATA[defType]||DEFLOC_DATA.dolapix;
+
+  // Litrapaino ohjaa savi/vesi-suhdetta lineaarisesti
+  // LP = 1310 → 52/48; LP = 1865 → 62/38 (approksimaatio)
+  const clayFrac=Math.max(.50,Math.min(.64,0.50+((densTgt-1310)/(1865-1310))*0.14));
+  const waterFrac=1-clayFrac;
+  const clayMass=unit*clayFrac;
+  const waterMass=unit*waterFrac;
+  const defMass=(clayMass*deflPct/100)*dd.factor;
+
+  document.getElementById('sc-clay').innerHTML=Math.round(clayMass)+'<sup>g</sup>';
+  document.getElementById('sc-water').innerHTML=Math.round(waterMass)+'<sup>g</sup>';
+  document.getElementById('sc-def').innerHTML=defMass.toFixed(1)+'<sup>g</sup>';
+  document.getElementById('sc-ratio').innerHTML=(clayFrac*100).toFixed(1)+'/'+(waterFrac*100).toFixed(1)+'<sup>%</sup>';
+  document.getElementById('sc-lp').innerHTML=densTgt+'<sup>g/l</sup>';
+  document.getElementById('sc-total').innerHTML=(unit/1000).toFixed(1)+'<sup>kg</sup>';
+  document.getElementById('sc-dens-lbl').textContent=densTgt<=1400?'Notkea':densTgt<=1500?'Puolinotkea':densTgt<=1650?'Normaali':'Paksu';
+  document.getElementById('sc-dens-lbl').textContent+=` — ${densTgt} g/l`;
+  document.getElementById('sc-def-pct-lbl').textContent=(deflPct).toFixed(2)+'%';
+
+  // Multi-batch table
+  const batches=[1000,5000,10000,25000,50000,100000];
+  const tbody=document.getElementById('sc-tbody');
+  tbody.innerHTML=batches.map(b=>{
+    const c=Math.round(b*clayFrac),w=Math.round(b*waterFrac),def=(b*clayFrac*deflPct/100*dd.factor).toFixed(1);
+    const highlight=b===unit?'style="background:rgba(139,69,19,.2)"':'';
+    return`<tr ${highlight}><td>${b>=1000?(b/1000)+' kg':b+' g'}</td><td>${c}</td><td>${w}</td><td>${def}</td><td>${densTgt}</td><td>${(clayFrac*100).toFixed(1)}/${(waterFrac*100).toFixed(1)}</td></tr>`;
+  }).join('');
+
+  // Status
+  const dot=document.getElementById('sc-dot');
+  const msg=document.getElementById('sc-msg');
+  const isDefOk=deflPct>=d.deflMin&&deflPct<=d.deflMax;
+  dot.className='status-dot '+(isDefOk?'ok':'warn-d');
+  msg.textContent=isDefOk?`Resepti OK. ${d.note}`:`Deflokkulanttimäärä on epätavallinen kyseiselle savityypille. Suositeltu alue: ${d.deflMin}–${d.deflMax}%. ${d.note}`;
+
+  // Analysis
+  document.getElementById('sc-defloc-analysis').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin:.5rem 0">
+      <div><div class="res-lbl">Min (aloitus)</div><div class="res-val">${(d.deflMin*100).toFixed(0)}%<br><span style="font-size:.65rem">${(clayMass*d.deflMin/100*dd.factor).toFixed(1)} g</span></div></div>
+      <div><div class="res-lbl">Optimi</div><div class="res-val" style="color:${deflPct>=(d.deflOpt-.05)&&deflPct<=(d.deflOpt+.05)?'var(--sage)':'var(--ochre)'}">${(d.deflOpt*100).toFixed(0)}%<br><span style="font-size:.65rem">${(clayMass*d.deflOpt/100*dd.factor).toFixed(1)} g</span></div></div>
+      <div><div class="res-lbl">Max (yläraja)</div><div class="res-val">${(d.deflMax*100).toFixed(0)}%<br><span style="font-size:.65rem">${(clayMass*d.deflMax/100*dd.factor).toFixed(1)} g</span></div></div>
+    </div>
+    <p style="margin:0;font-size:.8rem;color:var(--sand)">${dd.note} Valittu määrä: <strong>${(deflPct).toFixed(2)}% → ${defMass.toFixed(1)} g</strong> ${dd.name}-deflokkulantia ${unit/1000} kg erässä.</p>`;
+}
+calcSlip();
+
+/* ════════════════════════════════════════════════
+   ACCORDIONS (ei tällä hetkellä käytössä mutta pohja on)
+   ════════════════════════════════════════════════ */
+document.querySelectorAll('.acc-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>btn.closest('.acc-item').classList.toggle('open'));
+});
+</script>
+</body>
+</html>
