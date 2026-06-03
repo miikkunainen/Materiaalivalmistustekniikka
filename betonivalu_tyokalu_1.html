@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>Betonivalu — Suunnittelutyökalu</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{
+  --bg:#F5F3EE;--sur:#FFF;--bdr:#DDD8CE;--txt:#181510;--mut:#7A7368;
+  --grn:#2A5C45;--grn2:#4A9462;--ora:#B86A28;--blu:#2C4E7A;
+  --tag:#EDE8DF;--r:10px;--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--txt);font-size:14px;min-height:100vh}
+
+/* ---- TAB NAV ---- */
+.tabnav{display:flex;background:var(--sur);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;overflow-x:auto}
+.tabnav::-webkit-scrollbar{height:0}
+.tab{flex:1;min-width:80px;padding:12px 8px;font-size:12px;font-weight:500;color:var(--mut);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s}
+.tab.on{color:var(--grn);border-bottom-color:var(--grn)}
+.tab:hover:not(.on){color:var(--txt)}
+
+/* ---- PANELS ---- */
+.panel{display:none;padding:16px;max-width:680px;margin:0 auto}
+.panel.on{display:block}
+
+/* ---- SECTION LABELS ---- */
+.slbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin:18px 0 6px}
+.slbl:first-child{margin-top:0}
+
+/* ---- CARDS ---- */
+.card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.ctitle{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:12px}
+
+/* ---- SELECTS ---- */
+select{width:100%;padding:9px 32px 9px 10px;border:1px solid var(--bdr);border-radius:var(--r);background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%237A7368' d='M5 6L0 0h10z'/%3E%3C/svg%3E") no-repeat right 10px center;color:var(--txt);font-family:var(--sans);font-size:13px;cursor:pointer;appearance:none;margin-bottom:4px}
+select:focus{outline:none;border-color:var(--grn)}
+
+/* ---- CHIPS ---- */
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px}
+.chip{padding:5px 11px;border-radius:20px;font-size:12px;border:1px solid var(--bdr);cursor:pointer;background:transparent;color:var(--mut);transition:all .15s;font-family:var(--sans)}
+.chip.on{background:var(--grn);color:#fff;border-color:var(--grn)}
+
+/* ---- GOAL SLIDERS ---- */
+.gs{margin-bottom:14px}
+.gs-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.gs-name{font-size:13px}
+.gs-right{display:flex;align-items:center;gap:8px}
+.gs-val{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--grn);min-width:18px;text-align:right}
+.lkbtn{width:26px;height:26px;border:1px solid var(--bdr);border-radius:7px;background:transparent;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;flex-shrink:0}
+.lkbtn.on{background:var(--ora);border-color:var(--ora)}
+.sl-wrap{position:relative;height:6px;background:var(--bdr);border-radius:3px;margin-bottom:2px}
+.sl-fill{position:absolute;left:0;top:0;height:100%;border-radius:3px;background:var(--grn);transition:width .2s;pointer-events:none}
+.sl-fill.locked{background:var(--ora)}
+input[type=range]{position:absolute;top:-8px;left:0;width:100%;height:22px;appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer;outline:none;margin:0;padding:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:var(--grn);border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+input[type=range].lk::-webkit-slider-thumb{background:var(--ora)}
+input[type=range]:disabled{cursor:not-allowed}
+input[type=range]:disabled::-webkit-slider-thumb{background:#ccc}
+
+/* ---- MAT SLIDERS ---- */
+.ms{margin-bottom:16px}
+.ms-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.ms-name{font-size:12.5px;font-weight:500;flex:1;padding-right:8px}
+.ms-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.ms-val{font-family:var(--mono);font-size:12px;color:var(--grn);font-weight:500;min-width:50px;text-align:right}
+.ms-val.locked{color:var(--ora)}
+.ms-hints{display:flex;justify-content:space-between;font-size:10px;color:var(--mut);margin-top:3px}
+
+/* ---- METRICS ---- */
+.metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
+.metric{background:var(--tag);border-radius:var(--r);padding:12px}
+.metric-lbl{font-size:11px;color:var(--mut);margin-bottom:3px}
+.metric-val{font-family:var(--mono);font-size:20px;font-weight:500}
+.metric-unit{font-size:11px;color:var(--mut)}
+
+/* ---- QUAL BARS ---- */
+.qrow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.qlbl{font-size:11.5px;width:115px;flex-shrink:0;color:var(--mut)}
+.qtrack{flex:1;height:6px;background:var(--tag);border-radius:3px;overflow:hidden}
+.qfill{height:100%;border-radius:3px;transition:width .35s}
+.qnum{font-family:var(--mono);font-size:11.5px;width:28px;text-align:right}
+.f-hi{background:var(--grn)}.f-ok{background:var(--grn2)}.f-mid{background:var(--ora)}.f-lo{background:#C03030}
+
+/* ---- RECIPE TABLE ---- */
+.rtbl{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:4px}
+.rtbl th{background:var(--tag);padding:6px 8px;font-size:11px;font-weight:500;color:var(--mut);text-align:left;border-bottom:1px solid var(--bdr)}
+.rtbl td{padding:6px 8px;border-bottom:1px solid var(--bdr);vertical-align:middle}
+.rtbl tr:last-child td{border-bottom:none}
+.rbar{height:4px;border-radius:2px;background:var(--grn);min-width:2px}
+
+/* ---- SPEC TABLE ---- */
+.stbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.stbl td{padding:6px 0;border-bottom:1px solid var(--bdr)}
+.stbl tr:last-child td{border-bottom:none}
+.stbl td:first-child{color:var(--mut);width:50%}
+.stbl td:last-child{font-weight:500;text-align:right}
+
+/* ---- BADGES ---- */
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px}
+.b-grn{background:#D0EDDA;color:#1A5228}.b-amb{background:#FAECD8;color:#7A4210}
+.b-red{background:#FAD8D8;color:#7A1010}.b-blu{background:#D4E6F5;color:#1A3A6A}.b-gry{background:#E8E4DC;color:#4A4840}
+
+/* ---- COST ---- */
+.crow{display:flex;justify-content:space-between;padding:5px 0;font-size:12.5px;border-bottom:1px solid var(--bdr)}
+.crow:last-child{border-bottom:none;font-weight:500}
+.crow span:last-child{font-family:var(--mono)}
+
+/* ---- PROCESS STEPS ---- */
+.step{display:flex;gap:10px;margin-bottom:12px}
+.step-n{width:24px;height:24px;border-radius:50%;background:var(--grn);color:#fff;font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-t{font-size:13px;font-weight:500;margin-bottom:3px}
+.step-d{font-size:12px;color:var(--mut);line-height:1.55}
+
+/* ---- WARNINGS ---- */
+.warn{font-size:12px;padding:8px 11px;border-radius:8px;margin-top:8px;display:none;line-height:1.5}
+.warn.on{display:block}
+.w-red{background:#FAE8E8;color:#7A1010;border-left:3px solid #C03030}
+.w-amb{background:#FEF1DF;color:#7A4210;border-left:3px solid var(--ora)}
+.w-grn{background:#E2F4E8;color:#1A5228;border-left:3px solid var(--grn)}
+
+/* ---- REC BOXES ---- */
+.rbox{background:#EFF7F3;border:1px solid #BDD9CB;border-radius:var(--r);padding:11px 13px;margin-bottom:7px;font-size:12.5px;line-height:1.6}
+
+/* ---- CHART ---- */
+.cwrap{position:relative}
+
+/* ---- DIVIDER ---- */
+hr.dv{border:none;border-top:1px solid var(--bdr);margin:14px 0}
+
+/* ---- SCROLLBAR ---- */
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px}
+</style>
+</head>
+<body>
+
+<!-- TAB NAV -->
+<nav class="tabnav">
+  <button class="tab on" onclick="showTab('asetukset',this)">⚙ Asetukset</button>
+  <button class="tab" onclick="showTab('resepti',this)">🧪 Resepti</button>
+  <button class="tab" onclick="showTab('laatu',this)">📊 Laatu</button>
+  <button class="tab" onclick="showTab('valmistus',this)">🔨 Valmistus</button>
+  <button class="tab" onclick="showTab('hinta',this)">💶 Hinta</button>
+</nav>
+
+<!-- ===== TAB 1: ASETUKSET ===== -->
+<div id="tab-asetukset" class="panel on">
+
+  <div class="slbl">Kappale</div>
+  <select id="sel_type" onchange="update()">
+    <option value="koristelasi">Koristelasi / pieniveistos</option>
+    <option value="astia">Astia / ruukku</option>
+    <option value="pesuallas" selected>Pesuallas / tiskiallas</option>
+    <option value="tyotaso">Työtaso / pöytälevy</option>
+    <option value="lattia">Lattiaelementti / laatta</option>
+    <option value="ulkotaso">Ulkotaso / patio</option>
+    <option value="porras">Porras / kaide</option>
+    <option value="rakenneosa">Rakenneosa / pilari</option>
+  </select>
+
+  <div class="slbl">Käyttöympäristö</div>
+  <select id="sel_env" onchange="update()">
+    <option value="sisa_kuiva">Sisätila — kuiva</option>
+    <option value="sisa_kostea" selected>Sisätila — kostea / märkätila</option>
+    <option value="ulko_suoja">Ulkotila — suojattu</option>
+    <option value="ulko_avoin">Ulkotila — avoin / sade</option>
+    <option value="ulko_pakkanen">Ulkotila — pakkanen / tiesuola</option>
+    <option value="kemikaali">Kemikaalialtistus</option>
+  </select>
+
+  <div class="slbl">Sementti / sideaine</div>
+  <select id="sel_matrix" onchange="applyPreset()">
+    <option value="portland_harmaa">Portland — harmaa</option>
+    <option value="portland_valko" selected>Portland — valkoinen</option>
+    <option value="geo_lento">Geopolymeeri — lentotuhka</option>
+    <option value="geo_kuona">Geopolymeeri — kuona (GGBS)</option>
+    <option value="geo_meta">Geopolymeeri — metakaoliini</option>
+    <option value="uhpc">UHPC — ultralujalujuus</option>
+  </select>
+
+  <div class="slbl">Ohuin seinämä</div>
+  <select id="sel_wall" onchange="update()">
+    <option value="3">3 mm — mikrobetoni</option>
+    <option value="6">6 mm — ohut</option>
+    <option value="10" selected>10 mm — normaali</option>
+    <option value="20">20 mm — paksu</option>
+    <option value="50">50 mm — massiivinen</option>
+    <option value="100">100 mm+ — rakenne</option>
+  </select>
+
+  <div class="slbl">Kestävyysluokka</div>
+  <select id="sel_dclass" onchange="update()">
+    <option value="XC0">XC0 — ei karbonatisoitumisriskiä</option>
+    <option value="XC1">XC1 — kuiva / pysyvästi märkä</option>
+    <option value="XC2" selected>XC2 — kostea, harvoin kuiva</option>
+    <option value="XC3">XC3 — kohtalainen kosteus</option>
+    <option value="XC4">XC4 — vaihteleva kosteus</option>
+    <option value="XF1">XF1 — pakkasaltistus</option>
+    <option value="XF3">XF3 — pakkanen + kastuminen</option>
+    <option value="XF4">XF4 — tiesuola + pakkanen</option>
+  </select>
+
+  <div class="slbl">Vahvistus</div>
+  <div class="chips" id="rchips">
+    <button class="chip" data-v="pp" onclick="toggleChip(this)">PP-kuidut</button>
+    <button class="chip on" data-v="lasi" onclick="toggleChip(this)">Lasikuidut</button>
+    <button class="chip" data-v="teras" onclick="toggleChip(this)">Teräskuidut</button>
+    <button class="chip" data-v="pva" onclick="toggleChip(this)">PVA-kuidut</button>
+    <button class="chip" data-v="raudoitus" onclick="toggleChip(this)">Teräsraudoitus</button>
+    <button class="chip" data-v="nano" onclick="toggleChip(this)">Nano-SiO₂</button>
+  </div>
+
+  <hr class="dv">
+  <div class="slbl">Ominaisuustavoitteet — siirrä tai lukitse 🔒</div>
+  <div id="goal-sliders"></div>
+
+  <hr class="dv">
+  <div style="font-size:11px;color:var(--mut);line-height:1.7">
+    Kaikki arvot ovat laskennallisia arvioita.<br>
+    Kriittisissä kohteissa testitulokset ratkaisevat.
+  </div>
+</div>
+
+<!-- ===== TAB 2: RESEPTI ===== -->
+<div id="tab-resepti" class="panel">
+  <!-- metrics summary -->
+  <div class="metrics">
+    <div class="metric"><div class="metric-lbl">Puristuslujuus</div><span class="metric-val" id="m_str">—</span> <span class="metric-unit">MPa</span></div>
+    <div class="metric"><div class="metric-lbl">Hinta-arvio</div><span class="metric-val" id="m_cost">—</span> <span class="metric-unit">€/kg</span></div>
+    <div class="metric"><div class="metric-lbl">CO₂</div><span class="metric-val" id="m_co2">—</span> <span class="metric-unit">kg/t</span></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">Optimaalinen resepti (per 10 kg erä)</div>
+    <table class="rtbl">
+      <thead><tr><th>Ainesosa</th><th>kg</th><th>%</th><th style="width:70px">osuus</th></tr></thead>
+      <tbody id="recipe-body"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">Säädä ainesosamäärät — 🔒 lukitse arvo</div>
+    <div id="mat-sliders"></div>
+  </div>
+
+  <div id="warn_wall" class="warn w-red">⚠ Erittäin ohut seinämä — käytä supernotkistinta (PCE) ja silika fumeeta (10%). Raudoitus ei sovellu tähän paksuuteen.</div>
+  <div id="warn_steel" class="warn w-amb">⚠ Teräsraudoitus vaatii vähintään 20 mm seinämän.</div>
+  <div id="warn_geo" class="warn w-grn">✓ Geopolymeeri sopii erinomaisesti tähän kemikaaliympäristöön.</div>
+</div>
+
+<!-- ===== TAB 3: LAATU ===== -->
+<div id="tab-laatu" class="panel">
+
+  <!-- INTERACTIVE RADAR -->
+  <div class="card" style="padding:14px">
+    <div class="ctitle">Laaturadiaali — vedä pisteitä säätääksesi</div>
+    <div style="font-size:11.5px;color:var(--mut);margin-bottom:10px">
+      🟢 Tavoite (vedä) &nbsp;🟠 Saavutettu — muuttuu ainesosien mukaan
+    </div>
+    <svg id="iRadar" viewBox="0 0 320 300" style="width:100%;max-width:380px;display:block;margin:0 auto;touch-action:none;cursor:crosshair" role="img" aria-label="Interaktiivinen laaturadiaali"></svg>
+    <div style="margin-top:12px;display:flex;gap:14px;font-size:12px;color:var(--mut)">
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:3px;background:var(--grn);display:inline-block;border-radius:2px"></span>Tavoite</span>
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:3px;background:var(--ora);display:inline-block;border-radius:2px"></span>Saavutettu</span>
+    </div>
+  </div>
+
+  <!-- INGREDIENT IMPACT — live linked -->
+  <div class="card">
+    <div class="ctitle">Ainesosat — vaikutus laatuun &amp; säätö 🔒</div>
+    <div id="ing-impact-sliders"></div>
+  </div>
+
+  <!-- QUAL BARS -->
+  <div class="card">
+    <div class="ctitle">Massan laatu — ominaisuudet</div>
+    <div id="qual-bars"></div>
+  </div>
+
+  <!-- BAR IMPACT CHART -->
+  <div class="card">
+    <div class="ctitle">Ainesosien suhteellinen vaikutus</div>
+    <div class="cwrap" style="height:220px"><canvas id="impactChart" role="img" aria-label="Ainesosavaikutukset">Ainesosavaikutukset</canvas></div>
+    <div id="impact-leg" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:11px;color:var(--mut)"></div>
+  </div>
+
+  <!-- RECS -->
+  <div class="card">
+    <div class="ctitle">Suositukset</div>
+    <div id="recs"></div>
+  </div>
+</div>
+
+<!-- ===== TAB 4: VALMISTUS ===== -->
+<div id="tab-valmistus" class="panel">
+  <div class="card">
+    <div class="ctitle">Kappalespesifikaatio</div>
+    <table class="stbl" id="spec-tbl"></table>
+    <div id="warn_frost" class="warn w-amb">⚠ Pakkasluokka edellyttää ilmastusaineen (0.04–0.1%) ja w/c ≤ 0.45.</div>
+  </div>
+  <div class="card">
+    <div class="ctitle">Valmistusmenetelmä — vaihe vaiheelta</div>
+    <div id="process-steps"></div>
+  </div>
+</div>
+
+<!-- ===== TAB 5: HINTA ===== -->
+<div id="tab-hinta" class="panel">
+  <div class="metrics">
+    <div class="metric"><div class="metric-lbl">Puristuslujuus</div><span class="metric-val" id="m_str2">—</span> <span class="metric-unit">MPa</span></div>
+    <div class="metric"><div class="metric-lbl">Massa €/kg</div><span class="metric-val" id="m_cost2">—</span></div>
+    <div class="metric"><div class="metric-lbl">CO₂ kg/t</div><span class="metric-val" id="m_co22">—</span></div>
+  </div>
+  <div class="card">
+    <div class="ctitle">Kustannuserittely</div>
+    <div id="cost-break"></div>
+  </div>
+  <div class="card">
+    <div class="ctitle">Ainesosien yksikköhinnat (arvio)</div>
+    <table class="stbl" id="price-tbl"></table>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const TYPES={
+  koristelasi:{label:'Koristelasi/pieniveistos',minWall:3,wt:.2,canReinf:false},
+  astia:{label:'Astia / ruukku',minWall:6,wt:1,canReinf:false},
+  pesuallas:{label:'Pesuallas / tiskiallas',minWall:10,wt:15,canReinf:false},
+  tyotaso:{label:'Työtaso / pöytälevy',minWall:20,wt:40,canReinf:true},
+  lattia:{label:'Lattiaelementti / laatta',minWall:30,wt:60,canReinf:true},
+  ulkotaso:{label:'Ulkotaso / patio',minWall:40,wt:100,canReinf:true},
+  porras:{label:'Porras / kaide',minWall:50,wt:150,canReinf:true},
+  rakenneosa:{label:'Rakenneosa / pilari',minWall:100,wt:500,canReinf:true},
+};
+const MAT={
+  portland_harmaa:{label:'Portland (harmaa)',str:45,cost:.18,co2:820,colorScore:4,eco:3,isGeo:false,
+    recipe:[
+      {n:'Portland-sementti (harmaa)',kg:3.5,unit:'kg',uPrice:.18,desc:'Peruslujuus, harmaa väri'},
+      {n:'Kvartsihiekka 0–0.5 mm',kg:4.2,unit:'kg',uPrice:.05,desc:'Täyteaine, tiiveys'},
+      {n:'Vesi',kg:1.75,unit:'kg',uPrice:.001,desc:'w/c ≈ 0.50'},
+      {n:'Notkistin PCE',kg:.05,unit:'kg',uPrice:2.80,desc:'Työstettävyys'},
+    ]},
+  portland_valko:{label:'Portland (valkoinen)',str:50,cost:.32,co2:850,colorScore:9,eco:3,isGeo:false,
+    recipe:[
+      {n:'Valkoinen Portland-sementti',kg:3.5,unit:'kg',uPrice:.55,desc:'Puhdas vaalea väri'},
+      {n:'Kvartsihiekka (valkoinen)',kg:3.8,unit:'kg',uPrice:.08,desc:'Vaalea täyteaine'},
+      {n:'Marmorimurska',kg:.7,unit:'kg',uPrice:.12,desc:'Kirkkaus, estetiikka'},
+      {n:'Vesi',kg:1.57,unit:'kg',uPrice:.001,desc:'w/c ≈ 0.45'},
+      {n:'Notkistin PCE',kg:.06,unit:'kg',uPrice:2.80,desc:'Työstettävyys'},
+    ]},
+  geo_lento:{label:'Geopolymeeri / lentotuhka',str:55,cost:.25,co2:280,colorScore:5,eco:9,isGeo:true,
+    recipe:[
+      {n:'Lentotuhka (FA lk. F)',kg:4.0,unit:'kg',uPrice:.08,desc:'Pääsideaine'},
+      {n:'Kvartsihiekka',kg:4.0,unit:'kg',uPrice:.05,desc:'Täyteaine'},
+      {n:'NaOH-liuos 10 M',kg:.80,unit:'kg',uPrice:.35,desc:'Aktivaattori — syövyttävä'},
+      {n:'Na-silikaatti / vesilasi',kg:1.2,unit:'kg',uPrice:.28,desc:'Aktivaattori + lujuus'},
+    ]},
+  geo_kuona:{label:'Geopolymeeri / kuona GGBS',str:65,cost:.28,co2:220,colorScore:4,eco:9,isGeo:true,
+    recipe:[
+      {n:'Masuunikuona (GGBS)',kg:3.2,unit:'kg',uPrice:.12,desc:'Nopea lujittuminen'},
+      {n:'Lentotuhka (FA)',kg:1.0,unit:'kg',uPrice:.08,desc:'Lisäsideaine'},
+      {n:'Kvartsihiekka',kg:3.8,unit:'kg',uPrice:.05,desc:'Täyteaine'},
+      {n:'NaOH-liuos 10 M',kg:.90,unit:'kg',uPrice:.35,desc:'Aktivaattori'},
+      {n:'Na-silikaatti',kg:1.1,unit:'kg',uPrice:.28,desc:'Aktivaattori'},
+    ]},
+  geo_meta:{label:'Geopolymeeri / metakaoliini',str:60,cost:.55,co2:350,colorScore:8,eco:7,isGeo:true,
+    recipe:[
+      {n:'Metakaoliini',kg:3.5,unit:'kg',uPrice:.45,desc:'Vaalea, reaktiivinen'},
+      {n:'Kvartsihiekka (hieno)',kg:4.0,unit:'kg',uPrice:.06,desc:'Täyteaine'},
+      {n:'K-silikaatti-liuos',kg:1.5,unit:'kg',uPrice:.42,desc:'Aktivaattori'},
+      {n:'Vesi',kg:.70,unit:'kg',uPrice:.001,desc:'Konsistenssi'},
+      {n:'Notkistin PCE',kg:.05,unit:'kg',uPrice:2.80,desc:'Työstettävyys'},
+    ]},
+  uhpc:{label:'UHPC — ultralujalujuus',str:120,cost:1.80,co2:950,colorScore:7,eco:4,isGeo:false,
+    recipe:[
+      {n:'Portland (valkoinen, jauhettu)',kg:4.8,unit:'kg',uPrice:.75,desc:'Hienojakoinen sementti'},
+      {n:'Silika fumee',kg:.6,unit:'kg',uPrice:1.20,desc:'Tiiveys, reaktiivisuus'},
+      {n:'Kvartsijauhe (hieno)',kg:1.8,unit:'kg',uPrice:.18,desc:'Kiviaineshierre'},
+      {n:'Teräskuidut 13 mm',kg:1.5,unit:'kg',uPrice:1.40,desc:'Sitkeys, veto'},
+      {n:'PCE-notkistin',kg:.12,unit:'kg',uPrice:2.80,desc:'Matala w/c pakollinen'},
+      {n:'Vesi',kg:.80,unit:'kg',uPrice:.001,desc:'w/c ≈ 0.20'},
+    ]},
+};
+const ENV={
+  sisa_kuiva:{frost:false,wet:false,chem:false,label:'Sisätila, kuiva'},
+  sisa_kostea:{frost:false,wet:true,chem:false,label:'Sisätila, kostea'},
+  ulko_suoja:{frost:false,wet:true,chem:false,label:'Ulkotila, suojattu'},
+  ulko_avoin:{frost:true,wet:true,chem:false,label:'Ulkotila, avoin/sade'},
+  ulko_pakkanen:{frost:true,wet:true,chem:false,label:'Pakkanen/tiesuola'},
+  kemikaali:{frost:false,wet:true,chem:true,label:'Kemikaaliympäristö'},
+};
+const CHIP_DATA={
+  pp:{label:'PP-kuidut',str:3,tight:5,cost:.04,co2:10,notes:'0.9 kg/m³'},
+  lasi:{label:'Lasikuidut AR',str:8,tight:8,cost:.12,co2:20,notes:'2–3 kg/m³'},
+  teras:{label:'Teräskuidut',str:15,tight:5,cost:.08,co2:40,notes:'25–40 kg/m³'},
+  pva:{label:'PVA-kuidut',str:6,tight:7,cost:.15,co2:5,notes:'1.5 kg/m³'},
+  raudoitus:{label:'Teräsraudoitus',str:30,tight:2,cost:.20,co2:80,notes:'min. 20 mm'},
+  nano:{label:'Nano-SiO₂',str:10,tight:15,cost:.35,co2:5,notes:'3–5%'},
+};
+const GOALS=[
+  {id:'lujuus',label:'Lujuus',def:7},
+  {id:'pakkanen',label:'Pakkasenkestävyys',def:5},
+  {id:'vesi',label:'Vedenpitävyys',def:7},
+  {id:'liukkaus',label:'Liukkauden esto',def:3},
+  {id:'estetiikka',label:'Estetiikka / väri',def:8},
+  {id:'eko',label:'Ekologisuus',def:4},
+  {id:'budjetti',label:'Budjettitaso (1=halpa)',def:5},
+];
+
+// STATE
+let gLocked={};
+let mLocked={};
+let mOverride={};
+let activeMatKey='portland_valko';
+let impactChart=null;
+
+// INTERACTIVE RADAR STATE
+const RADAR_LABELS=['Lujuus','Pakkanen','Vedenpitävyys','Liukkaus','Estetiikka','Ekologisuus'];
+const N_AX=6;
+let radarTargets=[70,50,70,30,80,40]; // 0-100
+let radarTargetLocked=new Array(N_AX).fill(false);
+let radarAchieved=[60,50,65,30,80,45];
+let ingOverride={}; // ingredient amount overrides from laatu tab
+let ingLocked={}; // ingredient locks from laatu tab
+let draggingIdx=-1;
+
+// Radar geometry helpers
+const CX=160,CY=150,RR=110;
+function axAngle(i){return Math.PI/2-i*2*Math.PI/N_AX;}
+function polarPt(val,i){const a=axAngle(i),r=val/100*RR;return[CX+r*Math.cos(a),CY-r*Math.sin(a)];}
+function ptToVal(px,py,i){const a=axAngle(i);const dx=px-CX,dy=CY-py;return Math.max(0,Math.min(100,Math.round((dx*Math.cos(a)+dy*Math.sin(a))/RR*100)));}
+
+function drawRadar(){
+  const svg=document.getElementById('iRadar');
+  if(!svg)return;
+  const rings=[20,40,60,80,100];
+  let html='';
+  // grid rings
+  rings.forEach(r=>{
+    const pts=Array.from({length:N_AX},(_,i)=>polarPt(r,i).join(',')).join(' ');
+    html+=`<polygon points="${pts}" fill="none" stroke="#E0DAD0" stroke-width="0.8"/>`;
+  });
+  // axes
+  for(let i=0;i<N_AX;i++){
+    const [ex,ey]=polarPt(100,i);
+    html+=`<line x1="${CX}" y1="${CY}" x2="${ex}" y2="${ey}" stroke="#E0DAD0" stroke-width="0.8"/>`;
+  }
+  // achieved polygon
+  const aPts=Array.from({length:N_AX},(_,i)=>polarPt(radarAchieved[i],i).join(',')).join(' ');
+  html+=`<polygon points="${aPts}" fill="rgba(184,106,40,0.13)" stroke="#B86A28" stroke-width="2" stroke-linejoin="round"/>`;
+  // target polygon
+  const tPts=Array.from({length:N_AX},(_,i)=>polarPt(radarTargets[i],i).join(',')).join(' ');
+  html+=`<polygon points="${tPts}" fill="rgba(42,92,69,0.10)" stroke="#2A5C45" stroke-width="2" stroke-linejoin="round"/>`;
+  // achieved dots (no drag)
+  for(let i=0;i<N_AX;i++){
+    const [px,py]=polarPt(radarAchieved[i],i);
+    html+=`<circle cx="${px}" cy="${py}" r="4" fill="#B86A28" stroke="#fff" stroke-width="1.5" opacity="0.9"/>`;
+  }
+  // target draggable dots
+  for(let i=0;i<N_AX;i++){
+    const [px,py]=polarPt(radarTargets[i],i);
+    const lk=radarTargetLocked[i];
+    html+=`<circle cx="${px}" cy="${py}" r="7" fill="${lk?'#B86A28':'#2A5C45'}" stroke="#fff" stroke-width="2"
+      style="cursor:${lk?'not-allowed':'grab'}" data-idx="${i}"
+      class="rdot"/>`;
+    if(lk)html+=`<text x="${px+10}" y="${py-2}" font-size="10" fill="#B86A28">🔒</text>`;
+  }
+  // labels
+  for(let i=0;i<N_AX;i++){
+    const a=axAngle(i);
+    const lx=CX+(RR+22)*Math.cos(a);
+    const ly=CY-(RR+22)*Math.sin(a);
+    const anchor=Math.abs(lx-CX)<10?'middle':lx<CX?'end':'start';
+    html+=`<text x="${lx}" y="${ly+4}" font-size="11" fill="#7A7368" text-anchor="${anchor}" font-family="DM Sans">${RADAR_LABELS[i]}</text>`;
+    // value label on target dot
+    const [px,py]=polarPt(radarTargets[i],i);
+    html+=`<text x="${px}" y="${py-10}" font-size="10" fill="#2A5C45" text-anchor="middle" font-family="DM Mono" font-weight="500">${radarTargets[i]}</text>`;
+  }
+  svg.innerHTML=html;
+  // re-attach drag events
+  svg.querySelectorAll('.rdot').forEach(dot=>{
+    const idx=parseInt(dot.dataset.idx);
+    dot.addEventListener('mousedown',e=>{if(!radarTargetLocked[idx]){draggingIdx=idx;e.preventDefault();}});
+    dot.addEventListener('touchstart',e=>{if(!radarTargetLocked[idx]){draggingIdx=idx;e.preventDefault();}},{passive:false});
+  });
+}
+
+function radarPointerMove(e){
+  if(draggingIdx<0)return;
+  const svg=document.getElementById('iRadar');
+  const rect=svg.getBoundingClientRect();
+  const sx=svg.viewBox.baseVal.width/rect.width;
+  const sy=svg.viewBox.baseVal.height/rect.height;
+  const clientX=e.touches?e.touches[0].clientX:e.clientX;
+  const clientY=e.touches?e.touches[0].clientY:e.clientY;
+  const px=(clientX-rect.left)*sx;
+  const py=(clientY-rect.top)*sy;
+  const val=ptToVal(px,py,draggingIdx);
+  radarTargets[draggingIdx]=val;
+  // sync to goal slider if not locked
+  const goalMap=['lujuus','pakkanen','vesi','liukkaus','estetiikka','eko'];
+  const gid=goalMap[draggingIdx];
+  if(gid&&!gLocked[gid]){
+    const sl=document.getElementById('gs_'+gid);
+    const vEl=document.getElementById('gv_'+gid);
+    const fEl=document.getElementById('gsf_'+gid);
+    const mapped=Math.round(val/10);
+    if(sl){sl.value=Math.max(1,Math.min(10,mapped));}
+    if(vEl)vEl.textContent=Math.max(1,Math.min(10,mapped));
+    if(fEl)fEl.style.width=((Math.max(1,Math.min(10,mapped))-1)/9*100)+'%';
+  }
+  drawRadar();
+  update();
+}
+function radarPointerUp(){draggingIdx=-1;}
+document.addEventListener('mousemove',radarPointerMove);
+document.addEventListener('mouseup',radarPointerUp);
+document.addEventListener('touchmove',radarPointerMove,{passive:false});
+document.addEventListener('touchend',radarPointerUp);
+
+function toggleRadarLock(idx){
+  radarTargetLocked[idx]=!radarTargetLocked[idx];
+  const btn=document.getElementById('rlk_'+idx);
+  if(btn){btn.classList.toggle('on',radarTargetLocked[idx]);btn.textContent=radarTargetLocked[idx]?'🔒':'🔓';}
+  drawRadar();
+}
+
+// ===== INGREDIENT IMPACT SLIDERS (laatu tab) =====
+// These show each ingredient's contribution to the 6 quality axes + allow manual override
+const ING_IMPACT={
+  // per ingredient key → [lujuus,pakkanen,vesi,liukkaus,estetiikka,eko] contribution index 0-100
+  'Valkoinen Portland-sementti':[80,20,40,5,90,10],
+  'Portland-sementti (harmaa)':[75,20,40,5,30,10],
+  'Kvartsihiekka (valkoinen)':[10,10,30,15,60,20],
+  'Kvartsihiekka 0–0.5 mm':[10,10,30,15,30,20],
+  'Kvartsihiekka':[10,10,30,15,30,20],
+  'Marmorimurska':[5,5,15,10,80,10],
+  'Vesi':[5,5,5,0,5,5],
+  'Notkistin PCE':[15,5,20,0,10,5],
+  'PCE-notkistin':[15,5,20,0,10,5],
+  'Lentotuhka (FA lk. F)':[60,30,60,5,30,90],
+  'Lentotuhka (FA)':[55,25,55,5,30,85],
+  'Masuunikuona (GGBS)':[70,35,65,5,20,90],
+  'Metakaoliini':[65,25,60,5,70,60],
+  'NaOH-liuos 10 M':[30,10,40,0,5,5],
+  'Na-silikaatti / vesilasi':[35,15,45,0,5,5],
+  'Na-silikaatti':[35,15,45,0,5,5],
+  'K-silikaatti-liuos':[35,15,45,0,5,5],
+  'Silika fumee':[40,25,70,0,10,15],
+  'Kvartsijauhe (hieno)':[20,15,35,10,50,15],
+  'Teräskuidut 13 mm':[60,20,15,20,10,30],
+  'Portland (valkoinen, jauhettu)':[85,20,45,5,90,10],
+};
+
+function getIngImpact(name){return ING_IMPACT[name]||[30,15,30,5,20,15];}
+
+function renderIngImpactSliders(recipe,matKey,achieved){
+  const c=document.getElementById('ing-impact-sliders');
+  if(!c)return;
+  const QUAL_COLORS=['#2A5C45','#3A7A90','#4A7ACC','#8060A0','#B86A28','#569040'];
+  c.innerHTML=recipe.map((row,i)=>{
+    const sid='ii_'+matKey+'_'+i;
+    const lk=ingLocked[sid]||false;
+    const baseKg=row.kg;
+    const curKg=ingOverride[sid]!==undefined?ingOverride[sid]:baseKg;
+    const impact=getIngImpact(row.n);
+    const ratio=curKg/baseKg;
+    return`<div style="border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:10px;background:${lk?'#FEF8F3':'#F9F8F5'}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:500">${row.n}</span>
+        <div style="display:flex;align-items:center;gap:7px">
+          <span style="font-family:var(--mono);font-size:13px;color:${lk?'var(--ora)':'var(--grn)'}" id="iiv_${sid}">${curKg.toFixed(2)} kg</span>
+          <button class="lkbtn${lk?' on':''}" onclick="toggleIngLock('${sid}','${matKey}',${i})">${lk?'🔒':'🔓'}</button>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--mut);margin-bottom:7px">${row.desc||''}</div>
+      <div style="position:relative;height:6px;background:var(--bdr);border-radius:3px;margin-bottom:8px">
+        <div id="iif_${sid}" style="position:absolute;left:0;top:0;height:100%;border-radius:3px;background:${lk?'var(--ora)':'var(--grn)'};width:${Math.min(100,curKg/8*100)}%;transition:width .2s"></div>
+        <input type="range" min="0" max="8" step="0.05" value="${curKg}" ${lk?'disabled':''} ${lk?'class="lk"':''}
+          style="position:absolute;top:-8px;left:0;width:100%;height:22px;appearance:none;-webkit-appearance:none;background:transparent;cursor:${lk?'not-allowed':'pointer'};outline:none;margin:0"
+          oninput="onIngSlide('${sid}','${matKey}',${i},this.value,${baseKg})">
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px">
+        ${RADAR_LABELS.map((lbl,qi)=>{
+          const contrib=Math.round(impact[qi]*ratio);
+          return`<div style="text-align:center">
+            <div style="height:28px;background:var(--bdr);border-radius:3px;position:relative;overflow:hidden;margin-bottom:2px">
+              <div style="position:absolute;bottom:0;left:0;right:0;background:${QUAL_COLORS[qi]};height:${Math.min(100,contrib)}%;border-radius:3px;transition:height .25s;opacity:0.8"></div>
+            </div>
+            <div style="font-size:9px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${lbl.slice(0,4)}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:4px">
+        ${RADAR_LABELS.map((lbl,qi)=>{
+          const contrib=Math.round(impact[qi]*ratio);
+          return`<div style="text-align:center;font-size:9px;font-family:var(--mono);color:var(--grn);width:calc(100%/6)">${contrib}</div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+  // also render radar target controls below
+  const lockDiv=document.createElement('div');
+  lockDiv.style.cssText='margin-top:6px;padding:12px;background:var(--sur);border:1px solid var(--bdr);border-radius:9px';
+  lockDiv.innerHTML=`<div class="ctitle" style="margin-bottom:10px">Radiaaliakselit — lukitse tavoite</div>`+
+    RADAR_LABELS.map((lbl,i)=>`
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
+        <span style="font-size:12px;flex:1">${lbl}</span>
+        <span style="font-family:var(--mono);font-size:12px;color:var(--grn);min-width:30px;text-align:right">${radarTargets[i]}</span>
+        <button class="lkbtn${radarTargetLocked[i]?' on':''}" id="rlk_${i}" onclick="toggleRadarLock(${i})">${radarTargetLocked[i]?'🔒':'🔓'}</button>
+      </div>`).join('');
+  c.appendChild(lockDiv);
+}
+
+function onIngSlide(sid,matKey,idx,val,baseKg){
+  val=parseFloat(parseFloat(val).toFixed(2));
+  ingOverride[sid]=val;
+  mOverride[matKey+'_'+idx]=val;
+  const vEl=document.getElementById('iiv_'+sid);
+  if(vEl)vEl.textContent=val.toFixed(2)+' kg';
+  const fEl=document.getElementById('iif_'+sid);
+  if(fEl)fEl.style.width=Math.min(100,(val/8*100))+'%';
+  update();
+}
+function toggleIngLock(sid,matKey,idx){
+  ingLocked[sid]=!ingLocked[sid];
+  mLocked[matKey+'_'+idx]=ingLocked[sid];
+  const btn=document.querySelector(`button[onclick*="toggleIngLock('${sid}'"]`);
+  if(btn){btn.classList.toggle('on',ingLocked[sid]);btn.textContent=ingLocked[sid]?'🔒':'🔓';}
+  const fill=document.getElementById('iif_'+sid);
+  if(fill)fill.style.background=ingLocked[sid]?'var(--ora)':'var(--grn)';
+  const vEl=document.getElementById('iiv_'+sid);
+  if(vEl)vEl.style.color=ingLocked[sid]?'var(--ora)':'var(--grn)';
+  // re-render to update disabled state
+  update();
+}
+
+// ===== TAB SWITCHING =====
+function showTab(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+
+// ===== GOAL SLIDERS =====
+function initGoalSliders(){
+  const c=document.getElementById('goal-sliders');
+  c.innerHTML=GOALS.map(g=>`
+    <div class="gs">
+      <div class="gs-head">
+        <span class="gs-name">${g.label}</span>
+        <div class="gs-right">
+          <span class="gs-val" id="gv_${g.id}">${g.def}</span>
+          <button class="lkbtn" id="glk_${g.id}" onclick="toggleGL('${g.id}')" title="Lukitse">🔓</button>
+        </div>
+      </div>
+      <div class="sl-wrap" id="gsw_${g.id}">
+        <div class="sl-fill" id="gsf_${g.id}" style="width:${(g.def-1)/9*100}%"></div>
+        <input type="range" min="1" max="10" value="${g.def}" id="gs_${g.id}" oninput="onGoalSlide('${g.id}')">
+      </div>
+    </div>`).join('');
+}
+function onGoalSlide(id){
+  if(gLocked[id])return;
+  const v=document.getElementById('gs_'+id).value;
+  document.getElementById('gv_'+id).textContent=v;
+  document.getElementById('gsf_'+id).style.width=((v-1)/9*100)+'%';
+  update();
+}
+function toggleGL(id){
+  gLocked[id]=!gLocked[id];
+  const btn=document.getElementById('glk_'+id);
+  const sl=document.getElementById('gs_'+id);
+  const fill=document.getElementById('gsf_'+id);
+  btn.classList.toggle('on',gLocked[id]);
+  btn.textContent=gLocked[id]?'🔒':'🔓';
+  sl.disabled=gLocked[id];
+  if(gLocked[id]){sl.classList.add('lk');fill.classList.add('locked')}
+  else{sl.classList.remove('lk');fill.classList.remove('locked')}
+}
+function getG(id){return parseInt(document.getElementById('gs_'+id).value)}
+
+// ===== MAT SLIDERS =====
+function buildMatSliders(recipe,matKey){
+  const c=document.getElementById('mat-sliders');
+  c.innerHTML=recipe.map((row,i)=>{
+    const sid=matKey+'_'+i;
+    const lk=mLocked[sid]||false;
+    const val=mOverride[sid]!==undefined?mOverride[sid]:row.kg;
+    const pct=(val/8*100).toFixed(0);
+    return`<div class="ms">
+      <div class="ms-head">
+        <span class="ms-name">${row.n}</span>
+        <div class="ms-right">
+          <span class="ms-val${lk?' locked':''}" id="msv_${sid}">${val.toFixed(2)} kg</span>
+          <button class="lkbtn${lk?' on':''}" onclick="toggleML('${sid}','${matKey}',${i})">${lk?'🔒':'🔓'}</button>
+        </div>
+      </div>
+      <div class="sl-wrap" id="msw_${sid}">
+        <div class="sl-fill${lk?' locked':''}" id="msf_${sid}" style="width:${Math.min(100,pct)}%"></div>
+        <input type="range" min="0" max="8" step="0.05" value="${val}" id="msi_${sid}"
+          ${lk?'disabled':''}
+          ${lk?'class="lk"':''}
+          oninput="onMatSlide('${sid}','${matKey}',${i},this.value)">
+      </div>
+      <div class="ms-hints"><span>0 kg</span><span style="color:var(--grn)">↑ suositus: ${row.kg.toFixed(2)} kg</span><span>8 kg</span></div>
+      <div style="font-size:11px;color:var(--mut);margin-top:2px">${row.desc}</div>
+    </div>`;
+  }).join('');
+}
+function onMatSlide(sid,matKey,idx,val){
+  val=parseFloat(parseFloat(val).toFixed(2));
+  mOverride[sid]=val;
+  const vEl=document.getElementById('msv_'+sid);
+  if(vEl)vEl.textContent=val.toFixed(2)+' kg';
+  const fEl=document.getElementById('msf_'+sid);
+  if(fEl)fEl.style.width=Math.min(100,(val/8*100))+'%';
+  update();
+}
+function toggleML(sid,matKey,idx){
+  mLocked[sid]=!mLocked[sid];
+  const lk=mLocked[sid];
+  const btn=document.querySelector(`button[onclick*="${sid}"]`);
+  const sl=document.getElementById('msi_'+sid);
+  const fill=document.getElementById('msf_'+sid);
+  const val_el=document.getElementById('msv_'+sid);
+  if(btn){btn.classList.toggle('on',lk);btn.textContent=lk?'🔒':'🔓'}
+  if(sl){sl.disabled=lk;if(lk)sl.classList.add('lk');else sl.classList.remove('lk')}
+  if(fill){if(lk)fill.classList.add('locked');else fill.classList.remove('locked')}
+  if(val_el){if(lk)val_el.classList.add('locked');else val_el.classList.remove('locked')}
+}
+
+function applyPreset(){
+  const matKey=document.getElementById('sel_matrix').value;
+  // Keep locked mat overrides, reset unlocked
+  const recipe=MAT[matKey].recipe;
+  recipe.forEach((row,i)=>{
+    const sid=matKey+'_'+i;
+    if(!mLocked[sid])delete mOverride[sid];
+  });
+  activeMatKey=matKey;
+  update();
+}
+function getActiveChips(){return[...document.querySelectorAll('#rchips .chip.on')].map(c=>c.dataset.v)}
+function toggleChip(btn){btn.classList.toggle('on');update()}
+function qfill(v){return v>=80?'f-hi':v>=60?'f-ok':v>=40?'f-mid':'f-lo'}
+
+// ===== MAIN UPDATE =====
+function update(){
+  const typeKey=document.getElementById('sel_type').value;
+  const envKey=document.getElementById('sel_env').value;
+  const matKey=document.getElementById('sel_matrix').value;
+  const wallMm=parseInt(document.getElementById('sel_wall').value);
+  const dclass=document.getElementById('sel_dclass').value;
+  const chips=getActiveChips();
+  const type=TYPES[typeKey],env=ENV[envKey],mat=MAT[matKey];
+  const recipe=mat.recipe;
+
+  const G={};GOALS.forEach(g=>{G[g.id]=getG(g.id)});
+
+  // Chip bonuses
+  let strB=0,tightB=0,costAdd=0,co2Add=0,hasFiber=false,hasSteel=false,hasNano=false;
+  chips.forEach(c=>{
+    const d=CHIP_DATA[c];if(!d)return;
+    strB+=d.str;tightB+=d.tight;costAdd+=d.cost;co2Add+=d.co2;
+    if(c!=='raudoitus'&&c!=='nano')hasFiber=true;
+    if(c==='raudoitus')hasSteel=true;
+    if(c==='nano')hasNano=true;
+  });
+
+  // Quality scores
+  const qStr  =Math.min(100,(mat.str+strB)/1.5);
+  const qTight=Math.min(100,45+tightB+(hasNano?15:0)+(G.vesi>7?15:0));
+  const qFrost=Math.min(100,30+(env.frost?0:10)+(dclass.startsWith('XF')?20:0)+G.pakkanen*4);
+  const qChem =Math.min(100,(mat.isGeo?75:40)+(hasNano?10:0));
+  const qAest =Math.min(100,mat.colorScore*8+G.estetiikka*2);
+  const qEco  =Math.min(100,mat.eco*9+G.eko*1.5);
+  const qWork =Math.min(100,80-(wallMm<10?30:0)+(hasFiber?-5:0));
+  const qLife =Math.min(100,45+qTight*.3+qFrost*.2+qStr*.2);
+
+  const totalStr=Math.round(mat.str+strB);
+  const unitCost=(mat.cost+costAdd).toFixed(2);
+  const totalCo2=Math.round(mat.co2+co2Add);
+  const wc=wallMm<10?'0.30–0.38':wallMm<20?'0.35–0.42':'0.40–0.48';
+
+  // Metrics (both tabs)
+  ['m_str','m_str2'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=totalStr});
+  ['m_cost','m_cost2'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=unitCost});
+  ['m_co2','m_co22'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=totalCo2});
+
+  // RECIPE TABLE
+  const totalKg=recipe.reduce((s,r,i)=>{
+    const sid=matKey+'_'+i;
+    return s+(mOverride[sid]!==undefined?mOverride[sid]:r.kg);
+  },0);
+  const chipRows=chips.map(c=>{
+    const d=CHIP_DATA[c];if(!d)return null;
+    return{n:d.label+' ('+d.notes+')',kg:d.cost*5,reinforcement:true};
+  }).filter(Boolean);
+  const allRows=[...recipe.map((r,i)=>{
+    const sid=matKey+'_'+i;
+    return{...r,val:mOverride[sid]!==undefined?mOverride[sid]:r.kg};
+  }),...chipRows];
+  const grandTotal=allRows.reduce((s,r)=>s+(r.val||r.kg),0);
+
+  const rbody=document.getElementById('recipe-body');
+  if(rbody)rbody.innerHTML=allRows.map(row=>{
+    const v=row.val!==undefined?row.val:row.kg;
+    const pct=Math.round(v/grandTotal*100);
+    const bw=Math.min(100,Math.round(v/5*100));
+    return`<tr>
+      <td>${row.n}${row.reinforcement?'<span class="badge b-gry" style="margin-left:4px;font-size:9.5px">vahvistus</span>':''}</td>
+      <td style="font-family:var(--mono);white-space:nowrap">${v.toFixed(2)}</td>
+      <td style="font-family:var(--mono);color:var(--mut)">${pct}%</td>
+      <td><div class="rbar" style="width:${bw}%;background:${row.reinforcement?'var(--blu)':'var(--grn)'}"></div></td>
+    </tr>`;
+  }).join('');
+
+  // MAT SLIDERS
+  buildMatSliders(recipe,matKey);
+
+  // WARNINGS
+  document.getElementById('warn_wall').classList.toggle('on',wallMm<8);
+  document.getElementById('warn_steel').classList.toggle('on',hasSteel&&wallMm<20);
+  document.getElementById('warn_geo').classList.toggle('on',env.chem&&mat.isGeo);
+  document.getElementById('warn_frost').classList.toggle('on',env.frost&&G.pakkanen<7);
+
+  // QUAL BARS
+  const quals=[
+    {label:'Puristuslujuus',val:qStr},{label:'Vedenpitävyys',val:qTight},
+    {label:'Pakkasenkestävyys',val:qFrost},{label:'Kemikaalienkestävyys',val:qChem},
+    {label:'Estetiikka/väri',val:qAest},{label:'Ekologisuus',val:qEco},
+    {label:'Työstettävyys',val:qWork},{label:'Käyttöikä',val:qLife},
+  ];
+  const qb=document.getElementById('qual-bars');
+  if(qb)qb.innerHTML=quals.map(q=>`
+    <div class="qrow">
+      <span class="qlbl">${q.label}</span>
+      <div class="qtrack"><div class="qfill ${qfill(Math.round(q.val))}" style="width:${Math.round(q.val)}%"></div></div>
+      <span class="qnum">${Math.round(q.val)}</span>
+    </div>`).join('');
+
+  // INTERACTIVE SVG RADAR
+  const rT=[G.lujuus*10,G.pakkanen*10,G.vesi*10,G.liukkaus*10,G.estetiikka*10,G.eko*10];
+  const rA=[Math.round(qStr),Math.round(qFrost),Math.round(qTight),Math.min(100,G.liukkaus*10+10),Math.round(qAest),Math.round(qEco)];
+  // Only update unlocked radar target axes from goal sliders
+  for(let i=0;i<N_AX;i++){if(!radarTargetLocked[i])radarTargets[i]=rT[i];}
+  radarAchieved=[...rA];
+  drawRadar();
+  // Render ingredient impact sliders
+  renderIngImpactSliders(recipe,matKey,rA);
+
+  // IMPACT CHART
+  const ic=document.getElementById('impactChart');
+  if(ic){
+    if(impactChart)impactChart.destroy();
+    const ingN=['Sementti/sideaine','Kvartsihiekka','Silika fumee','Lasikuidut','Nano-SiO₂','Notkistin','Geopolymeeri','Teräskuidut'];
+    impactChart=new Chart(ic,{type:'bar',data:{labels:ingN,datasets:[
+      {label:'Lujuus',data:[50,5,15,12,18,2,60,25],backgroundColor:'#2A5C45',borderWidth:0},
+      {label:'Tiiveys',data:[40,8,20,5,25,5,55,3],backgroundColor:'#4A9462',borderWidth:0},
+      {label:'Hinta',data:[30,5,20,15,45,10,20,12],backgroundColor:'#B86A28',borderWidth:0},
+      {label:'Ekologisuus',data:[10,15,5,8,5,3,70,8],backgroundColor:'#2C4E7A',borderWidth:0},
+    ]},options:{responsive:true,maintainAspectRatio:false,
+      scales:{x:{ticks:{font:{size:10,family:'DM Sans'},color:'#7A7368'},grid:{display:false}},
+              y:{ticks:{font:{size:10},color:'#7A7368'},grid:{color:'#EDEAD5'},title:{display:true,text:'Indeksi',font:{size:10},color:'#7A7368'}}},
+      plugins:{legend:{display:false}}}});
+    const leg=document.getElementById('impact-leg');
+    if(leg)leg.innerHTML=[['#2A5C45','Lujuus'],['#4A9462','Tiiveys'],['#B86A28','Hinta'],['#2C4E7A','Ekologisuus']]
+      .map(([c,l])=>`<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c};display:inline-block"></span>${l}</span>`).join('');
+  }
+
+  // RECOMMENDATIONS
+  let recs=[];
+  if(env.chem&&!mat.isGeo)recs.push('Kemikaaliympäristöön suositellaan <b>geopolymeeria</b> — merkittävästi parempi kemikaalienkestävyys.');
+  if(env.frost&&G.pakkanen>=7)recs.push('<b>Pakkassuojaus:</b> ilmastusaine 0.04–0.1% + w/c ≤ 0.45. XF4: siloksaanikyllästys pinnalle.');
+  if(wallMm<=6)recs.push('<b>Ohut seinämä:</b> supernotkistin PCE pakollinen + silika fumee 10%. PP- tai PVA-kuidut estävät plastisuushalkeilua.');
+  if(G.estetiikka>=8&&matKey!=='portland_valko'&&matKey!=='geo_meta')recs.push('Korkea esteettistavoite → harkitse <b>valkoista Portland-sementtiä</b> tai metakaoliini-geopolymeeria.');
+  if(G.eko>=8&&!mat.isGeo)recs.push('<b>Ekologisuus:</b> geopolymeeri/lentotuhka tai kuona vähentää CO₂-päästöjä jopa 65%.');
+  if(G.lujuus>=9&&matKey!=='uhpc')recs.push('Äärimmäinen lujuustavoite → harkitse <b>UHPC</b> (120+ MPa) + teräskuidut.');
+  if(!hasFiber&&!hasSteel&&type.canReinf)recs.push('Kappale soveltuu raudoitukselle — <b>lasikuidut tai PP-kuidut</b> parantavat halkeamakestävyyttä.');
+  if(G.liukkaus>=7)recs.push('<b>Liukkauden esto:</b> kvartsihiekkasirottelu tuorepinnalle tai anti-slip-käsittely jälkikäteen.');
+  if(!recs.length)recs.push(`Kombinaatio on tasapainoinen. Pidä w/c välillä ${wc} ja käytä supernotkistinta.`);
+  const rd=document.getElementById('recs');
+  if(rd)rd.innerHTML=recs.map(r=>`<div class="rbox">→ ${r}</div>`).join('');
+
+  // SPEC TABLE
+  const wallOk=wallMm>=type.minWall;
+  const st=document.getElementById('spec-tbl');
+  if(st)st.innerHTML=`
+    <tr><td>Kappaltyyppi</td><td>${type.label}</td></tr>
+    <tr><td>Käyttöympäristö</td><td>${env.label}</td></tr>
+    <tr><td>Massa</td><td>${mat.label}</td></tr>
+    <tr><td>Ohuin seinämä</td><td>${wallMm} mm ${wallOk?'<span class="badge b-grn">OK</span>':'<span class="badge b-red">Liian ohut</span>'}</td></tr>
+    <tr><td>Kestävyysluokka</td><td><span class="badge b-blu">${dclass}</span></td></tr>
+    <tr><td>w/c suositus</td><td style="font-family:var(--mono)">${wc}</td></tr>
+    <tr><td>Raudoitusmahdollisuus</td><td>${type.canReinf?'<span class="badge b-grn">Kyllä</span>':'<span class="badge b-gry">Ei sovellu</span>'}</td></tr>
+    <tr><td>Arvioitu käyttöikä</td><td>${Math.round(qLife/10)*5+10}+ vuotta</td></tr>
+  `;
+
+  // PROCESS STEPS
+  const steps=mat.isGeo?[
+    {t:'Aktivaattoriliuoksen valmistus',d:`Sekoita NaOH (10 M) ja Na-silikaatti. Anna jäähtyä ≥30 min — liuos kuumenee! Suojaa kädet ja kasvot. Älä sekoita muoviastiassa.`},
+    {t:'Kuiva-aineiden esisekoitus',d:'Sekoita lentotuhka (ja kuona/metakaoliini) ja hiekka tasaisesti kuivana ennen nesteiden lisäystä.'},
+    {t:'Aktivaattorin lisäys',d:'Lisää jäähtynyt aktivaattoriliuos hitaasti (2–3 min). Sekoita kierresekottimella. Geopolymeeri kovettuu Portland-sementtiä nopeammin — toimi ripeästi.'},
+    {t:'Valu ja tärytys',d:`Kaada välittömästi muottiin. Täytä kerroksittain max. ${Math.min(50,wallMm*3)} mm. Tärytä jokainen kerros.`},
+    {t:'Kovetushoito',d:'Peitä muovilla. 40–80 °C lämpötila nopeuttaa merkittävästi. Huoneenlämmössä: 24–48 h ennen irrotusta.'},
+    {t:'Irrotus ja jälkihoito',d:`Irrota muotti ${wallMm<10?'24':'48'} h jälkeen. Älä kastele kuten Portland. Pinnoita 7–14 vrk kuivumisen jälkeen.`},
+  ]:[
+    {t:'Muotin valmistelu',d:`Öljytä muotti ohuella kerroksella (muottiöljy tai kasvisöljy). Tarkasta tiiveys. Ohuin seinämä ${wallMm} mm — tarkkuus ratkaisee.`},
+    {t:'Ainesten punnitus',d:'Punnitse kaikki ainesosat. Sekoitusjärjestys: kuiva-aineet ensin yhteen, vesi + notkistin erikseen.'},
+    {t:'Sekoitus',d:`Lisää vesineste (w/c = ${wc}) hitaasti kuivaan seokseen. Sekoita 3–5 min. ${wallMm<=6?'Mikrobetonimassan tulee muistuttaa paksua jugurttia.':'Notkistimen ansiosta massa on notkeaa vaikka w/c on matala.'}`},
+    {t:'Vahvistusten lisäys',d:chips.length?`Lisää ${chips.map(c=>CHIP_DATA[c]?.label).filter(Boolean).join(', ')} sekoittaen 1–2 min. Hajota kuidut ennen lisäystä.`:'Ei vahvistuksia valittu. Harkitse PP- tai lasikuituja.'},
+    {t:'Valu ja tärytys',d:`Kaada muottiin ${wallMm<20?'kerroksittain max. '+Math.round(wallMm*2)+' mm':'tasaisesti'}. Tärytä tai naputtele muottia ilmakuplien poistamiseksi.`},
+    {t:'Kovetushoito',d:`Peitä muovilla tai kostealla kankaalla. Pidä kosteana ${wallMm<10?'24 h':'48–72 h'}. Vältä pintakuivumista — se aiheuttaa halkeamia.`},
+    {t:'Irrotus ja viimeistely',d:`Irrota muotti ${wallMm<10?'24 h':'48 h'} jälkeen. Täysi lujuus 28 vrk. Pinnoita 7–14 vrk:n ikäisenä.`},
+  ];
+  const ps=document.getElementById('process-steps');
+  if(ps)ps.innerHTML=steps.map((s,i)=>`
+    <div class="step">
+      <div class="step-n">${i+1}</div>
+      <div><div class="step-t">${s.t}</div><div class="step-d">${s.d}</div></div>
+    </div>`).join('');
+
+  // COST BREAKDOWN
+  const wt=type.wt;
+  const mc=(parseFloat(unitCost)*wt).toFixed(2);
+  const mold=(wallMm<10?wt*8:wallMm<30?wt*3:wt*1.5).toFixed(2);
+  const work=(wt*4.5).toFixed(2);
+  const coat=(wt*1.2).toFixed(2);
+  const tot=(parseFloat(mc)+parseFloat(mold)+parseFloat(work)+parseFloat(coat)).toFixed(2);
+  const cb=document.getElementById('cost-break');
+  if(cb)cb.innerHTML=`
+    <div class="crow"><span>Massa (${wt} kg × ${unitCost} €/kg)</span><span>${mc} €</span></div>
+    <div class="crow"><span>Muotti (arvio)</span><span>${mold} €</span></div>
+    <div class="crow"><span>Työ — sekoitus, valu, irrotus</span><span>${work} €</span></div>
+    <div class="crow"><span>Pinnoitus ja viimeistely</span><span>${coat} €</span></div>
+    <div class="crow"><span><b>Yhteensä</b></span><span>${tot} €</span></div>`;
+
+  // UNIT PRICE TABLE
+  const pt=document.getElementById('price-tbl');
+  if(pt)pt.innerHTML=recipe.map(r=>`
+    <tr>
+      <td>${r.n}</td>
+      <td style="font-family:var(--mono);text-align:right">${r.uPrice.toFixed(3)} €/kg</td>
+    </tr>`).join('')+chips.map(c=>{const d=CHIP_DATA[c];return d?`<tr><td>${d.label}</td><td style="font-family:var(--mono);text-align:right">~${(d.cost*10).toFixed(2)} €/kg</td></tr>`:''}).join('');
+}
+
+// INIT
+initGoalSliders();
+update();
+</script>
+</body>
+</html>
